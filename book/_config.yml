@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: cvxsimulator
+title: cvxrisk
 author: Thomas Schmelzer
 only_build_toc_files: true
 
@@ -15,7 +15,7 @@ parse:
     - linkify
     - dollarmath
   myst_substitutions:
-    book_url: http://www.cvxgrp.org/simulator
+    book_url: http://www.cvxgrp.org/cvxrisk
 
 
 # needed for plotly
@@ -27,7 +27,7 @@ sphinx:
     
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/cvxgrp/simulator
+  url: https://github.com/cvxgrp/cvxrisk
   path_to_book: book
   branch: main
 
