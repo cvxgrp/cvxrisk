@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Use an abstract Risk Model &#8212; cvxrisk</title>
+    <title>Factor risk models &#8212; cvxrisk</title>
   
   
   
@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/factormodel';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="large.html" />
+    <link rel="next" title="Large problem with 1000 assets and 100 factors" href="large.html" />
     <link rel="prev" title="Notebooks" href="../nb.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -153,13 +153,8 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../nb.html">Notebooks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Use an abstract Risk Model</a></li>
-
-
-
-
-
-
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Factor risk models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large.html">Large problem with 1000 assets and 100 factors</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
@@ -347,7 +342,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Use an abstract Risk Model</h1>
+    <h1>Factor risk models</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -357,15 +352,14 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Use an abstract Risk Model</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#but-we-could-also-use-the-sample-covariance-matrix-here">But we could also use the sample covariance matrix here</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamental-factor-risk-models">Fundamental Factor Risk Models</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#riskmodel-is-injected-into-optimizer">RiskModel is injected into optimizer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-abstract-risk-model">An abstract Risk Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#but-we-could-also-use-the-sample-covariance-matrix-here">But we could also use the sample covariance matrix here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamental-factor-risk-models">Fundamental Factor Risk Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riskmodel-is-injected-into-optimizer">RiskModel is injected into optimizer</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -376,7 +370,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="factor-risk-models">
+<h1>Factor risk models<a class="headerlink" href="#factor-risk-models" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -390,8 +386,8 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="use-an-abstract-risk-model">
-<h1>Use an abstract Risk Model<a class="headerlink" href="#use-an-abstract-risk-model" title="Permalink to this heading">#</a></h1>
+<section id="an-abstract-risk-model">
+<h2>An abstract Risk Model<a class="headerlink" href="#an-abstract-risk-model" title="Permalink to this heading">#</a></h2>
 <p>An abstract risk model is the parent for concrete risk models. It serves as the blueprint. No instances of this class can be created.
 Each risk model inherits the interface and all attributes defined in this class.</p>
 <p>An optimizer would get a risk model. Since all risk models share the interface it is trivial to change the risk model.</p>
@@ -413,7 +409,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </section>
 <section id="load-prices-and-compute-returns">
-<h1>Load prices and compute returns<a class="headerlink" href="#load-prices-and-compute-returns" title="Permalink to this heading">#</a></h1>
+<h2>Load prices and compute returns<a class="headerlink" href="#load-prices-and-compute-returns" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/stock_prices.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -430,7 +426,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </section>
 <section id="compute-principal-components">
-<h1>Compute principal components<a class="headerlink" href="#compute-principal-components" title="Permalink to this heading">#</a></h1>
+<h2>Compute principal components<a class="headerlink" href="#compute-principal-components" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">components</span> <span class="o">=</span> <span class="n">principal_components</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -440,7 +436,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </section>
 <section id="create-the-risk-model-here-a-factormodel">
-<h1>Create the risk model, here a FactorModel<a class="headerlink" href="#create-the-risk-model-here-a-factormodel" title="Permalink to this heading">#</a></h1>
+<h2>Create the risk model, here a FactorModel<a class="headerlink" href="#create-the-risk-model-here-a-factormodel" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">TimeseriesFactorRiskModel</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="n">factors</span><span class="o">=</span><span class="n">components</span><span class="o">.</span><span class="n">returns</span><span class="p">)</span>
@@ -458,7 +454,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </section>
 <section id="but-we-could-also-use-the-sample-covariance-matrix-here">
-<h1>But we could also use the sample covariance matrix here<a class="headerlink" href="#but-we-could-also-use-the-sample-covariance-matrix-here" title="Permalink to this heading">#</a></h1>
+<h2>But we could also use the sample covariance matrix here<a class="headerlink" href="#but-we-could-also-use-the-sample-covariance-matrix-here" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
@@ -479,7 +475,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </section>
 <section id="fundamental-factor-risk-models">
-<h1>Fundamental Factor Risk Models<a class="headerlink" href="#fundamental-factor-risk-models" title="Permalink to this heading">#</a></h1>
+<h2>Fundamental Factor Risk Models<a class="headerlink" href="#fundamental-factor-risk-models" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model3</span> <span class="o">=</span> <span class="n">FundamentalFactorRiskModel</span><span class="p">(</span><span class="n">factor_covariance</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
@@ -499,7 +495,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </section>
 <section id="riskmodel-is-injected-into-optimizer">
-<h1>RiskModel is injected into optimizer<a class="headerlink" href="#riskmodel-is-injected-into-optimizer" title="Permalink to this heading">#</a></h1>
+<h2>RiskModel is injected into optimizer<a class="headerlink" href="#riskmodel-is-injected-into-optimizer" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;weights&quot;</span><span class="p">)</span>
@@ -642,6 +638,7 @@ dtype: float64
 </div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -688,7 +685,7 @@ dtype: float64
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Large problem with 1000 assets and 100 factors</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -710,15 +707,14 @@ dtype: float64
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Use an abstract Risk Model</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#but-we-could-also-use-the-sample-covariance-matrix-here">But we could also use the sample covariance matrix here</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamental-factor-risk-models">Fundamental Factor Risk Models</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#riskmodel-is-injected-into-optimizer">RiskModel is injected into optimizer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-abstract-risk-model">An abstract Risk Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#but-we-could-also-use-the-sample-covariance-matrix-here">But we could also use the sample covariance matrix here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamental-factor-risk-models">Fundamental Factor Risk Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riskmodel-is-injected-into-optimizer">RiskModel is injected into optimizer</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>
