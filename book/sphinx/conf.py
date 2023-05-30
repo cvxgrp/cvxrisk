@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 master_doc = "index"
-project = "cvxsimulator"
+project = "cvxrisk"
 
 source_suffix = {
     ".rst": "restructuredtext",
@@ -37,7 +37,7 @@ napoleon_numpy_docstring = True
 # HTML -----------------------------------------------------------------
 html_favicon = "_static/logo.jpeg"
 html_logo = "_static/logo.jpeg"
-html_title = "cvxsimulator Documentation"
+html_title = "cvxrisk Documentation"
 html_show_sourcelink = True
 html_css_files = [
     "custom.css",
