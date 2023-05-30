@@ -1,8 +1,8 @@
-# [cvxsimulator](http://www.cvxgrp.org/simulator/)
+# [cvxrisk](http://www.cvxgrp.org/cvxrisk/)
 
-[![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
+[![PyPI version](https://badge.fury.io/py/cvxrisk.svg)](https://badge.fury.io/py/cvxrisk)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
-[![PyPI download month](https://img.shields.io/pypi/dm/cvxsimulator.svg)](https://pypi.python.org/pypi/cvxsimulator/)
+[![PyPI download month](https://img.shields.io/pypi/dm/cvxrisk.svg)](https://pypi.python.org/pypi/cvxrisk/)
 
 Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$, 
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.

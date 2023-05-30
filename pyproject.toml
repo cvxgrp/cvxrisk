@@ -1,16 +1,16 @@
 [tool.poetry]
-name = "cvxsimulator"
+name = "cvxrisk"
 version = "0.0.0"
-description = "Simple simulator for investors"
+description = "Simple riskengine for cvxpy"
 authors = ["Thomas Schmelzer"]
 readme = "README.md"
-repository = "https://github.com/cvxgrp/simulator"
+repository = "https://github.com/cvxgrp/cvxrisk"
 packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-numpy = "^1.24.2"
-pandas = "<2.0.0"   # unfortunately otherwise crash with quantstats
+python = ">=3.8"
+pandas = "*"   # unfortunately otherwise crash with quantstats
+scikit-learn = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "7.2.0"
@@ -21,6 +21,7 @@ plotly = "*"
 cvxpy = "*"
 jupyterlab = "*"
 loguru = "*"
+cvxsimulator = "*"
 
 [build-system]
 requires = ["poetry-core"]
