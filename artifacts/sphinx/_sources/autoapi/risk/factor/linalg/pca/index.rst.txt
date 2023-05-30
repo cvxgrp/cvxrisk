@@ -1,0 +1,45 @@
+:py:mod:`risk.factor.linalg.pca`
+================================
+
+.. py:module:: risk.factor.linalg.pca
+
+.. autoapi-nested-parse::
+
+   PCA analysis
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   risk.factor.linalg.pca.pca
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   risk.factor.linalg.pca.PCA
+
+
+.. py:data:: PCA
+   
+
+   
+
+.. py:function:: pca(returns, n_components=10)
+
+   Compute the first n principal components for a return matrix
+
+   :param returns: DataFrame of prices
+   :param n_components: Number of components
+
+

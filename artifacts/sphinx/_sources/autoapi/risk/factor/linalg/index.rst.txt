@@ -1,0 +1,15 @@
+:py:mod:`risk.factor.linalg`
+============================
+
+.. py:module:: risk.factor.linalg
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   pca/index.rst
+
+

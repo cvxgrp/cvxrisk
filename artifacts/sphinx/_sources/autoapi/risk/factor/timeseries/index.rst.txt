@@ -1,0 +1,88 @@
+:py:mod:`risk.factor.timeseries`
+================================
+
+.. py:module:: risk.factor.timeseries
+
+.. autoapi-nested-parse::
+
+   Time series factor risk model
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.factor.timeseries.TimeseriesFactorRiskModel
+
+
+
+
+.. py:class:: TimeseriesFactorRiskModel
+
+   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+
+   Time series factor risk model
+
+   .. py:attribute:: factors
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: returns
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: cov
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: systematic_returns(self)
+      :property:
+
+      The systematic returns are the factor return * exposure
+
+
+   .. py:method:: idiosyncratic_returns(self)
+      :property:
+
+      The idiosyncratic_returns are the returns - systematic returns. Hence:
+
+      Returns = systematic returns + idiosyncratic returns
+
+
+   .. py:method:: variance(self, weights)
+
+      Estimates variance for a given (cvxpy or numpy) vector
+
+      :param weights: the aforementioned vector
+
+
+   .. py:method:: _covariance(self)
+      :property:
+
+      Either use the covariance matrix provided by the user or compute one
+
+
+   .. py:method:: variance_matrix(self)
+      :property:
+
+      Constructs the matrix G such that
+      w'G'G w = variance
+
+
+   .. py:method:: estimate_risk(self, weights)
+
+      Estimate the variance given the portfolio weights
+
+
+

@@ -1,0 +1,25 @@
+:py:mod:`risk`
+==============
+
+.. py:module:: risk
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   factor/index.rst
+   sample/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   model/index.rst
+
+

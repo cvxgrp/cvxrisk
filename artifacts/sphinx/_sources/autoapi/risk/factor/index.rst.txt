@@ -1,0 +1,27 @@
+:py:mod:`risk.factor`
+=====================
+
+.. py:module:: risk.factor
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   linalg/index.rst
+   util/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   _model/index.rst
+   fundamental/index.rst
+   timeseries/index.rst
+
+

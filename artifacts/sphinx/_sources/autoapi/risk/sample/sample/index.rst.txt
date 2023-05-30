@@ -1,0 +1,49 @@
+:py:mod:`risk.sample.sample`
+============================
+
+.. py:module:: risk.sample.sample
+
+.. autoapi-nested-parse::
+
+   Risk models based on the sample covariance matrix
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.sample.sample.SampleCovariance
+   risk.sample.sample.SampleCovarianceCholesky
+
+
+
+
+.. py:class:: SampleCovariance(cov)
+
+   Bases: :py:obj:`cvx.risk.model.RiskModel`
+
+   Sample covariance model
+
+   .. py:method:: estimate_risk(self, weights)
+
+      Estimate the variance given the portfolio weights
+
+
+
+.. py:class:: SampleCovarianceCholesky(cov)
+
+   Bases: :py:obj:`cvx.risk.model.RiskModel`
+
+   Risk model based on Cholesky decomposition of the sample cov matrix
+
+   .. py:method:: estimate_risk(self, weights)
+
+      Estimate the variance given the portfolio weights
+
+
+

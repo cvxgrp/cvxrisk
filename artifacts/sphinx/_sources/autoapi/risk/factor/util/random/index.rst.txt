@@ -1,0 +1,48 @@
+:py:mod:`risk.factor.util.random`
+=================================
+
+.. py:module:: risk.factor.util.random
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   risk.factor.util.random.random_weights
+   risk.factor.util.random.random_factors
+   risk.factor.util.random.random_beta
+   risk.factor.util.random.random_noise
+   risk.factor.util.random.random_assets
+
+
+
+.. py:function:: random_weights(assets)
+
+   Construct a vector of non-negative random weights. Their sum shall be 1
+
+
+.. py:function:: random_factors(T, N=2, const_factor=True)
+
+   Construct N random factor time series for T timestamps
+
+
+.. py:function:: random_beta(assets, factors)
+
+   Construct a random exposure matrix
+
+
+.. py:function:: random_noise(frame)
+
+   Construct a frame of random noise with exactly the same dimensions as the input frame
+
+
+.. py:function:: random_assets(num)
+
+   Construct a vector of random assets
+
+

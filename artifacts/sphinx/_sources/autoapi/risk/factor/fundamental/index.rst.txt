@@ -1,0 +1,55 @@
+:py:mod:`risk.factor.fundamental`
+=================================
+
+.. py:module:: risk.factor.fundamental
+
+.. autoapi-nested-parse::
+
+   Fundamental factor risk model
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.factor.fundamental.FundamentalFactorRiskModel
+
+
+
+
+.. py:class:: FundamentalFactorRiskModel
+
+   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+
+   Fundamental factor risk model
+
+   .. py:attribute:: factor_covariance
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:method:: variance(self, weights)
+
+      Estimates variance for a given (cvxpy or numpy) vector
+
+      :param weights: the aforementioned vector
+
+
+   .. py:method:: variance_matrix(self)
+      :property:
+
+      Constructs the matrix G such that
+      w'G'G w = variance
+
+
+   .. py:method:: estimate_risk(self, weights)
+
+      Estimate the variance given the portfolio weights
+
+
+

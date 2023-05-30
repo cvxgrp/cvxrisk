@@ -1,0 +1,37 @@
+:py:mod:`risk.model`
+====================
+
+.. py:module:: risk.model
+
+.. autoapi-nested-parse::
+
+   Abstract risk model
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.model.RiskModel
+
+
+
+
+.. py:class:: RiskModel
+
+   Bases: :py:obj:`abc.ABC`
+
+   Abstract risk model
+
+   .. py:method:: estimate_risk(self, weights)
+      :abstractmethod:
+
+      Estimate the variance given the portfolio weights
+
+
+
