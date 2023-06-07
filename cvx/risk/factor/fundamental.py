@@ -14,6 +14,9 @@ from cvx.risk.factor._model import FactorModel
 class FundamentalFactorRiskModel(FactorModel):
     """Fundamental factor risk model"""
 
+    # def __init__(self, num):
+    #    self.num = num
+
     factor_covariance: pd.DataFrame = None
 
     def variance(self, weights):
