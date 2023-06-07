@@ -4,7 +4,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from cvx.risk.factor.fundamental import FundamentalFactorRiskModel, FundamentalFactorRiskModel_Product
+from cvx.risk.factor.fundamental import FundamentalFactorRiskModel
+from cvx.risk.factor.fundamental import FundamentalFactorRiskModel_Product
 from cvx.risk.sample.sample import SampleCovariance
 from cvx.risk.sample.sample import SampleCovarianceCholesky
 
@@ -32,6 +33,7 @@ def test_fundamental_factor_risk_model():
 
     var = riskmodel.estimate_risk(np.array([1.0, 1.0])).value
     np.testing.assert_almost_equal(var, 4.0)
+
 
 def test_fundamental_factor_risk_model_product():
     riskmodel = FundamentalFactorRiskModel_Product()

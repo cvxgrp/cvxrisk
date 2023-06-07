@@ -49,7 +49,7 @@ class TimeseriesFactorRiskModel(FactorModel):
         """
         return self.returns - self.systematic_returns
 
-    #def variance(self, weights):
+    # def variance(self, weights):
     #    """
     #    Estimates variance for a given (cvxpy or numpy) vector
     #
@@ -68,8 +68,8 @@ class TimeseriesFactorRiskModel(FactorModel):
 
         return self.cov
 
-    #@property
-    #def variance_matrix(self):
+    # @property
+    # def variance_matrix(self):
     #    """
     #    Constructs the matrix G such that
     #    w'G'G w = variance
