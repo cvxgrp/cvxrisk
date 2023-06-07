@@ -33,5 +33,5 @@ class FundamentalFactorRiskModel(FactorModel):
         """
         return super()._variance_matrix(cov=self.factor_covariance)
 
-    def estimate_risk(self, weights):
+    def estimate_risk(self, weights, **kwargs):
         return self.variance(weights)

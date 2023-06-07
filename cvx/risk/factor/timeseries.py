@@ -75,5 +75,5 @@ class TimeseriesFactorRiskModel(FactorModel):
         """
         return super()._variance_matrix(self._covariance)
 
-    def estimate_risk(self, weights):
+    def estimate_risk(self, weights, **kwargs):
         return self.variance(weights)

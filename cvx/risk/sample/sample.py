@@ -13,24 +13,24 @@ from cvx.risk.model import RiskModel
 class SampleCovariance(RiskModel):
     """Sample covariance model"""
 
-    def __init__(self, cov):
-        num = cov.shape[0]
+    def __init__(self, num):
         self.cov = cvx.Parameter(
             shape=(num, num), name="covariance", PSD=True, value=np.identity(num)
         )
-        self.cov.value = cov
 
-    def estimate_risk(self, weights):
+    def estimate_risk(self, weights, **kwargs):
         return cvx.quad_form(weights, self.cov)
 
 
 class SampleCovarianceCholesky(RiskModel):
     """Risk model based on Cholesky decomposition of the sample cov matrix"""
 
-    def __init__(self, cov):
-        num = cov.shape[0]
-        self.__root = cvx.Parameter(shape=(num, num))
-        self.__root.value = sc.linalg.sqrtm(cov)
+    def __init__(self, num):
+        self.cov = cvx.Parameter(
+            shape=(num, num), name="covariance", PSD=True, value=np.identity(num)
+        )
 
-    def estimate_risk(self, weights):
-        return cvx.sum_squares(self.__root @ weights)
+    def estimate_risk(self, weights, **kwargs):
+        """Estimate the risk by computing the Cholesky decomposition of self.cov"""
+        root = sc.linalg.cholesky(self.cov.value)
+        return cvx.sum_squares(root @ weights)
