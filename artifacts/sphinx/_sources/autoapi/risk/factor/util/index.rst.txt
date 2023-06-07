@@ -4,12 +4,3 @@
 .. py:module:: risk.factor.util
 
 
-Submodules
-----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   random/index.rst
-
-

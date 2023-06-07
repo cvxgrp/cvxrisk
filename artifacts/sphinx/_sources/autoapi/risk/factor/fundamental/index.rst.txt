@@ -18,6 +18,7 @@ Classes
 .. autoapisummary::
 
    risk.factor.fundamental.FundamentalFactorRiskModel
+   risk.factor.fundamental.FundamentalFactorRiskModel_Product
 
 
 
@@ -33,23 +34,26 @@ Classes
 
       
 
-   .. py:method:: variance(self, weights)
-
-      Estimates variance for a given (cvxpy or numpy) vector
-
-      :param weights: the aforementioned vector
-
-
-   .. py:method:: variance_matrix(self)
-      :property:
-
-      Constructs the matrix G such that
-      w'G'G w = variance
-
-
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the variance given the portfolio weights
+
+
+
+.. py:class:: FundamentalFactorRiskModel_Product
+
+   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+
+   Fundamental factor risk model
+
+   .. py:attribute:: factor_covariance
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the risk by computing a matrix G such that variance = w'G'G w
 
 
 

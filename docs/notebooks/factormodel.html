@@ -381,6 +381,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">cvx.risk.factor.linalg.pca</span> <span class="kn">import</span> <span class="n">pca</span> <span class="k">as</span> <span class="n">principal_components</span>
 <span class="kn">from</span> <span class="nn">cvx.risk.factor.timeseries</span> <span class="kn">import</span> <span class="n">TimeseriesFactorRiskModel</span>
 <span class="kn">from</span> <span class="nn">cvx.risk.factor.fundamental</span> <span class="kn">import</span> <span class="n">FundamentalFactorRiskModel</span>
+
 <span class="kn">from</span> <span class="nn">cvx.risk.sample.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance</span><span class="p">,</span> <span class="n">SampleCovarianceCholesky</span>
 </pre></div>
 </div>
@@ -457,25 +458,22 @@ Each risk model inherits the interface and all attributes defined in this class.
 <h2>But we could also use the sample covariance matrix here<a class="headerlink" href="#but-we-could-also-use-the-sample-covariance-matrix-here" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print(returns.cov().shape)</span>
+<span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">model2</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+
 <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
-<span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovarianceCholesky</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovarianceCholesky</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">model2</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
 <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-
-<span class="ne">TypeError</span>: SampleCovariance.__init__() got an unexpected keyword argument &#39;cov&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array(8.36104368e-05)
 </pre></div>
 </div>
 </div>
@@ -495,7 +493,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029708e-05
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029715e-05
 </pre></div>
 </div>
 </div>
@@ -545,7 +543,7 @@ PFE     2.484151e-01
 JPM    -2.403183e-18
 SBUX    1.949663e-01
 dtype: float64
-4.427599563869687e-05
+4.4275995638696866e-05
 </pre></div>
 </div>
 </div>
@@ -639,7 +637,7 @@ PFE     2.484151e-01
 JPM    -2.403183e-18
 SBUX    1.949663e-01
 dtype: float64
-4.427599563869687e-05
+4.4275995638696866e-05
 </pre></div>
 </div>
 </div>
