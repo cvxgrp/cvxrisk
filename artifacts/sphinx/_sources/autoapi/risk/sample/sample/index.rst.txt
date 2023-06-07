@@ -23,27 +23,27 @@ Classes
 
 
 
-.. py:class:: SampleCovariance(cov)
+.. py:class:: SampleCovariance(num)
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
    Sample covariance model
 
-   .. py:method:: estimate_risk(self, weights)
+   .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the variance given the portfolio weights
 
 
 
-.. py:class:: SampleCovarianceCholesky(cov)
+.. py:class:: SampleCovarianceCholesky(num)
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
    Risk model based on Cholesky decomposition of the sample cov matrix
 
-   .. py:method:: estimate_risk(self, weights)
+   .. py:method:: estimate_risk(self, weights, **kwargs)
 
-      Estimate the variance given the portfolio weights
+      Estimate the risk by computing the Cholesky decomposition of self.cov
 
 
 

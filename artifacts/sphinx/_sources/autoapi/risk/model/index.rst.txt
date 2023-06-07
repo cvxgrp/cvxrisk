@@ -28,7 +28,7 @@ Classes
 
    Abstract risk model
 
-   .. py:method:: estimate_risk(self, weights)
+   .. py:method:: estimate_risk(self, weights, **kwargs)
       :abstractmethod:
 
       Estimate the variance given the portfolio weights

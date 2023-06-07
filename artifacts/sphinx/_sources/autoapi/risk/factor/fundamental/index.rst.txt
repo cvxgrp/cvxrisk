@@ -47,7 +47,7 @@ Classes
       w'G'G w = variance
 
 
-   .. py:method:: estimate_risk(self, weights)
+   .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the variance given the portfolio weights
 
