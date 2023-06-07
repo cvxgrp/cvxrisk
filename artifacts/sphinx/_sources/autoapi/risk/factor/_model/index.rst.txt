@@ -59,6 +59,8 @@ Classes
 
    .. py:method:: _variance(self, weights, cov)
 
+      Compute the total variance
+
 
    .. py:method:: _variance_matrix(self, cov)
 

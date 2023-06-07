@@ -108,6 +108,7 @@
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="FactorModel._cholesky_t"><a class="viewcode-back" href="../../../autoapi/risk/factor/_model/index.html#risk.factor._model.FactorModel._cholesky_t">[docs]</a>    <span class="k">def</span> <span class="nf">_cholesky_t</span><span class="p">(</span><span class="n">cov</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">))</span></div>
+        <span class="c1"># return np.linalg.cholesky(cov)</span>
 
 <div class="viewcode-block" id="FactorModel._variance_factor"><a class="viewcode-back" href="../../../autoapi/risk/factor/_model/index.html#risk.factor._model.FactorModel._variance_factor">[docs]</a>    <span class="k">def</span> <span class="nf">_variance_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">cov</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -118,6 +119,9 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="FactorModel._variance"><a class="viewcode-back" href="../../../autoapi/risk/factor/_model/index.html#risk.factor._model.FactorModel._variance">[docs]</a>    <span class="k">def</span> <span class="nf">_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">cov</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the total variance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance_factor</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">cov</span><span class="o">=</span><span class="n">cov</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variance_residual</span><span class="p">(</span>
             <span class="n">weights</span>
         <span class="p">)</span></div>
