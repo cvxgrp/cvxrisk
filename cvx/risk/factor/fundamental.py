@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import pandas as pd
+import cvxpy as cvx
 
 from cvx.risk.factor._model import FactorModel
 
@@ -14,27 +15,18 @@ from cvx.risk.factor._model import FactorModel
 class FundamentalFactorRiskModel(FactorModel):
     """Fundamental factor risk model"""
 
-    # def __init__(self, num):
-    #    self.num = num
-
     factor_covariance: pd.DataFrame = None
 
-    def variance(self, weights):
-        """
-        Estimates variance for a given (cvxpy or numpy) vector
-
-        Args:
-            weights: the aforementioned vector
-        """
+    # let's find out what's faster
+    def estimate_risk(self, weights, **kwargs):
         return super()._variance(weights, cov=self.factor_covariance)
 
-    @property
-    def variance_matrix(self):
-        """
-        Constructs the matrix G such that
-        w'G'G w = variance
-        """
-        return super()._variance_matrix(cov=self.factor_covariance)
+@dataclass
+class FundamentalFactorRiskModel_Product(FactorModel):
+    """Fundamental factor risk model"""
 
+    factor_covariance: pd.DataFrame = None
     def estimate_risk(self, weights, **kwargs):
-        return self.variance(weights)
+        """Estimate the risk by computing a matrix G such that variance = w'G'G w"""
+        g = super()._variance_matrix(cov=self.factor_covariance)
+        return cvx.sum_squares(g @ weights)
