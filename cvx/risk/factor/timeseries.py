@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import cvxpy as cvx
 import numpy as np
 import pandas as pd
 
@@ -48,14 +49,14 @@ class TimeseriesFactorRiskModel(FactorModel):
         """
         return self.returns - self.systematic_returns
 
-    def variance(self, weights):
-        """
-        Estimates variance for a given (cvxpy or numpy) vector
-
-        Args:
-            weights: the aforementioned vector
-        """
-        return super()._variance(weights, cov=self._covariance)
+    #def variance(self, weights):
+    #    """
+    #    Estimates variance for a given (cvxpy or numpy) vector
+    #
+    #    Args:
+    #        weights: the aforementioned vector
+    #    """
+    #    return super()._variance(weights, cov=self._covariance)
 
     @property
     def _covariance(self):
@@ -67,13 +68,18 @@ class TimeseriesFactorRiskModel(FactorModel):
 
         return self.cov
 
-    @property
-    def variance_matrix(self):
-        """
-        Constructs the matrix G such that
-        w'G'G w = variance
-        """
-        return super()._variance_matrix(self._covariance)
+    #@property
+    #def variance_matrix(self):
+    #    """
+    #    Constructs the matrix G such that
+    #    w'G'G w = variance
+    #    """
+    #    return super()._variance_matrix(self._covariance)
 
-    def estimate_risk(self, weights):
-        return self.variance(weights)
+    def estimate_risk(self, weights, **kwargs):
+        return super()._variance(weights, cov=self._covariance)
+
+    def estimate_risk2(self, weights, **kwargs):
+        """Estimate the risk by computing a matrix G such that variance = w'G'G w"""
+        g = super()._variance_matrix(cov=self._covariance)
+        return cvx.sum_squares(g @ weights)

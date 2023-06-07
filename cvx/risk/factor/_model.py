@@ -35,6 +35,7 @@ class FactorModel(RiskModel):
     @staticmethod
     def _cholesky_t(cov):
         return np.transpose(np.linalg.cholesky(cov))
+        # return np.linalg.cholesky(cov)
 
     def _variance_factor(self, weights, cov):
         """
@@ -45,6 +46,9 @@ class FactorModel(RiskModel):
         )
 
     def _variance(self, weights, cov):
+        """
+        Compute the total variance
+        """
         return self._variance_factor(weights, cov=cov) + self._variance_residual(
             weights
         )

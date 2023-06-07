@@ -20,7 +20,7 @@ def pca(returns, n_components=10):
         n_components: Number of components
     """
 
-    # USING SKLEARN. Let's look at the first 20 components
+    # USING SKLEARN. Let's look at the first n components
     sklearn_pca = sklearnPCA(n_components=n_components)
     sklearn_pca.fit_transform(returns)
 

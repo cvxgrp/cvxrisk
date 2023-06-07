@@ -28,6 +28,8 @@ def test_timeseries_model(returns):
     var = model.estimate_risk(weights).value
     np.testing.assert_almost_equal(var, 8.527444810470023e-05)
 
+    var = model.estimate_risk2(weights).value
+    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
 
 def test_fundamental_model(returns):
     model = TimeseriesFactorRiskModel(
@@ -43,4 +45,21 @@ def test_fundamental_model(returns):
 
     weights = pd.Series(index=returns.columns, data=0.05).values
     var = model.estimate_risk(weights).value
+    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
+
+def test_with_covariance(returns):
+    factors = principal_components(returns=returns, n_components=10).returns
+    cov = factors.cov()
+
+    model = TimeseriesFactorRiskModel(
+        cov=cov,
+        factors=factors,
+        returns=returns
+    )
+
+    weights = pd.Series(index=returns.columns, data=0.05).values
+    var = model.estimate_risk(weights).value
+    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
+
+    var = model.estimate_risk2(weights).value
     np.testing.assert_almost_equal(var, 8.527444810470023e-05)

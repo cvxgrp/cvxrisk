@@ -11,7 +11,7 @@ class RiskModel(ABC):
     """Abstract risk model"""
 
     @abstractmethod
-    def estimate_risk(self, weights):
+    def estimate_risk(self, weights, **kwargs):
         """
         Estimate the variance given the portfolio weights
         """
