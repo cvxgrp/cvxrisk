@@ -34,7 +34,7 @@ class TimeseriesFactorRiskModel(FactorModel):
         self.idiosyncratic_risk = self.idiosyncratic_returns.std()
 
     @property
-    def systematic_returns(self):
+    def _systematic_returns(self):
         """
         The systematic returns are the factor return * exposure
         """
@@ -47,16 +47,7 @@ class TimeseriesFactorRiskModel(FactorModel):
 
         Returns = systematic returns + idiosyncratic returns
         """
-        return self.returns - self.systematic_returns
-
-    # def variance(self, weights):
-    #    """
-    #    Estimates variance for a given (cvxpy or numpy) vector
-    #
-    #    Args:
-    #        weights: the aforementioned vector
-    #    """
-    #    return super()._variance(weights, cov=self._covariance)
+        return self.returns - self._systematic_returns
 
     @property
     def _covariance(self):
@@ -68,18 +59,13 @@ class TimeseriesFactorRiskModel(FactorModel):
 
         return self.cov
 
-    # @property
-    # def variance_matrix(self):
-    #    """
-    #    Constructs the matrix G such that
-    #    w'G'G w = variance
-    #    """
-    #    return super()._variance_matrix(self._covariance)
-
     def estimate_risk(self, weights, **kwargs):
         return super()._variance(weights, cov=self._covariance)
 
-    def estimate_risk2(self, weights, **kwargs):
+
+@dataclass
+class TimeseriesFactorRiskModel_Product(TimeseriesFactorRiskModel):
+    def estimate_risk(self, weights, **kwargs):
         """Estimate the risk by computing a matrix G such that variance = w'G'G w"""
         g = super()._variance_matrix(cov=self._covariance)
         return cvx.sum_squares(g @ weights)

@@ -20,38 +20,19 @@ class FactorModel(RiskModel):
     exposure: pd.DataFrame = None
     idiosyncratic_risk: pd.Series = None
 
-    def _project_on_factors(self, weights):
-        """
-        Project the weights (in asset space) down into factor space
-        """
-        return self.exposure.values @ weights
-
-    def _variance_residual(self, weights):
-        """
-        Compute the contribution to variance from the idiosyncratic risks
-        """
-        return cvx.sum_squares(cvx.multiply(self.idiosyncratic_risk.values, weights))
-
-    @staticmethod
-    def _cholesky_t(cov):
-        return np.transpose(np.linalg.cholesky(cov))
-        # return np.linalg.cholesky(cov)
-
-    def _variance_factor(self, weights, cov):
-        """
-        Compute the contribution to variance from the factor covariance matrix
-        """
-        return cvx.sum_squares(
-            self._cholesky_t(cov) @ self._project_on_factors(weights)
-        )
-
     def _variance(self, weights, cov):
         """
         Compute the total variance
         """
-        return self._variance_factor(weights, cov=cov) + self._variance_residual(
-            weights
+        var_factor = cvx.sum_squares(
+            np.transpose(np.linalg.cholesky(cov)) @ (self.exposure.values @ weights)
         )
+
+        var_residual = cvx.sum_squares(
+            cvx.multiply(self.idiosyncratic_risk.values, weights)
+        )
+
+        return var_factor + var_residual
 
     def _variance_matrix(self, cov):
         """
@@ -66,6 +47,8 @@ class FactorModel(RiskModel):
         return sparse.vstack(
             (
                 sparse.diags(self.idiosyncratic_risk.values, 0),
-                sparse.csr_matrix(self._cholesky_t(cov) @ self.exposure.values),
+                sparse.csr_matrix(
+                    np.transpose(np.linalg.cholesky(cov)) @ self.exposure.values
+                ),
             )
         )

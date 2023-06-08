@@ -23,10 +23,8 @@ class FundamentalFactorRiskModel(FactorModel):
 
 
 @dataclass
-class FundamentalFactorRiskModel_Product(FactorModel):
-    """Fundamental factor risk model"""
-
-    factor_covariance: pd.DataFrame = None
+class FundamentalFactorRiskModel_Product(FundamentalFactorRiskModel):
+    """Fundamental factor risk model in product form"""
 
     def estimate_risk(self, weights, **kwargs):
         """Estimate the risk by computing a matrix G such that variance = w'G'G w"""
