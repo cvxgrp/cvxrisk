@@ -42,14 +42,9 @@ Classes
 
 .. py:class:: FundamentalFactorRiskModel_Product
 
-   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+   Bases: :py:obj:`FundamentalFactorRiskModel`
 
-   Fundamental factor risk model
-
-   .. py:attribute:: factor_covariance
-      :annotation: :pandas.DataFrame
-
-      
+   Fundamental factor risk model in product form
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
 

@@ -18,7 +18,7 @@ Classes
 .. autoapisummary::
 
    risk.sample.sample.SampleCovariance
-   risk.sample.sample.SampleCovarianceCholesky
+   risk.sample.sample.SampleCovariance_Product
 
 
 
@@ -35,9 +35,9 @@ Classes
 
 
 
-.. py:class:: SampleCovarianceCholesky(num)
+.. py:class:: SampleCovariance_Product(num)
 
-   Bases: :py:obj:`cvx.risk.model.RiskModel`
+   Bases: :py:obj:`SampleCovariance`
 
    Risk model based on Cholesky decomposition of the sample cov matrix
 

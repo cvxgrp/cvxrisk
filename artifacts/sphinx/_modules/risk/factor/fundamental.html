@@ -96,10 +96,8 @@
 
 
 <span class="nd">@dataclass</span>
-<div class="viewcode-block" id="FundamentalFactorRiskModel_Product"><a class="viewcode-back" href="../../../autoapi/risk/factor/fundamental/index.html#risk.factor.fundamental.FundamentalFactorRiskModel_Product">[docs]</a><span class="k">class</span> <span class="nc">FundamentalFactorRiskModel_Product</span><span class="p">(</span><span class="n">FactorModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fundamental factor risk model&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="FundamentalFactorRiskModel_Product.factor_covariance"><a class="viewcode-back" href="../../../autoapi/risk/factor/fundamental/index.html#risk.factor.fundamental.FundamentalFactorRiskModel_Product.factor_covariance">[docs]</a>    <span class="n">factor_covariance</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="FundamentalFactorRiskModel_Product"><a class="viewcode-back" href="../../../autoapi/risk/factor/fundamental/index.html#risk.factor.fundamental.FundamentalFactorRiskModel_Product">[docs]</a><span class="k">class</span> <span class="nc">FundamentalFactorRiskModel_Product</span><span class="p">(</span><span class="n">FundamentalFactorRiskModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fundamental factor risk model in product form&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="FundamentalFactorRiskModel_Product.estimate_risk"><a class="viewcode-back" href="../../../autoapi/risk/factor/fundamental/index.html#risk.factor.fundamental.FundamentalFactorRiskModel_Product.estimate_risk">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate the risk by computing a matrix G such that variance = w&#39;G&#39;G w&quot;&quot;&quot;</span>

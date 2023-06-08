@@ -38,25 +38,6 @@ Classes
 
       
 
-   .. py:method:: _project_on_factors(self, weights)
-
-      Project the weights (in asset space) down into factor space
-
-
-   .. py:method:: _variance_residual(self, weights)
-
-      Compute the contribution to variance from the idiosyncratic risks
-
-
-   .. py:method:: _cholesky_t(cov)
-      :staticmethod:
-
-
-   .. py:method:: _variance_factor(self, weights, cov)
-
-      Compute the contribution to variance from the factor covariance matrix
-
-
    .. py:method:: _variance(self, weights, cov)
 
       Compute the total variance
