@@ -103,9 +103,6 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#risk.factor.timeseries.TimeseriesFactorRiskModel" title="risk.factor.timeseries.TimeseriesFactorRiskModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeseriesFactorRiskModel</span></code></a></p></td>
 <td><p>Time series factor risk model</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#risk.factor.timeseries.TimeseriesFactorRiskModel_Product" title="risk.factor.timeseries.TimeseriesFactorRiskModel_Product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeseriesFactorRiskModel_Product</span></code></a></p></td>
-<td><p>Time series factor risk model</p></td>
-</tr>
 </tbody>
 </table>
 <dl class="py class">
@@ -134,8 +131,8 @@
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="risk.factor.timeseries.TimeseriesFactorRiskModel._systematic_returns">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_systematic_returns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/risk/factor/timeseries.html#TimeseriesFactorRiskModel._systematic_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.factor.timeseries.TimeseriesFactorRiskModel._systematic_returns" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="risk.factor.timeseries.TimeseriesFactorRiskModel.systematic_returns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">systematic_returns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/risk/factor/timeseries.html#TimeseriesFactorRiskModel.systematic_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.factor.timeseries.TimeseriesFactorRiskModel.systematic_returns" title="Permalink to this definition"></a></dt>
 <dd><p>The systematic returns are the factor return * exposure</p>
 </dd></dl>
 
@@ -156,19 +153,6 @@
 <dt class="sig sig-object py" id="risk.factor.timeseries.TimeseriesFactorRiskModel.estimate_risk">
 <span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/risk/factor/timeseries.html#TimeseriesFactorRiskModel.estimate_risk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.factor.timeseries.TimeseriesFactorRiskModel.estimate_risk" title="Permalink to this definition"></a></dt>
 <dd><p>Estimate the variance given the portfolio weights</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="risk.factor.timeseries.TimeseriesFactorRiskModel_Product">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.factor.timeseries.</span></span><span class="sig-name descname"><span class="pre">TimeseriesFactorRiskModel_Product</span></span><a class="reference internal" href="../../../../_modules/risk/factor/timeseries.html#TimeseriesFactorRiskModel_Product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.factor.timeseries.TimeseriesFactorRiskModel_Product" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#risk.factor.timeseries.TimeseriesFactorRiskModel" title="risk.factor.timeseries.TimeseriesFactorRiskModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeseriesFactorRiskModel</span></code></a></p>
-<p>Time series factor risk model</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="risk.factor.timeseries.TimeseriesFactorRiskModel_Product.estimate_risk">
-<span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/risk/factor/timeseries.html#TimeseriesFactorRiskModel_Product.estimate_risk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.factor.timeseries.TimeseriesFactorRiskModel_Product.estimate_risk" title="Permalink to this definition"></a></dt>
-<dd><p>Estimate the risk by computing a matrix G such that variance = w’G’G w</p>
 </dd></dl>
 
 </dd></dl>
