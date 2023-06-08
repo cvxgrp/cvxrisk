@@ -8,7 +8,6 @@ import pytest
 from cvx.risk.factor.fundamental import FundamentalFactorRiskModel
 from cvx.risk.factor.linalg.pca import pca as principal_components
 from cvx.risk.factor.timeseries import TimeseriesFactorRiskModel
-from cvx.risk.factor.timeseries import TimeseriesFactorRiskModel_Product
 
 
 @pytest.fixture()
@@ -23,13 +22,6 @@ def test_timeseries_model(returns):
     weights = pd.Series(index=returns.columns, data=0.05).values
 
     model = TimeseriesFactorRiskModel(
-        returns=returns,
-        factors=principal_components(returns=returns, n_components=10).returns,
-    )
-    var = model.estimate_risk(weights).value
-    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
-
-    model = TimeseriesFactorRiskModel_Product(
         returns=returns,
         factors=principal_components(returns=returns, n_components=10).returns,
     )
@@ -60,9 +52,5 @@ def test_with_covariance(returns):
     weights = pd.Series(index=returns.columns, data=0.05).values
 
     model = TimeseriesFactorRiskModel(cov=cov, factors=factors, returns=returns)
-    var = model.estimate_risk(weights).value
-    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
-
-    model = TimeseriesFactorRiskModel_Product(cov=cov, factors=factors, returns=returns)
     var = model.estimate_risk(weights).value
     np.testing.assert_almost_equal(var, 8.527444810470023e-05)
