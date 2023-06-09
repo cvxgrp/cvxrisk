@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-import cvxpy as cvx
 import numpy as np
 import pandas as pd
 
@@ -34,7 +33,7 @@ class TimeseriesFactorRiskModel(FactorModel):
         self.idiosyncratic_risk = self.idiosyncratic_returns.std()
 
     @property
-    def _systematic_returns(self):
+    def systematic_returns(self):
         """
         The systematic returns are the factor return * exposure
         """
@@ -47,7 +46,7 @@ class TimeseriesFactorRiskModel(FactorModel):
 
         Returns = systematic returns + idiosyncratic returns
         """
-        return self.returns - self._systematic_returns
+        return self.returns - self.systematic_returns
 
     @property
     def _covariance(self):
@@ -61,11 +60,3 @@ class TimeseriesFactorRiskModel(FactorModel):
 
     def estimate_risk(self, weights, **kwargs):
         return super()._variance(weights, cov=self._covariance)
-
-
-@dataclass
-class TimeseriesFactorRiskModel_Product(TimeseriesFactorRiskModel):
-    def estimate_risk(self, weights, **kwargs):
-        """Estimate the risk by computing a matrix G such that variance = w'G'G w"""
-        g = super()._variance_matrix(cov=self._covariance)
-        return cvx.sum_squares(g @ weights)

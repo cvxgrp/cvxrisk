@@ -8,7 +8,6 @@ from dataclasses import dataclass
 import cvxpy as cvx
 import numpy as np
 import pandas as pd
-from scipy import sparse
 
 from cvx.risk.model import RiskModel
 
@@ -33,22 +32,3 @@ class FactorModel(RiskModel):
         )
 
         return var_factor + var_residual
-
-    def _variance_matrix(self, cov):
-        """
-        Computes the matrix G such that weight'G'G*weight = variance
-
-        Args:
-            cov: factor covariance matrix
-
-        Returns:
-            The matrix G
-        """
-        return sparse.vstack(
-            (
-                sparse.diags(self.idiosyncratic_risk.values, 0),
-                sparse.csr_matrix(
-                    np.transpose(np.linalg.cholesky(cov)) @ self.exposure.values
-                ),
-            )
-        )
