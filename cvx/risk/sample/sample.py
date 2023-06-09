@@ -18,6 +18,7 @@ class SampleCovariance(RiskModel):
             shape=(num, num), name="covariance", PSD=True, value=np.identity(num)
         )
 
+    # is not DPP
     def estimate_risk(self, weights, **kwargs):
         return cvx.quad_form(weights, self.cov)
 
