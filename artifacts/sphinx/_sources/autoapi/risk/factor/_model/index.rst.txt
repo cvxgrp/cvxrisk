@@ -43,4 +43,13 @@ Classes
       Compute the total variance
 
 
+   .. py:method:: _variance_matrix(self, cov)
+
+      Computes the matrix G such that weight'G'G*weight = variance
+
+      :param cov: factor covariance matrix
+
+      :returns: The matrix G
+
+
 

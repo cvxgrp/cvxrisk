@@ -18,6 +18,7 @@ Classes
 .. autoapisummary::
 
    risk.factor.fundamental.FundamentalFactorRiskModel
+   risk.factor.fundamental.FundamentalFactorRiskModel_Product
 
 
 
@@ -36,6 +37,18 @@ Classes
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the variance given the portfolio weights
+
+
+
+.. py:class:: FundamentalFactorRiskModel_Product
+
+   Bases: :py:obj:`FundamentalFactorRiskModel`
+
+   Fundamental factor risk model in product form
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the risk by computing a matrix G such that variance = w'G'G w
 
 
 
