@@ -1,0 +1,15 @@
+:py:mod:`risk.cvar`
+===================
+
+.. py:module:: risk.cvar
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   cvar/index.rst
+
+

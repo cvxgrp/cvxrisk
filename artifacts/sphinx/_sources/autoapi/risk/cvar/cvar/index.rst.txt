@@ -1,0 +1,31 @@
+:py:mod:`risk.cvar.cvar`
+========================
+
+.. py:module:: risk.cvar.cvar
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.cvar.cvar.CVar
+
+
+
+
+.. py:class:: CVar(alpha=0.95)
+
+   Bases: :py:obj:`cvx.risk.model.RiskModel`
+
+   Conditional value at risk risk model
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the risk by computing the Cholesky decomposition of self.cov
+
+
+
