@@ -18,7 +18,6 @@ Classes
 .. autoapisummary::
 
    risk.factor.timeseries.TimeseriesFactorRiskModel
-   risk.factor.timeseries.TimeseriesFactorRiskModel_Product
 
 
 
@@ -47,7 +46,7 @@ Classes
    .. py:method:: __post_init__(self)
 
 
-   .. py:method:: _systematic_returns(self)
+   .. py:method:: systematic_returns(self)
       :property:
 
       The systematic returns are the factor return * exposure
@@ -70,18 +69,6 @@ Classes
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the variance given the portfolio weights
-
-
-
-.. py:class:: TimeseriesFactorRiskModel_Product
-
-   Bases: :py:obj:`TimeseriesFactorRiskModel`
-
-   Time series factor risk model
-
-   .. py:method:: estimate_risk(self, weights, **kwargs)
-
-      Estimate the risk by computing a matrix G such that variance = w'G'G w
 
 
 
