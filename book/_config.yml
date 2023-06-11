@@ -15,7 +15,7 @@ parse:
     - linkify
     - dollarmath
   myst_substitutions:
-    book_url: http://www.cvxgrp.org/cvxrisk
+    book_url: https://www.cvxgrp.org/cvxrisk
 
 
 # needed for plotly
@@ -36,9 +36,4 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
-  #use_edit_page_button: true
   extra_navbar: Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
-
-# Launch button settings
-# launch_buttons:
-#  binderhub_url: "https://mybinder.org"
