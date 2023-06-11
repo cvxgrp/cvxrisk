@@ -8,7 +8,7 @@ repository = "https://github.com/cvxgrp/cvxrisk"
 packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.8,<4.0"
 pandas = "*"   # unfortunately otherwise crash with quantstats
 scikit-learn = "*"
 cvxpy = "*"
@@ -21,6 +21,7 @@ jupyterlab = "*"
 loguru = "*"
 cvxsimulator = "*"
 cvxcovariance = "*"
+jupyter-book = "0.15.1"
 
 [build-system]
 requires = ["poetry-core"]
