@@ -9,7 +9,7 @@ packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-pandas = "*" 
+pandas = "*"
 scikit-learn = "*"
 cvxpy = "*"
 
