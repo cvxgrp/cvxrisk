@@ -95,21 +95,23 @@ Var(r) = Var(\beta w) + Var(\epsilon w)
 We assume the residual returns are uncorrelated and hence
 
 ```math
-Var(r) = f^T \Sigma_f f + \sum_i w_i^2 \epsilon_i^2
+Var(r) = f^T \Sigma_f f + \sum_i w_i^2 Var(\epsilon_i)
 ```
 
 XXX: Explore alignment of equations.
 
-where $\Sigma_f$ is the covariance matrix of the factors and $\epsilon_i^2$ is the variance of the idiosyncratic returns.
+where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$
+is the variance of the idiosyncratic returns.
 
 Again we offer two variants of the factor risk model reflecting what is widely used in practice.
-The first variant is the `FundamentalFactorRiskModel` class. Here the user provides the factor covariance matrix $\Sigma_f$,
+The first variant is the `FundamentalFactorRiskModel` class.
+Here the user provides the factor covariance matrix $\Sigma_f$,
 the loadings $\beta$ and the volatilities of the idiosyncratic returns $\epsilon_i$. Often such
 data is provided by the external parties, e.g. Barra or Axioma.
 
 The second variant is the `TimeseriesFactorRiskModel` class.
 Here the user provides the factor time series $f_1, \ldots, f_k$, usually obtained from
-a prinicipal component analysis (PCA) of the asset returns. The loadings $\beta$ are computed
+a principal component analysis (PCA) of the asset returns. The loadings $\beta$ are computed
 via a linear regression of the asset returns on the factor time series.
 The volatilities of the idiosyncratic returns $\epsilon_i$ are computed as the standard deviation
 of the residuals of the linear regression.
