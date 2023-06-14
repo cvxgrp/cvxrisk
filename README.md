@@ -7,6 +7,7 @@
 We provide an abstract `RiskModel` class. The class is designed to be used in conjunction with [cvxpy].
 Using this class, we can formulate a function computing a standard minimum variance portfolio as
 
+
 ```math
 \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
 ```
