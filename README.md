@@ -83,6 +83,17 @@ XXX: Check whether $\beta_{ij}$ or $\beta_{ji}$.
 The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients $\beta_{ij}$.
 The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
 
+Any position $w$ in weight space corresponds to a position $\beta w$ in factor space.
+Factor space has only $k$ dimensions, whereas weight space has $n$ dimensions.
+The variance for a position $w$ is the sum of the variance of the
+systemic returns explained by the factors and the variance by the idiosyncratic returns.
+```math
+Var(r) = Var(\beta w) + Var(\epsilon w)
+```
+
+
+```math
+
 
 
 
