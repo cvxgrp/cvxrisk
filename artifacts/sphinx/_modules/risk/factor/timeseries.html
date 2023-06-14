@@ -85,14 +85,14 @@
 
 
 <span class="nd">@dataclass</span>
-<div class="viewcode-block" id="TimeseriesFactorRiskModel"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel">[docs]</a><span class="k">class</span> <span class="nc">TimeseriesFactorRiskModel</span><span class="p">(</span><span class="n">FactorModel</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel">[docs]</a><span class="k">class</span> <span class="nc">TimeseriesFactorRiskModel</span><span class="p">(</span><span class="n">FactorModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Time series factor risk model&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.factors"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.factors">[docs]</a>    <span class="n">factors</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.returns"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.returns">[docs]</a>    <span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.cov"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.cov">[docs]</a>    <span class="n">cov</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.factors"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.factors">[docs]</a>    <span class="n">factors</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.returns"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.returns">[docs]</a>    <span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.cov"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.cov">[docs]</a>    <span class="n">cov</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.__post_init__"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.__post_init__"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># B = A * exposure + idiosyncratic_returns</span>
         <span class="n">exposure</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span>
             <span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span>
@@ -106,14 +106,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">idiosyncratic_risk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idiosyncratic_returns</span><span class="o">.</span><span class="n">std</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.systematic_returns"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.systematic_returns">[docs]</a>    <span class="k">def</span> <span class="nf">systematic_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.systematic_returns"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.systematic_returns">[docs]</a>    <span class="k">def</span> <span class="nf">systematic_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The systematic returns are the factor return * exposure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">exposure</span></div>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.idiosyncratic_returns"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.idiosyncratic_returns">[docs]</a>    <span class="k">def</span> <span class="nf">idiosyncratic_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.idiosyncratic_returns"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.idiosyncratic_returns">[docs]</a>    <span class="k">def</span> <span class="nf">idiosyncratic_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The idiosyncratic_returns are the returns - systematic returns. Hence:</span>
 
@@ -122,7 +122,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">systematic_returns</span></div>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="TimeseriesFactorRiskModel._covariance"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel._covariance">[docs]</a>    <span class="k">def</span> <span class="nf">_covariance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel._covariance"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel._covariance">[docs]</a>    <span class="k">def</span> <span class="nf">_covariance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Either use the covariance matrix provided by the user or compute one</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -131,7 +131,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov</span></div>
 
-<div class="viewcode-block" id="TimeseriesFactorRiskModel.estimate_risk"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.timeseries.TimeseriesFactorRiskModel.estimate_risk">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeseriesFactorRiskModel.estimate_risk"><a class="viewcode-back" href="../../../autoapi/risk/factor/timeseries/index.html#risk.factor.TimeseriesFactorRiskModel.estimate_risk">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_variance</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">cov</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_covariance</span><span class="p">)</span></div></div>
 </pre></div>
 

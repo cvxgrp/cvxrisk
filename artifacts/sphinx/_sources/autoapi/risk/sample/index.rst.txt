@@ -13,3 +13,41 @@ Submodules
    sample/index.rst
 
 
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.sample.SampleCovariance
+   risk.sample.SampleCovariance_Product
+
+
+
+
+.. py:class:: SampleCovariance(num)
+
+   Bases: :py:obj:`cvx.risk.model.RiskModel`
+
+   Sample covariance model
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the variance given the portfolio weights
+
+
+
+.. py:class:: SampleCovariance_Product(num)
+
+   Bases: :py:obj:`SampleCovariance`
+
+   Risk model based on Cholesky decomposition of the sample cov matrix
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the risk by computing the Cholesky decomposition of self.cov
+
+
+

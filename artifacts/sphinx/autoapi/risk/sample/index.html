@@ -97,6 +97,52 @@
 </ul>
 </div>
 </section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#risk.sample.SampleCovariance" title="risk.sample.SampleCovariance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SampleCovariance</span></code></a></p></td>
+<td><p>Sample covariance model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#risk.sample.SampleCovariance_Product" title="risk.sample.SampleCovariance_Product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SampleCovariance_Product</span></code></a></p></td>
+<td><p>Risk model based on Cholesky decomposition of the sample cov matrix</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.sample.</span></span><span class="sig-name descname"><span class="pre">SampleCovariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/risk/sample/sample.html#SampleCovariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.sample.SampleCovariance" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">cvx.risk.model.RiskModel</span></code></p>
+<p>Sample covariance model</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance.estimate_risk">
+<span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#risk.sample.SampleCovariance.estimate_risk" title="Permalink to this definition"></a></dt>
+<dd><p>Estimate the variance given the portfolio weights</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance_Product">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.sample.</span></span><span class="sig-name descname"><span class="pre">SampleCovariance_Product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/risk/sample/sample.html#SampleCovariance_Product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.sample.SampleCovariance_Product" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#risk.sample.SampleCovariance" title="risk.sample.SampleCovariance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SampleCovariance</span></code></a></p>
+<p>Risk model based on Cholesky decomposition of the sample cov matrix</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance_Product.estimate_risk">
+<span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#risk.sample.SampleCovariance_Product.estimate_risk" title="Permalink to this definition"></a></dt>
+<dd><p>Estimate the risk by computing the Cholesky decomposition of self.cov</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
 </section>
 
 

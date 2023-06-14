@@ -25,3 +25,84 @@ Submodules
    timeseries/index.rst
 
 
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.factor.FundamentalFactorRiskModel
+   risk.factor.TimeseriesFactorRiskModel
+
+
+
+
+.. py:class:: FundamentalFactorRiskModel
+
+   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+
+   Fundamental factor risk model
+
+   .. py:attribute:: factor_covariance
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the variance given the portfolio weights
+
+
+
+.. py:class:: TimeseriesFactorRiskModel
+
+   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+
+   Time series factor risk model
+
+   .. py:attribute:: factors
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: returns
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: cov
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: systematic_returns(self)
+      :property:
+
+      The systematic returns are the factor return * exposure
+
+
+   .. py:method:: idiosyncratic_returns(self)
+      :property:
+
+      The idiosyncratic_returns are the returns - systematic returns. Hence:
+
+      Returns = systematic returns + idiosyncratic returns
+
+
+   .. py:method:: _covariance(self)
+      :property:
+
+      Either use the covariance matrix provided by the user or compute one
+
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
+
+      Estimate the variance given the portfolio weights
+
+
+
