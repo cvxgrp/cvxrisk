@@ -79,6 +79,11 @@ dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
 ```math
 r_i = \sum_{j=1}^k \beta_{ij} f_j + \epsilon_i
 ```
+XXX: Check whether $\beta_{ij}$ or $\beta_{ji}$.
+The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients $\beta_{ij}$.
+The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
+
+
 
 
 ## Poetry
