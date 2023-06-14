@@ -1,6 +1,0 @@
-:py:mod:`risk.factor.util`
-==========================
-
-.. py:module:: risk.factor.util
-
-
