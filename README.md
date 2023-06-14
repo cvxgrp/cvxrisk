@@ -77,13 +77,12 @@ It relies on cxxpy's `sum_of_squares` function to compute the variance using
 Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
 ```math
-r_i = \sum_{j=1}^k \beta_{ij} f_j + \epsilon_i
+r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
 ```
-XXX: Check whether $\beta_{ij}$ or $\beta_{ji}$.
-The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients $\beta_{ij}$.
+The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients $\beta_{ji}$.
 The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
 
-Any position $w$ in weight space corresponds to a position $f = \beta w$ in factor space.
+Any position $w$ in weight space projects to a position $y = \beta w$ in factor space.
 Factor space has only $k$ dimensions, whereas weight space has $n$ dimensions.
 The variance for a position $w$ is the sum of the variance of the
 systemic returns explained by the factors and the variance by the idiosyncratic returns.
@@ -95,10 +94,8 @@ Var(r) = Var(\beta w) + Var(\epsilon w)
 We assume the residual returns are uncorrelated and hence
 
 ```math
-Var(r) = f^T \Sigma_f f + \sum_i w_i^2 Var(\epsilon_i)
+Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
 ```
-
-XXX: Explore alignment of equations.
 
 where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$
 is the variance of the idiosyncratic returns.
@@ -116,6 +113,8 @@ via a linear regression of the asset returns on the factor time series.
 The volatilities of the idiosyncratic returns $\epsilon_i$ are computed as the standard deviation
 of the residuals of the linear regression.
 The factor covariance matrix $\Sigma_f$ may even be diagonal in this case as the factors are orthogonal.
+
+We expose a method to compute the first $k$ principal components.
 
 ### cvar
 
