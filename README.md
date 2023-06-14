@@ -88,8 +88,8 @@ Factor space has only $k$ dimensions, whereas weight space has $n$ dimensions.
 The variance for a position $w$ is the sum of the variance of the
 systemic returns explained by the factors and the variance by the idiosyncratic returns.
 ```math
-Var(r) & = & Var(\beta w) + Var(\epsilon w) \\
-       & = & f^T \Sigma_f f + \sum_i w_i^2 \epsilon_i^2 \\
+Var(r) & = Var(\beta w) + Var(\epsilon w) \\
+       & = f^T \Sigma_f f + \sum_i w_i^2 \epsilon_i^2
 ```
 where $\Sigma_f$ is the covariance matrix of the factors and $\epsilon_i^2$ is the variance of the idiosyncratic returns.
 
