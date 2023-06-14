@@ -4,13 +4,8 @@
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxrisk.svg)](https://pypi.python.org/pypi/cvxrisk/)
 
-We provide an abstract `RiskModel` class. The class is designed to be used in conjunction with [cvxpy].
+We provide an abstract `RiskModel` class. The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
 Using this class, we can formulate a function computing a standard minimum variance portfolio as
-
-
-```math
-\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
-```
 
 ```python
 import cvxpy as cp
@@ -67,22 +62,23 @@ This is good practice and keeps the code clean and maintainable.
 We offer two variants of the sample covariance risk model.
 The first variant is the `SampleCovariance` class.
 It relies on cxxpy's `quad_form` function to compute the variance
-$$
+```math
 w^T \Sigma w.
-$$
+```
 The second variant is the `SampleCovariance_product` class.
 It relies on cxxpy's `sum_of_squares` function to compute the variance using
-\[
+```math
 \| \Sigma^{1/2} w \|_2.
-\]
+```
+
 
 ### Factor risk models
 
 Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
-\[
+```math
 r_i = \sum_{j=1}^k \beta_{ij} f_j + \epsilon_i
-\]
+```
 
 
 ## Poetry
