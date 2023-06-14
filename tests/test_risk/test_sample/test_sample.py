@@ -4,9 +4,9 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from cvx.risk.factor.fundamental import FundamentalFactorRiskModel
-from cvx.risk.sample.sample import SampleCovariance
-from cvx.risk.sample.sample import SampleCovariance_Product
+from cvx.risk.factor import FundamentalFactorRiskModel
+from cvx.risk.sample import SampleCovariance
+from cvx.risk.sample import SampleCovariance_Product
 
 
 def test_sample():

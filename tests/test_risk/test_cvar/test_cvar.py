@@ -6,7 +6,7 @@ import cvxpy as cvx
 import numpy as np
 import pytest
 
-from cvx.risk.cvar.cvar import CVar
+from cvx.risk.cvar import CVar
 
 
 def test_estimate_risk():

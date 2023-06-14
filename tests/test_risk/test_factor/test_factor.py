@@ -5,9 +5,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.risk.factor.fundamental import FundamentalFactorRiskModel
+from cvx.risk.factor import FundamentalFactorRiskModel
+from cvx.risk.factor import TimeseriesFactorRiskModel
 from cvx.risk.factor.linalg.pca import pca as principal_components
-from cvx.risk.factor.timeseries import TimeseriesFactorRiskModel
 
 
 @pytest.fixture()
