@@ -24,7 +24,7 @@ Classes
 
 .. py:class:: FundamentalFactorRiskModel
 
-   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+   Bases: :py:obj:`risk.factor._model.FactorModel`
 
    Fundamental factor risk model
 
@@ -34,8 +34,6 @@ Classes
       
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
-
-      Estimate the variance given the portfolio weights
 
 
 

@@ -24,7 +24,7 @@ Classes
 
 .. py:class:: TimeseriesFactorRiskModel
 
-   Bases: :py:obj:`cvx.risk.factor._model.FactorModel`
+   Bases: :py:obj:`risk.factor._model.FactorModel`
 
    Time series factor risk model
 
