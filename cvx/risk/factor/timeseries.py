@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from cvx.risk.factor._model import FactorModel
+from ._model import FactorModel
 
 
 @dataclass

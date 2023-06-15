@@ -5,14 +5,14 @@
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxrisk.svg)](https://pypi.python.org/pypi/cvxrisk/)
 
 We provide an abstract `RiskModel` class. The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
-Using this class, we can formulate a function computing a standard minimum variance portfolio as
+Using this class, we can formulate a function computing a standard minimum risk portfolio as
 
 ```python
 import cvxpy as cp
 
 from cvx.risk import RiskModel
 
-def minimum_variance(w: cp.Variable, risk_model: RiskModel) -> cp.Problem:
+def minimum_risk(w: cp.Variable, risk_model: RiskModel) -> cp.Problem:
     """Constructs a minimum variance portfolio.
 
     Args:
@@ -48,7 +48,7 @@ riskmodel.cov.value = np.array([[1.0, 0.5], [0.5, 2.0]])
 
 w = cp.Variable(2)
 
-minimum_variance(w, riskmodel).solve()
+minimum_risk(w, riskmodel).solve()
 print(w.value)
 ```
 
@@ -85,7 +85,7 @@ The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factor
 Any position $w$ in weight space projects to a position $y = \beta w$ in factor space.
 Factor space has only $k$ dimensions, whereas weight space has $n$ dimensions.
 The variance for a position $w$ is the sum of the variance of the
-systemic returns explained by the factors and the variance by the idiosyncratic returns.
+systematic returns explained by the factors and the variance of the idiosyncratic returns.
 
 ```math
 Var(r) = Var(\beta w) + Var(\epsilon w)
