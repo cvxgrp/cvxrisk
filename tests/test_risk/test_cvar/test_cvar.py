@@ -11,12 +11,11 @@ from cvx.risk.cvar import CVar
 
 def test_estimate_risk():
     """Test the estimate_risk() method"""
-    alpha = 0.95
-    model = CVar(alpha)
+    model = CVar(alpha=0.95)
     np.random.seed(42)
-    R = np.random.randn(50, 10)
+    model.R = np.random.randn(50, 10)
     weights = cvx.Variable(10)
-    risk = model.estimate_risk(weights, R=R)
+    risk = model.estimate_risk(weights)
     prob = cvx.Problem(cvx.Minimize(risk), [cvx.sum(weights) == 1, weights >= 0])
     prob.solve()
     assert prob.value == pytest.approx(0.5058720677762698)
