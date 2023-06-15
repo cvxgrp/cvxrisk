@@ -104,7 +104,7 @@ Again we offer two variants of the factor risk model reflecting what is widely u
 The first variant is the `FundamentalFactorRiskModel` class.
 Here the user provides the factor covariance matrix $\Sigma_f$,
 the loadings $\beta$ and the volatilities of the idiosyncratic returns $\epsilon_i$. Often such
-data is provided by the external parties, e.g. Barra or Axioma.
+data is provided by external parties, e.g. Barra or Axioma.
 
 The second variant is the `TimeseriesFactorRiskModel` class.
 Here the user provides the factor time series $f_1, \ldots, f_k$, usually obtained from
