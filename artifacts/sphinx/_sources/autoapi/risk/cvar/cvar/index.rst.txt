@@ -17,11 +17,21 @@ Classes
 
 
 
-.. py:class:: CVar(alpha=0.95)
+.. py:class:: CVar
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
    Conditional value at risk risk model
+
+   .. py:attribute:: alpha
+      :annotation: :float = 0.95
+
+      
+
+   .. py:attribute:: R
+      :annotation: :numpy.ndarray
+
+      
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
 

@@ -107,9 +107,19 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="risk.cvar.cvar.CVar">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.cvar.cvar.</span></span><span class="sig-name descname"><span class="pre">CVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/risk/cvar/cvar.html#CVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.cvar.cvar.CVar" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.cvar.cvar.</span></span><span class="sig-name descname"><span class="pre">CVar</span></span><a class="reference internal" href="../../../../_modules/risk/cvar/cvar.html#CVar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.cvar.cvar.CVar" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">cvx.risk.model.RiskModel</span></code></p>
 <p>Conditional value at risk risk model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="risk.cvar.cvar.CVar.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">0.95</span></em><a class="reference internal" href="../../../../_modules/risk/cvar/cvar.html#CVar.alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.cvar.cvar.CVar.alpha" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="risk.cvar.cvar.CVar.R">
+<span class="sig-name descname"><span class="pre">R</span></span><em class="property"><span class="w"> </span><span class="pre">:numpy.ndarray</span></em><a class="reference internal" href="../../../../_modules/risk/cvar/cvar.html#CVar.R"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.cvar.cvar.CVar.R" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="risk.cvar.cvar.CVar.estimate_risk">
 <span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/risk/cvar/cvar.html#CVar.estimate_risk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.cvar.cvar.CVar.estimate_risk" title="Permalink to this definition"></a></dt>
