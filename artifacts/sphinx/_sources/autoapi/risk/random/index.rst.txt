@@ -1,0 +1,31 @@
+:py:mod:`risk.random`
+=====================
+
+.. py:module:: risk.random
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   rand_cov/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   risk.random.rand_cov
+
+
+
+.. py:function:: rand_cov(n)
+
+

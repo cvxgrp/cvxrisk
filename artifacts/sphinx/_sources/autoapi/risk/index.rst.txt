@@ -12,6 +12,7 @@ Subpackages
 
    cvar/index.rst
    factor/index.rst
+   random/index.rst
    sample/index.rst
 
 
