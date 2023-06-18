@@ -3,24 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>risk.factor.linalg.pca &mdash; cvxrisk Documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
-    <link rel="shortcut icon" href="../../../../_static/logo.jpeg"/>
+  <title>pca &mdash; cvxrisk Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/logo.jpeg"/>
   <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
+    <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/underscore.js"></script>
-        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -28,11 +28,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../../index.html" class="icon icon-home"> cvxrisk
-            <img src="../../../../_static/logo.jpeg" class="logo" alt="Logo"/>
+            <a href="../index.html" class="icon icon-home"> cvxrisk
+            <img src="../_static/logo.jpeg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -40,10 +40,10 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autoapi/index.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -52,16 +52,16 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">cvxrisk</a>
+          <a href="../index.html">cvxrisk</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../../index.html">Module code</a> &raquo;</li>
-      <li>risk.factor.linalg.pca</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>pca</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -70,7 +70,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for risk.factor.linalg.pca</h1><div class="highlight"><pre>
+  <h1>Source code for pca</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;PCA analysis</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -81,10 +81,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span> <span class="k">as</span> <span class="n">sklearnPCA</span>
 
-<div class="viewcode-block" id="PCA"><a class="viewcode-back" href="../../../../autoapi/risk/factor/linalg/pca/index.html#risk.factor.linalg.pca.PCA">[docs]</a><span class="n">PCA</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;explained_variance&quot;</span><span class="p">,</span> <span class="s2">&quot;component&quot;</span><span class="p">,</span> <span class="s2">&quot;returns&quot;</span><span class="p">])</span></div>
+<div class="viewcode-block" id="PCA"><a class="viewcode-back" href="../autoapi/pca/index.html#pca.PCA">[docs]</a><span class="n">PCA</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;explained_variance&quot;</span><span class="p">,</span> <span class="s2">&quot;component&quot;</span><span class="p">,</span> <span class="s2">&quot;returns&quot;</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="pca"><a class="viewcode-back" href="../../../../autoapi/risk/factor/linalg/pca/index.html#risk.factor.linalg.pca.pca">[docs]</a><span class="k">def</span> <span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="pca"><a class="viewcode-back" href="../autoapi/pca/index.html#pca.pca">[docs]</a><span class="k">def</span> <span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the first n principal components for a return matrix</span>
 
