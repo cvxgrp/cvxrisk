@@ -117,9 +117,19 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="risk.sample.SampleCovariance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.sample.</span></span><span class="sig-name descname"><span class="pre">SampleCovariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/risk/sample/sample.html#SampleCovariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.sample.SampleCovariance" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.sample.</span></span><span class="sig-name descname"><span class="pre">SampleCovariance</span></span><a class="reference internal" href="../../../_modules/risk/sample/sample.html#SampleCovariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.sample.SampleCovariance" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">cvx.risk.model.RiskModel</span></code></p>
 <p>Sample covariance model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance.num">
+<span class="sig-name descname"><span class="pre">num</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#risk.sample.SampleCovariance.num" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#risk.sample.SampleCovariance.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="risk.sample.SampleCovariance.estimate_risk">
 <span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#risk.sample.SampleCovariance.estimate_risk" title="Permalink to this definition"></a></dt>
@@ -130,9 +140,19 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="risk.sample.SampleCovariance_Product">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.sample.</span></span><span class="sig-name descname"><span class="pre">SampleCovariance_Product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/risk/sample/sample.html#SampleCovariance_Product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.sample.SampleCovariance_Product" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.sample.</span></span><span class="sig-name descname"><span class="pre">SampleCovariance_Product</span></span><a class="reference internal" href="../../../_modules/risk/sample/sample.html#SampleCovariance_Product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.sample.SampleCovariance_Product" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">cvx.risk.model.RiskModel</span></code></p>
 <p>Risk model based on Cholesky decomposition of the sample cov matrix</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance_Product.num">
+<span class="sig-name descname"><span class="pre">num</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#risk.sample.SampleCovariance_Product.num" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.sample.SampleCovariance_Product.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#risk.sample.SampleCovariance_Product.__post_init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="risk.sample.SampleCovariance_Product.estimate_risk">
 <span class="sig-name descname"><span class="pre">estimate_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#risk.sample.SampleCovariance_Product.estimate_risk" title="Permalink to this definition"></a></dt>

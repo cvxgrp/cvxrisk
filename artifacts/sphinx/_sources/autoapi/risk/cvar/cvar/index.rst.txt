@@ -28,10 +28,18 @@ Classes
 
       
 
-   .. py:attribute:: R
-      :annotation: :numpy.ndarray
+   .. py:attribute:: n
+      :annotation: :int = 0
 
       
+
+   .. py:attribute:: m
+      :annotation: :int = 0
+
+      
+
+   .. py:method:: __post_init__(self)
+
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
 

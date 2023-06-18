@@ -23,11 +23,19 @@ Classes
 
 
 
-.. py:class:: SampleCovariance(num)
+.. py:class:: SampleCovariance
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
    Sample covariance model
+
+   .. py:attribute:: num
+      :annotation: :int = 0
+
+      
+
+   .. py:method:: __post_init__(self)
+
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
@@ -35,11 +43,19 @@ Classes
 
 
 
-.. py:class:: SampleCovariance_Product(num)
+.. py:class:: SampleCovariance_Product
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
    Risk model based on Cholesky decomposition of the sample cov matrix
+
+   .. py:attribute:: num
+      :annotation: :int = 0
+
+      
+
+   .. py:method:: __post_init__(self)
+
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
