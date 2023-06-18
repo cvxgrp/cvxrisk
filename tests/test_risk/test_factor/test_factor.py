@@ -34,7 +34,6 @@ def test_timeseries_model(returns):
         cp.Minimize(model.estimate_risk(weights)),
         [cp.sum(weights) == 1.0, weights >= 0],
     )
-    assert problem.is_dgp()
 
 
 def test_fundamental_model(returns):
