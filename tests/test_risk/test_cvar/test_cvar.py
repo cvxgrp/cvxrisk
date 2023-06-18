@@ -19,6 +19,7 @@ def test_estimate_risk():
     weights = cvx.Variable(10)
     risk = model.estimate_risk(weights)
     prob = cvx.Problem(cvx.Minimize(risk), [cvx.sum(weights) == 1, weights >= 0])
+    assert prob.is_dpp()
 
     model.R.value = np.random.randn(50, 10)
     prob.solve()

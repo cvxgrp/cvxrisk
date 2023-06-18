@@ -7,28 +7,27 @@ from dataclasses import dataclass
 
 import cvxpy as cvx
 import numpy as np
-import scipy as sc
 
 from cvx.risk.model import RiskModel
 
 
-@dataclass
-class SampleCovariance(RiskModel):
-    """Sample covariance model"""
-
-    num: int = 0
-
-    def __post_init__(self):
-        self.cov = cvx.Parameter(
-            shape=(self.num, self.num),
-            name="covariance",
-            PSD=True,
-            value=np.identity(self.num),
-        )
-
-    # is not DPP
-    def estimate_risk(self, weights, **kwargs):
-        return cvx.quad_form(weights, self.cov)
+# @dataclass
+# class SampleCovariance(RiskModel):
+#     """Sample covariance model"""
+#
+#     num: int = 0
+#
+#     def __post_init__(self):
+#         self.cov = cvx.Parameter(
+#             shape=(self.num, self.num),
+#             name="covariance",
+#             PSD=True,
+#             value=np.identity(self.num),
+#         )
+#
+#     # is not DPP
+#     def estimate_risk(self, weights, **kwargs):
+#         return cvx.quad_form(weights, self.cov)
 
 
 @dataclass
@@ -47,8 +46,3 @@ class SampleCovariance_Product(RiskModel):
     def estimate_risk(self, weights, **kwargs):
         """Estimate the risk by computing the Cholesky decomposition of self.cov"""
         return cvx.sum_squares(self.chol @ weights)
-
-    @staticmethod
-    def cholesky(cov):
-        return sc.linalg.cholesky(cov)
-        # todo: np.linalg.cholesky is giving a different result than sc.linalg.cholesky?
