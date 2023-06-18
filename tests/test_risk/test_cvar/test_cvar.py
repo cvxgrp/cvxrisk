@@ -14,13 +14,17 @@ def test_estimate_risk():
     model = CVar(alpha=0.95, n=50, m=10)
 
     np.random.seed(42)
-    model.R.value = np.random.randn(50, 10)
+
+    # define the problem
     weights = cvx.Variable(10)
     risk = model.estimate_risk(weights)
     prob = cvx.Problem(cvx.Minimize(risk), [cvx.sum(weights) == 1, weights >= 0])
+
+    model.R.value = np.random.randn(50, 10)
     prob.solve()
     assert prob.value == pytest.approx(0.5058720677762698)
 
+    # it's enough to only update the R value...
     model.R.value = np.random.randn(50, 10)
     prob.solve()
     assert prob.value == pytest.approx(0.43559171295408616)
