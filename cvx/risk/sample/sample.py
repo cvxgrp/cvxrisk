@@ -23,10 +23,18 @@ class SampleCovariance(RiskModel):
         return cvx.quad_form(weights, self.cov)
 
 
-class SampleCovariance_Product(SampleCovariance):
+class SampleCovariance_Product(RiskModel):
     """Risk model based on Cholesky decomposition of the sample cov matrix"""
+
+    def __init__(self, num):
+        self.chol = cvx.Parameter(
+            shape=(num, num), name="cholesky of covariance", value=np.identity(num)
+        )
 
     def estimate_risk(self, weights, **kwargs):
         """Estimate the risk by computing the Cholesky decomposition of self.cov"""
-        root = sc.linalg.cholesky(self.cov.value)
-        return cvx.sum_squares(root @ weights)
+        return cvx.sum_squares(self.chol @ weights)
+
+    @staticmethod
+    def cholesky(cov):
+        return sc.linalg.cholesky(cov)
