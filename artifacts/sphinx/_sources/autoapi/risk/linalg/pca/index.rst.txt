@@ -1,7 +1,7 @@
-:py:mod:`pca`
-=============
+:py:mod:`risk.linalg.pca`
+=========================
 
-.. py:module:: pca
+.. py:module:: risk.linalg.pca
 
 .. autoapi-nested-parse::
 
@@ -18,7 +18,7 @@ Functions
 
 .. autoapisummary::
 
-   pca.pca
+   risk.linalg.pca.pca
 
 
 
@@ -27,7 +27,7 @@ Attributes
 
 .. autoapisummary::
 
-   pca.PCA
+   risk.linalg.pca.PCA
 
 
 .. py:data:: PCA

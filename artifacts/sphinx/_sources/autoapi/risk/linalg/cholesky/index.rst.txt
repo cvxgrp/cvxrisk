@@ -1,0 +1,22 @@
+:py:mod:`risk.linalg.cholesky`
+==============================
+
+.. py:module:: risk.linalg.cholesky
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   risk.linalg.cholesky.cholesky
+
+
+
+.. py:function:: cholesky(cov)
+
+

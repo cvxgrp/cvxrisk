@@ -21,29 +21,8 @@ Classes
 
 .. autoapisummary::
 
-   risk.sample.SampleCovariance
    risk.sample.SampleCovariance_Product
 
-
-
-
-.. py:class:: SampleCovariance
-
-   Bases: :py:obj:`cvx.risk.model.RiskModel`
-
-   Sample covariance model
-
-   .. py:attribute:: num
-      :annotation: :int = 0
-
-      
-
-   .. py:method:: __post_init__(self)
-
-
-   .. py:method:: estimate_risk(self, weights, **kwargs)
-
-      Estimate the variance given the portfolio weights
 
 
 
@@ -64,10 +43,6 @@ Classes
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the risk by computing the Cholesky decomposition of self.cov
-
-
-   .. py:method:: cholesky(cov)
-      :staticmethod:
 
 
 

@@ -15,20 +15,25 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-model2 = SampleCovariance_Product(num=returns.shape[1])
-model2.cov.value = returns.cov().values
-weights = pd.Series(index = prices.columns, data=0.05).values
-model2.estimate_risk(weights).value
+import pandas as pd
+import numpy as np
+import cvxpy as cvx
+
+from cvx.risk.factor.linalg.pca import pca as principal_components
+from cvx.risk.factor import TimeseriesFactorRiskModel
+from cvx.risk.factor import FundamentalFactorRiskModel
+from cvx.risk.sample import SampleCovariance_Product, SampleCovariance
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mAttributeError[0m                            Traceback (most recent call last)
-Cell [0;32mIn[6], line 2[0m
-[1;32m      1[0m model2 [38;5;241m=[39m SampleCovariance_Product(num[38;5;241m=[39mreturns[38;5;241m.[39mshape[[38;5;241m1[39m])
-[0;32m----> 2[0m [43mmodel2[49m[38;5;241;43m.[39;49m[43mcov[49m[38;5;241m.[39mvalue [38;5;241m=[39m returns[38;5;241m.[39mcov()[38;5;241m.[39mvalues
-[1;32m      3[0m weights [38;5;241m=[39m pd[38;5;241m.[39mSeries(index [38;5;241m=[39m prices[38;5;241m.[39mcolumns, data[38;5;241m=[39m[38;5;241m0.05[39m)[38;5;241m.[39mvalues
-[1;32m      4[0m model2[38;5;241m.[39mestimate_risk(weights)[38;5;241m.[39mvalue
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[1], line 5[0m
+[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
+[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mcvxpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mcvx[39;00m
+[0;32m----> 5[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrisk[39;00m[38;5;21;01m.[39;00m[38;5;21;01mfactor[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlinalg[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpca[39;00m [38;5;28;01mimport[39;00m pca [38;5;28;01mas[39;00m principal_components
+[1;32m      6[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrisk[39;00m[38;5;21;01m.[39;00m[38;5;21;01mfactor[39;00m [38;5;28;01mimport[39;00m TimeseriesFactorRiskModel
+[1;32m      7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrisk[39;00m[38;5;21;01m.[39;00m[38;5;21;01mfactor[39;00m [38;5;28;01mimport[39;00m FundamentalFactorRiskModel
 
-[0;31mAttributeError[0m: 'SampleCovariance_Product' object has no attribute 'cov'
+[0;31mModuleNotFoundError[0m: No module named 'cvx.risk.factor.linalg'
 
