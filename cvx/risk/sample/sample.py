@@ -3,6 +3,8 @@
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import cvxpy as cvx
 import numpy as np
 import scipy as sc
@@ -10,12 +12,18 @@ import scipy as sc
 from cvx.risk.model import RiskModel
 
 
+@dataclass
 class SampleCovariance(RiskModel):
     """Sample covariance model"""
 
-    def __init__(self, num):
+    num: int = 0
+
+    def __post_init__(self):
         self.cov = cvx.Parameter(
-            shape=(num, num), name="covariance", PSD=True, value=np.identity(num)
+            shape=(self.num, self.num),
+            name="covariance",
+            PSD=True,
+            value=np.identity(self.num),
         )
 
     # is not DPP
@@ -23,12 +31,17 @@ class SampleCovariance(RiskModel):
         return cvx.quad_form(weights, self.cov)
 
 
+@dataclass
 class SampleCovariance_Product(RiskModel):
     """Risk model based on Cholesky decomposition of the sample cov matrix"""
 
-    def __init__(self, num):
+    num: int = 0
+
+    def __post_init__(self):
         self.chol = cvx.Parameter(
-            shape=(num, num), name="cholesky of covariance", value=np.identity(num)
+            shape=(self.num, self.num),
+            name="cholesky of covariance",
+            value=np.identity(self.num),
         )
 
     def estimate_risk(self, weights, **kwargs):
@@ -38,3 +51,4 @@ class SampleCovariance_Product(RiskModel):
     @staticmethod
     def cholesky(cov):
         return sc.linalg.cholesky(cov)
+        # todo: np.linalg.cholesky is giving a different result than sc.linalg.cholesky?
