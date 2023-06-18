@@ -20,3 +20,7 @@ def test_estimate_risk():
     prob = cvx.Problem(cvx.Minimize(risk), [cvx.sum(weights) == 1, weights >= 0])
     prob.solve()
     assert prob.value == pytest.approx(0.5058720677762698)
+
+    model.R.value = np.random.randn(50, 10)
+    prob.solve()
+    assert prob.value == pytest.approx(0.43559171295408616)
