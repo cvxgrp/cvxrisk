@@ -448,7 +448,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029715e-05
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029708e-05
 </pre></div>
 </div>
 </div>
@@ -466,7 +466,15 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array(8.36104368e-05)
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance_Product</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">model2</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="ne">AttributeError</span>: &#39;SampleCovariance_Product&#39; object has no attribute &#39;cov&#39;
 </pre></div>
 </div>
 </div>
@@ -486,7 +494,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029715e-05
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029733e-05
 </pre></div>
 </div>
 </div>
@@ -536,7 +544,7 @@ PFE     2.484151e-01
 JPM    -2.403183e-18
 SBUX    1.949663e-01
 dtype: float64
-4.4275995638696866e-05
+4.4275995638696914e-05
 </pre></div>
 </div>
 </div>
@@ -583,7 +591,7 @@ PFE     2.300331e-01
 JPM    -9.114715e-19
 SBUX    1.788449e-01
 dtype: float64
-4.4505298301447164e-05
+4.45052983014472e-05
 </pre></div>
 </div>
 </div>
@@ -630,7 +638,7 @@ PFE     2.484151e-01
 JPM    -2.403183e-18
 SBUX    1.949663e-01
 dtype: float64
-4.4275995638696866e-05
+4.4275995638696914e-05
 </pre></div>
 </div>
 </div>
@@ -646,7 +654,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>761 µs ± 12.6 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>255 µs ± 2.54 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 </pre></div>
 </div>
 </div>
@@ -662,7 +670,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>750 µs ± 22.3 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>253 µs ± 2.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 </pre></div>
 </div>
 </div>

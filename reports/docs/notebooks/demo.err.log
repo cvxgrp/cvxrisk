@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 166, in wrapped
+    return loop.run_until_complete(inner)
+  File "/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Perform the backtest
+_builder = builder(prices=prices.truncate(before=start), initial_cash=1e6)
+
+w = cp.Variable(len(_builder.assets))
+
+for t, _ in _builder:
+    risk_model.cov.value = cov.loc[t[-1]].values
+    minimum_risk(w, risk_model).solve()
+    _builder.set_weights(t[-1], w.value)
+
+portfolio = _builder.build()
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+Cell [0;32mIn[6], line 7[0m
+[1;32m      4[0m w [38;5;241m=[39m cp[38;5;241m.[39mVariable([38;5;28mlen[39m(_builder[38;5;241m.[39massets))
+[1;32m      6[0m [38;5;28;01mfor[39;00m t, _ [38;5;129;01min[39;00m _builder:
+[0;32m----> 7[0m     [43mrisk_model[49m[38;5;241;43m.[39;49m[43mcov[49m[38;5;241m.[39mvalue [38;5;241m=[39m cov[38;5;241m.[39mloc[t[[38;5;241m-[39m[38;5;241m1[39m]][38;5;241m.[39mvalues
+[1;32m      8[0m     minimum_risk(w, risk_model)[38;5;241m.[39msolve()
+[1;32m      9[0m     _builder[38;5;241m.[39mset_weights(t[[38;5;241m-[39m[38;5;241m1[39m], w[38;5;241m.[39mvalue)
+
+[0;31mAttributeError[0m: 'SampleCovariance_Product' object has no attribute 'cov'
+

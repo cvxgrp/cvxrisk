@@ -41,13 +41,17 @@ Classes
 
 .. py:class:: SampleCovariance_Product(num)
 
-   Bases: :py:obj:`SampleCovariance`
+   Bases: :py:obj:`cvx.risk.model.RiskModel`
 
    Risk model based on Cholesky decomposition of the sample cov matrix
 
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the risk by computing the Cholesky decomposition of self.cov
+
+
+   .. py:method:: cholesky(cov)
+      :staticmethod:
 
 
 
