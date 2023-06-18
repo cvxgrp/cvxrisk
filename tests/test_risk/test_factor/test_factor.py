@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import cvxpy as cp
 import numpy as np
 import pandas as pd
 import pytest
 
 from cvx.risk.factor import FundamentalFactorRiskModel
 from cvx.risk.factor import TimeseriesFactorRiskModel
-from cvx.risk.factor.linalg.pca import pca as principal_components
+from cvx.risk.linalg import pca as principal_components
 
 
 @pytest.fixture()
@@ -27,6 +28,13 @@ def test_timeseries_model(returns):
     )
     var = model.estimate_risk(weights).value
     np.testing.assert_almost_equal(var, 8.527444810470023e-05)
+
+    weights = cp.Variable(20)
+    problem = cp.Problem(
+        cp.Minimize(model.estimate_risk(weights)),
+        [cp.sum(weights) == 1.0, weights >= 0],
+    )
+    assert problem.is_dgp()
 
 
 def test_fundamental_model(returns):
