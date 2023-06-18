@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import cvxpy as cvx
 import numpy as np
 import pandas as pd
+import scipy as sc
 
 from cvx.risk.model import RiskModel
 
@@ -23,8 +24,9 @@ class FactorModel(RiskModel):
         """
         Compute the total variance
         """
+        # todo: use sc linalg cholesky?
         var_factor = cvx.sum_squares(
-            np.transpose(np.linalg.cholesky(cov)) @ (self.exposure.values @ weights)
+            sc.linalg.cholesky(cov) @ (self.exposure.values @ weights)
         )
 
         var_residual = cvx.sum_squares(
