@@ -36,10 +36,6 @@ class FactorModel(RiskModel):
             value=np.zeros((self.k, self.k)),
         )
 
-        # self.factor_position = cvx.Parameter(
-        #     shape=(self.k,), name="factor position", value=np.zeros(self.k)
-        # )
-
     def estimate_risk(self, weights, **kwargs):
         """
         Compute the total variance
@@ -54,4 +50,3 @@ class FactorModel(RiskModel):
         self.exposure.value = kwargs["exposure"]
         self.idiosyncratic_risk.value = kwargs["idiosyncratic_risk"]
         self.chol.value = cholesky(kwargs["cov"])
-        # self.factor_position.value = kwargs["factor_position"]

@@ -11,7 +11,7 @@ from cvx.risk.model import RiskModel
 
 @dataclass
 class CVar(RiskModel):
-    """Conditional value at risk risk model"""
+    """Conditional value at risk model"""
 
     alpha: float = 0.95
     n: int = 0
