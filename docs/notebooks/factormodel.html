@@ -434,32 +434,17 @@ Each risk model inherits the interface and all attributes defined in this class.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># update the model parameters</span>
-<span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                  <span class="n">lower</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">upper</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
 
 <span class="c1"># test the risk model with uniform weights</span>
-<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># update the model parameters</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># test the risk model with uniform weights</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-
-<span class="nn">File ~/work/cvxrisk/cvxrisk/cvx/risk/factor/factor.py:69,</span> in <span class="ni">FactorModel.update_data</span><span class="nt">(self, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="bp">self</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">     </span><span class="mi">68</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">69</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
-
-<span class="ne">KeyError</span>: &#39;lower&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.526818368171275e-05
 </pre></div>
 </div>
 </div>
@@ -473,7 +458,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 <span class="n">y</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="mf">1e3</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">))</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="n">exposure</span> <span class="o">@</span> <span class="n">w</span><span class="p">]</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="n">exposure</span> <span class="o">@</span> <span class="n">w</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span> <span class="o">&lt;=</span> <span class="n">w</span><span class="p">,</span> <span class="n">w</span> <span class="o">&lt;=</span> <span class="n">model</span><span class="o">.</span><span class="n">upper</span><span class="p">]</span>
 
 <span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span>
 <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
@@ -488,28 +473,28 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    3.726134e-24
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    5.139026e-24
 AAPL    1.307768e-02
-FB      3.614237e-25
+FB      3.414333e-24
 BABA    5.587538e-02
 AMZN    3.332625e-02
 GE      6.494129e-03
-AMD    -1.265276e-22
+AMD    -1.538891e-23
 WMT     4.472814e-02
-BAC    -1.000186e-23
-GM     -2.356836e-23
+BAC    -1.993206e-24
+GM     -4.055911e-24
 T       1.330519e-01
-UAA    -5.489793e-23
-SHLD   -3.594943e-22
+UAA    -1.008809e-23
+SHLD   -8.047317e-23
 XOM     2.498250e-01
-RRC    -2.624581e-23
+RRC    -2.756693e-23
 BBY     1.102160e-02
 MA      6.236276e-02
 PFE     2.407212e-01
-JPM    -7.403189e-24
+JPM     1.270214e-24
 SBUX    1.495160e-01
 dtype: float64
-4.620056983380704e-05
+4.6200569833807105e-05
 </pre></div>
 </div>
 </div>
