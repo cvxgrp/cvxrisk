@@ -22,6 +22,14 @@ Classes
 
 
 
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   risk.sample.sample.s
+
+
 .. py:class:: SampleCovariance
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
@@ -46,4 +54,9 @@ Classes
       Update the data in the risk model
 
 
+
+.. py:data:: s
+   
+
+   
 
