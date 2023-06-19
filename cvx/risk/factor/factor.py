@@ -35,12 +35,16 @@ class FactorModel(RiskModel):
             value=np.zeros((self.k, self.k)),
         )
 
+        self.factor_position = cvx.Parameter(
+            shape=(self.k,), name="factor position", value=np.zeros(self.k)
+        )
+
     def estimate_risk(self, weights, **kwargs):
         """
         Compute the total variance
         """
-        var_factor = cvx.sum_squares(self.chol @ (self.exposure @ weights))
-
         var_residual = cvx.sum_squares(cvx.multiply(self.idiosyncratic_risk, weights))
 
-        return var_factor + var_residual
+        y = kwargs.get("y", self.exposure @ weights)
+
+        return cvx.sum_squares(self.chol @ y) + var_residual

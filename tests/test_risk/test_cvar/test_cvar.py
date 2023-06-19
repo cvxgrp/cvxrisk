@@ -2,7 +2,7 @@
 # Import necessary libraries
 from __future__ import annotations
 
-import cvxpy as cvx
+import cvxpy as cp
 import numpy as np
 import pytest
 
@@ -16,9 +16,9 @@ def test_estimate_risk():
     np.random.seed(42)
 
     # define the problem
-    weights = cvx.Variable(10)
+    weights = cp.Variable(10)
     risk = model.estimate_risk(weights)
-    prob = cvx.Problem(cvx.Minimize(risk), [cvx.sum(weights) == 1, weights >= 0])
+    prob = cp.Problem(cp.Minimize(risk), [cp.sum(weights) == 1, weights >= 0])
     assert prob.is_dpp()
 
     model.R.value = np.random.randn(50, 10)
@@ -29,3 +29,15 @@ def test_estimate_risk():
     model.R.value = np.random.randn(50, 10)
     prob.solve()
     assert prob.value == pytest.approx(0.43559171295408616)
+
+
+def test_minvar():
+    weights = cp.Variable(10)
+    model = CVar(alpha=0.95, n=50, m=10)
+
+    problem = cp.Problem(
+        cp.Minimize(model.estimate_risk(weights)),
+        [cp.sum(weights) == 1.0, weights >= 0],
+    )
+
+    assert problem.is_dpp()
