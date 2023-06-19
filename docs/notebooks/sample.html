@@ -363,26 +363,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
 
-<span class="kn">from</span> <span class="nn">cvx.risk.linalg</span> <span class="kn">import</span> <span class="n">cholesky</span>
-<span class="kn">from</span> <span class="nn">cvx.risk.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance_Product</span>
-
+<span class="kn">from</span> <span class="nn">cvx.risk.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance</span>
 <span class="kn">from</span> <span class="nn">cvx.risk.random</span> <span class="kn">import</span> <span class="n">rand_cov</span>
 
 <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">cvx.risk.linalg</span> <span class="kn">import</span> <span class="n">cholesky</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">cvx.risk.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance_Product</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">cvx.risk.random</span> <span class="kn">import</span> <span class="n">rand_cov</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
-
-<span class="ne">ImportError</span>: cannot import name &#39;SampleCovariance_Product&#39; from &#39;cvx.risk.sample&#39; (/home/runner/work/cvxrisk/cvxrisk/cvx/risk/sample/__init__.py)
 </pre></div>
 </div>
 </div>
@@ -391,7 +375,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">problem</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">SampleCovariance_Product</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
 
     <span class="n">_problem</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">_riskmodel</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)),</span>
@@ -416,18 +400,18 @@ document.write(`
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">_riskmodel</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="c1"># Recompile the problem if the dimension has changed!</span>
         <span class="n">_problem</span><span class="p">,</span> <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">_riskmodel</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
         
     <span class="n">_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>133 ms ± 486 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>409 ms ± 1.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre></div>
 </div>
 </div>
@@ -443,13 +427,13 @@ document.write(`
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">_problem</span><span class="p">,</span> <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">_riskmodel</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
     <span class="n">_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.74 s ± 52.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10.3 s ± 91.8 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre></div>
 </div>
 </div>
