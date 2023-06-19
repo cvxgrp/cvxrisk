@@ -433,12 +433,8 @@ Each risk model inherits the interface and all attributes defined in this class.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-
 <span class="c1"># update the model parameters</span>
-<span class="c1">#model.chol.value = cholesky(factors.cov)</span>
-<span class="c1">#model.exposure.value = factors.exposure</span>
-<span class="c1">#model.idiosyncratic_risk.value = factors.idiosyncratic.std().values</span>
+<span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
 <span class="c1"># test the risk model with uniform weights</span>
 <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
@@ -467,7 +463,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># check the solution</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -497,7 +493,7 @@ PFE     2.407212e-01
 JPM     1.232356e-24
 SBUX    1.495160e-01
 dtype: float64
-4.6200569833807e-05
+4.6200569833807003e-05
 </pre></div>
 </div>
 </div>
