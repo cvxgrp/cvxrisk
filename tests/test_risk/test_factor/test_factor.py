@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-import cvxpy as cp
 import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.risk.factor import FundamentalFactorRiskModel
-from cvx.risk.factor import TimeseriesFactorRiskModel
+from cvx.risk.factor import FactorModel
+from cvx.risk.linalg import cholesky
 from cvx.risk.linalg import pca as principal_components
 
 
@@ -22,42 +21,14 @@ def returns(resource_dir):
 def test_timeseries_model(returns):
     weights = pd.Series(index=returns.columns, data=0.05).values
 
-    model = TimeseriesFactorRiskModel(
-        returns=returns,
-        factors=principal_components(returns=returns, n_components=10).returns,
-    )
-    var = model.estimate_risk(weights).value
-    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
+    # Here we compute the factors and regress the returns on them
+    factors = principal_components(returns=returns, n_components=10)
 
-    weights = cp.Variable(20)
-    problem = cp.Problem(
-        cp.Minimize(model.estimate_risk(weights)),
-        [cp.sum(weights) == 1.0, weights >= 0],
-    )
+    model = FactorModel(assets=20, k=10)
 
+    model.exposure.value = factors.exposure
+    model.chol.value = cholesky(factors.cov.values)
+    model.idiosyncratic_risk.value = factors.idiosyncratic.std().values
 
-def test_fundamental_model(returns):
-    model = TimeseriesFactorRiskModel(
-        returns=returns,
-        factors=principal_components(returns=returns, n_components=10).returns,
-    )
-
-    model = FundamentalFactorRiskModel(
-        factor_covariance=model.factors.cov(),
-        exposure=model.exposure,
-        idiosyncratic_risk=model.idiosyncratic_returns.std(),
-    )
-
-    weights = pd.Series(index=returns.columns, data=0.05).values
-    var = model.estimate_risk(weights).value
-    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
-
-
-def test_with_covariance(returns):
-    factors = principal_components(returns=returns, n_components=10).returns
-    cov = factors.cov()
-    weights = pd.Series(index=returns.columns, data=0.05).values
-
-    model = TimeseriesFactorRiskModel(cov=cov, factors=factors, returns=returns)
     var = model.estimate_risk(weights).value
     np.testing.assert_almost_equal(var, 8.527444810470023e-05)
