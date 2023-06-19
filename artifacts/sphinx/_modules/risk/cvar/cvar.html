@@ -105,7 +105,10 @@
         <span class="c1"># k is the number of returns in the left tail</span>
         <span class="c1"># k = int(n * (1 - self.alpha))</span>
         <span class="c1"># average value of the k elements in the left tail</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span></div></div>
+        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span></div>
+
+<div class="viewcode-block" id="CVar.update_data"><a class="viewcode-back" href="../../../autoapi/risk/cvar/cvar/index.html#risk.cvar.cvar.CVar.update_data">[docs]</a>    <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span></div></div>
 </pre></div>
 
            </div>

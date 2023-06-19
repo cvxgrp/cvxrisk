@@ -46,4 +46,9 @@ Classes
       Estimate the risk by computing the Cholesky decomposition of self.cov
 
 
+   .. py:method:: update_data(self, **kwargs)
+
+      Update the data in the risk model
+
+
 

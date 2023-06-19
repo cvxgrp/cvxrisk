@@ -446,7 +446,37 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.526818368171254e-05
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># update the model parameters</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">model</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">model</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">factors</span><span class="o">.</span><span class="n">exposure</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">model</span><span class="o">.</span><span class="n">idiosyncratic_risk</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># test the risk model with uniform weights</span>
+
+<span class="nn">File ~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/cvxpy/expressions/constants/parameter.py:87,</span> in <span class="ni">Parameter.value</span><span class="nt">(self, val)</span>
+<span class="g g-Whitespace">     </span><span class="mi">85</span> <span class="nd">@value</span><span class="o">.</span><span class="n">setter</span>
+<span class="g g-Whitespace">     </span><span class="mi">86</span> <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">87</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_value</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+<span class="nn">File ~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/cvxpy/expressions/leaf.py:390,</span> in <span class="ni">Leaf._validate_value</span><span class="nt">(self, val)</span>
+<span class="g g-Whitespace">    </span><span class="mi">387</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">388</span>     <span class="c1"># Convert val to ndarray or sparse matrix.</span>
+<span class="g g-Whitespace">    </span><span class="mi">389</span>     <span class="n">val</span> <span class="o">=</span> <span class="n">intf</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">390</span>     <span class="k">if</span> <span class="n">intf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">391</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">392</span>             <span class="s2">&quot;Invalid dimensions </span><span class="si">%s</span><span class="s2"> for </span><span class="si">%s</span><span class="s2"> value.&quot;</span> <span class="o">%</span>
+<span class="g g-Whitespace">    </span><span class="mi">393</span>             <span class="p">(</span><span class="n">intf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">394</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">395</span>     <span class="n">projection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+<span class="nn">File ~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/cvxpy/interface/matrix_utilities.py:137,</span> in <span class="ni">shape</span><span class="nt">(constant)</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span>     <span class="k">return</span> <span class="n">INTERFACES</span><span class="p">[</span><span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">constant</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">136</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">137</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid type for a Constant value.&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">constant</span><span class="p">))</span>
+
+<span class="ne">TypeError</span>: &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt; is not a valid type for a Constant value.
 </pre></div>
 </div>
 </div>
@@ -475,28 +505,28 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    7.604266e-24
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    3.726134e-24
 AAPL    1.307768e-02
-FB     -6.135139e-24
+FB      3.614237e-25
 BABA    5.587538e-02
 AMZN    3.332625e-02
 GE      6.494129e-03
-AMD    -2.252476e-24
+AMD    -1.265276e-22
 WMT     4.472814e-02
-BAC    -2.977674e-23
-GM     -1.231833e-23
+BAC    -1.000186e-23
+GM     -2.356836e-23
 T       1.330519e-01
-UAA    -1.680343e-23
-SHLD   -3.150268e-22
+UAA    -5.489793e-23
+SHLD   -3.594943e-22
 XOM     2.498250e-01
-RRC    -1.055184e-24
+RRC    -2.624581e-23
 BBY     1.102160e-02
 MA      6.236276e-02
 PFE     2.407212e-01
-JPM     1.232356e-24
+JPM    -7.403189e-24
 SBUX    1.495160e-01
 dtype: float64
-4.6200569833807e-05
+4.620056983380704e-05
 </pre></div>
 </div>
 </div>

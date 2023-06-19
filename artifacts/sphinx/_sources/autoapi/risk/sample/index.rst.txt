@@ -21,12 +21,12 @@ Classes
 
 .. autoapisummary::
 
-   risk.sample.SampleCovariance_Product
+   risk.sample.SampleCovariance
 
 
 
 
-.. py:class:: SampleCovariance_Product
+.. py:class:: SampleCovariance
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
@@ -43,6 +43,11 @@ Classes
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Estimate the risk by computing the Cholesky decomposition of self.cov
+
+
+   .. py:method:: update_data(self, **kwargs)
+
+      Update the data in the risk model
 
 
 

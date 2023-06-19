@@ -1,0 +1,62 @@
+Traceback (most recent call last):
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 166, in wrapped
+    return loop.run_until_complete(inner)
+  File "/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+model = FactorModel(assets=len(returns.columns), k=10)
+
+# update the model parameters
+model.chol.value = cholesky(factors.cov)
+model.exposure.value = factors.exposure
+model.idiosyncratic_risk.value = factors.idiosyncratic.std().values
+
+# test the risk model with uniform weights
+weights = pd.Series(index = prices.columns, data=0.05).values
+model.estimate_risk(weights).value
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[5], line 5[0m
+[1;32m      3[0m [38;5;66;03m# update the model parameters[39;00m
+[1;32m      4[0m model[38;5;241m.[39mchol[38;5;241m.[39mvalue [38;5;241m=[39m cholesky(factors[38;5;241m.[39mcov)
+[0;32m----> 5[0m [43mmodel[49m[38;5;241;43m.[39;49m[43mexposure[49m[38;5;241;43m.[39;49m[43mvalue[49m [38;5;241m=[39m factors[38;5;241m.[39mexposure
+[1;32m      6[0m model[38;5;241m.[39midiosyncratic_risk[38;5;241m.[39mvalue [38;5;241m=[39m factors[38;5;241m.[39midiosyncratic[38;5;241m.[39mstd()[38;5;241m.[39mvalues
+[1;32m      8[0m [38;5;66;03m# test the risk model with uniform weights[39;00m
+
+File [0;32m~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/cvxpy/expressions/constants/parameter.py:87[0m, in [0;36mParameter.value[0;34m(self, val)[0m
+[1;32m     85[0m [38;5;129m@value[39m[38;5;241m.[39msetter
+[1;32m     86[0m [38;5;28;01mdef[39;00m [38;5;21mvalue[39m([38;5;28mself[39m, val):
+[0;32m---> 87[0m     [38;5;28mself[39m[38;5;241m.[39m_value [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_validate_value[49m[43m([49m[43mval[49m[43m)[49m
+
+File [0;32m~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/cvxpy/expressions/leaf.py:390[0m, in [0;36mLeaf._validate_value[0;34m(self, val)[0m
+[1;32m    387[0m [38;5;28;01mif[39;00m val [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+[1;32m    388[0m     [38;5;66;03m# Convert val to ndarray or sparse matrix.[39;00m
+[1;32m    389[0m     val [38;5;241m=[39m intf[38;5;241m.[39mconvert(val)
+[0;32m--> 390[0m     [38;5;28;01mif[39;00m [43mintf[49m[38;5;241;43m.[39;49m[43mshape[49m[43m([49m[43mval[49m[43m)[49m [38;5;241m!=[39m [38;5;28mself[39m[38;5;241m.[39mshape:
+[1;32m    391[0m         [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
+[1;32m    392[0m             [38;5;124m"[39m[38;5;124mInvalid dimensions [39m[38;5;132;01m%s[39;00m[38;5;124m for [39m[38;5;132;01m%s[39;00m[38;5;124m value.[39m[38;5;124m"[39m [38;5;241m%[39m
+[1;32m    393[0m             (intf[38;5;241m.[39mshape(val), [38;5;28mself[39m[38;5;241m.[39m[38;5;18m__class__[39m[38;5;241m.[39m[38;5;18m__name__[39m)
+[1;32m    394[0m         )
+[1;32m    395[0m     projection [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mproject(val)
+
+File [0;32m~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/cvxpy/interface/matrix_utilities.py:137[0m, in [0;36mshape[0;34m(constant)[0m
+[1;32m    135[0m     [38;5;28;01mreturn[39;00m INTERFACES[sp[38;5;241m.[39mcsc_matrix][38;5;241m.[39mshape(constant)
+[1;32m    136[0m [38;5;28;01melse[39;00m:
+[0;32m--> 137[0m     [38;5;28;01mraise[39;00m [38;5;167;01mTypeError[39;00m([38;5;124m"[39m[38;5;132;01m%s[39;00m[38;5;124m is not a valid type for a Constant value.[39m[38;5;124m"[39m [38;5;241m%[39m [38;5;28mtype[39m(constant))
+
+[0;31mTypeError[0m: <class 'pandas.core.frame.DataFrame'> is not a valid type for a Constant value.
+

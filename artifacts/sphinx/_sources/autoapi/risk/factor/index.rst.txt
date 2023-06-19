@@ -50,4 +50,9 @@ Classes
       Compute the total variance
 
 
+   .. py:method:: update_data(self, **kwargs)
+
+      Update the data in the risk model
+
+
 
