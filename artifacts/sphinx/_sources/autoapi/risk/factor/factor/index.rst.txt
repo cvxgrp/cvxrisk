@@ -1,7 +1,7 @@
-:py:mod:`risk.factor._model`
+:py:mod:`risk.factor.factor`
 ============================
 
-.. py:module:: risk.factor._model
+.. py:module:: risk.factor.factor
 
 .. autoapi-nested-parse::
 
@@ -17,7 +17,7 @@ Classes
 
 .. autoapisummary::
 
-   risk.factor._model.FactorModel
+   risk.factor.factor.FactorModel
 
 
 
@@ -28,17 +28,20 @@ Classes
 
    Factor risk model
 
-   .. py:attribute:: exposure
-      :annotation: :pandas.DataFrame
+   .. py:attribute:: assets
+      :annotation: :int = 0
 
       
 
-   .. py:attribute:: idiosyncratic_risk
-      :annotation: :pandas.Series
+   .. py:attribute:: k
+      :annotation: :int = 0
 
       
 
-   .. py:method:: _variance(self, weights, cov)
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: estimate_risk(self, weights, **kwargs)
 
       Compute the total variance
 

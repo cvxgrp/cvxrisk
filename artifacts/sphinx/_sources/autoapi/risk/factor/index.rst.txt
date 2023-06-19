@@ -10,9 +10,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   _model/index.rst
-   fundamental/index.rst
-   timeseries/index.rst
+   factor/index.rst
 
 
 Package Contents
@@ -23,74 +21,33 @@ Classes
 
 .. autoapisummary::
 
-   risk.factor.FundamentalFactorRiskModel
-   risk.factor.TimeseriesFactorRiskModel
+   risk.factor.FactorModel
 
 
 
 
-.. py:class:: FundamentalFactorRiskModel
+.. py:class:: FactorModel
 
-   Bases: :py:obj:`risk.factor._model.FactorModel`
+   Bases: :py:obj:`cvx.risk.model.RiskModel`
 
-   Fundamental factor risk model
+   Factor risk model
 
-   .. py:attribute:: factor_covariance
-      :annotation: :pandas.DataFrame
-
-      
-
-   .. py:method:: estimate_risk(self, weights, **kwargs)
-
-
-
-.. py:class:: TimeseriesFactorRiskModel
-
-   Bases: :py:obj:`risk.factor._model.FactorModel`
-
-   Time series factor risk model
-
-   .. py:attribute:: factors
-      :annotation: :pandas.DataFrame
+   .. py:attribute:: assets
+      :annotation: :int = 0
 
       
 
-   .. py:attribute:: returns
-      :annotation: :pandas.DataFrame
-
-      
-
-   .. py:attribute:: cov
-      :annotation: :pandas.DataFrame
+   .. py:attribute:: k
+      :annotation: :int = 0
 
       
 
    .. py:method:: __post_init__(self)
 
 
-   .. py:method:: systematic_returns(self)
-      :property:
-
-      The systematic returns are the factor return * exposure
-
-
-   .. py:method:: idiosyncratic_returns(self)
-      :property:
-
-      The idiosyncratic_returns are the returns - systematic returns. Hence:
-
-      Returns = systematic returns + idiosyncratic returns
-
-
-   .. py:method:: _covariance(self)
-      :property:
-
-      Either use the covariance matrix provided by the user or compute one
-
-
    .. py:method:: estimate_risk(self, weights, **kwargs)
 
-      Estimate the variance given the portfolio weights
+      Compute the total variance
 
 
 

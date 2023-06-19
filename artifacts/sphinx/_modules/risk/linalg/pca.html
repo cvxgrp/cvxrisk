@@ -79,9 +79,13 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span> <span class="k">as</span> <span class="n">sklearnPCA</span>
 
-<div class="viewcode-block" id="PCA"><a class="viewcode-back" href="../../../autoapi/risk/linalg/pca/index.html#risk.linalg.pca.PCA">[docs]</a><span class="n">PCA</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;explained_variance&quot;</span><span class="p">,</span> <span class="s2">&quot;component&quot;</span><span class="p">,</span> <span class="s2">&quot;returns&quot;</span><span class="p">])</span></div>
+<div class="viewcode-block" id="PCA"><a class="viewcode-back" href="../../../autoapi/risk/linalg/pca/index.html#risk.linalg.pca.PCA">[docs]</a><span class="n">PCA</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;PCA&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;explained_variance&quot;</span><span class="p">,</span> <span class="s2">&quot;factors&quot;</span><span class="p">,</span> <span class="s2">&quot;exposure&quot;</span><span class="p">,</span> <span class="s2">&quot;cov&quot;</span><span class="p">,</span> <span class="s2">&quot;systematic&quot;</span><span class="p">,</span> <span class="s2">&quot;idiosyncratic&quot;</span><span class="p">],</span>
+<span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="pca"><a class="viewcode-back" href="../../../autoapi/risk/linalg/pca/index.html#risk.linalg.pca.pca">[docs]</a><span class="k">def</span> <span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
@@ -97,10 +101,22 @@
     <span class="n">sklearn_pca</span> <span class="o">=</span> <span class="n">sklearnPCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
     <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
 
+    <span class="n">exposure</span> <span class="o">=</span> <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span>
+    <span class="n">factors</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">exposure</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">PCA</span><span class="p">(</span>
         <span class="n">explained_variance</span><span class="o">=</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">,</span>
-        <span class="n">component</span><span class="o">=</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span><span class="p">,</span>
-        <span class="n">returns</span><span class="o">=</span><span class="n">returns</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span><span class="p">),</span>
+        <span class="n">factors</span><span class="o">=</span><span class="n">factors</span><span class="p">,</span>
+        <span class="n">exposure</span><span class="o">=</span><span class="n">exposure</span><span class="p">,</span>
+        <span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
+        <span class="n">systematic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span>
+        <span class="p">),</span>
+        <span class="n">idiosyncratic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+        <span class="p">),</span>
     <span class="p">)</span></div>
 </pre></div>
 
