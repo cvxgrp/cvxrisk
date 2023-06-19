@@ -30,7 +30,7 @@ Classes
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
-   Conditional value at risk risk model
+   Conditional value at risk model
 
    .. py:attribute:: alpha
       :annotation: :float = 0.95

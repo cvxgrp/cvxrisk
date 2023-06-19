@@ -109,10 +109,6 @@
             <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)),</span>
         <span class="p">)</span></div>
 
-        <span class="c1"># self.factor_position = cvx.Parameter(</span>
-        <span class="c1">#     shape=(self.k,), name=&quot;factor position&quot;, value=np.zeros(self.k)</span>
-        <span class="c1"># )</span>
-
 <div class="viewcode-block" id="FactorModel.estimate_risk"><a class="viewcode-back" href="../../../autoapi/risk/factor/factor/index.html#risk.factor.factor.FactorModel.estimate_risk">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the total variance</span>
@@ -127,7 +123,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idiosyncratic_risk</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;idiosyncratic_risk&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">])</span></div></div>
-        <span class="c1"># self.factor_position.value = kwargs[&quot;factor_position&quot;]</span>
 </pre></div>
 
            </div>

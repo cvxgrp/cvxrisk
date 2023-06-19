@@ -26,7 +26,7 @@ Classes
 
    Bases: :py:obj:`cvx.risk.model.RiskModel`
 
-   Risk model based on Cholesky decomposition of the sample cov matrix
+   Risk model based on the Cholesky decomposition of the sample cov matrix
 
    .. py:attribute:: num
       :annotation: :int = 0
