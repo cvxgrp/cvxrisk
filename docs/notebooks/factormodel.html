@@ -358,8 +358,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#but-we-could-also-use-the-sample-covariance-matrix-here">But we could also use the sample covariance matrix here</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamental-factor-risk-models">Fundamental Factor Risk Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riskmodel-is-injected-into-optimizer">RiskModel is injected into optimizer</a></li>
 </ul>
             </nav>
@@ -380,24 +378,9 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cvx</span>
 
-<span class="kn">from</span> <span class="nn">cvx.risk.factor.linalg.pca</span> <span class="kn">import</span> <span class="n">pca</span> <span class="k">as</span> <span class="n">principal_components</span>
-<span class="kn">from</span> <span class="nn">cvx.risk.factor</span> <span class="kn">import</span> <span class="n">TimeseriesFactorRiskModel</span>
-<span class="kn">from</span> <span class="nn">cvx.risk.factor</span> <span class="kn">import</span> <span class="n">FundamentalFactorRiskModel</span>
-<span class="kn">from</span> <span class="nn">cvx.risk.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance_Product</span><span class="p">,</span> <span class="n">SampleCovariance</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cvx</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">cvx.risk.factor.linalg.pca</span> <span class="kn">import</span> <span class="n">pca</span> <span class="k">as</span> <span class="n">principal_components</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">cvx.risk.factor</span> <span class="kn">import</span> <span class="n">TimeseriesFactorRiskModel</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">cvx.risk.factor</span> <span class="kn">import</span> <span class="n">FundamentalFactorRiskModel</span>
+<span class="kn">from</span> <span class="nn">cvx.risk.linalg</span> <span class="kn">import</span> <span class="n">pca</span><span class="p">,</span> <span class="n">cholesky</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;cvx.risk.factor.linalg&#39;
+<span class="kn">from</span> <span class="nn">cvx.risk.factor</span> <span class="kn">import</span> <span class="n">FactorModel</span>
 </pre></div>
 </div>
 </div>
@@ -414,7 +397,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 
 <span class="k">class</span> <span class="nc">RiskModel</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Estimate the variance of a portfolio given its weights</span>
 <span class="sd">        The weights may come as a cvxpy Variable or numpy array.</span>
@@ -430,12 +413,6 @@ Each risk model inherits the interface and all attributes defined in this class.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/stock_prices.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">returns</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-
-<span class="c1"># compute vola</span>
-<span class="c1"># compute ret/vola</span>
-<span class="c1"># winsorize</span>
-
-<span class="c1"># </span>
 </pre></div>
 </div>
 </div>
@@ -445,7 +422,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 <h2>Compute principal components<a class="headerlink" href="#compute-principal-components" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">components</span> <span class="o">=</span> <span class="n">principal_components</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">factors</span> <span class="o">=</span> <span class="n">pca</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -455,7 +432,13 @@ Each risk model inherits the interface and all attributes defined in this class.
 <h2>Create the risk model, here a FactorModel<a class="headerlink" href="#create-the-risk-model-here-a-factormodel" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">TimeseriesFactorRiskModel</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="n">factors</span><span class="o">=</span><span class="n">components</span><span class="o">.</span><span class="n">returns</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># update the model parameters</span>
+<span class="n">model</span><span class="o">.</span><span class="n">chol</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">factors</span><span class="o">.</span><span class="n">exposure</span>
+<span class="n">model</span><span class="o">.</span><span class="n">idiosyncratic_risk</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+
 <span class="c1"># test the risk model with uniform weights</span>
 <span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
@@ -463,45 +446,7 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029733e-05
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="but-we-could-also-use-the-sample-covariance-matrix-here">
-<h2>But we could also use the sample covariance matrix here<a class="headerlink" href="#but-we-could-also-use-the-sample-covariance-matrix-here" title="Permalink to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance_Product</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">model2</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
-<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array(8.36104368e-05)
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="fundamental-factor-risk-models">
-<h2>Fundamental Factor Risk Models<a class="headerlink" href="#fundamental-factor-risk-models" title="Permalink to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model3</span> <span class="o">=</span> <span class="n">FundamentalFactorRiskModel</span><span class="p">(</span><span class="n">factor_covariance</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
-                                    <span class="n">exposure</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">exposure</span><span class="p">,</span>
-                                    <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">idiosyncratic_returns</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-
-<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">model3</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.410457095029733e-05
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.526818368171254e-05
 </pre></div>
 </div>
 </div>
@@ -511,58 +456,11 @@ Each risk model inherits the interface and all attributes defined in this class.
 <h2>RiskModel is injected into optimizer<a class="headerlink" href="#riskmodel-is-injected-into-optimizer" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;weights&quot;</span><span class="p">)</span>
-<span class="n">w0</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
-<span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
-
-<span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span>
-<span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-
-<span class="c1"># check the solution</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    2.848336e-18
-AAPL    1.119894e-02
-FB      2.304546e-18
-BABA    3.163122e-02
-AMZN    8.130561e-02
-GE      2.928897e-02
-AMD    -5.601166e-18
-WMT     6.158817e-02
-BAC    -3.221819e-18
-GM     -3.927327e-18
-T       9.970227e-02
-UAA     3.134359e-18
-SHLD    1.459721e-17
-XOM     2.298441e-01
-RRC    -1.920683e-17
-BBY     8.742421e-03
-MA      3.316937e-03
-PFE     2.484151e-01
-JPM    -2.403183e-18
-SBUX    1.949663e-01
-dtype: float64
-4.4275995638696914e-05
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;weights&quot;</span><span class="p">)</span>
-<span class="n">w0</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="mf">1e3</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">))</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="n">exposure</span> <span class="o">@</span> <span class="n">w</span><span class="p">]</span>
 
 <span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span>
 <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
@@ -577,107 +475,28 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    1.733346e-18
-AAPL    3.460390e-02
-FB      4.125759e-18
-BABA    2.497240e-02
-AMZN    5.801095e-02
-GE      2.808894e-02
-AMD    -3.642522e-18
-WMT     7.364039e-02
-BAC    -5.590159e-19
-GM     -2.114470e-18
-T       1.257405e-01
-UAA     3.236164e-18
-SHLD    5.489146e-18
-XOM     2.209641e-01
-RRC    -7.275791e-18
-BBY     5.780887e-03
-MA      1.931995e-02
-PFE     2.300331e-01
-JPM    -9.114715e-19
-SBUX    1.788449e-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    7.604266e-24
+AAPL    1.307768e-02
+FB     -6.135139e-24
+BABA    5.587538e-02
+AMZN    3.332625e-02
+GE      6.494129e-03
+AMD    -2.252476e-24
+WMT     4.472814e-02
+BAC    -2.977674e-23
+GM     -1.231833e-23
+T       1.330519e-01
+UAA    -1.680343e-23
+SHLD   -3.150268e-22
+XOM     2.498250e-01
+RRC    -1.055184e-24
+BBY     1.102160e-02
+MA      6.236276e-02
+PFE     2.407212e-01
+JPM     1.232356e-24
+SBUX    1.495160e-01
 dtype: float64
-4.45052983014472e-05
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;weights&quot;</span><span class="p">)</span>
-<span class="n">w0</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">model3</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
-
-<span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span>
-<span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-
-<span class="c1"># check the solution</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    2.848336e-18
-AAPL    1.119894e-02
-FB      2.304546e-18
-BABA    3.163122e-02
-AMZN    8.130561e-02
-GE      2.928897e-02
-AMD    -5.601166e-18
-WMT     6.158817e-02
-BAC    -3.221819e-18
-GM     -3.927327e-18
-T       9.970227e-02
-UAA     3.134359e-18
-SHLD    1.459721e-17
-XOM     2.298441e-01
-RRC    -1.920683e-17
-BBY     8.742421e-03
-MA      3.316937e-03
-PFE     2.484151e-01
-JPM    -2.403183e-18
-SBUX    1.949663e-01
-dtype: float64
-4.4275995638696914e-05
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
-<span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance_Product</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">model2</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
-<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>255 µs ± 2.54 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
-<span class="n">model2</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">model2</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
-<span class="n">weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-<span class="n">model2</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>253 µs ± 2.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+4.6200569833807e-05
 </pre></div>
 </div>
 </div>
@@ -756,8 +575,6 @@ dtype: float64
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#but-we-could-also-use-the-sample-covariance-matrix-here">But we could also use the sample covariance matrix here</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamental-factor-risk-models">Fundamental Factor Risk Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riskmodel-is-injected-into-optimizer">RiskModel is injected into optimizer</a></li>
 </ul>
   </nav></div>
