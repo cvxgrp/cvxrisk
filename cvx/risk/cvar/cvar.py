@@ -33,3 +33,6 @@ class CVar(RiskModel):
         # k = int(n * (1 - self.alpha))
         # average value of the k elements in the left tail
         return -cvx.sum_smallest(self.R @ weights, k=self.k) / self.k
+
+    def update_data(self, **kwargs):
+        self.R.value = kwargs["returns"]

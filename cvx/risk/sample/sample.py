@@ -8,30 +8,12 @@ from dataclasses import dataclass
 import cvxpy as cvx
 import numpy as np
 
+from cvx.risk.linalg import cholesky
 from cvx.risk.model import RiskModel
 
 
-# @dataclass
-# class SampleCovariance(RiskModel):
-#     """Sample covariance model"""
-#
-#     num: int = 0
-#
-#     def __post_init__(self):
-#         self.cov = cvx.Parameter(
-#             shape=(self.num, self.num),
-#             name="covariance",
-#             PSD=True,
-#             value=np.identity(self.num),
-#         )
-#
-#     # is not DPP
-#     def estimate_risk(self, weights, **kwargs):
-#         return cvx.quad_form(weights, self.cov)
-
-
 @dataclass
-class SampleCovariance_Product(RiskModel):
+class SampleCovariance(RiskModel):
     """Risk model based on Cholesky decomposition of the sample cov matrix"""
 
     num: int = 0
@@ -46,3 +28,6 @@ class SampleCovariance_Product(RiskModel):
     def estimate_risk(self, weights, **kwargs):
         """Estimate the risk by computing the Cholesky decomposition of self.cov"""
         return cvx.sum_squares(self.chol @ weights)
+
+    def update_data(self, **kwargs):
+        self.chol.value = cholesky(kwargs["cov"])

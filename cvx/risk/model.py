@@ -17,3 +17,8 @@ class RiskModel(ABC):
         """
         Estimate the variance given the portfolio weights
         """
+
+    def update_data(self, **kwargs):
+        """
+        Update the data in the risk model
+        """

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import cvxpy as cvx
 import numpy as np
 
+from cvx.risk.linalg import cholesky
 from cvx.risk.model import RiskModel
 
 
@@ -35,9 +36,9 @@ class FactorModel(RiskModel):
             value=np.zeros((self.k, self.k)),
         )
 
-        self.factor_position = cvx.Parameter(
-            shape=(self.k,), name="factor position", value=np.zeros(self.k)
-        )
+        # self.factor_position = cvx.Parameter(
+        #     shape=(self.k,), name="factor position", value=np.zeros(self.k)
+        # )
 
     def estimate_risk(self, weights, **kwargs):
         """
@@ -48,3 +49,9 @@ class FactorModel(RiskModel):
         y = kwargs.get("y", self.exposure @ weights)
 
         return cvx.sum_squares(self.chol @ y) + var_residual
+
+    def update_data(self, **kwargs):
+        self.exposure.value = kwargs["exposure"]
+        self.idiosyncratic_risk.value = kwargs["idiosyncratic_risk"]
+        self.chol.value = cholesky(kwargs["cov"])
+        # self.factor_position.value = kwargs["factor_position"]

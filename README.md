@@ -44,32 +44,27 @@ import cvxpy as cp
 from cvx.risk.sample import SampleCovariance
 
 riskmodel = SampleCovariance(num=2)
-riskmodel.cov.value = np.array([[1.0, 0.5], [0.5, 2.0]])
-
 w = cp.Variable(2)
+problem = minimum_risk(w, riskmodel)
 
-minimum_risk(w, riskmodel).solve()
+riskmodel.update_data(cov=np.array([[1.0, 0.5], [0.5, 2.0]]))
+problem.solve()
 print(w.value)
 ```
 
 The risk model and the actual optimization problem are decoupled.
 This is good practice and keeps the code clean and maintainable.
 
+In a backtest we don't have to reconstruct the problem in every iteration.
+We can simply update the risk model with the new data and solve the problem again.
+If the dimension of the problem is changing during the test we expect
+a new problem has to be constructed though.
+
 ## Risk models
 
 ### Sample covariance
 
-We offer two variants of the sample covariance risk model.
-The first variant is the `SampleCovariance` class.
-It relies on cxxpy's `quad_form` function to compute the variance
-```math
-w^T \Sigma w.
-```
-The second variant is the `SampleCovariance_product` class.
-It relies on cxxpy's `sum_of_squares` function to compute the variance using
-```math
-\| \Sigma^{1/2} w \|_2.
-```
+We offer a `SampleCovariance` class as seen above.
 
 
 ### Factor risk models
@@ -79,11 +74,11 @@ dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
 ```math
 r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
 ```
-The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients $\beta_{ji}$.
+The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients
+$\beta_{ji}$.
 The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
 
 Any position $w$ in weight space projects to a position $y = \beta w$ in factor space.
-Factor space has only $k$ dimensions, whereas weight space has $n$ dimensions.
 The variance for a position $w$ is the sum of the variance of the
 systematic returns explained by the factors and the variance of the idiosyncratic returns.
 

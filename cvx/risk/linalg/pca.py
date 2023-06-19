@@ -34,7 +34,7 @@ def pca(returns, n_components=10):
     return PCA(
         explained_variance=sklearn_pca.explained_variance_ratio_,
         factors=factors,
-        exposure=exposure,
+        exposure=pd.DataFrame(data=exposure, columns=returns.columns),
         cov=factors.cov(),
         systematic=pd.DataFrame(
             data=factors.values @ exposure, index=returns.index, columns=returns.columns

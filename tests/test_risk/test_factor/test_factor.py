@@ -7,7 +7,6 @@ import pandas as pd
 import pytest
 
 from cvx.risk.factor import FactorModel
-from cvx.risk.linalg import cholesky
 from cvx.risk.linalg import pca as principal_components
 
 
@@ -27,9 +26,11 @@ def test_timeseries_model(returns):
 
     model = FactorModel(assets=20, k=10)
 
-    model.exposure.value = factors.exposure
-    model.chol.value = cholesky(factors.cov.values)
-    model.idiosyncratic_risk.value = factors.idiosyncratic.std().values
+    model.update_data(
+        cov=factors.cov.values,
+        exposure=factors.exposure.values,
+        idiosyncratic_risk=factors.idiosyncratic.std().values,
+    )
 
     var = model.estimate_risk(weights).value
     np.testing.assert_almost_equal(var, 8.527444810470023e-05)
