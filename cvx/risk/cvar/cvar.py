@@ -22,6 +22,16 @@ class CVar(RiskModel):
         self.R = cvx.Parameter(
             shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m))
         )
+        self.lower = cvx.Parameter(
+            shape=self.m,
+            name="lower bound",
+            value=np.zeros(self.m),
+        )
+        self.upper = cvx.Parameter(
+            shape=self.m,
+            name="upper bound",
+            value=np.ones(self.m),
+        )
 
     # R: np.ndarray = None
 
@@ -35,4 +45,13 @@ class CVar(RiskModel):
         return -cvx.sum_smallest(self.R @ weights, k=self.k) / self.k
 
     def update_data(self, **kwargs):
-        self.R.value = kwargs["returns"]
+        ret = kwargs["returns"]
+        m = ret.shape[1]
+
+        self.R.value[:, :m] = kwargs["returns"]
+
+        self.lower.value = np.zeros(self.m)
+        self.lower.value[:m] = kwargs["lower"]
+
+        self.upper.value = np.zeros(self.m)
+        self.upper.value[:m] = kwargs["upper"]

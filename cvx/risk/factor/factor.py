@@ -27,13 +27,24 @@ class FactorModel(RiskModel):
         )
 
         self.idiosyncratic_risk = cvx.Parameter(
-            shape=(self.assets,), name="idiosyncratic risk", value=np.zeros(self.assets)
+            shape=self.assets, name="idiosyncratic risk", value=np.zeros(self.assets)
         )
 
         self.chol = cvx.Parameter(
             shape=(self.k, self.k),
             name="cholesky of covariance",
             value=np.zeros((self.k, self.k)),
+        )
+
+        self.lower = cvx.Parameter(
+            shape=self.assets,
+            name="lower bound",
+            value=np.zeros(self.assets),
+        )
+        self.upper = cvx.Parameter(
+            shape=self.assets,
+            name="upper bound",
+            value=np.ones(self.assets),
         )
 
     def estimate_risk(self, weights, **kwargs):
@@ -47,6 +58,15 @@ class FactorModel(RiskModel):
         return cvx.sum_squares(self.chol @ y) + var_residual
 
     def update_data(self, **kwargs):
-        self.exposure.value = kwargs["exposure"]
-        self.idiosyncratic_risk.value = kwargs["idiosyncratic_risk"]
-        self.chol.value = cholesky(kwargs["cov"])
+        exposure = kwargs["exposure"]
+        k, assets = exposure.shape
+
+        self.exposure.value[:k, :assets] = kwargs["exposure"]
+        self.idiosyncratic_risk.value[:assets] = kwargs["idiosyncratic_risk"]
+        self.chol.value[:k, :k] = cholesky(kwargs["cov"])
+
+        self.lower.value = np.zeros(self.assets)
+        self.lower.value[:assets] = kwargs["lower"]
+
+        self.upper.value = np.zeros(self.assets)
+        self.upper.value[:assets] = kwargs["upper"]
