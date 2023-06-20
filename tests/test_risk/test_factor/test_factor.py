@@ -36,8 +36,8 @@ def test_timeseries_model(returns):
     w = np.zeros(25)
     w[:20] = 0.05
 
-    var = model.estimate_risk(w).value
-    np.testing.assert_almost_equal(var, 8.527444810470023e-05)
+    vola = model.estimate_risk(w).value
+    np.testing.assert_almost_equal(vola, 0.00923407730537884)
 
 
 def test_minvar(returns):
@@ -86,7 +86,7 @@ def test_estimate_risk():
         upper=np.ones(20),
     )
     prob.solve()
-    assert prob.value == pytest.approx(0.01856273748192123)
+    assert prob.value == pytest.approx(0.13625197847921858)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
 
     model.update_data(
@@ -97,5 +97,5 @@ def test_estimate_risk():
         upper=np.ones(20),
     )
     prob.solve()
-    assert prob.value == pytest.approx(0.16675109055174622)
+    assert prob.value == pytest.approx(0.40835167515605786)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)

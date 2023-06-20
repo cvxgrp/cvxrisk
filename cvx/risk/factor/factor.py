@@ -51,11 +51,11 @@ class FactorModel(RiskModel):
         """
         Compute the total variance
         """
-        var_residual = cvx.sum_squares(cvx.multiply(self.idiosyncratic_risk, weights))
+        var_residual = cvx.norm2(cvx.multiply(self.idiosyncratic_risk, weights))
 
         y = kwargs.get("y", self.exposure @ weights)
 
-        return cvx.sum_squares(self.chol @ y) + var_residual
+        return cvx.norm2(cvx.vstack([cvx.norm2(self.chol @ y), var_residual]))
 
     def update_data(self, **kwargs):
         exposure = kwargs["exposure"]
