@@ -56,13 +56,13 @@ def test_minvar(returns):
 
 def test_estimate_risk():
     """Test the estimate_risk() method"""
-    model = FactorModel(assets=25, k=10)
+    model = FactorModel(assets=25, k=12)
 
     np.random.seed(42)
 
     # define the problem
     weights = cp.Variable(25)
-    y = cp.Variable(10)
+    y = cp.Variable(12)
 
     risk = model.estimate_risk(weights, y=y)
 

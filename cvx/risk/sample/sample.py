@@ -38,7 +38,7 @@ class SampleCovariance(RiskModel):
 
     def estimate_risk(self, weights, **kwargs):
         """Estimate the risk by computing the Cholesky decomposition of self.cov"""
-        return cvx.sum_squares(self._chol @ weights)
+        return cvx.norm2(self._chol @ weights)
 
     def update_data(self, **kwargs):
         cov = kwargs["cov"]
