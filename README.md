@@ -115,8 +115,7 @@ We expose a method to compute the first $k$ principal components.
 
 ### cvar
 
-XXX: Conditional value at risk
-Relies on cxxpy's `sum_largest` function.
+We currently also support the conditional value at risk (CVaR) as a risk measure.
 
 
 
