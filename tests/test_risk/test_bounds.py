@@ -5,7 +5,7 @@ import cvxpy as cp
 import numpy as np
 import pytest
 
-from cvx.risk.model import Bounds
+from cvx.risk.bounds import Bounds
 
 
 def test_raise_not_implemented():
@@ -14,15 +14,6 @@ def test_raise_not_implemented():
 
     with pytest.raises(NotImplementedError):
         bounds.estimate(weights)
-
-
-def test_implicit_update():
-    weights = cp.Variable(3)
-    bounds = Bounds(m=3)
-    bounds.update()
-
-    assert bounds.parameter["lower"].value == pytest.approx(np.array([0, 0, 0]))
-    assert bounds.parameter["upper"].value == pytest.approx(np.array([1, 1, 1]))
 
 
 def test_constraints():

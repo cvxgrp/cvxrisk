@@ -9,7 +9,7 @@ import cvxpy as cvx
 import numpy as np
 
 from cvx.linalg import cholesky
-from cvx.risk.model import Bounds
+from cvx.risk.bounds import Bounds
 from cvx.risk.model import Model
 
 
