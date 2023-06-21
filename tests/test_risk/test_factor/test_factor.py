@@ -30,8 +30,10 @@ def test_timeseries_model(returns):
         cov=factors.cov.values,
         exposure=factors.exposure.values,
         idiosyncratic_risk=factors.idiosyncratic.std().values,
-        lower=np.zeros(20),
-        upper=np.ones(20),
+        lower_assets=np.zeros(20),
+        upper_assets=np.ones(20),
+        lower_factors=np.zeros(10),
+        upper_factors=np.ones(10),
     )
 
     w = np.zeros(25)
@@ -76,20 +78,34 @@ def test_estimate_risk():
         cov=rand_cov(10),
         exposure=np.random.randn(10, 20),
         idiosyncratic_risk=np.random.randn(20),
-        lower=np.zeros(20),
-        upper=np.ones(20),
+        lower_assets=np.zeros(20),
+        upper_assets=np.ones(20),
+        lower_factors=np.zeros(10),
+        upper_factors=np.ones(10),
     )
     prob.solve()
-    assert prob.value == pytest.approx(0.13625197847921858)
+    assert prob.value == pytest.approx(0.14138117837204583)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
 
     model.update(
         cov=rand_cov(10),
         exposure=np.random.randn(10, 20),
         idiosyncratic_risk=np.random.randn(20),
-        lower=np.zeros(20),
-        upper=np.ones(20),
+        lower_assets=np.zeros(20),
+        upper_assets=np.ones(20),
+        lower_factors=-0.1 * np.ones(10),
+        upper_factors=0.1 * np.ones(10),
     )
     prob.solve()
-    assert prob.value == pytest.approx(0.40835167515605786)
+    assert prob.value == pytest.approx(0.5454593844618784)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
+
+    # test that the exposure is correct, e.g. the factor weights match the exposure * asset weights
+    assert model.parameter["exposure"].value @ weights.value == pytest.approx(
+        y.value, abs=1e-6
+    )
+
+    # test all entries of y are smaller than 0.1
+    assert np.all([y.value <= 0.1 + 1e-6])
+    # test all entries of y are larger than -0.1
+    assert np.all([y.value >= -(0.1 + 1e-6)])

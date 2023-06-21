@@ -21,11 +21,19 @@ def test_estimate_risk():
     prob = minvar_problem(model, weights)
     assert prob.is_dpp()
 
-    model.update(returns=np.random.randn(50, 10), lower=np.zeros(10), upper=np.ones(10))
+    model.update(
+        returns=np.random.randn(50, 10),
+        lower_assets=np.zeros(10),
+        upper_assets=np.ones(10),
+    )
     prob.solve()
     assert prob.value == pytest.approx(0.5058720677762698)
 
     # it's enough to only update the R value...
-    model.update(returns=np.random.randn(50, 10), lower=np.zeros(10), upper=np.ones(10))
+    model.update(
+        returns=np.random.randn(50, 10),
+        lower_assets=np.zeros(10),
+        upper_assets=np.ones(10),
+    )
     prob.solve()
     assert prob.value == pytest.approx(0.43559171295408616)

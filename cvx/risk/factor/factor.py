@@ -37,7 +37,8 @@ class FactorModel(Model):
             value=np.zeros((self.k, self.k)),
         )
 
-        self.bounds = Bounds(m=self.assets)
+        self.bounds_assets = Bounds(m=self.assets, name="assets")
+        self.bounds_factors = Bounds(m=self.k, name="factors")
 
     def estimate(self, weights, **kwargs):
         """
@@ -62,11 +63,14 @@ class FactorModel(Model):
             "idiosyncratic_risk"
         ]
         self.parameter["chol"].value[:k, :k] = cholesky(kwargs["cov"])
-        self.bounds.update(**kwargs)
+        self.bounds_assets.update(**kwargs)
+        self.bounds_factors.update(**kwargs)
 
     def constraints(self, weights, **kwargs):
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
 
-        return self.bounds.constraints(weights) + [
-            y == self.parameter["exposure"] @ weights
-        ]
+        return (
+            self.bounds_assets.constraints(weights)
+            + self.bounds_factors.constraints(y)
+            + [y == self.parameter["exposure"] @ weights]
+        )

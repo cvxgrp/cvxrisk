@@ -11,7 +11,9 @@ from tests.test_risk.minvar import minvar_problem
 def test_sample():
     riskmodel = SampleCovariance(num=2)
     riskmodel.update(
-        cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower=np.zeros(2), upper=np.ones(2)
+        cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
+        lower_assets=np.zeros(2),
+        upper_assets=np.ones(2),
     )
     vola = riskmodel.estimate(np.array([1.0, 1.0])).value
     np.testing.assert_almost_equal(vola, 2.0)
@@ -20,7 +22,9 @@ def test_sample():
 def test_sample_large():
     riskmodel = SampleCovariance(num=4)
     riskmodel.update(
-        cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower=np.zeros(2), upper=np.ones(2)
+        cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
+        lower_assets=np.zeros(2),
+        upper_assets=np.ones(2),
     )
     vola = riskmodel.estimate(np.array([1.0, 1.0, 0.0, 0.0])).value
     np.testing.assert_almost_equal(vola, 2.0)
@@ -33,7 +37,9 @@ def test_min_variance():
     assert problem.is_dpp()
 
     riskmodel.update(
-        cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower=np.zeros(2), upper=np.ones(2)
+        cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
+        lower_assets=np.zeros(2),
+        upper_assets=np.ones(2),
     )
     problem.solve()
     np.testing.assert_almost_equal(
@@ -42,7 +48,9 @@ def test_min_variance():
 
     # It's enough to only update the value for the cholesky decomposition
     riskmodel.update(
-        cov=np.array([[1.0, 0.5], [0.5, 4.0]]), lower=np.zeros(2), upper=np.ones(2)
+        cov=np.array([[1.0, 0.5], [0.5, 4.0]]),
+        lower_assets=np.zeros(2),
+        upper_assets=np.ones(2),
     )
     problem.solve()
     np.testing.assert_almost_equal(
