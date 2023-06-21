@@ -420,7 +420,30 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.009234077305378851
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># update the model parameters</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># test the risk model with uniform weights</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">weights</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="nn">File ~/work/cvxrisk/cvxrisk/cvx/risk/factor/factor.py:65,</span> in <span class="ni">FactorModel.update</span><span class="nt">(self, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;idiosyncratic_risk&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span>     <span class="s2">&quot;idiosyncratic_risk&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span> <span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">])</span>
+<span class="ne">---&gt; </span><span class="mi">65</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/work/cvxrisk/cvxrisk/cvx/risk/bounds.py:35,</span> in <span class="ni">Bounds.update</span><span class="nt">(self, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="c1"># lower = kwargs.get(&quot;lower&quot;, np.zeros(self.m))</span>
+<span class="ne">---&gt; </span><span class="mi">35</span>     <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span>     <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span>     <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
+
+<span class="ne">KeyError</span>: &#39;lower&#39;
 </pre></div>
 </div>
 </div>
@@ -445,32 +468,6 @@ document.write(`
 <span class="c1"># check the solution</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    0.000841
-AAPL    0.000463
-FB      0.000462
-BABA    0.003246
-AMZN    0.000594
-GE      0.003120
-AMD     0.143065
-WMT     0.001252
-BAC     0.001290
-GM      0.000356
-T       0.000359
-UAA     0.186590
-SHLD    0.534772
-XOM     0.000519
-RRC     0.036929
-BBY     0.082946
-MA      0.000675
-PFE     0.000576
-JPM     0.001600
-SBUX    0.000344
-dtype: float64
-0.00017052344991498624
 </pre></div>
 </div>
 </div>

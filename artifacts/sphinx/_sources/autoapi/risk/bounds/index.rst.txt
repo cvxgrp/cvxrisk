@@ -1,11 +1,11 @@
-:py:mod:`risk.model`
-====================
+:py:mod:`risk.bounds`
+=====================
 
-.. py:module:: risk.model
+.. py:module:: risk.bounds
 
 .. autoapi-nested-parse::
 
-   Abstract risk model
+   Bounds
 
 
 
@@ -17,36 +17,37 @@ Classes
 
 .. autoapisummary::
 
-   risk.model.Model
+   risk.bounds.Bounds
 
 
 
 
-.. py:class:: Model
+.. py:class:: Bounds
 
-   Bases: :py:obj:`abc.ABC`
+   Bases: :py:obj:`cvx.risk.Model`
 
    Abstract risk model
 
-   .. py:attribute:: parameter
-      :annotation: :Dict[str, cvxpy.Parameter]
+   .. py:attribute:: m
+      :annotation: :int = 0
 
       
 
    .. py:method:: estimate(self, weights, **kwargs)
       :abstractmethod:
 
-      Estimate the variance given the portfolio weights
+      No estimation for bounds
+
+
+   .. py:method:: __post_init__(self)
 
 
    .. py:method:: update(self, **kwargs)
-      :abstractmethod:
 
       Update the data in the risk model
 
 
    .. py:method:: constraints(self, weights, **kwargs)
-      :abstractmethod:
 
       Return the constraints for the risk model
 
