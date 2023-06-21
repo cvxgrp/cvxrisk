@@ -23,7 +23,7 @@ class CVar(Model):
         self.parameter["R"] = cvx.Parameter(
             shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m))
         )
-        self.bounds = Bounds(m=self.m)
+        self.bounds = Bounds(m=self.m, name="assets")
 
     def estimate(self, weights, **kwargs):
         """Estimate the risk by computing the Cholesky decomposition of self.cov"""
@@ -41,5 +41,5 @@ class CVar(Model):
         self.parameter["R"].value[:, :m] = kwargs["returns"]
         self.bounds.update(**kwargs)
 
-    def constraints(self, weights):
+    def constraints(self, weights, **kwargs):
         return self.bounds.constraints(weights)
