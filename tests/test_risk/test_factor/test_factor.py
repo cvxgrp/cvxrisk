@@ -7,9 +7,9 @@ import pandas as pd
 import pytest
 
 from cvx.linalg import pca as principal_components
+from cvx.portfolio.min_risk import minrisk_problem
 from cvx.random import rand_cov
 from cvx.risk.factor import FactorModel
-from tests.test_risk.minvar import minvar_problem
 
 
 @pytest.fixture()
@@ -49,14 +49,7 @@ def test_minvar(returns):
 
     model = FactorModel(assets=20, k=10)
 
-    problem = cp.Problem(
-        cp.Minimize(model.estimate(weights, y=y)),
-        [
-            cp.sum(weights) == 1.0,
-            weights >= 0,
-            y == model.parameter["exposure"] @ weights,
-        ],
-    )
+    problem = minrisk_problem(model, weights, y=y)
 
     assert problem.is_dpp()
 
@@ -71,7 +64,7 @@ def test_estimate_risk():
     weights = cp.Variable(25)
     y = cp.Variable(12)
 
-    prob = minvar_problem(model, weights, y=y)
+    prob = minrisk_problem(model, weights, y=y)
     assert prob.is_dpp()
 
     model.update(
