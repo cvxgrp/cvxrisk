@@ -40,14 +40,19 @@ Classes
    .. py:method:: __post_init__(self)
 
 
-   .. py:method:: estimate_risk(self, weights, **kwargs)
+   .. py:method:: estimate(self, weights, **kwargs)
 
       Estimate the risk by computing the Cholesky decomposition of self.cov
 
 
-   .. py:method:: update_data(self, **kwargs)
+   .. py:method:: update(self, **kwargs)
 
       Update the data in the risk model
+
+
+   .. py:method:: constraints(self, weights)
+
+      Return the constraints for the risk model
 
 
 

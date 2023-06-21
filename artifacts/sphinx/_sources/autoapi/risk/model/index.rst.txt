@@ -18,6 +18,7 @@ Classes
 .. autoapisummary::
 
    risk.model.RiskModel
+   risk.model.Bounds
 
 
 
@@ -28,15 +29,55 @@ Classes
 
    Abstract risk model
 
-   .. py:method:: estimate_risk(self, weights, **kwargs)
+   .. py:attribute:: parameter
+      :annotation: :Dict[str, cvxpy.Parameter]
+
+      
+
+   .. py:method:: estimate(self, weights, **kwargs)
       :abstractmethod:
 
       Estimate the variance given the portfolio weights
 
 
-   .. py:method:: update_data(self, **kwargs)
+   .. py:method:: update(self, **kwargs)
 
       Update the data in the risk model
+
+
+   .. py:method:: constraints(self, weights, **kwargs)
+
+      Return the constraints for the risk model
+
+
+
+.. py:class:: Bounds
+
+   Bases: :py:obj:`RiskModel`
+
+   Abstract risk model
+
+   .. py:attribute:: m
+      :annotation: :int = 0
+
+      
+
+   .. py:method:: estimate(self, weights, **kwargs)
+
+      Estimate the variance given the portfolio weights
+
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: update(self, **kwargs)
+
+      Update the data in the risk model
+
+
+   .. py:method:: constraints(self, weights, **kwargs)
+
+      Return the constraints for the risk model
 
 
 
