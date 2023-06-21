@@ -354,7 +354,6 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-abstract-risk-model">An abstract Risk Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
@@ -384,28 +383,6 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="an-abstract-risk-model">
-<h2>An abstract Risk Model<a class="headerlink" href="#an-abstract-risk-model" title="Permalink to this heading">#</a></h2>
-<p>An abstract risk model is the parent for concrete risk models. It serves as the blueprint. No instances of this class can be created.
-Each risk model inherits the interface and all attributes defined in this class.</p>
-<p>An optimizer would get a risk model. Since all risk models share the interface it is trivial to change the risk model.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABC</span>
-
-
-<span class="k">class</span> <span class="nc">RiskModel</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">estimate_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Estimate the variance of a portfolio given its weights</span>
-<span class="sd">        The weights may come as a cvxpy Variable or numpy array.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
 <section id="load-prices-and-compute-returns">
 <h2>Load prices and compute returns<a class="headerlink" href="#load-prices-and-compute-returns" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -434,27 +411,16 @@ Each risk model inherits the interface and all attributes defined in this class.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># update the model parameters</span>
-<span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-                  <span class="n">lower</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">upper</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
 <span class="c1"># test the risk model with uniform weights</span>
 <span class="n">weights</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="n">model</span><span class="o">.</span><span class="n">estimate</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">model</span> <span class="o">=</span> <span class="n">FactorModel</span><span class="p">(</span><span class="n">assets</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># update the model parameters</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">model</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span> <span class="n">exposure</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">idiosyncratic_risk</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">idiosyncratic</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>                   <span class="n">lower</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">upper</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># test the risk model with uniform weights</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">weights</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="ne">AttributeError</span>: &#39;FactorModel&#39; object has no attribute &#39;update_data&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.009234077305378839
 </pre></div>
 </div>
 </div>
@@ -467,14 +433,14 @@ Each risk model inherits the interface and all attributes defined in this class.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
-<span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="mf">1e3</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">))</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="n">exposure</span> <span class="o">@</span> <span class="n">w</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span> <span class="o">&lt;=</span> <span class="n">w</span><span class="p">,</span> <span class="n">w</span> <span class="o">&lt;=</span> <span class="n">model</span><span class="o">.</span><span class="n">upper</span><span class="p">]</span>
+<span class="n">objective</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="mf">1e3</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">estimate</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">))</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
 <span class="n">problem</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span>
 <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate_risk</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">estimate</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># check the solution</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -483,28 +449,28 @@ Each risk model inherits the interface and all attributes defined in this class.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    5.139026e-24
-AAPL    1.307768e-02
-FB      3.414333e-24
-BABA    5.587538e-02
-AMZN    3.332625e-02
-GE      6.494129e-03
-AMD    -1.538891e-23
-WMT     4.472814e-02
-BAC    -1.993206e-24
-GM     -4.055911e-24
-T       1.330519e-01
-UAA    -1.008809e-23
-SHLD   -8.047317e-23
-XOM     2.498250e-01
-RRC    -2.756693e-23
-BBY     1.102160e-02
-MA      6.236276e-02
-PFE     2.407212e-01
-JPM     1.270214e-24
-SBUX    1.495160e-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    0.000841
+AAPL    0.000463
+FB      0.000462
+BABA    0.003246
+AMZN    0.000594
+GE      0.003120
+AMD     0.143065
+WMT     0.001252
+BAC     0.001290
+GM      0.000356
+T       0.000359
+UAA     0.186590
+SHLD    0.534772
+XOM     0.000519
+RRC     0.036929
+BBY     0.082946
+MA      0.000675
+PFE     0.000576
+JPM     0.001600
+SBUX    0.000344
 dtype: float64
-4.6200569833807105e-05
+0.00017052344991498586
 </pre></div>
 </div>
 </div>
@@ -579,7 +545,6 @@ dtype: float64
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-abstract-risk-model">An abstract Risk Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-prices-and-compute-returns">Load prices and compute returns</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-principal-components">Compute principal components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-risk-model-here-a-factormodel">Create the risk model, here a FactorModel</a></li>
