@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -330,7 +332,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -346,6 +350,22 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-first-example">A first example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-models">Risk models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-covariance">Sample covariance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-risk-models">Factor risk models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cvar">cvar</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poetry">Poetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -357,7 +377,124 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="cvxrisk">
 <h1>cvxrisk<a class="headerlink" href="#cvxrisk" title="Permalink to this heading">#</a></h1>
-<p><span class="xref myst">README</span></p>
+<p><a class="reference external" href="https://badge.fury.io/py/cvxrisk"><img alt="PyPI version" src="https://badge.fury.io/py/cvxrisk.svg" /></a>
+<a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/cvxrisk/"><img alt="PyPI download month" src="https://img.shields.io/pypi/dm/cvxrisk.svg" /></a></p>
+<p>We provide an abstract <code class="docutils literal notranslate"><span class="pre">Model</span></code> class.
+The class is designed to be used in conjunction with <a class="reference external" href="https://github.com/cvxpy/cvxpy">cvxpy</a>.
+Using this class, we can formulate a function computing a standard minimum risk portfolio as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
+
+<span class="kn">from</span> <span class="nn">cvx.risk</span> <span class="kn">import</span> <span class="n">Model</span>
+
+
+<span class="k">def</span> <span class="nf">minimum_risk</span><span class="p">(</span><span class="n">w</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="n">risk_model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a minimum variance portfolio.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        w: cp.Variable representing the portfolio weights.</span>
+<span class="sd">        risk_model: A risk model.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A convex optimization problem.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span>
+        <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">risk_model</span><span class="o">.</span><span class="n">estimate</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)),</span>
+        <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">risk_model</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>The risk model is injected into the function.
+The function is not aware of the precise risk model used.
+All risk models are required to implement the <code class="docutils literal notranslate"><span class="pre">estimate</span></code> method.</p>
+<p>Note that factor risk models work with weights for the assets but also with weights for the factors.
+To stay flexible we are applying thiS <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> pattern to the function above.</p>
+<section id="a-first-example">
+<h2>A first example<a class="headerlink" href="#a-first-example" title="Permalink to this heading">#</a></h2>
+<p>A first example is a risk model based on the sample covariance matrix.
+We construct the risk model as follows</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
+
+<span class="kn">from</span> <span class="nn">cvx.risk.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance</span>
+
+<span class="n">riskmodel</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">problem</span> <span class="o">=</span> <span class="n">minimum_risk</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">riskmodel</span><span class="p">)</span>
+
+<span class="n">riskmodel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]]))</span>
+<span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The risk model and the actual optimization problem are decoupled.
+This is good practice and keeps the code clean and maintainable.</p>
+<p>In a backtest we don’t have to reconstruct the problem in every iteration.
+We can simply update the risk model with the new data and solve the problem again.
+The implementation of the risk models is flexible enough to deal with changing dimensions
+of the underlying weight space.</p>
+</section>
+<section id="risk-models">
+<h2>Risk models<a class="headerlink" href="#risk-models" title="Permalink to this heading">#</a></h2>
+<section id="sample-covariance">
+<h3>Sample covariance<a class="headerlink" href="#sample-covariance" title="Permalink to this heading">#</a></h3>
+<p>We offer a <code class="docutils literal notranslate"><span class="pre">SampleCovariance</span></code> class as seen above.</p>
+</section>
+<section id="factor-risk-models">
+<h3>Factor risk models<a class="headerlink" href="#factor-risk-models" title="Permalink to this heading">#</a></h3>
+<p>Factor risk models use the projection of the weight vector into a lower
+dimensional subspace, e.g. each asset is the linear combination of <span class="math notranslate nohighlight">\(k\)</span> factors.</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
+</pre></div>
+</div>
+<p>The factor time series are <span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>. The loadings are the coefficients
+<span class="math notranslate nohighlight">\(\beta_{ji}\)</span>.
+The residual returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are assumed to be uncorrelated with the factors.</p>
+<p>Any position <span class="math notranslate nohighlight">\(w\)</span> in weight space projects to a position <span class="math notranslate nohighlight">\(y = \beta^T w\)</span> in factor space.
+The variance for a position <span class="math notranslate nohighlight">\(w\)</span> is the sum of the variance of the
+systematic returns explained by the factors and the variance of the idiosyncratic returns.</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = Var(\beta^T w) + Var(\epsilon w)
+</pre></div>
+</div>
+<p>We assume the residual returns are uncorrelated and hence</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
+</pre></div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\Sigma_f\)</span> is the covariance matrix of the factors and <span class="math notranslate nohighlight">\(Var(\epsilon_i)\)</span>
+is the variance of the idiosyncratic returns.</p>
+<p>Factor risk models are widely used in practice. Usually two scenarios are distinguished.
+A first route is to rely on estimates for the factor covariance matrix <span class="math notranslate nohighlight">\(\Sigma_f\)</span>,
+the loadings <span class="math notranslate nohighlight">\(\beta\)</span> and the volatilities of the idiosyncratic returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span>.
+Usually those quantities are provided by external parties, e.g. Barra or Axioma.</p>
+<p>An alternative would be to start with the estimation of factor time series <span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>.
+Usually they are estimated via a principal component analysis (PCA) of the asset returns.
+It is then a simple linear regression to compute the loadings <span class="math notranslate nohighlight">\(\beta\)</span>.
+The volatilities of the idiosyncratic returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are computed as the standard deviation
+of the observed residuals.
+The factor covariance matrix <span class="math notranslate nohighlight">\(\Sigma_f\)</span> may even be diagonal in this case as the factors are orthogonal.</p>
+<p>We expose a method to compute the first <span class="math notranslate nohighlight">\(k\)</span> principal components.</p>
+</section>
+<section id="cvar">
+<h3>cvar<a class="headerlink" href="#cvar" title="Permalink to this heading">#</a></h3>
+<p>We currently also support the conditional value at risk (CVaR) as a risk measure.</p>
+</section>
+</section>
+<section id="poetry">
+<h2>Poetry<a class="headerlink" href="#poetry" title="Permalink to this heading">#</a></h2>
+<p>We assume you share already the love for <a class="reference external" href="https://python-poetry.org">Poetry</a>. Once you have installed poetry you can perform</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
+</pre></div>
+</div>
+<p>to replicate the virtual environment we have defined in pyproject.toml.</p>
+</section>
+<section id="kernel">
+<h2>Kernel<a class="headerlink" href="#kernel" title="Permalink to this heading">#</a></h2>
+<p>We install <a class="reference external" href="https://jupyter.org">JupyterLab</a> within your new virtual environment. Executing</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./create_kernel.sh
+</pre></div>
+</div>
+<p>constructs a dedicated <a class="reference external" href="https://docs.jupyter.org/en/latest/projects/kernels.html">Kernel</a> for the project.</p>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -411,6 +548,28 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-first-example">A first example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-models">Risk models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-covariance">Sample covariance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-risk-models">Factor risk models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cvar">cvar</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poetry">Poetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
