@@ -25,11 +25,13 @@ class RiskModel(ABC):
         Estimate the variance given the portfolio weights
         """
 
+    @abstractmethod
     def update(self, **kwargs):
         """
         Update the data in the risk model
         """
 
+    @abstractmethod
     def constraints(self, weights, **kwargs):
         """
         Return the constraints for the risk model
@@ -38,11 +40,11 @@ class RiskModel(ABC):
 
 @dataclass
 class Bounds(RiskModel):
+    m: int = 0
+
     def estimate(self, weights, **kwargs):
         """No estimation for bounds"""
         raise NotImplementedError("No estimation for bounds")
-
-    m: int = 0
 
     def __post_init__(self):
         self.parameter["lower"] = cp.Parameter(

@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from cvx.linalg import pca as principal_components
+from cvx.random import rand_cov
 from cvx.risk.factor import FactorModel
-from cvx.risk.linalg import pca as principal_components
-from cvx.risk.random import rand_cov
 from tests.test_risk.minvar import minvar_problem
 
 

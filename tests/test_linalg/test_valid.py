@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from cvx.risk.linalg import valid
+from cvx.linalg import valid
 
 
 def test_valid():

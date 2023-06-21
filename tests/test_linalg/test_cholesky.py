@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from cvx.risk.linalg import cholesky
-from cvx.risk.random import rand_cov
+from cvx.linalg import cholesky
+from cvx.random import rand_cov
 
 
 def test_cholesky():
