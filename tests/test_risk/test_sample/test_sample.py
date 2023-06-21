@@ -5,42 +5,34 @@ import cvxpy as cp
 import numpy as np
 
 from cvx.risk.sample import SampleCovariance
+from tests.test_risk.minvar import minvar_problem
 
 
 def test_sample():
     riskmodel = SampleCovariance(num=2)
-    riskmodel.update_data(
+    riskmodel.update(
         cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower=np.zeros(2), upper=np.ones(2)
     )
-    vola = riskmodel.estimate_risk(np.array([1.0, 1.0])).value
+    vola = riskmodel.estimate(np.array([1.0, 1.0])).value
     np.testing.assert_almost_equal(vola, 2.0)
 
 
 def test_sample_large():
     riskmodel = SampleCovariance(num=4)
-    riskmodel.update_data(
+    riskmodel.update(
         cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower=np.zeros(2), upper=np.ones(2)
     )
-    vola = riskmodel.estimate_risk(np.array([1.0, 1.0, 0.0, 0.0])).value
+    vola = riskmodel.estimate(np.array([1.0, 1.0, 0.0, 0.0])).value
     np.testing.assert_almost_equal(vola, 2.0)
 
 
 def test_min_variance():
     weights = cp.Variable(4)
     riskmodel = SampleCovariance(num=4)
+    problem = minvar_problem(riskmodel, weights)
+    assert problem.is_dpp()
 
-    #
-    problem = cp.Problem(
-        cp.Minimize(riskmodel.estimate_risk(weights)),
-        [
-            cp.sum(weights) == 1.0,
-            weights >= 0,
-            riskmodel.lower <= weights,
-            weights <= riskmodel.upper,
-        ],
-    )
-
-    riskmodel.update_data(
+    riskmodel.update(
         cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower=np.zeros(2), upper=np.ones(2)
     )
     problem.solve()
@@ -49,7 +41,7 @@ def test_min_variance():
     )
 
     # It's enough to only update the value for the cholesky decomposition
-    riskmodel.update_data(
+    riskmodel.update(
         cov=np.array([[1.0, 0.5], [0.5, 4.0]]), lower=np.zeros(2), upper=np.ones(2)
     )
     problem.solve()

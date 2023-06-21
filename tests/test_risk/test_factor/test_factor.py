@@ -9,6 +9,7 @@ import pytest
 from cvx.risk.factor import FactorModel
 from cvx.risk.linalg import pca as principal_components
 from cvx.risk.random import rand_cov
+from tests.test_risk.minvar import minvar_problem
 
 
 @pytest.fixture()
@@ -25,7 +26,7 @@ def test_timeseries_model(returns):
 
     model = FactorModel(assets=25, k=10)
 
-    model.update_data(
+    model.update(
         cov=factors.cov.values,
         exposure=factors.exposure.values,
         idiosyncratic_risk=factors.idiosyncratic.std().values,
@@ -36,7 +37,7 @@ def test_timeseries_model(returns):
     w = np.zeros(25)
     w[:20] = 0.05
 
-    vola = model.estimate_risk(w).value
+    vola = model.estimate(w).value
     np.testing.assert_almost_equal(vola, 0.00923407730537884)
 
 
@@ -47,15 +48,19 @@ def test_minvar(returns):
     model = FactorModel(assets=20, k=10)
 
     problem = cp.Problem(
-        cp.Minimize(model.estimate_risk(weights, y=y)),
-        [cp.sum(weights) == 1.0, weights >= 0, y == model.exposure @ weights],
+        cp.Minimize(model.estimate(weights, y=y)),
+        [
+            cp.sum(weights) == 1.0,
+            weights >= 0,
+            y == model.parameter["exposure"] @ weights,
+        ],
     )
 
     assert problem.is_dpp()
 
 
 def test_estimate_risk():
-    """Test the estimate_risk() method"""
+    """Test the estimate() method"""
     model = FactorModel(assets=25, k=12)
 
     np.random.seed(42)
@@ -64,21 +69,10 @@ def test_estimate_risk():
     weights = cp.Variable(25)
     y = cp.Variable(12)
 
-    risk = model.estimate_risk(weights, y=y)
-
-    prob = cp.Problem(
-        cp.Minimize(risk),
-        [
-            cp.sum(weights) == 1,
-            weights >= 0,
-            y == model.exposure @ weights,
-            model.lower <= weights,
-            weights <= model.upper,
-        ],
-    )
+    prob = minvar_problem(model, weights, y=y)
     assert prob.is_dpp()
 
-    model.update_data(
+    model.update(
         cov=rand_cov(10),
         exposure=np.random.randn(10, 20),
         idiosyncratic_risk=np.random.randn(20),
@@ -89,7 +83,7 @@ def test_estimate_risk():
     assert prob.value == pytest.approx(0.13625197847921858)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
 
-    model.update_data(
+    model.update(
         cov=rand_cov(10),
         exposure=np.random.randn(10, 20),
         idiosyncratic_risk=np.random.randn(20),

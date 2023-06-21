@@ -7,54 +7,25 @@ import numpy as np
 import pytest
 
 from cvx.risk.cvar import CVar
+from tests.test_risk.minvar import minvar_problem
 
 
 def test_estimate_risk():
-    """Test the estimate_risk() method"""
+    """Test the estimate() method"""
     model = CVar(alpha=0.95, n=50, m=14)
 
     np.random.seed(42)
 
     # define the problem
     weights = cp.Variable(14)
-    risk = model.estimate_risk(weights)
-    prob = cp.Problem(
-        cp.Minimize(risk),
-        [
-            cp.sum(weights) == 1,
-            weights >= 0,
-            model.lower <= weights,
-            weights <= model.upper,
-        ],
-    )
+    prob = minvar_problem(model, weights)
     assert prob.is_dpp()
 
-    model.update_data(
-        returns=np.random.randn(50, 10), lower=np.zeros(10), upper=np.ones(10)
-    )
+    model.update(returns=np.random.randn(50, 10), lower=np.zeros(10), upper=np.ones(10))
     prob.solve()
     assert prob.value == pytest.approx(0.5058720677762698)
 
     # it's enough to only update the R value...
-    model.update_data(
-        returns=np.random.randn(50, 10), lower=np.zeros(10), upper=np.ones(10)
-    )
+    model.update(returns=np.random.randn(50, 10), lower=np.zeros(10), upper=np.ones(10))
     prob.solve()
     assert prob.value == pytest.approx(0.43559171295408616)
-
-
-def test_minvar():
-    weights = cp.Variable(10)
-    model = CVar(alpha=0.95, n=50, m=10)
-
-    problem = cp.Problem(
-        cp.Minimize(model.estimate_risk(weights)),
-        [
-            cp.sum(weights) == 1.0,
-            weights >= 0,
-            model.lower <= weights,
-            weights <= model.upper,
-        ],
-    )
-
-    assert problem.is_dpp()

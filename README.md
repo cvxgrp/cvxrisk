@@ -12,6 +12,7 @@ import cvxpy as cp
 
 from cvx.risk import RiskModel
 
+
 def minimum_risk(w: cp.Variable, risk_model: RiskModel) -> cp.Problem:
     """Constructs a minimum variance portfolio.
 
@@ -23,14 +24,14 @@ def minimum_risk(w: cp.Variable, risk_model: RiskModel) -> cp.Problem:
         A convex optimization problem.
     """
     return cp.Problem(
-        cp.Minimize(risk_model.estimate_risk(w)),
+        cp.Minimize(risk_model.estimate(w)),
         [cp.sum(w) == 1, w >= 0]
     )
 ```
 
 The risk model is injected into the function.
 The function is not aware of the precise risk model used.
-All risk models are required to implement the `estimate_risk` method.
+All risk models are required to implement the `estimate` method.
 
 ## A first example
 
@@ -47,7 +48,7 @@ riskmodel = SampleCovariance(num=2)
 w = cp.Variable(2)
 problem = minimum_risk(w, riskmodel)
 
-riskmodel.update_data(cov=np.array([[1.0, 0.5], [0.5, 2.0]]))
+riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]))
 problem.solve()
 print(w.value)
 ```
