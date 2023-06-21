@@ -41,11 +41,13 @@ Classes
 
 
    .. py:method:: update(self, **kwargs)
+      :abstractmethod:
 
       Update the data in the risk model
 
 
    .. py:method:: constraints(self, weights, **kwargs)
+      :abstractmethod:
 
       Return the constraints for the risk model
 
