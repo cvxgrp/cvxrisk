@@ -63,8 +63,9 @@ Classes
       
 
    .. py:method:: estimate(self, weights, **kwargs)
+      :abstractmethod:
 
-      Estimate the variance given the portfolio weights
+      No estimation for bounds
 
 
    .. py:method:: __post_init__(self)
