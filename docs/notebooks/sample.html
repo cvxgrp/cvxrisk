@@ -365,6 +365,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">cvx.risk.sample</span> <span class="kn">import</span> <span class="n">SampleCovariance</span>
 <span class="kn">from</span> <span class="nn">cvx.random</span> <span class="kn">import</span> <span class="n">rand_cov</span>
+<span class="kn">from</span> <span class="nn">cvx.portfolio.min_risk</span> <span class="kn">import</span> <span class="n">minrisk_problem</span>
 
 <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
 </pre></div>
@@ -376,11 +377,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">problem</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
     <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">SampleCovariance</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
-
-    <span class="n">_problem</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span>
-        <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">_riskmodel</span><span class="o">.</span><span class="n">estimate</span><span class="p">(</span><span class="n">weights</span><span class="p">)),</span>
-        <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">weights</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_riskmodel</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">_problem</span> <span class="o">=</span> <span class="n">minrisk_problem</span><span class="p">(</span><span class="n">_riskmodel</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_problem</span><span class="p">,</span> <span class="n">_riskmodel</span>
 </pre></div>
@@ -396,55 +393,13 @@ document.write(`
 <span class="n">_problem</span><span class="p">,</span> <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-    <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">lower_assets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">48</span><span class="p">),</span> <span class="n">upper_assets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">48</span><span class="p">))</span>
     <span class="n">_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="nn">----&gt; 1 get_ipython().run_cell_magic(&#39;timeit&#39;, &#39;&#39;, &#39;n = 50\na = rand_cov(n-2)\n\n_problem, _riskmodel = problem(n)\n\nfor i</span> in <span class="ni">range(100):\n    _riskmodel.update(cov=a)\n    _problem.solve</span><span class="nt">()\n&#39;)</span>
-
-<span class="nn">File ~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/IPython/core/interactiveshell.py:2478,</span> in <span class="ni">InteractiveShell.run_cell_magic</span><span class="nt">(self, magic_name, line, cell)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2476</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">builtin_trap</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">2477</span>     <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">magic_arg_s</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">2478</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2480</span> <span class="c1"># The code below prevents the output from being displayed</span>
-<span class="g g-Whitespace">   </span><span class="mi">2481</span> <span class="c1"># when using magics with decodator @output_can_be_silenced</span>
-<span class="g g-Whitespace">   </span><span class="mi">2482</span> <span class="c1"># when the last Python token in the expression is a &#39;;&#39;.</span>
-<span class="g g-Whitespace">   </span><span class="mi">2483</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">magic</span><span class="o">.</span><span class="n">MAGIC_OUTPUT_CAN_BE_SILENCED</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-
-<span class="nn">File ~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/IPython/core/magics/execution.py:1170,</span> in <span class="ni">ExecutionMagics.timeit</span><span class="nt">(self, line, cell, local_ns)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1169</span>     <span class="n">number</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">index</span>
-<span class="ne">-&gt; </span><span class="mi">1170</span>     <span class="n">time_number</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="k">if</span> <span class="n">time_number</span> <span class="o">&gt;=</span> <span class="mf">0.2</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1172</span>         <span class="k">break</span>
-
-<span class="nn">File ~/work/cvxrisk/cvxrisk/.venv/lib/python3.10/site-packages/IPython/core/magics/execution.py:158,</span> in <span class="ni">Timer.timeit</span><span class="nt">(self, number)</span>
-<span class="g g-Whitespace">    </span><span class="mi">156</span> <span class="n">gc</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">157</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">158</span>     <span class="n">timing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">159</span> <span class="k">finally</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">160</span>     <span class="k">if</span> <span class="n">gcold</span><span class="p">:</span>
-
-<span class="nn">File &lt;magic-timeit&gt;:7,</span> in <span class="ni">inner</span><span class="nt">(_it, _timer)</span>
-
-<span class="nn">File ~/work/cvxrisk/cvxrisk/cvx/risk/sample/sample.py:39,</span> in <span class="ni">SampleCovariance.update</span><span class="nt">(self, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">39</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/work/cvxrisk/cvxrisk/cvx/risk/bounds.py:39,</span> in <span class="ni">Bounds.update</span><span class="nt">(self, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span>     <span class="c1"># lower = kwargs.get(&quot;lower&quot;, np.zeros(self.m))</span>
-<span class="ne">---&gt; </span><span class="mi">39</span>     <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
-<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span>     <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
-
-<span class="ne">KeyError</span>: &#39;lower_assets&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>869 ms ± 22.6 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre></div>
 </div>
 </div>
@@ -460,13 +415,13 @@ document.write(`
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">_problem</span><span class="p">,</span> <span class="n">_riskmodel</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">_riskmodel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cov</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">lower_assets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">48</span><span class="p">),</span> <span class="n">upper_assets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">48</span><span class="p">))</span>
     <span class="n">_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.92 s ± 51.8 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.09 s ± 30.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre></div>
 </div>
 </div>
