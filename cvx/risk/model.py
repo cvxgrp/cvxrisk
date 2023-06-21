@@ -39,7 +39,8 @@ class RiskModel(ABC):
 @dataclass
 class Bounds(RiskModel):
     def estimate(self, weights, **kwargs):
-        pass
+        """No estimation for bounds"""
+        raise NotImplementedError("No estimation for bounds")
 
     m: int = 0
 
