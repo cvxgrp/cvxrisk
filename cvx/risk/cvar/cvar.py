@@ -7,11 +7,11 @@ import cvxpy as cvx
 import numpy as np
 
 from cvx.risk.model import Bounds
-from cvx.risk.model import RiskModel
+from cvx.risk.model import Model
 
 
 @dataclass
-class CVar(RiskModel):
+class CVar(Model):
     """Conditional value at risk model"""
 
     alpha: float = 0.95

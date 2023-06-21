@@ -4,16 +4,17 @@
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxrisk.svg)](https://pypi.python.org/pypi/cvxrisk/)
 
-We provide an abstract `RiskModel` class. The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
+We provide an abstract `Model` class.
+The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
 Using this class, we can formulate a function computing a standard minimum risk portfolio as
 
 ```python
 import cvxpy as cp
 
-from cvx.risk import RiskModel
+from cvx.risk import Model
 
 
-def minimum_risk(w: cp.Variable, risk_model: RiskModel) -> cp.Problem:
+def minimum_risk(w: cp.Variable, risk_model: Model, **kwargs) -> cp.Problem:
     """Constructs a minimum variance portfolio.
 
     Args:
@@ -24,8 +25,8 @@ def minimum_risk(w: cp.Variable, risk_model: RiskModel) -> cp.Problem:
         A convex optimization problem.
     """
     return cp.Problem(
-        cp.Minimize(risk_model.estimate(w)),
-        [cp.sum(w) == 1, w >= 0]
+        cp.Minimize(risk_model.estimate(w, **kwargs)),
+        [cp.sum(w) == 1, w >= 0] + risk_model.constraints(w, **kwargs)
     )
 ```
 
@@ -96,18 +97,16 @@ Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
 where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$
 is the variance of the idiosyncratic returns.
 
-Again we offer two variants of the factor risk model reflecting what is widely used in practice.
-The first variant is the `FundamentalFactorRiskModel` class.
-Here the user provides the factor covariance matrix $\Sigma_f$,
-the loadings $\beta$ and the volatilities of the idiosyncratic returns $\epsilon_i$. Often such
-data is provided by external parties, e.g. Barra or Axioma.
+Factor risk models are widely used in practice. Usually two scenarios are distinguished.
+A first route is to rely on estimates for the factor covariance matrix $\Sigma_f$,
+the loadings $\beta$ and the volatilities of the idiosyncratic returns $\epsilon_i$.
+Usually those quantities are provided by external parties, e.g. Barra or Axioma.
 
-The second variant is the `TimeseriesFactorRiskModel` class.
-Here the user provides the factor time series $f_1, \ldots, f_k$, usually obtained from
-a principal component analysis (PCA) of the asset returns. The loadings $\beta$ are computed
-via a linear regression of the asset returns on the factor time series.
+An alternative would be to start with the estimation of factor time series $f_1, \ldots, f_k$.
+Usually they are estimated via a principal component analysis (PCA) of the asset returns.
+It is then a simple linear regression to compute the loadings $\beta$.
 The volatilities of the idiosyncratic returns $\epsilon_i$ are computed as the standard deviation
-of the residuals of the linear regression.
+of the observed residuals.
 The factor covariance matrix $\Sigma_f$ may even be diagonal in this case as the factors are orthogonal.
 
 We expose a method to compute the first $k$ principal components.

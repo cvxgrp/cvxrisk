@@ -10,11 +10,11 @@ import numpy as np
 
 from cvx.linalg import cholesky
 from cvx.risk.model import Bounds
-from cvx.risk.model import RiskModel
+from cvx.risk.model import Model
 
 
 @dataclass
-class FactorModel(RiskModel):
+class FactorModel(Model):
     """Factor risk model"""
 
     assets: int = 0

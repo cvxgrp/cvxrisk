@@ -10,11 +10,11 @@ import numpy as np
 
 from cvx.linalg import cholesky
 from cvx.risk.model import Bounds
-from cvx.risk.model import RiskModel
+from cvx.risk.model import Model
 
 
 @dataclass
-class SampleCovariance(RiskModel):
+class SampleCovariance(Model):
     """Risk model based on the Cholesky decomposition of the sample cov matrix"""
 
     num: int = 0

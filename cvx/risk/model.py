@@ -14,7 +14,7 @@ import numpy as np
 
 
 @dataclass
-class RiskModel(ABC):
+class Model(ABC):
     """Abstract risk model"""
 
     parameter: Dict[str, cp.Parameter] = field(default_factory=dict)
@@ -39,7 +39,7 @@ class RiskModel(ABC):
 
 
 @dataclass
-class Bounds(RiskModel):
+class Bounds(Model):
     m: int = 0
 
     def estimate(self, weights, **kwargs):
