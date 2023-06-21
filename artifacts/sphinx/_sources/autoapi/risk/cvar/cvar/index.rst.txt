@@ -51,7 +51,7 @@ Classes
       Update the data in the risk model
 
 
-   .. py:method:: constraints(self, weights)
+   .. py:method:: constraints(self, weights, **kwargs)
 
       Return the constraints for the risk model
 

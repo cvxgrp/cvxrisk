@@ -62,12 +62,12 @@ File [0;32m~/work/cvxrisk/cvxrisk/cvx/risk/sample/sample.py:39[0m, in [0;36mS
 [1;32m     38[0m [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124mchol[39m[38;5;124m"[39m][38;5;241m.[39mvalue[:n, :n] [38;5;241m=[39m cholesky(cov)
 [0;32m---> 39[0m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mbounds[49m[38;5;241;43m.[39;49m[43mupdate[49m[43m([49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
 
-File [0;32m~/work/cvxrisk/cvxrisk/cvx/risk/bounds.py:35[0m, in [0;36mBounds.update[0;34m(self, **kwargs)[0m
-[1;32m     33[0m [38;5;28;01mdef[39;00m [38;5;21mupdate[39m([38;5;28mself[39m, [38;5;241m*[39m[38;5;241m*[39mkwargs):
-[1;32m     34[0m     [38;5;66;03m# lower = kwargs.get("lower", np.zeros(self.m))[39;00m
-[0;32m---> 35[0m     lower [38;5;241m=[39m [43mkwargs[49m[43m[[49m[38;5;124;43m"[39;49m[38;5;124;43mlower[39;49m[38;5;124;43m"[39;49m[43m][49m
-[1;32m     36[0m     [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124mlower[39m[38;5;124m"[39m][38;5;241m.[39mvalue [38;5;241m=[39m np[38;5;241m.[39mzeros([38;5;28mself[39m[38;5;241m.[39mm)
-[1;32m     37[0m     [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124mlower[39m[38;5;124m"[39m][38;5;241m.[39mvalue[: [38;5;28mlen[39m(lower)] [38;5;241m=[39m lower
+File [0;32m~/work/cvxrisk/cvxrisk/cvx/risk/bounds.py:39[0m, in [0;36mBounds.update[0;34m(self, **kwargs)[0m
+[1;32m     37[0m [38;5;28;01mdef[39;00m [38;5;21mupdate[39m([38;5;28mself[39m, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[1;32m     38[0m     [38;5;66;03m# lower = kwargs.get("lower", np.zeros(self.m))[39;00m
+[0;32m---> 39[0m     lower [38;5;241m=[39m [43mkwargs[49m[43m[[49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_f[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mlower[39;49m[38;5;124;43m"[39;49m[43m)[49m[43m][49m
+[1;32m     40[0m     [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;28mself[39m[38;5;241m.[39m_f([38;5;124m"[39m[38;5;124mlower[39m[38;5;124m"[39m)][38;5;241m.[39mvalue [38;5;241m=[39m np[38;5;241m.[39mzeros([38;5;28mself[39m[38;5;241m.[39mm)
+[1;32m     41[0m     [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;28mself[39m[38;5;241m.[39m_f([38;5;124m"[39m[38;5;124mlower[39m[38;5;124m"[39m)][38;5;241m.[39mvalue[: [38;5;28mlen[39m(lower)] [38;5;241m=[39m lower
 
-[0;31mKeyError[0m: 'lower'
+[0;31mKeyError[0m: 'lower_assets'
 

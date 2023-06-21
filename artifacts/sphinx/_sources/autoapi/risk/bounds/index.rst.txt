@@ -33,10 +33,18 @@ Classes
 
       
 
+   .. py:attribute:: name
+      :annotation: :str = 
+
+      
+
    .. py:method:: estimate(self, weights, **kwargs)
       :abstractmethod:
 
       No estimation for bounds
+
+
+   .. py:method:: _f(self, str)
 
 
    .. py:method:: __post_init__(self)

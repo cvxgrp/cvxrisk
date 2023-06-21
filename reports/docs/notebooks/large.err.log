@@ -30,27 +30,14 @@ triangle.update(exposure=beta.values,
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mKeyError[0m                                  Traceback (most recent call last)
-Cell [0;32mIn[6], line 8[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+Cell [0;32mIn[6], line 6[0m
+[1;32m      3[0m y [38;5;241m=[39m cvx[38;5;241m.[39mVariable([38;5;241m100[39m)
 [1;32m      5[0m objective [38;5;241m=[39m cvx[38;5;241m.[39mMinimize(triangle[38;5;241m.[39mestimate(w, y[38;5;241m=[39my))
-[1;32m      6[0m constraints [38;5;241m=[39m [w [38;5;241m>[39m[38;5;241m=[39m [38;5;241m0[39m, cvx[38;5;241m.[39msum(w) [38;5;241m==[39m [38;5;241m1[39m] [38;5;241m+[39m triangle[38;5;241m.[39mbounds[38;5;241m.[39mconstraints(w)
-[0;32m----> 8[0m [43mtriangle[49m[38;5;241;43m.[39;49m[43mupdate[49m[43m([49m[43mexposure[49m[38;5;241;43m=[39;49m[43mbeta[49m[38;5;241;43m.[39;49m[43mvalues[49m[43m,[49m[43m [49m
-[1;32m      9[0m [43m                     [49m[43mcov[49m[38;5;241;43m=[39;49m[43mfactors[49m[38;5;241;43m.[39;49m[43mcov[49m[43m([49m[43m)[49m[38;5;241;43m.[39;49m[43mvalues[49m[43m,[49m[43m [49m
-[1;32m     10[0m [43m                     [49m[43midiosyncratic_risk[49m[38;5;241;43m=[39;49m[43mpd[49m[38;5;241;43m.[39;49m[43mDataFrame[49m[43m([49m[43mdata[49m[38;5;241;43m=[39;49m[43mret[49m[43m [49m[38;5;241;43m-[39;49m[43m [49m[43mfactors[49m[43m [49m[38;5;241;43m@[39;49m[43m [49m[43mbeta[49m[43m,[49m[43m [49m[43mindex[49m[38;5;241;43m=[39;49m[43mret[49m[38;5;241;43m.[39;49m[43mindex[49m[43m,[49m[43m [49m[43mcolumns[49m[38;5;241;43m=[39;49m[43mret[49m[38;5;241;43m.[39;49m[43mcolumns[49m[43m)[49m[38;5;241;43m.[39;49m[43mstd[49m[43m([49m[43m)[49m[38;5;241;43m.[39;49m[43mvalues[49m[43m)[49m
+[0;32m----> 6[0m constraints [38;5;241m=[39m [w [38;5;241m>[39m[38;5;241m=[39m [38;5;241m0[39m, cvx[38;5;241m.[39msum(w) [38;5;241m==[39m [38;5;241m1[39m] [38;5;241m+[39m [43mtriangle[49m[38;5;241;43m.[39;49m[43mbounds[49m[38;5;241m.[39mconstraints(w)
+[1;32m      8[0m triangle[38;5;241m.[39mupdate(exposure[38;5;241m=[39mbeta[38;5;241m.[39mvalues, 
+[1;32m      9[0m                      cov[38;5;241m=[39mfactors[38;5;241m.[39mcov()[38;5;241m.[39mvalues, 
+[1;32m     10[0m                      idiosyncratic_risk[38;5;241m=[39mpd[38;5;241m.[39mDataFrame(data[38;5;241m=[39mret [38;5;241m-[39m factors [38;5;241m@[39m beta, index[38;5;241m=[39mret[38;5;241m.[39mindex, columns[38;5;241m=[39mret[38;5;241m.[39mcolumns)[38;5;241m.[39mstd()[38;5;241m.[39mvalues)
 
-File [0;32m~/work/cvxrisk/cvxrisk/cvx/risk/factor/factor.py:65[0m, in [0;36mFactorModel.update[0;34m(self, **kwargs)[0m
-[1;32m     61[0m [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124midiosyncratic_risk[39m[38;5;124m"[39m][38;5;241m.[39mvalue[:assets] [38;5;241m=[39m kwargs[
-[1;32m     62[0m     [38;5;124m"[39m[38;5;124midiosyncratic_risk[39m[38;5;124m"[39m
-[1;32m     63[0m ]
-[1;32m     64[0m [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124mchol[39m[38;5;124m"[39m][38;5;241m.[39mvalue[:k, :k] [38;5;241m=[39m cholesky(kwargs[[38;5;124m"[39m[38;5;124mcov[39m[38;5;124m"[39m])
-[0;32m---> 65[0m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mbounds[49m[38;5;241;43m.[39;49m[43mupdate[49m[43m([49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
-
-File [0;32m~/work/cvxrisk/cvxrisk/cvx/risk/bounds.py:35[0m, in [0;36mBounds.update[0;34m(self, **kwargs)[0m
-[1;32m     33[0m [38;5;28;01mdef[39;00m [38;5;21mupdate[39m([38;5;28mself[39m, [38;5;241m*[39m[38;5;241m*[39mkwargs):
-[1;32m     34[0m     [38;5;66;03m# lower = kwargs.get("lower", np.zeros(self.m))[39;00m
-[0;32m---> 35[0m     lower [38;5;241m=[39m [43mkwargs[49m[43m[[49m[38;5;124;43m"[39;49m[38;5;124;43mlower[39;49m[38;5;124;43m"[39;49m[43m][49m
-[1;32m     36[0m     [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124mlower[39m[38;5;124m"[39m][38;5;241m.[39mvalue [38;5;241m=[39m np[38;5;241m.[39mzeros([38;5;28mself[39m[38;5;241m.[39mm)
-[1;32m     37[0m     [38;5;28mself[39m[38;5;241m.[39mparameter[[38;5;124m"[39m[38;5;124mlower[39m[38;5;124m"[39m][38;5;241m.[39mvalue[: [38;5;28mlen[39m(lower)] [38;5;241m=[39m lower
-
-[0;31mKeyError[0m: 'lower'
+[0;31mAttributeError[0m: 'FactorModel' object has no attribute 'bounds'
 
