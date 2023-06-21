@@ -6,8 +6,8 @@ import cvxpy as cp
 import numpy as np
 import pytest
 
+from cvx.portfolio.min_risk import minrisk_problem
 from cvx.risk.cvar import CVar
-from tests.test_risk.minvar import minvar_problem
 
 
 def test_estimate_risk():
@@ -18,7 +18,7 @@ def test_estimate_risk():
 
     # define the problem
     weights = cp.Variable(14)
-    prob = minvar_problem(model, weights)
+    prob = minrisk_problem(model, weights)
     assert prob.is_dpp()
 
     model.update(

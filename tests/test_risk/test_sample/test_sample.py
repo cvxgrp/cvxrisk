@@ -4,8 +4,8 @@ from __future__ import annotations
 import cvxpy as cp
 import numpy as np
 
+from cvx.portfolio.min_risk import minrisk_problem
 from cvx.risk.sample import SampleCovariance
-from tests.test_risk.minvar import minvar_problem
 
 
 def test_sample():
@@ -33,7 +33,7 @@ def test_sample_large():
 def test_min_variance():
     weights = cp.Variable(4)
     riskmodel = SampleCovariance(num=4)
-    problem = minvar_problem(riskmodel, weights)
+    problem = minrisk_problem(riskmodel, weights)
     assert problem.is_dpp()
 
     riskmodel.update(
