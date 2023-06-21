@@ -28,7 +28,7 @@ Classes
 
 .. py:class:: CVar
 
-   Bases: :py:obj:`cvx.risk.model.RiskModel`
+   Bases: :py:obj:`cvx.risk.model.Model`
 
    Conditional value at risk model
 

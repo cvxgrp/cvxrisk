@@ -24,7 +24,7 @@ Classes
 
 .. py:class:: FactorModel
 
-   Bases: :py:obj:`cvx.risk.model.RiskModel`
+   Bases: :py:obj:`cvx.risk.model.Model`
 
    Factor risk model
 

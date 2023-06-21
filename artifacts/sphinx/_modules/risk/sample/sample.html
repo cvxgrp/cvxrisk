@@ -83,11 +83,11 @@
 
 <span class="kn">from</span> <span class="nn">cvx.linalg</span> <span class="kn">import</span> <span class="n">cholesky</span>
 <span class="kn">from</span> <span class="nn">cvx.risk.model</span> <span class="kn">import</span> <span class="n">Bounds</span>
-<span class="kn">from</span> <span class="nn">cvx.risk.model</span> <span class="kn">import</span> <span class="n">RiskModel</span>
+<span class="kn">from</span> <span class="nn">cvx.risk.model</span> <span class="kn">import</span> <span class="n">Model</span>
 
 
 <span class="nd">@dataclass</span>
-<div class="viewcode-block" id="SampleCovariance"><a class="viewcode-back" href="../../../autoapi/risk/sample/sample/index.html#risk.sample.SampleCovariance">[docs]</a><span class="k">class</span> <span class="nc">SampleCovariance</span><span class="p">(</span><span class="n">RiskModel</span><span class="p">):</span>
+<div class="viewcode-block" id="SampleCovariance"><a class="viewcode-back" href="../../../autoapi/risk/sample/sample/index.html#risk.sample.SampleCovariance">[docs]</a><span class="k">class</span> <span class="nc">SampleCovariance</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Risk model based on the Cholesky decomposition of the sample cov matrix&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SampleCovariance.num"><a class="viewcode-back" href="../../../autoapi/risk/sample/sample/index.html#risk.sample.SampleCovariance.num">[docs]</a>    <span class="n">num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>

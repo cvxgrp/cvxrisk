@@ -17,13 +17,13 @@ Classes
 
 .. autoapisummary::
 
-   risk.model.RiskModel
+   risk.model.Model
    risk.model.Bounds
 
 
 
 
-.. py:class:: RiskModel
+.. py:class:: Model
 
    Bases: :py:obj:`abc.ABC`
 
@@ -55,7 +55,7 @@ Classes
 
 .. py:class:: Bounds
 
-   Bases: :py:obj:`RiskModel`
+   Bases: :py:obj:`Model`
 
    Abstract risk model
 
