@@ -34,6 +34,8 @@ The risk model is injected into the function.
 The function is not aware of the precise risk model used.
 All risk models are required to implement the `estimate` method.
 
+Note that factor risk models work with weights for the assets but also with weights for the factors.
+To stay flexible we are applying thiS `**kwargs` pattern to the function above.
 ## A first example
 
 A first example is a risk model based on the sample covariance matrix.
@@ -59,8 +61,8 @@ This is good practice and keeps the code clean and maintainable.
 
 In a backtest we don't have to reconstruct the problem in every iteration.
 We can simply update the risk model with the new data and solve the problem again.
-If the dimension of the problem is changing during the test we expect
-a new problem has to be constructed though.
+The implementation of the risk models is flexible enough to deal with changing dimensions
+of the underlying weight space.
 
 ## Risk models
 
@@ -80,12 +82,12 @@ The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients
 $\beta_{ji}$.
 The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
 
-Any position $w$ in weight space projects to a position $y = \beta w$ in factor space.
+Any position $w$ in weight space projects to a position $y = \beta^T w$ in factor space.
 The variance for a position $w$ is the sum of the variance of the
 systematic returns explained by the factors and the variance of the idiosyncratic returns.
 
 ```math
-Var(r) = Var(\beta w) + Var(\epsilon w)
+Var(r) = Var(\beta^T w) + Var(\epsilon w)
 ```
 
 We assume the residual returns are uncorrelated and hence
@@ -113,8 +115,7 @@ We expose a method to compute the first $k$ principal components.
 
 ### cvar
 
-XXX: Conditional value at risk
-Relies on cxxpy's `sum_largest` function.
+We currently also support the conditional value at risk (CVaR) as a risk measure.
 
 
 
