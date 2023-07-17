@@ -6,7 +6,8 @@
 
 We provide an abstract `Model` class.
 The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
-Using this class, we can formulate a function computing a standard minimum risk portfolio as
+Using this class, we can formulate a function computing a standard minimum
+risk portfolio as
 
 ```python
 import cvxpy as cp
@@ -34,8 +35,10 @@ The risk model is injected into the function.
 The function is not aware of the precise risk model used.
 All risk models are required to implement the `estimate` method.
 
-Note that factor risk models work with weights for the assets but also with weights for the factors.
+Note that factor risk models work with weights for the assets but also with
+weights for the factors.
 To stay flexible we are applying thiS `**kwargs` pattern to the function above.
+
 ## A first example
 
 A first example is a risk model based on the sample covariance matrix.
@@ -60,9 +63,9 @@ The risk model and the actual optimization problem are decoupled.
 This is good practice and keeps the code clean and maintainable.
 
 In a backtest we don't have to reconstruct the problem in every iteration.
-We can simply update the risk model with the new data and solve the problem again.
-The implementation of the risk models is flexible enough to deal with changing dimensions
-of the underlying weight space.
+We can simply update the risk model with the new data and solve the problem
+again. The implementation of the risk models is flexible enough to deal with
+changing dimensions of the underlying weight space.
 
 ## Risk models
 
@@ -70,21 +73,24 @@ of the underlying weight space.
 
 We offer a `SampleCovariance` class as seen above.
 
-
 ### Factor risk models
 
 Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
+
 ```math
 r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
 ```
+
 The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients
 $\beta_{ji}$.
-The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
+The residual returns $\epsilon_i$ are assumed to be uncorrelated with the f
+actors.
 
-Any position $w$ in weight space projects to a position $y = \beta^T w$ in factor space.
-The variance for a position $w$ is the sum of the variance of the
-systematic returns explained by the factors and the variance of the idiosyncratic returns.
+Any position $w$ in weight space projects to a position $y = \beta^T w$ in
+factor space. The variance for a position $w$ is the sum of the variance of the
+systematic returns explained by the factors and the variance of the
+idiosyncratic returns.
 
 ```math
 Var(r) = Var(\beta^T w) + Var(\epsilon w)
@@ -99,43 +105,47 @@ Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
 where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$
 is the variance of the idiosyncratic returns.
 
-Factor risk models are widely used in practice. Usually two scenarios are distinguished.
-A first route is to rely on estimates for the factor covariance matrix $\Sigma_f$,
-the loadings $\beta$ and the volatilities of the idiosyncratic returns $\epsilon_i$.
-Usually those quantities are provided by external parties, e.g. Barra or Axioma.
+Factor risk models are widely used in practice. Usually two scenarios are
+distinguished. A first route is to rely on estimates for the factor covariance
+matrix $\Sigma_f$, the loadings $\beta$ and the volatilities of the
+idiosyncratic returns $\epsilon_i$. Usually those quantities are provided by
+external parties, e.g. Barra or Axioma.
 
-An alternative would be to start with the estimation of factor time series $f_1, \ldots, f_k$.
-Usually they are estimated via a principal component analysis (PCA) of the asset returns.
-It is then a simple linear regression to compute the loadings $\beta$.
-The volatilities of the idiosyncratic returns $\epsilon_i$ are computed as the standard deviation
-of the observed residuals.
-The factor covariance matrix $\Sigma_f$ may even be diagonal in this case as the factors are orthogonal.
+An alternative would be to start with the estimation of factor time series
+$f_1, \ldots, f_k$.
+Usually they are estimated via a principal component analysis (PCA) of the
+asset returns.  It is then a simple linear regression to compute the loadings
+$\beta$. The volatilities of the idiosyncratic returns $\epsilon_i$ are computed
+as the standard deviation of the observed residuals.
+The factor covariance matrix $\Sigma_f$ may even be diagonal in this case as the
+factors are orthogonal.
 
 We expose a method to compute the first $k$ principal components.
 
 ### cvar
 
-We currently also support the conditional value at risk (CVaR) as a risk measure.
-
-
-
+We currently also support the conditional value at risk (CVaR) as a risk
+measure.
 
 ## Poetry
 
-We assume you share already the love for [Poetry](https://python-poetry.org). Once you have installed poetry you can perform
+We assume you share already the love for [Poetry](https://python-poetry.org).
+Once you have installed poetry you can perform
 
 ```bash
-poetry install
+make install
 ```
 
 to replicate the virtual environment we have defined in pyproject.toml.
 
 ## Kernel
 
-We install [JupyterLab](https://jupyter.org) within your new virtual environment. Executing
+We install [JupyterLab](https://jupyter.org) within your new virtual
+environment. Executing
 
 ```bash
-./create_kernel.sh
+make kernel
 ```
 
-constructs a dedicated [Kernel](https://docs.jupyter.org/en/latest/projects/kernels.html) for the project.
+constructs a dedicated [Kernel](https://docs.jupyter.org/en/latest/projects/kernels.html)
+for the project.

@@ -26,3 +26,11 @@ jupyter-book = "0.15.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 120
+target-version = "py38"
+exclude = [
+    "*__init__.py"
+]
