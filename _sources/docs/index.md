@@ -125,7 +125,7 @@ We currently also support the conditional value at risk (CVaR) as a risk measure
 We assume you share already the love for [Poetry](https://python-poetry.org). Once you have installed poetry you can perform
 
 ```bash
-poetry install
+make install
 ```
 
 to replicate the virtual environment we have defined in pyproject.toml.
@@ -135,7 +135,7 @@ to replicate the virtual environment we have defined in pyproject.toml.
 We install [JupyterLab](https://jupyter.org) within your new virtual environment. Executing
 
 ```bash
-./create_kernel.sh
+make kernel
 ```
 
 constructs a dedicated [Kernel](https://docs.jupyter.org/en/latest/projects/kernels.html) for the project.
