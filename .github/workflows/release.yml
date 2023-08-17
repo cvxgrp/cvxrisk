@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    #environment: release
+    environment: release
 
     permissions:
       # This permission is required for trusted publishing.
