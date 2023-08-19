@@ -8,7 +8,6 @@ UNAME=$(shell uname -s)
 install:  ## Install a virtual environment
 	@poetry install -vv
 
-
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
 	@poetry run pip install pre-commit
