@@ -1,4 +1,4 @@
-# [cvxrisk](http://www.cvxgrp.org/cvxrisk/)
+# [cvxrisk](http://www.cvxgrp.org/cvxrisk/book)
 
 [![PyPI version](https://badge.fury.io/py/cvxrisk.svg)](https://badge.fury.io/py/cvxrisk)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
