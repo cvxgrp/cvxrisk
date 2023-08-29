@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """Abstract risk model
 """
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict
 
 import cvxpy as cp
 
@@ -14,7 +12,7 @@ import cvxpy as cp
 class Model(ABC):
     """Abstract risk model"""
 
-    parameter: Dict[str, cp.Parameter] = field(default_factory=dict)
+    parameter: dict[str, cp.Parameter] = field(default_factory=dict)
 
     @abstractmethod
     def estimate(self, weights, **kwargs):

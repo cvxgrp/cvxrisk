@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """PCA analysis
 """
 from __future__ import annotations

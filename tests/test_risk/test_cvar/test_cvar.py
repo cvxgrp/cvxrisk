@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Import necessary libraries
 from __future__ import annotations
 
