@@ -29,7 +29,7 @@ Classes
    Abstract risk model
 
    .. py:attribute:: parameter
-      :annotation: :Dict[str, cvxpy.Parameter]
+      :annotation: :dict[str, cvxpy.Parameter]
 
       
 
