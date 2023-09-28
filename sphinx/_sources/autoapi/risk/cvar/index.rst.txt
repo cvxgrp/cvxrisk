@@ -28,39 +28,43 @@ Classes
 
 .. py:class:: CVar
 
+
    Bases: :py:obj:`cvx.risk.model.Model`
 
    Conditional value at risk model
 
    .. py:attribute:: alpha
-      :annotation: :float = 0.95
+      :type: float
+      :value: 0.95
 
       
 
    .. py:attribute:: n
-      :annotation: :int = 0
+      :type: int
+      :value: 0
 
       
 
    .. py:attribute:: m
-      :annotation: :int = 0
+      :type: int
+      :value: 0
 
       
 
-   .. py:method:: __post_init__(self)
+   .. py:method:: __post_init__()
 
 
-   .. py:method:: estimate(self, weights, **kwargs)
+   .. py:method:: estimate(weights, **kwargs)
 
       Estimate the risk by computing the Cholesky decomposition of self.cov
 
 
-   .. py:method:: update(self, **kwargs)
+   .. py:method:: update(**kwargs)
 
       Update the data in the risk model
 
 
-   .. py:method:: constraints(self, weights, **kwargs)
+   .. py:method:: constraints(weights, **kwargs)
 
       Return the constraints for the risk model
 

@@ -13,11 +13,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -28,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> cvxrisk
-            <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cvxrisk
+              <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -59,9 +63,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>risk.bounds</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">risk.bounds</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -96,18 +100,34 @@
 
 
 <span class="nd">@dataclass</span>
-<div class="viewcode-block" id="Bounds"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds">[docs]</a><span class="k">class</span> <span class="nc">Bounds</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-<div class="viewcode-block" id="Bounds.m"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.m">[docs]</a>    <span class="n">m</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-<div class="viewcode-block" id="Bounds.name"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.name">[docs]</a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+<div class="viewcode-block" id="Bounds">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds">[docs]</a>
+<span class="k">class</span> <span class="nc">Bounds</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Bounds.m">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.m">[docs]</a>
+    <span class="n">m</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Bounds.estimate"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.estimate">[docs]</a>    <span class="k">def</span> <span class="nf">estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Bounds.name">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.name">[docs]</a>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Bounds.estimate">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.estimate">[docs]</a>
+    <span class="k">def</span> <span class="nf">estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;No estimation for bounds&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;No estimation for bounds&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Bounds._f"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds._f">[docs]</a>    <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Bounds._f">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds._f">[docs]</a>
+    <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="Bounds.__post_init__"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Bounds.__post_init__">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.__post_init__">[docs]</a>
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
             <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lower bound&quot;</span><span class="p">,</span>
@@ -119,7 +139,10 @@
             <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Bounds.update"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Bounds.update">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># lower = kwargs.get(&quot;lower&quot;, np.zeros(self.m))</span>
         <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
@@ -131,11 +154,16 @@
             <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">upper</span>  <span class="c1"># kwargs.get(&quot;upper&quot;, np.ones(m))</span></div>
 
-<div class="viewcode-block" id="Bounds.constraints"><a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.constraints">[docs]</a>    <span class="k">def</span> <span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Bounds.constraints">
+<a class="viewcode-back" href="../../autoapi/risk/bounds/index.html#risk.bounds.Bounds.constraints">[docs]</a>
+    <span class="k">def</span> <span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
             <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
-        <span class="p">]</span></div></div>
+        <span class="p">]</span></div>
+</div>
+
 </pre></div>
 
            </div>

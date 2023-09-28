@@ -24,28 +24,29 @@ Classes
 
 .. py:class:: Model
 
+
    Bases: :py:obj:`abc.ABC`
 
    Abstract risk model
 
    .. py:attribute:: parameter
-      :annotation: :dict[str, cvxpy.Parameter]
+      :type: dict[str, cvxpy.Parameter]
 
       
 
-   .. py:method:: estimate(self, weights, **kwargs)
+   .. py:method:: estimate(weights, **kwargs)
       :abstractmethod:
 
       Estimate the variance given the portfolio weights
 
 
-   .. py:method:: update(self, **kwargs)
+   .. py:method:: update(**kwargs)
       :abstractmethod:
 
       Update the data in the risk model
 
 
-   .. py:method:: constraints(self, weights, **kwargs)
+   .. py:method:: constraints(weights, **kwargs)
       :abstractmethod:
 
       Return the constraints for the risk model

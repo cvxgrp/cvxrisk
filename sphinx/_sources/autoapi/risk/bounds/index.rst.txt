@@ -24,38 +24,41 @@ Classes
 
 .. py:class:: Bounds
 
+
    Bases: :py:obj:`cvx.risk.Model`
 
    Abstract risk model
 
    .. py:attribute:: m
-      :annotation: :int = 0
+      :type: int
+      :value: 0
 
       
 
    .. py:attribute:: name
-      :annotation: :str = 
+      :type: str
+      :value: ''
 
       
 
-   .. py:method:: estimate(self, weights, **kwargs)
+   .. py:method:: estimate(weights, **kwargs)
       :abstractmethod:
 
       No estimation for bounds
 
 
-   .. py:method:: _f(self, str)
+   .. py:method:: _f(str)
 
 
-   .. py:method:: __post_init__(self)
+   .. py:method:: __post_init__()
 
 
-   .. py:method:: update(self, **kwargs)
+   .. py:method:: update(**kwargs)
 
       Update the data in the risk model
 
 
-   .. py:method:: constraints(self, weights, **kwargs)
+   .. py:method:: constraints(weights, **kwargs)
 
       Return the constraints for the risk model
 
