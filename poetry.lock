@@ -305,13 +305,13 @@ toml = ["tomli"]
 
 [[package]]
 name = "cvxcovariance"
-version = "0.1.1"
+version = "0.1.2"
 description = "..."
 optional = false
-python-versions = ">=3.8.0"
+python-versions = ">=3.9.0,<3.12"
 files = [
-    {file = "cvxcovariance-0.1.1-py3-none-any.whl", hash = "sha256:c22e5bd2e7db084a4ee92c811cfd36c23a7564c7300bbc557be265a11ffa664b"},
-    {file = "cvxcovariance-0.1.1.tar.gz", hash = "sha256:0d6129f8c3bd3b8024efcb305efdafa9fa1a4404af1738f26f613fdabcd594ba"},
+    {file = "cvxcovariance-0.1.2-py3-none-any.whl", hash = "sha256:b997f579635c47478b2ee2a04174c4626bc97305f5f8bab464e894e24e923134"},
+    {file = "cvxcovariance-0.1.2.tar.gz", hash = "sha256:1fcaae76835f07c65a2f18889cf3ff91b223b06abe75b1b3576b3d5a9baa74ee"},
 ]
 
 [package.dependencies]
