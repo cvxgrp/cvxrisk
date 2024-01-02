@@ -9,14 +9,15 @@ packages = [{include = "cvx"}]
 homepage = "https://www.cvxgrp.org/cvxrisk"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12"
+python = ">=3.9"
 pandas = "*"
 scikit-learn = "*"
 cvxpy = "*"
 
 [tool.poetry.group.test.dependencies]
-pytest = "7.4.4"
-pytest-cov = "4.1.0"
+pytest = "*"
+pytest-cov = "*"
+pre-commit = "*"
 
 [tool.poetry.dev-dependencies]
 plotly = "*"
