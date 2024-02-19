@@ -1,0 +1,52 @@
+:py:mod:`linalg`
+================
+
+.. py:module:: linalg
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   cholesky/index.rst
+   pca/index.rst
+   valid/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   linalg.cholesky
+   linalg.pca
+   linalg.valid
+
+
+
+.. py:function:: cholesky(cov)
+
+
+.. py:function:: pca(returns, n_components=10)
+
+   Compute the first n principal components for a return matrix
+
+   :param returns: DataFrame of prices
+   :param n_components: Number of components
+
+
+.. py:function:: valid(matrix)
+
+   Construct the valid subset of matrix (correlation) matrix matrix
+   :param matrix: n x n matrix
+
+   :return: Tuple of matrix boolean vector indicating if row/column
+   is valid and the valid subset of the matrix
+
+

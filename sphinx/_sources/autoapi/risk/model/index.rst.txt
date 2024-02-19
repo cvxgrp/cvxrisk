@@ -1,0 +1,55 @@
+:py:mod:`risk.model`
+====================
+
+.. py:module:: risk.model
+
+.. autoapi-nested-parse::
+
+   Abstract risk model
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   risk.model.Model
+
+
+
+
+.. py:class:: Model
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   Abstract risk model
+
+   .. py:attribute:: parameter
+      :type: dict[str, cvxpy.Parameter]
+
+      
+
+   .. py:method:: estimate(weights, **kwargs)
+      :abstractmethod:
+
+      Estimate the variance given the portfolio weights
+
+
+   .. py:method:: update(**kwargs)
+      :abstractmethod:
+
+      Update the data in the risk model
+
+
+   .. py:method:: constraints(weights, **kwargs)
+      :abstractmethod:
+
+      Return the constraints for the risk model
+
+
+

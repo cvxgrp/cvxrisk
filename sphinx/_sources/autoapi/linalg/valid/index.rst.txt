@@ -1,0 +1,28 @@
+:py:mod:`linalg.valid`
+======================
+
+.. py:module:: linalg.valid
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   linalg.valid.valid
+
+
+
+.. py:function:: valid(matrix)
+
+   Construct the valid subset of matrix (correlation) matrix matrix
+   :param matrix: n x n matrix
+
+   :return: Tuple of matrix boolean vector indicating if row/column
+   is valid and the valid subset of the matrix
+
+
