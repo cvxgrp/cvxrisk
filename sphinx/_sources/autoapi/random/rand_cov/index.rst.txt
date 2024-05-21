@@ -1,22 +1,19 @@
-:py:mod:`random.rand_cov`
-=========================
+random.rand_cov
+===============
 
 .. py:module:: random.rand_cov
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    random.rand_cov.rand_cov
 
 
+Module Contents
+---------------
 
 .. py:function:: rand_cov(n)
-
 

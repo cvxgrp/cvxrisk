@@ -1,22 +1,19 @@
-:py:mod:`portfolio.min_risk`
-============================
+portfolio.min_risk
+==================
 
 .. py:module:: portfolio.min_risk
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    portfolio.min_risk.minrisk_problem
 
 
+Module Contents
+---------------
 
 .. py:function:: minrisk_problem(riskmodel, weights, **kwargs)
-
 

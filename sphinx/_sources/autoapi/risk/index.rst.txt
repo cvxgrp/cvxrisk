@@ -1,27 +1,27 @@
-:py:mod:`risk`
-==============
+risk
+====
 
 .. py:module:: risk
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   cvar/index.rst
-   factor/index.rst
-   sample/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/risk/cvar/index
+   /autoapi/risk/factor/index
+   /autoapi/risk/sample/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   bounds/index.rst
-   model/index.rst
+   /autoapi/risk/bounds/index
+   /autoapi/risk/model/index
 
 

@@ -1,5 +1,5 @@
-:py:mod:`risk.model`
-====================
+risk.model
+==========
 
 .. py:module:: risk.model
 
@@ -9,45 +9,48 @@
 
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    risk.model.Model
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Model
 
-
    Bases: :py:obj:`abc.ABC`
+
 
    Abstract risk model
 
-   .. py:attribute:: parameter
-      :type: dict[str, cvxpy.Parameter]
 
-      
+   .. py:attribute:: parameter
+      :type:  dict[str, cvxpy.Parameter]
+
 
    .. py:method:: estimate(weights, **kwargs)
       :abstractmethod:
 
+
       Estimate the variance given the portfolio weights
+
 
 
    .. py:method:: update(**kwargs)
       :abstractmethod:
 
+
       Update the data in the risk model
+
 
 
    .. py:method:: constraints(weights, **kwargs)
       :abstractmethod:
+
 
       Return the constraints for the risk model
 

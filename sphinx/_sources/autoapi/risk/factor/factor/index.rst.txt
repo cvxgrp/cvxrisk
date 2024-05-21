@@ -1,5 +1,5 @@
-:py:mod:`risk.factor.factor`
-============================
+risk.factor.factor
+==================
 
 .. py:module:: risk.factor.factor
 
@@ -9,37 +9,36 @@
 
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    risk.factor.factor.FactorModel
 
 
-
+Module Contents
+---------------
 
 .. py:class:: FactorModel
 
-
    Bases: :py:obj:`cvx.risk.model.Model`
+
 
    Factor risk model
 
+
    .. py:attribute:: assets
-      :type: int
+      :type:  int
       :value: 0
 
-      
+
 
    .. py:attribute:: k
-      :type: int
+      :type:  int
       :value: 0
 
-      
+
 
    .. py:method:: __post_init__()
 
@@ -49,9 +48,11 @@ Classes
       Compute the total variance
 
 
+
    .. py:method:: update(**kwargs)
 
       Update the data in the risk model
+
 
 
    .. py:method:: constraints(weights, **kwargs)

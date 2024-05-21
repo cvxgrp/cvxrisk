@@ -1,26 +1,21 @@
-:py:mod:`linalg`
-================
+linalg
+======
 
 .. py:module:: linalg
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   cholesky/index.rst
-   pca/index.rst
-   valid/index.rst
-
-
-Package Contents
-----------------
+   /autoapi/linalg/pca/index
+   /autoapi/linalg/valid/index
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -29,9 +24,10 @@ Functions
    linalg.valid
 
 
+Package Contents
+----------------
 
 .. py:function:: cholesky(cov)
-
 
 .. py:function:: pca(returns, n_components=10)
 

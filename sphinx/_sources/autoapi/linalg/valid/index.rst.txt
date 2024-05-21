@@ -1,21 +1,19 @@
-:py:mod:`linalg.valid`
-======================
+linalg.valid
+============
 
 .. py:module:: linalg.valid
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    linalg.valid.valid
 
 
+Module Contents
+---------------
 
 .. py:function:: valid(matrix)
 

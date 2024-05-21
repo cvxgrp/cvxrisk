@@ -1,15 +1,15 @@
-:py:mod:`portfolio`
-===================
+portfolio
+=========
 
 .. py:module:: portfolio
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   min_risk/index.rst
+   /autoapi/portfolio/min_risk/index
 
 

@@ -1,5 +1,5 @@
-:py:mod:`risk.bounds`
-=====================
+risk.bounds
+===========
 
 .. py:module:: risk.bounds
 
@@ -9,42 +9,43 @@
 
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    risk.bounds.Bounds
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Bounds
 
-
    Bases: :py:obj:`cvx.risk.Model`
+
 
    Abstract risk model
 
+
    .. py:attribute:: m
-      :type: int
+      :type:  int
       :value: 0
 
-      
+
 
    .. py:attribute:: name
-      :type: str
+      :type:  str
       :value: ''
 
-      
+
 
    .. py:method:: estimate(weights, **kwargs)
       :abstractmethod:
 
+
       No estimation for bounds
+
 
 
    .. py:method:: _f(str)
@@ -56,6 +57,7 @@ Classes
    .. py:method:: update(**kwargs)
 
       Update the data in the risk model
+
 
 
    .. py:method:: constraints(weights, **kwargs)

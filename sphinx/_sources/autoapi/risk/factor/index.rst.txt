@@ -1,49 +1,48 @@
-:py:mod:`risk.factor`
-=====================
+risk.factor
+===========
 
 .. py:module:: risk.factor
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   factor/index.rst
+   /autoapi/risk/factor/factor/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    risk.factor.FactorModel
 
 
-
+Package Contents
+----------------
 
 .. py:class:: FactorModel
 
-
    Bases: :py:obj:`cvx.risk.model.Model`
+
 
    Factor risk model
 
+
    .. py:attribute:: assets
-      :type: int
+      :type:  int
       :value: 0
 
-      
+
 
    .. py:attribute:: k
-      :type: int
+      :type:  int
       :value: 0
 
-      
+
 
    .. py:method:: __post_init__()
 
@@ -53,9 +52,11 @@ Classes
       Compute the total variance
 
 
+
    .. py:method:: update(**kwargs)
 
       Update the data in the risk model
+
 
 
    .. py:method:: constraints(weights, **kwargs)

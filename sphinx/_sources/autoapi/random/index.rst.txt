@@ -1,31 +1,28 @@
-:py:mod:`random`
-================
+random
+======
 
 .. py:module:: random
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   rand_cov/index.rst
-
-
-Package Contents
-----------------
+   /autoapi/random/rand_cov/index
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    random.rand_cov
 
 
+Package Contents
+----------------
 
 .. py:function:: rand_cov(n)
-
 

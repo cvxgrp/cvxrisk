@@ -1,5 +1,5 @@
-:py:mod:`linalg.pca`
-====================
+linalg.pca
+==========
 
 .. py:module:: linalg.pca
 
@@ -9,30 +9,26 @@
 
 
 
-Module Contents
----------------
-
-
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   linalg.pca.pca
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    linalg.pca.PCA
 
 
-.. py:data:: PCA
+Functions
+---------
 
-   
+.. autoapisummary::
+
+   linalg.pca.pca
+
+
+Module Contents
+---------------
+
+.. py:data:: PCA
 
 .. py:function:: pca(returns, n_components=10)
 
