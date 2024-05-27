@@ -10,6 +10,7 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/linalg/cholesky/index
    /autoapi/linalg/pca/index
    /autoapi/linalg/valid/index
 

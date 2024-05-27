@@ -6,8 +6,8 @@ This page contains auto-generated API reference documentation [#f1]_.
 .. toctree::
    :titlesonly:
 
-   /autoapi/random/index
    /autoapi/risk/index
+   /autoapi/random/index
    /autoapi/linalg/index
    /autoapi/portfolio/index
 
