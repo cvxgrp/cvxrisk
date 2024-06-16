@@ -11,7 +11,8 @@ packages = [{include = "cvx"}]
 python = ">=3.9"
 pandas = "*"
 scikit-learn = "*"
-cvxpy = "*"
+cvxpy-base = "*"
+clarabel = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
