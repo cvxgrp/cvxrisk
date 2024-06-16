@@ -23,7 +23,7 @@ pre-commit = "*"
 plotly = "*"
 loguru = "*"
 cvxsimulator = "*"
-cvxcovariance = "*"
+# cvxcovariance = "*"
 
 [build-system]
 requires = ["poetry-core"]
