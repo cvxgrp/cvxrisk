@@ -37,7 +37,7 @@ All risk models are required to implement the `estimate` method.
 
 Note that factor risk models work with weights for the assets but also with
 weights for the factors.
-To stay flexible we are applying thiS `**kwargs` pattern to the function above.
+To stay flexible we are applying the `**kwargs` pattern to the function above.
 
 ## A first example
 
