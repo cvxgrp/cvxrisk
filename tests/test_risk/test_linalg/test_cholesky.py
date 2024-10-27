@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from cvx.risk.linalg import cholesky
 from cvx.random import rand_cov
+from cvx.risk.linalg import cholesky
 
 
 def test_cholesky():
