@@ -26,7 +26,7 @@ Package Contents
 
 .. py:class:: SampleCovariance
 
-   Bases: :py:obj:`cvx.risk.model.Model`
+   Bases: :py:obj:`risk.model.Model`
 
 
    Risk model based on the Cholesky decomposition of the sample cov matrix

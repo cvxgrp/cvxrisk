@@ -1,7 +1,7 @@
-linalg.pca
-==========
+risk.linalg.pca
+===============
 
-.. py:module:: linalg.pca
+.. py:module:: risk.linalg.pca
 
 .. autoapi-nested-parse::
 
@@ -14,7 +14,7 @@ Attributes
 
 .. autoapisummary::
 
-   linalg.pca.PCA
+   risk.linalg.pca.PCA
 
 
 Functions
@@ -22,7 +22,7 @@ Functions
 
 .. autoapisummary::
 
-   linalg.pca.pca
+   risk.linalg.pca.pca
 
 
 Module Contents

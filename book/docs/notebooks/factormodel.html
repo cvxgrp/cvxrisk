@@ -389,6 +389,20 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cvx</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">cvx.linalg</span> <span class="kn">import</span> <span class="n">pca</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">cvx.risk.factor</span> <span class="kn">import</span> <span class="n">FactorModel</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">cvx.portfolio.min_risk</span> <span class="kn">import</span> <span class="n">minrisk_problem</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;cvx.linalg&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <section id="load-prices-and-compute-returns">
 <h2>Load prices and compute returns<a class="headerlink" href="#load-prices-and-compute-returns" title="Link to this heading">#</a></h2>
@@ -429,7 +443,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.009234077305378823
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.00923407730537884
 </pre></div>
 </div>
 </div>
@@ -456,30 +470,30 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    5.654443e-09
-AAPL    1.078298e-02
-FB      5.488993e-09
-BABA    6.149758e-02
-AMZN    4.095639e-02
-GE      1.694607e-03
-AMD     2.165086e-09
-WMT     4.448256e-02
-BAC     2.516557e-09
-GM      2.730307e-09
-T       1.297914e-01
-UAA     2.310979e-09
-SHLD    1.733012e-09
-XOM     2.502611e-01
-RRC     2.457944e-09
-BBY     1.392807e-02
-MA      5.914495e-02
-PFE     2.364385e-01
-JPM     8.938541e-09
-SBUX    1.510218e-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GOOG    2.359232e-09
+AAPL    1.078173e-02
+FB      2.289733e-09
+BABA    6.149695e-02
+AMZN    4.095655e-02
+GE      1.692077e-03
+AMD     9.033789e-10
+WMT     4.448612e-02
+BAC     1.048329e-09
+GM      1.137605e-09
+T       1.297920e-01
+UAA     9.633963e-10
+SHLD    7.309925e-10
+XOM     2.502608e-01
+RRC     1.020484e-09
+BBY     1.392779e-02
+MA      5.914576e-02
+PFE     2.364381e-01
+JPM     3.743304e-09
+SBUX    1.510221e-01
 dtype: float64
-0.006799927163237339
-[ 0.04251151  0.09313457  0.03753817  0.08220493 -0.08363883 -0.0280072
- -0.1        -0.07172425  0.09783884  0.03309744]
+0.006799927138118909
+[ 0.04251146 -0.09313427 -0.03753803  0.08220467  0.08363908 -0.02800705
+ -0.1        -0.0717266   0.09784121 -0.03309495]
 </pre></div>
 </div>
 </div>
@@ -491,8 +505,8 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251151,  0.09313457,  0.03753817,  0.08220493, -0.08363883,
-       -0.0280072 , -0.1       , -0.07172425,  0.09783884,  0.03309744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251146, -0.09313427, -0.03753803,  0.08220467,  0.08363908,
+       -0.02800705, -0.1       , -0.0717266 ,  0.09784121, -0.03309495])
 </pre></div>
 </div>
 </div>
@@ -504,8 +518,8 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251151,  0.09313457,  0.03753817,  0.08220493, -0.08363883,
-       -0.0280072 , -0.1       , -0.07172425,  0.09783884,  0.03309744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251146, -0.09313427, -0.03753803,  0.08220467,  0.08363908,
+       -0.02800705, -0.1       , -0.0717266 ,  0.09784121, -0.03309495])
 </pre></div>
 </div>
 </div>
@@ -517,8 +531,8 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251151,  0.09313457,  0.03753817,  0.08220493, -0.08363883,
-       -0.0280072 , -0.1       , -0.07172425,  0.09783884,  0.03309744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251146, -0.09313427, -0.03753803,  0.08220467,  0.08363908,
+       -0.02800705, -0.1       , -0.0717266 ,  0.09784121, -0.03309495])
 </pre></div>
 </div>
 </div>
@@ -530,8 +544,8 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251151,  0.09313457,  0.03753817,  0.08220493, -0.08363883,
-       -0.0280072 , -0.1       , -0.07172425,  0.09783884,  0.03309744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251146, -0.09313427, -0.03753803,  0.08220467,  0.08363908,
+       -0.02800705, -0.1       , -0.0717266 ,  0.09784121, -0.03309495])
 </pre></div>
 </div>
 </div>
@@ -543,8 +557,8 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251151,  0.09313457,  0.03753817,  0.08220493, -0.08363883,
-       -0.0280072 , -0.1       , -0.07172425,  0.09783884,  0.03309744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251146, -0.09313427, -0.03753803,  0.08220467,  0.08363908,
+       -0.02800705, -0.1       , -0.0717266 ,  0.09784121, -0.03309495])
 </pre></div>
 </div>
 </div>
@@ -556,8 +570,8 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251151,  0.09313457,  0.03753817,  0.08220493, -0.08363883,
-       -0.0280072 , -0.1       , -0.07172425,  0.09783884,  0.03309744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.04251146, -0.09313427, -0.03753803,  0.08220467,  0.08363908,
+       -0.02800705, -0.1       , -0.0717266 ,  0.09784121, -0.03309495])
 </pre></div>
 </div>
 </div>

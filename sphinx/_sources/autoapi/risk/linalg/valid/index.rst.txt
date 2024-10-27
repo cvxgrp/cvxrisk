@@ -1,7 +1,7 @@
-linalg.valid
-============
+risk.linalg.valid
+=================
 
-.. py:module:: linalg.valid
+.. py:module:: risk.linalg.valid
 
 
 Functions
@@ -9,7 +9,7 @@ Functions
 
 .. autoapisummary::
 
-   linalg.valid.valid
+   risk.linalg.valid.valid
 
 
 Module Contents

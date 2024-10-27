@@ -13,6 +13,7 @@ Submodules
    /autoapi/risk/bounds/index
    /autoapi/risk/cvar/index
    /autoapi/risk/factor/index
+   /autoapi/risk/linalg/index
    /autoapi/risk/model/index
    /autoapi/risk/sample/index
 

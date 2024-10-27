@@ -1,7 +1,7 @@
-linalg.cholesky
-===============
+risk.linalg.cholesky
+====================
 
-.. py:module:: linalg.cholesky
+.. py:module:: risk.linalg.cholesky
 
 
 Functions
@@ -9,7 +9,7 @@ Functions
 
 .. autoapisummary::
 
-   linalg.cholesky.cholesky
+   risk.linalg.cholesky.cholesky
 
 
 Module Contents

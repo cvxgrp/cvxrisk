@@ -22,7 +22,7 @@ Module Contents
 
 .. py:class:: FactorModel
 
-   Bases: :py:obj:`cvx.risk.model.Model`
+   Bases: :py:obj:`risk.model.Model`
 
 
    Factor risk model

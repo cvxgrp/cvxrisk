@@ -22,7 +22,7 @@ Module Contents
 
 .. py:class:: Bounds
 
-   Bases: :py:obj:`cvx.risk.Model`
+   Bases: :py:obj:`risk.model.Model`
 
 
    Abstract risk model

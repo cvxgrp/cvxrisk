@@ -1,7 +1,7 @@
-linalg
-======
+risk.linalg
+===========
 
-.. py:module:: linalg
+.. py:module:: risk.linalg
 
 
 Submodules
@@ -10,9 +10,9 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
-   /autoapi/linalg/cholesky/index
-   /autoapi/linalg/pca/index
-   /autoapi/linalg/valid/index
+   /autoapi/risk/linalg/cholesky/index
+   /autoapi/risk/linalg/pca/index
+   /autoapi/risk/linalg/valid/index
 
 
 Functions
@@ -20,9 +20,9 @@ Functions
 
 .. autoapisummary::
 
-   linalg.cholesky
-   linalg.pca
-   linalg.valid
+   risk.linalg.cholesky
+   risk.linalg.pca
+   risk.linalg.valid
 
 
 Package Contents
