@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from cvx.linalg import cholesky
+from cvx.risk.linalg import cholesky
 from cvx.random import rand_cov
 
 
