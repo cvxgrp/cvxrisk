@@ -19,7 +19,7 @@ from dataclasses import dataclass
 import cvxpy as cp
 import numpy as np
 
-from cvx.risk import Model
+from .model import Model
 
 
 @dataclass
