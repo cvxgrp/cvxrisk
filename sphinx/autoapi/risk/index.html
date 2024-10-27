@@ -58,6 +58,11 @@
 <li class="toctree-l4"><a class="reference internal" href="sample/index.html">risk.sample</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#risk.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../random/index.html">random</a></li>
@@ -105,6 +110,49 @@
 <li class="toctree-l1"><a class="reference internal" href="sample/index.html">risk.sample</a></li>
 </ul>
 </div>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#risk.Model" title="risk.Model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Model</span></code></a></p></td>
+<td><p>Abstract risk model</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="risk.Model">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">risk.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><a class="reference internal" href="../../_modules/risk/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.Model" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract risk model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="risk.Model.parameter">
+<span class="sig-name descname"><span class="pre">parameter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">cvxpy.Parameter</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#risk.Model.parameter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.Model.estimate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/risk/model.html#Model.estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.Model.estimate" title="Link to this definition"></a></dt>
+<dd><p>Estimate the variance given the portfolio weights</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.Model.update">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/risk/model.html#Model.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.Model.update" title="Link to this definition"></a></dt>
+<dd><p>Update the data in the risk model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="risk.Model.constraints">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">constraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/risk/model.html#Model.constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.Model.constraints" title="Link to this definition"></a></dt>
+<dd><p>Return the constraints for the risk model</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
