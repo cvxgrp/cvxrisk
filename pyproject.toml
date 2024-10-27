@@ -13,7 +13,8 @@ numpy = "*"
 pandas = "*"
 scikit-learn = "*"
 cvxpy-base = "*"
-clarabel = "*"
+scipy = "*"
+#clarabel = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
