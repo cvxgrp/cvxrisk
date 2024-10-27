@@ -4,17 +4,6 @@ risk
 .. py:module:: risk
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/risk/cvar/index
-   /autoapi/risk/factor/index
-   /autoapi/risk/sample/index
-
-
 Submodules
 ----------
 
@@ -22,6 +11,9 @@ Submodules
    :maxdepth: 1
 
    /autoapi/risk/bounds/index
+   /autoapi/risk/cvar/index
+   /autoapi/risk/factor/index
    /autoapi/risk/model/index
+   /autoapi/risk/sample/index
 
 
