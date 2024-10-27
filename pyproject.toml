@@ -14,12 +14,12 @@ pandas = "*"
 scikit-learn = "*"
 cvxpy-base = "*"
 scipy = "*"
-#clarabel = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
 pre-commit = "*"
+clarabel = "*"
 
 [tool.poetry.dev-dependencies]
 plotly = "*"
