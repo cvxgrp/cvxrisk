@@ -8,12 +8,12 @@ repository = "https://github.com/cvxgrp/cvxrisk"
 packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.10"
 numpy = "*"
 pandas = "*"
 scikit-learn = "*"
 cvxpy-base = "*"
-scipy = "*"
+scipy = "1.14.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
