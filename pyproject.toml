@@ -45,10 +45,10 @@ packages = [{include = "cvx"}]
 #requires = ["poetry-core"]
 #build-backend = "poetry.core.masonry.api"
 
-#[tool.ruff]
-#select = ["E", "F", "I"]
-#line-length = 120
-#target-version = "py38"
-#exclude = [
-#    "*__init__.py"
-#]
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 120
+target-version = "py10"
+exclude = [
+    "*__init__.py"
+]
