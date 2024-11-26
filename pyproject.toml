@@ -1,40 +1,49 @@
-[tool.poetry]
+[project]
 name = "cvxrisk"
 version = "0.0.0"
 description = "Simple riskengine for cvxpy"
-authors = ["Thomas Schmelzer"]
 readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+authors = ["Thomas Schmelzer"]
+
+#[tool.poetry]
+#name = "cvxrisk"
+#version = "0.0.0"
+#description = "Simple riskengine for cvxpy"
+#authors = ["Thomas Schmelzer"]
+#readme = "README.md"
 repository = "https://github.com/cvxgrp/cvxrisk"
 packages = [{include = "cvx"}]
 
-[tool.poetry.dependencies]
-python = ">=3.10"
-numpy = "*"
-pandas = "*"
-scikit-learn = "*"
-cvxpy-base = "*"
-scipy = "1.14.1"
+#[tool.poetry.dependencies]
+#python = ">=3.10"
+#numpy = "*"
+#pandas = "*"
+#scikit-learn = "*"
+#cvxpy-base = "*"
+#scipy = "1.14.1"
 
-[tool.poetry.group.test.dependencies]
-pytest = "*"
-pytest-cov = "*"
-pre-commit = "*"
-clarabel = "*"
+#[tool.poetry.group.test.dependencies]
+#pytest = "*"
+#pytest-cov = "*"
+#pre-commit = "*"
+#clarabel = "*"
 
-[tool.poetry.dev-dependencies]
-plotly = "*"
-loguru = "*"
-cvxsimulator = "*"
-# cvxcovariance = "*"
+#[tool.poetry.dev-dependencies]
+#plotly = "*"
+#loguru = "*"
+#cvxsimulator = "*"
+## cvxcovariance = "*"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+#[build-system]
+#requires = ["poetry-core"]
+#build-backend = "poetry.core.masonry.api"
 
-[tool.ruff]
-select = ["E", "F", "I"]
-line-length = 120
-target-version = "py38"
-exclude = [
-    "*__init__.py"
-]
+#[tool.ruff]
+#select = ["E", "F", "I"]
+#line-length = 120
+#target-version = "py38"
+#exclude = [
+#    "*__init__.py"
+#]
