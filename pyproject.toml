@@ -48,7 +48,7 @@ packages = [{include = "cvx"}]
 [tool.ruff]
 select = ["E", "F", "I"]
 line-length = 120
-target-version = "py10"
+target-version = "py310"
 exclude = [
     "*__init__.py"
 ]
