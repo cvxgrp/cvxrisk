@@ -6,19 +6,19 @@ UNAME=$(shell uname -s)
 
 .PHONY: install
 install:  ## Install a virtual environment
-	@poetry install -vv
+	@uv sync -vv
 
 
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
-	@poetry run pip install pre-commit
-	@poetry run pre-commit install
-	@poetry run pre-commit run --all-files
+	@uv run pip install pre-commit
+	@uv run pre-commit install
+	@uv run pre-commit run --all-files
 
 
 .PHONY: test
 test: install ## Run tests
-	@poetry run pytest
+	@uv run pytest
 
 
 .PHONY: clean
