@@ -69,15 +69,16 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
-      - name: Sync
-        shell: bash
-        run: |
-          uv sync
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
 
       - name: Install deptry
         shell: bash
         run: |
-            uv run pip install --no-cache-dir deptry
+            uv pip install --no-cache-dir deptry
 
       - name: Run deptry
         shell: bash
