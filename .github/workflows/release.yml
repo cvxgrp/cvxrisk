@@ -16,8 +16,8 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
+      - name: Set up Python
+        run: uv python install
 
       - name: Install the project
         run: uv sync
@@ -27,11 +27,8 @@ jobs:
         run: |
            sed -i -e "s/0.0.0/${GITHUB_REF#refs/*/}/" pyproject.toml
            uv build
-           #poetry version ${{  github.ref_name }}
-           #poetry build
 
-      #Archive the dist folder
-      - name: Archive sphinx documentation
+      - name: Archive dist folder
         uses: actions/upload-artifact@v4
         with:
            name: dist
