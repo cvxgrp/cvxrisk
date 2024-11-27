@@ -19,7 +19,7 @@ jobs:
       - name: Install sphinx
         shell: bash
         run: |
-          uv pip install --no-cache-dir \
+          uv run pip install --no-cache-dir \
                      sphinx==7.2.6 \
                      sphinx-autoapi \
                      sphinx-rtd-theme
@@ -53,7 +53,7 @@ jobs:
       - name: Test on Linux
         shell: bash
         run: |
-            uv pip install --no-cache-dir \
+            uv run pip install --no-cache-dir \
                           pytest-cov \
                           pytest-html \
                           pytest-random-order
@@ -91,7 +91,7 @@ jobs:
       - name: Install jupyterbook
         shell: bash
         run: |
-          uv pip install jupyter-book
+          uv run pip install jupyter-book
           # There is no need to create the kernel if the jupyter book is installed within the same virtual environment as the package
           # poetry run python -m ipykernel install --user --name='cvx'
 
