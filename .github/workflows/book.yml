@@ -55,11 +55,16 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
 
       - name: Test on Linux
         shell: bash
         run: |
-            uv run pip install --no-cache-dir \
+            uv pip install --no-cache-dir \
                           pytest-cov \
                           pytest-html \
                           pytest-random-order
@@ -94,10 +99,16 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+
       - name: Install jupyterbook
         shell: bash
         run: |
-          uv run pip install jupyter-book
+          uv pip install jupyter-book
           # There is no need to create the kernel if the jupyter book is installed within the same virtual environment as the package
           # poetry run python -m ipykernel install --user --name='cvx'
 
