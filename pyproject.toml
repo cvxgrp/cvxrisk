@@ -40,3 +40,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["cvx"]
+
+[tool.deptry.per_rule_ignores]
+DEP001 = ["cvxpy"]
+DEP002 = ["pandas", "numpy"]
