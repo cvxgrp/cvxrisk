@@ -130,13 +130,13 @@ measure.
 ## uv
 
 We assume you share already the love for [uv](https://docs.astral.sh/uv/).
-Once you have installed uv you can perform
+Please perform
 
 ```bash
 make install
 ```
 
-to replicate the virtual environment we have defined in [pyproject.toml](pyproject.toml)
+which will install uv and replicate the virtual environment we have defined in [pyproject.toml](pyproject.toml)
 and locked in [uv.lock](uv.lock).
 
 ## Jupyter
