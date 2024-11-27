@@ -42,5 +42,5 @@ build-backend = "hatchling.build"
 packages = ["cvx"]
 
 [tool.deptry.per_rule_ignores]
-DEP001 = ["cvxpy"]
-DEP002 = ["pandas", "numpy"]
+DEP001 = ["cvxpy", "sklearn"]
+DEP002 = ["cvxpy-base", "scikit-learn"]
