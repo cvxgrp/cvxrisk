@@ -16,15 +16,16 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
-      - name: Sync
-        shell: bash
-        run: |
-          uv sync
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
 
       - name: Install sphinx
         shell: bash
         run: |
-          uv run pip install --no-cache-dir \
+          uv pip install --no-cache-dir \
                      sphinx==7.2.6 \
                      sphinx-autoapi \
                      sphinx-rtd-theme
