@@ -24,14 +24,22 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+
+
+      - name: Set up Pytest
+        run: uv pip install --no-cache-dir \
+                    pytest \
+                    pytest-cov \
+                    pytest-html \
+                    pytest-random-order
+
+
       - name: Test on Linux
         shell: bash
         run: |
-            uv run pip install --no-cache-dir \
-                       pytest-cov \
-                       pytest-html \
-                       pytest-random-order
-
             uv run pytest --cov='cvx' --random-order --verbose \
                               --html=artifacts/tests/html-report/report.html \
                               --cov-report term \
