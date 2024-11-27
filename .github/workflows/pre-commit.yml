@@ -8,7 +8,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: pre-commit/action@v3.0.1
       with:
         extra_args: '--verbose --all-files'
@@ -16,14 +16,39 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: cvxgrp/.github/actions/coverage@main
+      - uses: actions/checkout@v4
 
-    # Uncomment once the package is public
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v2
-      with:
-        files: artifacts/tests/coverage/coverage.info
-        format: lcov
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          # Install a specific version of uv.
+          version: "0.5.4"
+
+      - name: Test on Linux
+        shell: bash
+        run: |
+            uv run pip install --no-cache-dir \
+                       pytest-cov \
+                       pytest-html \
+                       pytest-random-order
+
+            uv run pytest --cov='cvx' --random-order --verbose \
+                              --html=artifacts/tests/html-report/report.html \
+                              --cov-report term \
+                              --cov-report xml:artifacts/tests/coverage/coverage.xml \
+                              --cov-report json:artifacts/tests/coverage/coverage.json \
+                              --cov-report lcov:artifacts/tests/coverage/coverage.info \
+                              --cov-report html:artifacts/tests/html-coverage \
+                              tests/
+
+            # I want to upload the result to gh-pages, hence this file disturbs
+            rm -f artifacts/tests/html-coverage/.gitignore
+      # Uncomment once the package is public
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2
+        with:
+          files: artifacts/tests/coverage/coverage.info
+          format: lcov
 
   deptry:
     runs-on: ubuntu-latest

@@ -58,7 +58,7 @@ jobs:
                           pytest-html \
                           pytest-random-order
 
-            uv run pytest --cov=${{ inputs.source-folder || 'cvx' }} --random-order --verbose \
+            uv run pytest --cov='cvx' --random-order --verbose \
                               --html=artifacts/tests/html-report/report.html \
                               --cov-report term \
                               --cov-report xml:artifacts/tests/coverage/coverage.xml \
