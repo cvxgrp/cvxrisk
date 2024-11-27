@@ -6,8 +6,9 @@ UNAME=$(shell uname -s)
 
 .PHONY: install
 install:  ## Install a virtual environment
+	@uv venv
 	@uv sync -vv
-
+	. .venv/bin/activate
 
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
@@ -48,6 +49,7 @@ help:  ## Display this help screen
 .PHONY: jupyter
 jupyter: install ## Start jupyter lab
 	# @uvx tool install jupyterlab
+	@uv pip install jupyterlab
 	@uv run jupyter lab
 
 
