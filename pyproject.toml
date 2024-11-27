@@ -11,9 +11,9 @@ dependencies = [
     "scikit-learn>=1.5.2",
     "scipy>=1.14.1",
 ]
-authors = ["Thomas Schmelzer"]
+authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 repository = "https://github.com/cvxgrp/cvxrisk"
-packages = [{include = "cvx"}]
+#packages = [{include = "cvx"}]
 
 [dependency-groups]
 dev = [
@@ -21,27 +21,11 @@ dev = [
     "pytest>=8.3.3",
     "pre-commit>=4.0.1",
     "clarabel>=0.9.0",
+    "jupyter>=1.1.1",
+    "jupyterlab>=4.3.1",
+    "cvxsimulator>=1.2.1",
 ]
 
-#[tool.poetry.dependencies]
-#scikit-learn = "*"
-
-
-#[tool.poetry.group.test.dependencies]
-#pytest = "*"
-#pytest-cov = "*"
-#pre-commit = "*"
-#clarabel = "*"
-
-#[tool.poetry.dev-dependencies]
-#plotly = "*"
-#loguru = "*"
-#cvxsimulator = "*"
-## cvxcovariance = "*"
-
-#[build-system]
-#requires = ["poetry-core"]
-#build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 select = ["E", "F", "I"]
@@ -50,3 +34,10 @@ target-version = "py310"
 exclude = [
     "*__init__.py"
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cvx"]

@@ -47,11 +47,11 @@ help:  ## Display this help screen
 
 .PHONY: jupyter
 jupyter: install ## Start jupyter lab
-	@poetry run pip install jupyterlab
-	@poetry run jupyter lab
+	# @uvx tool install jupyterlab
+	@uv run jupyter lab
 
 
-.PHONY: boil
-boil: ## Update the boilerplate code
-	@poetry run pip install cvxcooker
-	@poetry run cook pyproject.toml
+#.PHONY: boil
+#boil: ## Update the boilerplate code
+#	@poetry run pip install cvxcooker
+#	@poetry run cook pyproject.toml
