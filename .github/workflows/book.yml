@@ -8,18 +8,119 @@ jobs:
   sphinx:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/sphinx@main
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          # Install a specific version of uv.
+          version: "0.5.4"
+
+      - name: Install sphinx
+        shell: bash
+        run: |
+          uv pip install --no-cache-dir \
+                     sphinx==7.2.6 \
+                     sphinx-autoapi \
+                     sphinx-rtd-theme
+                     #recommonmark  \
+                     #toml
+
+      - name: Build sphinx
+        shell: bash
+        run: |
+          uv run sphinx-build -b html 'book/sphinx' artifacts/sphinx
+
+      - name: Archive sphinx documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: sphinx
+          path: artifacts/sphinx
+          retention-days: 1
 
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/coverage@main
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          # Install a specific version of uv.
+          version: "0.5.4"
+
+
+      - name: Test on Linux
+        shell: bash
+        run: |
+            uv pip install --no-cache-dir \
+                          pytest-cov \
+                          pytest-html \
+                          pytest-random-order
+
+            uv run pytest --cov=${{ inputs.source-folder || 'cvx' }} --random-order --verbose \
+                              --html=artifacts/tests/html-report/report.html \
+                              --cov-report term \
+                              --cov-report xml:artifacts/tests/coverage/coverage.xml \
+                              --cov-report json:artifacts/tests/coverage/coverage.json \
+                              --cov-report lcov:artifacts/tests/coverage/coverage.info \
+                              --cov-report html:artifacts/tests/html-coverage \
+                              tests/
+
+            # I want to upload the result to gh-pages, hence this file disturbs
+            rm -f artifacts/tests/html-coverage/.gitignore
+
+      - name: Archive tests results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests_coverage
+          path: artifacts/tests
+          retention-days: 1
 
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/jupyter@main
+      - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          # Install a specific version of uv.
+          version: "0.5.4"
+
+      - name: Install jupyterbook
+        shell: bash
+        run: |
+          uv pip install jupyter-book
+          # There is no need to create the kernel if the jupyter book is installed within the same virtual environment as the package
+          # poetry run python -m ipykernel install --user --name='cvx'
+
+      - uses: actions/cache@v4
+        name: Jupyter Cache
+        with:
+          path: ~/book/_build/.jupyter_cache
+          key: ${{ runner.os }}-jupyter-${{ hashFiles('**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-jupyter-
+
+      # Build the book
+      - name: Build the book
+        shell: bash
+        run: |
+          uv run jupyter-book clean book
+          uv run jupyter-book build book
+          # Create this weird .nojekyll file
+          # We do this in the book action... This is the wrong place
+          # see https://jupyterbook.org/en/stable/publish/gh-pages.html#option-1-copy-and-paste-your-books-build-contents-into-a-new-folder
+          # touch book/_build/html/.nojekyll
+
+      # Upload the book
+      - name: Archive book
+        uses: actions/upload-artifact@v4
+        with:
+          name: book
+          path: book/_build/html/
+          retention-days: 1
   book:
     runs-on: "ubuntu-latest"
     needs: [test, sphinx, jupyter]
