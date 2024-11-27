@@ -28,4 +28,21 @@ jobs:
   deptry:
     runs-on: ubuntu-latest
     steps:
-      - uses: cvxgrp/.github/actions/deptry@main
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          # Install a specific version of uv.
+          version: "0.5.4"
+
+
+      - name: Install deptry
+        shell: bash
+        run: |
+            uv run pip install --no-cache-dir deptry
+
+      - name: Run deptry
+        shell: bash
+        run : |
+          uv run deptry 'cvx'
