@@ -99,8 +99,8 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
+      - name: Set up Python
+        run: uv python install
 
       - name: Install the project
         run: uv sync --all-extras --dev

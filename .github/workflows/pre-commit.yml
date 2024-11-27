@@ -24,10 +24,11 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
-      - name: Set up Python 3.12
-        run: uv python install 3.12
+      - name: Set up Python
+        run: uv python install
 
-
+      - name: Install the project
+        run: uv sync --all-extras --dev
 
       - name: Set up Pytest
         run: uv pip install --no-cache-dir \
