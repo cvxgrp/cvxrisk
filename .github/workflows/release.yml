@@ -8,8 +8,42 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: cvxgrp/.github/actions/build@main
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          # Install a specific version of uv.
+          version: "0.5.4"
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install the project
+        run: uv sync
+
+      - name: Change version in pyproject.toml
+        shell: bash
+        run: |
+           sed -i -e "s/0.0.0/${GITHUB_REF#refs/*/}/" pyproject.toml
+           uv build
+           #poetry version ${{  github.ref_name }}
+           #poetry build
+
+      #Archive the dist folder
+      - name: Archive sphinx documentation
+        uses: actions/upload-artifact@v4
+        with:
+           name: dist
+           path: dist
+           retention-days: 1
+
+      # Push dist folder to the build branch
+      - name: Publish the dist folder
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: dist     # The branch the action should deploy to.
+          folder: dist     # The folder the action should deploy.
 
   deploy:
     runs-on: ubuntu-latest
