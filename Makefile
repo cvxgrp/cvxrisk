@@ -12,7 +12,7 @@ install:  ## Install a virtual environment
 
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
-	@uv run pip install pre-commit
+	@uv pip install pre-commit
 	@uv run pre-commit install
 	@uv run pre-commit run --all-files
 
@@ -48,7 +48,6 @@ help:  ## Display this help screen
 
 .PHONY: jupyter
 jupyter: install ## Start jupyter lab
-	# @uvx tool install jupyterlab
 	@uv pip install jupyterlab
 	@uv run jupyter lab
 

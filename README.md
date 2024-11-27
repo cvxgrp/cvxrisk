@@ -127,17 +127,17 @@ We expose a method to compute the first $k$ principal components.
 We currently also support the conditional value at risk (CVaR) as a risk
 measure.
 
-## Poetry
+## uv
 
-We assume you share already the love for [Poetry](https://python-poetry.org).
-Once you have installed poetry you can perform
+We assume you share already the love for [uv](https://docs.astral.sh/uv/).
+Once you have installed uv you can perform
 
 ```bash
 make install
 ```
 
 to replicate the virtual environment we have defined in [pyproject.toml](pyproject.toml)
-and locked in [poetry.lock](poetry.lock).
+and locked in [uv.lock](uv.lock).
 
 ## Jupyter
 
