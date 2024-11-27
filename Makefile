@@ -28,9 +28,9 @@ clean:  ## Clean up caches and build artifacts
 
 .PHONY: coverage
 coverage: install ## test and coverage
-	@poetry run coverage run --source=cvx/. -m pytest
-	@poetry run coverage report -m
-	@poetry run coverage html
+	@uv run coverage run --source=cvx/. -m pytest
+	@uv run coverage report -m
+	@uv run coverage html
 
 	@if [ ${UNAME} == "Darwin" ]; then \
 		open htmlcov/index.html; \
