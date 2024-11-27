@@ -69,6 +69,10 @@ jobs:
           # Install a specific version of uv.
           version: "0.5.4"
 
+      - name: Sync
+        shell: bash
+        run: |
+          uv sync
 
       - name: Install deptry
         shell: bash
