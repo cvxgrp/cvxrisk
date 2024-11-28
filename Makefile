@@ -56,7 +56,8 @@ jupyter: install ## Start jupyter lab
 .PHONY: marimo
 marimo: install ## Start marimo
 	@uv pip install marimo
-	@uv run marimo $(argument)
+	@uv run marimo edit marimo
+	# $(argument)
 
 #.PHONY: boil
 #boil: ## Update the boilerplate code
