@@ -49,17 +49,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          # Install a specific version of uv.
-          version: "0.5.4"
+      - uses: ./actions/environment
 
-      - name: Set up Python
-        run: uv python install
+      #- uses: actions/checkout@v4
 
-      - name: Install the project
-        run: uv sync --all-extras --dev
+      #- name: Install uv
+      #  uses: astral-sh/setup-uv@v3
+      #  with:
+      #    # Install a specific version of uv.
+      #    version: "0.5.4"
+
+      #- name: Set up Python
+      #  run: uv python install
+
+      #- name: Install the project
+      #  run: uv sync --all-extras --dev
 
       - name: Test on Linux
         shell: bash
@@ -93,22 +97,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          # Install a specific version of uv.
-          version: "0.5.4"
+      - uses: ./actions/environment
 
-      - name: Set up Python
-        run: uv python install
+      #- uses: actions/checkout@v4
+      #
+      #- name: Install uv
+      #  uses: astral-sh/setup-uv@v3
+      #  with:
+      #    # Install a specific version of uv.
+      #    version: "0.5.4"
 
-      - name: Install the project
-        run: uv sync --all-extras --dev
+      #- name: Set up Python
+      #  run: uv python install
+
+      #- name: Install the project
+      #  run: uv sync --all-extras --dev
 
       - name: Install jupyterbook
         shell: bash
         run: |
-          uv pip install jupyter-book
+          uv pip install --no-cache-dir jupyter-book
           # There is no need to create the kernel if the jupyter book is installed within the same virtual environment as the package
           # poetry run python -m ipykernel install --user --name='cvx'
 
