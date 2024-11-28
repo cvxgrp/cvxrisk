@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
       # without dev dependencies?
       - name: Change version in pyproject.toml
