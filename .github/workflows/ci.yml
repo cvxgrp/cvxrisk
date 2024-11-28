@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
         with:
           python-version: ${{ matrix.python-version }}
 

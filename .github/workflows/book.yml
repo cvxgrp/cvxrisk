@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
       - name: Install sphinx
         shell: bash
@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
       - name: Test on Linux
         shell: bash
@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
       - name: Install jupyterbook
         shell: bash
