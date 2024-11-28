@@ -68,17 +68,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          # Install a specific version of uv.
-          version: "0.5.4"
+      - uses: ./actions/environment
 
-      - name: Set up Python
-        run: uv python install
+      #- name: Install uv
+      #  uses: astral-sh/setup-uv@v3
+      #  with:
+      #    # Install a specific version of uv.
+      #    version: "0.5.4"
 
-      - name: Install the project
-        run: uv sync --all-extras --dev
+      #- name: Set up Python
+      #  run: uv python install
+
+      #- name: Install the project
+      #  run: uv sync --all-extras --dev
 
       - name: Install deptry
         shell: bash
