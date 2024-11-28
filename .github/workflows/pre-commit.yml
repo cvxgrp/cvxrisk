@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
       - name: Install deptry
         shell: bash
