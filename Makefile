@@ -53,6 +53,11 @@ jupyter: install ## Start jupyter lab
 	@uv run jupyter lab
 
 
+.PHONY: marimo
+marimo: install ## Start marimo
+	@uv pip install marimo
+	@uv run marimo $(argument)
+
 #.PHONY: boil
 #boil: ## Update the boilerplate code
 #	@poetry run pip install cvxcooker
