@@ -6,11 +6,7 @@ app = marimo.App()
 
 @app.cell
 def __(mo):
-    mo.md(
-        r"""
-        # Large problem with 1000 assets and 100 factors
-        """
-    )
+    mo.md(r"""# Large problem with 1000 assets and 100 factors""")
     return
 
 
