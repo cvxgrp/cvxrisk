@@ -54,14 +54,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv@main
+      - uses: cvxgrp/.github/actions/uv/deptry@main
 
-      - name: Install deptry
-        shell: bash
-        run: |
-            uv pip install --no-cache-dir deptry
 
-      - name: Run deptry
-        shell: bash
-        run : |
-          uv run deptry 'cvx'
+      #setup-environment-uv@main
+
+      #- name: Install deptry
+      #  shell: bash
+      #  run: |
+      #      uv pip install --no-cache-dir deptry
+
+      #- name: Run deptry
+      #  shell: bash
+      #  run : |
+      #    uv run deptry 'cvx'

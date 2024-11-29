@@ -55,27 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv@main
-
-      - name: Install sphinx
-        shell: bash
-        run: |
-          uv pip install --no-cache-dir \
-                     sphinx==7.2.6 \
-                     sphinx-autoapi \
-                     sphinx-rtd-theme
-
-      - name: Build sphinx
-        shell: bash
-        run: |
-          uv run sphinx-build -b html 'book/sphinx' artifacts/sphinx
-
-      - name: Archive sphinx documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: sphinx
-          path: artifacts/sphinx
-          retention-days: 1
+      - uses: cvxgrp/.github/actions/uv/sphinx@main
 
   test:
     runs-on: "ubuntu-latest"
