@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: cvxgrp/.github/actions/setup-environment-uv@main
+
       - name: Copy marimo html
         shell: bash
         run: |
