@@ -5,25 +5,37 @@ app = marimo.App(width="medium")
 
 
 @app.cell
-def __():
+def __(__file__):
+    from pathlib import Path
+
     import cvxpy as cp
     import numpy as np
     import pandas as pd
 
-    import marimo as mo
     from cvx.portfolio.min_risk import minrisk_problem
     from cvx.risk.sample import SampleCovariance
     from cvx.simulator import Builder
 
     pd.options.plotting.backend = "plotly"
-    return Builder, SampleCovariance, cp, minrisk_problem, mo, np, pd
+
+    path = Path(__file__).parent
+    return (
+        Builder,
+        Path,
+        SampleCovariance,
+        cp,
+        minrisk_problem,
+        np,
+        path,
+        pd,
+    )
 
 
 @app.cell
-def __(pd):
+def __(path, pd):
     # Load some historic stock prices
     prices = pd.read_csv(
-        "marimo/data/stock_prices.csv", index_col=0, parse_dates=True, header=0
+        path / "data" / "stock_prices.csv", index_col=0, parse_dates=True, header=0
     )
 
     # Estimate a series of historic covariance matrices
@@ -99,13 +111,7 @@ def __(Builder, cp, minrisk_problem, np, prices, returns, start):
 
     _portfolio = _builder.build()
     _portfolio.nav.plot()
-
     return (CVar,)
-
-
-@app.cell
-def __():
-    return
 
 
 if __name__ == "__main__":

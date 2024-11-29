@@ -6,6 +6,8 @@ app = marimo.App(width="medium")
 
 @app.cell
 def __():
+    from pathlib import Path
+
     import cvxpy as cvx
     import numpy as np
     import pandas as pd
@@ -14,15 +16,19 @@ def __():
     from cvx.risk.factor import FactorModel
     from cvx.risk.linalg import pca
 
-    return FactorModel, cvx, minrisk_problem, np, pca, pd
+    path = Path(__file__).parent
+    return FactorModel, cvx, minrisk_problem, np, pca, path, pd
 
 
 @app.cell
-def __(pd):
+def __(path, pd):
+    # Load some historic stock prices
     prices = pd.read_csv(
-        "marimo/data/stock_prices.csv", index_col=0, header=0, parse_dates=True
+        path / "data" / "stock_prices.csv", index_col=0, parse_dates=True, header=0
     )
-    returns = prices.pct_change().fillna(0.0)
+
+    # Estimate a series of historic covariance matrices
+    returns = prices.pct_change().dropna(axis=0, how="all")
     return prices, returns
 
 
@@ -69,11 +75,6 @@ def __(cvx, minrisk_problem, model, np, pd, prices):
     assert np.all(w.value > -0.01)
     print(y.value)
     return problem, w, y
-
-
-@app.cell
-def __():
-    return
 
 
 if __name__ == "__main__":
