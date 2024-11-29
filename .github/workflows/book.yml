@@ -33,10 +33,11 @@ jobs:
 
               # Extract filename without extension
               filename=$(basename "$file" .py)
+              echo $filename
 
               # Convert to HTML
               echo "Converting $file to HTML..."
-              marimo export html "$file" -o "artifacts/marimo/${filename}.html"
+              marimo export html marimo/"$file" -o "artifacts/marimo/${filename}.html"
           done
 
 
