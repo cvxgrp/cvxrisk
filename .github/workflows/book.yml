@@ -97,27 +97,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv@main
+      - uses: cvxgrp/.github/actions/uv/jupyter@main
 
-      - name: Install jupyterbook
-        shell: bash
-        run: |
-          uv pip install --no-cache-dir jupyter-book
-
-      # Build the book
-      - name: Build the book
-        shell: bash
-        run: |
-          uv run jupyter-book clean book
-          uv run jupyter-book build book
-
-      # Upload the book
-      - name: Archive book
-        uses: actions/upload-artifact@v4
-        with:
-          name: book
-          path: book/_build/html/
-          retention-days: 1
   book:
     runs-on: "ubuntu-latest"
     needs: [test, sphinx, jupyter, marimo]
