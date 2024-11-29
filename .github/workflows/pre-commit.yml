@@ -17,32 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: cvxgrp/.github/actions/uv/coverage@main
 
-      - uses: cvxgrp/.github/actions/setup-environment-uv@main
-
-      - name: Set up Pytest
-        run: uv pip install --no-cache-dir \
-                    pytest \
-                    pytest-cov \
-                    pytest-html \
-                    pytest-random-order
-
-
-      - name: Test on Linux
-        shell: bash
-        run: |
-            uv run pytest --cov='cvx' --random-order --verbose \
-                              --html=artifacts/tests/html-report/report.html \
-                              --cov-report term \
-                              --cov-report xml:artifacts/tests/coverage/coverage.xml \
-                              --cov-report json:artifacts/tests/coverage/coverage.json \
-                              --cov-report lcov:artifacts/tests/coverage/coverage.info \
-                              --cov-report html:artifacts/tests/html-coverage \
-                              tests/
-
-            # I want to upload the result to gh-pages, hence this file disturbs
-            rm -f artifacts/tests/html-coverage/.gitignore
-      # Uncomment once the package is public
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2
         with:
