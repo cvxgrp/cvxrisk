@@ -14,8 +14,36 @@ jobs:
       - name: Copy marimo html
         shell: bash
         run: |
+          # Check if any .py files exist
+          if ! ls *.py marimo /dev/null 2>&1; then
+              echo "No Python files found in the marimo directory."
+              exit 1
+          fi
+
+          # Create a directory for HTML outputs if it doesn't exist
           mkdir -p artifacts/marimo
-          cp marimo/marimo_html/*.html artifacts/marimo
+
+          # Loop through all .py files
+          for file in marimo/*.py; do
+
+              echo $file
+
+              # Skip if file is not a regular file
+              [ -f marimo/"$file" ] || continue
+
+              # Extract filename without extension
+              filename=$(basename "$file" .py)
+
+              # Convert to HTML
+              echo "Converting $file to HTML..."
+              marimo export html "$file" -o "artifacts/marimo/${filename}.html"
+          done
+
+
+
+
+          #mkdir -p artifacts/marimo
+          #cp marimo/marimo_html/*.html artifacts/marimo
 
       - name: Archive marimo html
         uses: actions/upload-artifact@v4
