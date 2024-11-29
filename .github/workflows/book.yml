@@ -29,7 +29,7 @@ jobs:
               echo $file
 
               # Skip if file is not a regular file
-              [ -f marimo/"$file" ] || continue
+              [ -f "$file" ] || continue
 
               # Extract filename without extension
               filename=$(basename "$file" .py)
@@ -37,7 +37,7 @@ jobs:
 
               # Convert to HTML
               echo "Converting $file to HTML..."
-              marimo export html marimo/"$file" -o "artifacts/marimo/${filename}.html"
+              marimo export html "$file" -o "artifacts/marimo/${filename}.html"
           done
 
 
