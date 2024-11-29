@@ -22,3 +22,8 @@ jobs:
         run: |
           uv pip install -r requirements.txt --system
           uv pip install -e . --system
+
+      - name: Install Dependencies again
+        run: |
+          pip install -r requirements.txt
+          pip install -e .
