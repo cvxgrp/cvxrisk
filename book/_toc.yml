@@ -8,3 +8,4 @@ chapters:
         - glob: docs/notebooks/*
     - file: docs/api
     - file: docs/reports
+    - file: docs/marimo
