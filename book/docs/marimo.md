@@ -1,4 +1,5 @@
 # Marimo
 
-[demo](https://www.cvxgrp.org/cvxrisk/marimo/demo.html)
-[factor model](https://www.cvxgrp.org/cvxrisk/marimo/factormodel.html)
+## Demos
+- [Demo](https://www.cvxgrp.org/cvxrisk/marimo/demo.html)
+- [Factor Model](https://www.cvxgrp.org/cvxrisk/marimo/factormodel.html)
