@@ -26,4 +26,4 @@ jobs:
           echo $UV_PYTHON_PREFERENCE
           which python
           which pip
-          uv sync --all-extras
+          uv sync --all-extras --python-preference system
