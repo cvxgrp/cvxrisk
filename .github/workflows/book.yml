@@ -7,48 +7,9 @@ on:
 jobs:
   marimo:
     runs-on: "ubuntu-latest"
-
     steps:
       - uses: actions/checkout@v4
-
-      - uses: cvxgrp/.github/actions/setup-environment-uv@main
-
-      - name: Install marimo
-        shell: bash
-        run: |
-          uv pip install marimo
-
-
-      - name: Convert *.py files in book/marimo folder to html files
-        shell: bash
-        run: |
-          # Create a directory for HTML outputs if it doesn't exist
-          mkdir -p artifacts/marimo
-
-          # Loop through all .py files
-          for file in book/marimo/*.py; do
-
-              echo $file
-
-              # Skip if file is not a regular file
-              [ -f "$file" ] || continue
-
-              # Extract filename without extension
-              filename=$(basename "$file" .py)
-              echo $filename
-
-              # Convert to HTML
-              echo "Converting $file to HTML..."
-              uv run marimo export html "$file" -o "artifacts/marimo/${filename}.html"
-              uv run marimo export md "$file" -o "artifacts/marimo/${filename}.md"
-          done
-
-      - name: Archive marimo html
-        uses: actions/upload-artifact@v4
-        with:
-          name: marimo
-          path: artifacts/marimo
-          retention-days: 1
+      - uses: cvxgrp/.github/actions/uv/marimo@main
 
   sphinx:
     runs-on: "ubuntu-latest"
@@ -66,7 +27,6 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
-
       - uses: cvxgrp/.github/actions/uv/jupyter@main
 
   book:
