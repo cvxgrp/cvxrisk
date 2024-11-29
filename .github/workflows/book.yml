@@ -35,7 +35,7 @@ jobs:
 
               # Convert to HTML
               echo "Converting $file to HTML..."
-              marimo export html "$file" -o "artifacts/marimo/${filename}.html"
+              uv run marimo export html "$file" -o "artifacts/marimo/${filename}.html"
           done
 
       - name: Archive marimo html
