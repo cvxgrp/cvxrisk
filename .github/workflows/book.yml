@@ -13,11 +13,15 @@ jobs:
 
       - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
-      - name: Convert *.py files in book/marimo folder to html files
+      - name: Install marimo
         shell: bash
         run: |
           uv pip install marimo
 
+
+      - name: Convert *.py files in book/marimo folder to html files
+        shell: bash
+        run: |
           # Create a directory for HTML outputs if it doesn't exist
           mkdir -p artifacts/marimo
 
@@ -36,6 +40,7 @@ jobs:
               # Convert to HTML
               echo "Converting $file to HTML..."
               uv run marimo export html "$file" -o "artifacts/marimo/${filename}.html"
+              uv run marimo export md "$file" -o "artifacts/marimo/${filename}.md"
           done
 
       - name: Archive marimo html
@@ -59,8 +64,6 @@ jobs:
                      sphinx==7.2.6 \
                      sphinx-autoapi \
                      sphinx-rtd-theme
-                     #recommonmark  \
-                     #toml
 
       - name: Build sphinx
         shell: bash
@@ -85,6 +88,7 @@ jobs:
         shell: bash
         run: |
             uv pip install --no-cache-dir \
+                          pytest \
                           pytest-cov \
                           pytest-html \
                           pytest-random-order
@@ -119,14 +123,6 @@ jobs:
         shell: bash
         run: |
           uv pip install --no-cache-dir jupyter-book
-
-      - uses: actions/cache@v4
-        name: Jupyter Cache
-        with:
-          path: ~/book/_build/.jupyter_cache
-          key: ${{ runner.os }}-jupyter-${{ hashFiles('**/*') }}
-          restore-keys: |
-            ${{ runner.os }}-jupyter-
 
       # Build the book
       - name: Build the book

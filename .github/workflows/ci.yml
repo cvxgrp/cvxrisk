@@ -24,4 +24,5 @@ jobs:
       - name: Test
         shell: bash
         run: |
+            uv pip install pytest
             uv run pytest tests
