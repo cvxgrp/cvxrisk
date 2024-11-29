@@ -120,9 +120,9 @@ We currently also support the conditional value at risk (CVaR) as a risk measure
 
 
 
-## Poetry
+## uv
 
-We assume you share already the love for [Poetry](https://python-poetry.org). Once you have installed poetry you can perform
+You can perform
 
 ```bash
 make install
