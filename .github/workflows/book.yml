@@ -13,9 +13,11 @@ jobs:
 
       - uses: cvxgrp/.github/actions/setup-environment-uv@main
 
-      - name: Copy marimo html
+      - name: Convert *.py files in marimo folder
         shell: bash
         run: |
+          uv pip install marimo
+
           # Create a directory for HTML outputs if it doesn't exist
           mkdir -p artifacts/marimo
 
