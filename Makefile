@@ -7,9 +7,9 @@ UNAME=$(shell uname -s)
 .PHONY: install
 install:  ## Install a virtual environment
 	@curl -LsSf https://astral.sh/uv/install.sh | sh
-	@uv venv
 	@uv sync -vv
-	. .venv/bin/activate
+	@echo 'Please perform'
+	@echo 'source .venv/bin/activate'
 
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
