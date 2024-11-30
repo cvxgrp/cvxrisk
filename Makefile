@@ -47,12 +47,6 @@ help:  ## Display this help screen
 	@grep -E '^[a-z.A-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}' | sort
 
 
-.PHONY: jupyter
-jupyter: install ## Start jupyter lab
-	@uv pip install jupyterlab
-	@uv run jupyter lab
-
-
 .PHONY: marimo
 marimo: install ## Start marimo
 	@uv pip install marimo
