@@ -9,8 +9,8 @@ risk.linalg.pca
 
 
 
-Attributes
-----------
+Classes
+-------
 
 .. autoapisummary::
 
@@ -28,7 +28,28 @@ Functions
 Module Contents
 ---------------
 
-.. py:data:: PCA
+.. py:class:: PCA
+
+   Bases: :py:obj:`tuple`
+
+
+   .. py:attribute:: explained_variance
+
+
+   .. py:attribute:: factors
+
+
+   .. py:attribute:: exposure
+
+
+   .. py:attribute:: cov
+
+
+   .. py:attribute:: systematic
+
+
+   .. py:attribute:: idiosyncratic
+
 
 .. py:function:: pca(returns, n_components=10)
 
