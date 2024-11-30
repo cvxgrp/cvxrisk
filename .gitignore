@@ -1,7 +1,6 @@
 .idea
 
 .DS_Store
-uv.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
