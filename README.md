@@ -129,23 +129,23 @@ measure.
 
 ## uv
 
-We assume you share already the love for [uv](https://docs.astral.sh/uv/).
-Please perform
+Starting with
 
 ```bash
 make install
 ```
 
-which will install uv and replicate the virtual environment we have defined in [pyproject.toml](pyproject.toml)
-and locked in [uv.lock](uv.lock).
+will install [uv](https://github.com/astral-sh/uv) and create
+the virtual environment defined in
+pyproject.toml and locked in uv.lock.
 
-## Jupyter
+## marimo
 
-We install [JupyterLab](https://jupyter.org) on fly within the aforementioned
+We install [marimo](https://marimo.io) on the fly within the aforementioned
 virtual environment. Executing
 
 ```bash
-make jupyter
+make marimo
 ```
 
-will install and start the jupyter lab.
+will install and start marimo.
