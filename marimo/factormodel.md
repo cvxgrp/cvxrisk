@@ -1,6 +1,6 @@
 ---
 title: Factormodel
-marimo-version: 0.9.27
+marimo-version: 0.10.2
 width: medium
 ---
 

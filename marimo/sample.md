@@ -1,6 +1,6 @@
 ---
 title: Sample
-marimo-version: 0.9.27
+marimo-version: 0.10.2
 ---
 
 # Sample covariance
