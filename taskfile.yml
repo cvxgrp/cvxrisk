@@ -1,0 +1,5 @@
+version: '3'
+
+includes:
+  setup:
+    taskfile:  https://github.com/cvxgrp/.github/-/raw/main/tasks/setup.yml
