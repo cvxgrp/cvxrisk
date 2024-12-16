@@ -23,7 +23,6 @@ dev = [
     "cvxsimulator>=1.2.1",
 ]
 
-
 [tool.ruff]
 select = ["E", "F", "I"]
 line-length = 120
