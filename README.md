@@ -129,10 +129,11 @@ measure.
 
 ## uv
 
+You need to install [task](https://taskfile.dev).
 Starting with
 
 ```bash
-make install
+task cvxrisk:install
 ```
 
 will install [uv](https://github.com/astral-sh/uv) and create
@@ -145,7 +146,7 @@ We install [marimo](https://marimo.io) on the fly within the aforementioned
 virtual environment. Executing
 
 ```bash
-make marimo
+task cvxrisk:marimo
 ```
 
 will install and start marimo.
