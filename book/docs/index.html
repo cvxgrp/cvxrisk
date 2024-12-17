@@ -454,8 +454,9 @@ changing dimensions of the underlying weight space.</p>
 <h3>Factor risk models<a class="headerlink" href="#factor-risk-models" title="Link to this heading">#</a></h3>
 <p>Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of <span class="math notranslate nohighlight">\(k\)</span> factors.</p>
-<div class="math notranslate nohighlight">
-\[r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i\]</div>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
+</pre></div>
+</div>
 <p>The factor time series are <span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>. The loadings are the coefficients
 <span class="math notranslate nohighlight">\(\beta_{ji}\)</span>.
 The residual returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are assumed to be uncorrelated with the f
@@ -464,11 +465,13 @@ actors.</p>
 factor space. The variance for a position <span class="math notranslate nohighlight">\(w\)</span> is the sum of the variance of the
 systematic returns explained by the factors and the variance of the
 idiosyncratic returns.</p>
-<div class="math notranslate nohighlight">
-\[Var(r) = Var(\beta^T w) + Var(\epsilon w)\]</div>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = Var(\beta^T w) + Var(\epsilon w)
+</pre></div>
+</div>
 <p>We assume the residual returns are uncorrelated and hence</p>
-<div class="math notranslate nohighlight">
-\[Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)\]</div>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
+</pre></div>
+</div>
 <p>where <span class="math notranslate nohighlight">\(\Sigma_f\)</span> is the covariance matrix of the factors and <span class="math notranslate nohighlight">\(Var(\epsilon_i)\)</span>
 is the variance of the idiosyncratic returns.</p>
 <p>Factor risk models are widely used in practice. Usually two scenarios are

@@ -80,7 +80,7 @@ We offer a `SampleCovariance` class as seen above.
 Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
 
-```{math}
+```math
 r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
 ```
 
@@ -94,13 +94,13 @@ factor space. The variance for a position $w$ is the sum of the variance of the
 systematic returns explained by the factors and the variance of the
 idiosyncratic returns.
 
-```{math}
+```math
 Var(r) = Var(\beta^T w) + Var(\epsilon w)
 ```
 
 We assume the residual returns are uncorrelated and hence
 
-```{math}
+```math
 Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
 ```
 
