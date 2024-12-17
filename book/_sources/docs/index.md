@@ -92,15 +92,11 @@ factor space. The variance for a position $w$ is the sum of the variance of the
 systematic returns explained by the factors and the variance of the
 idiosyncratic returns.
 
-```math
-Var(r) = Var(\beta^T w) + Var(\epsilon w)
-```
+$$Var(r) = Var(\beta^T w) + Var(\epsilon w)$$
 
 We assume the residual returns are uncorrelated and hence
 
-```math
-Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
-```
+$$Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)$$
 
 where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$
 is the variance of the idiosyncratic returns.
