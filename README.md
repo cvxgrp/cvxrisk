@@ -80,9 +80,7 @@ We offer a `SampleCovariance` class as seen above.
 Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
 
-```math
-r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
-```
+$$r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i$$
 
 The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients
 $\beta_{ji}$.
