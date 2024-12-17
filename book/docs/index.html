@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
@@ -39,10 +39,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -178,9 +178,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -365,7 +370,7 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uv">uv</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marimo">marimo</a></li>
 </ul>
             </nav>
         </div>
@@ -378,13 +383,15 @@
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="cvxrisk">
-<h1>cvxrisk<a class="headerlink" href="#cvxrisk" title="Link to this heading">#</a></h1>
+<h1><a class="reference external" href="http://www.cvxgrp.org/cvxrisk/book">cvxrisk</a><a class="headerlink" href="#cvxrisk" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://badge.fury.io/py/cvxrisk"><img alt="PyPI version" src="https://badge.fury.io/py/cvxrisk.svg" /></a>
 <a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
-<a class="reference external" href="https://pypi.python.org/pypi/cvxrisk/"><img alt="PyPI download month" src="https://img.shields.io/pypi/dm/cvxrisk.svg" /></a></p>
+<a class="reference external" href="https://pepy.tech/project/cvxrisk"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/cvxrisk?period=month&amp;units=international_system&amp;left_color=black&amp;right_color=orange&amp;left_text=PyPI%20downloads%20per%20month" /></a></p>
+<p><a class="reference external" href="https://codespaces.new/cvxgrp/cvxrisk"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
 <p>We provide an abstract <code class="docutils literal notranslate"><span class="pre">Model</span></code> class.
 The class is designed to be used in conjunction with <a class="reference external" href="https://github.com/cvxpy/cvxpy">cvxpy</a>.
-Using this class, we can formulate a function computing a standard minimum risk portfolio as</p>
+Using this class, we can formulate a function computing a standard minimum
+risk portfolio as</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
 
 <span class="kn">from</span> <span class="nn">cvx.risk</span> <span class="kn">import</span> <span class="n">Model</span>
@@ -409,8 +416,9 @@ Using this class, we can formulate a function computing a standard minimum risk 
 <p>The risk model is injected into the function.
 The function is not aware of the precise risk model used.
 All risk models are required to implement the <code class="docutils literal notranslate"><span class="pre">estimate</span></code> method.</p>
-<p>Note that factor risk models work with weights for the assets but also with weights for the factors.
-To stay flexible we are applying thiS <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> pattern to the function above.</p>
+<p>Note that factor risk models work with weights for the assets but also with
+weights for the factors.
+To stay flexible we are applying the <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> pattern to the function above.</p>
 <section id="a-first-example">
 <h2>A first example<a class="headerlink" href="#a-first-example" title="Link to this heading">#</a></h2>
 <p>A first example is a risk model based on the sample covariance matrix.
@@ -432,9 +440,9 @@ We construct the risk model as follows</p>
 <p>The risk model and the actual optimization problem are decoupled.
 This is good practice and keeps the code clean and maintainable.</p>
 <p>In a backtest we don’t have to reconstruct the problem in every iteration.
-We can simply update the risk model with the new data and solve the problem again.
-The implementation of the risk models is flexible enough to deal with changing dimensions
-of the underlying weight space.</p>
+We can simply update the risk model with the new data and solve the problem
+again. The implementation of the risk models is flexible enough to deal with
+changing dimensions of the underlying weight space.</p>
 </section>
 <section id="risk-models">
 <h2>Risk models<a class="headerlink" href="#risk-models" title="Link to this heading">#</a></h2>
@@ -451,10 +459,12 @@ dimensional subspace, e.g. each asset is the linear combination of <span class="
 </div>
 <p>The factor time series are <span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>. The loadings are the coefficients
 <span class="math notranslate nohighlight">\(\beta_{ji}\)</span>.
-The residual returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are assumed to be uncorrelated with the factors.</p>
-<p>Any position <span class="math notranslate nohighlight">\(w\)</span> in weight space projects to a position <span class="math notranslate nohighlight">\(y = \beta^T w\)</span> in factor space.
-The variance for a position <span class="math notranslate nohighlight">\(w\)</span> is the sum of the variance of the
-systematic returns explained by the factors and the variance of the idiosyncratic returns.</p>
+The residual returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are assumed to be uncorrelated with the f
+actors.</p>
+<p>Any position <span class="math notranslate nohighlight">\(w\)</span> in weight space projects to a position <span class="math notranslate nohighlight">\(y = \beta^T w\)</span> in
+factor space. The variance for a position <span class="math notranslate nohighlight">\(w\)</span> is the sum of the variance of the
+systematic returns explained by the factors and the variance of the
+idiosyncratic returns.</p>
 <div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = Var(\beta^T w) + Var(\epsilon w)
 </pre></div>
 </div>
@@ -464,38 +474,46 @@ systematic returns explained by the factors and the variance of the idiosyncrati
 </div>
 <p>where <span class="math notranslate nohighlight">\(\Sigma_f\)</span> is the covariance matrix of the factors and <span class="math notranslate nohighlight">\(Var(\epsilon_i)\)</span>
 is the variance of the idiosyncratic returns.</p>
-<p>Factor risk models are widely used in practice. Usually two scenarios are distinguished.
-A first route is to rely on estimates for the factor covariance matrix <span class="math notranslate nohighlight">\(\Sigma_f\)</span>,
-the loadings <span class="math notranslate nohighlight">\(\beta\)</span> and the volatilities of the idiosyncratic returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span>.
-Usually those quantities are provided by external parties, e.g. Barra or Axioma.</p>
-<p>An alternative would be to start with the estimation of factor time series <span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>.
-Usually they are estimated via a principal component analysis (PCA) of the asset returns.
-It is then a simple linear regression to compute the loadings <span class="math notranslate nohighlight">\(\beta\)</span>.
-The volatilities of the idiosyncratic returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are computed as the standard deviation
-of the observed residuals.
-The factor covariance matrix <span class="math notranslate nohighlight">\(\Sigma_f\)</span> may even be diagonal in this case as the factors are orthogonal.</p>
+<p>Factor risk models are widely used in practice. Usually two scenarios are
+distinguished. A first route is to rely on estimates for the factor covariance
+matrix <span class="math notranslate nohighlight">\(\Sigma_f\)</span>, the loadings <span class="math notranslate nohighlight">\(\beta\)</span> and the volatilities of the
+idiosyncratic returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span>. Usually those quantities are provided by
+external parties, e.g. Barra or Axioma.</p>
+<p>An alternative would be to start with the estimation of factor time series
+<span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>.
+Usually they are estimated via a principal component analysis (PCA) of the
+asset returns.  It is then a simple linear regression to compute the loadings
+<span class="math notranslate nohighlight">\(\beta\)</span>. The volatilities of the idiosyncratic returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are computed
+as the standard deviation of the observed residuals.
+The factor covariance matrix <span class="math notranslate nohighlight">\(\Sigma_f\)</span> may even be diagonal in this case as the
+factors are orthogonal.</p>
 <p>We expose a method to compute the first <span class="math notranslate nohighlight">\(k\)</span> principal components.</p>
 </section>
 <section id="cvar">
 <h3>cvar<a class="headerlink" href="#cvar" title="Link to this heading">#</a></h3>
-<p>We currently also support the conditional value at risk (CVaR) as a risk measure.</p>
+<p>We currently also support the conditional value at risk (CVaR) as a risk
+measure.</p>
 </section>
 </section>
 <section id="uv">
 <h2>uv<a class="headerlink" href="#uv" title="Link to this heading">#</a></h2>
-<p>You can perform</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>install
+<p>You need to install <a class="reference external" href="https://taskfile.dev">task</a>.
+Starting with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>task<span class="w"> </span>cvxrisk:install
 </pre></div>
 </div>
-<p>to replicate the virtual environment we have defined in pyproject.toml.</p>
+<p>will install <a class="reference external" href="https://github.com/astral-sh/uv">uv</a> and create
+the virtual environment defined in
+pyproject.toml and locked in uv.lock.</p>
 </section>
-<section id="kernel">
-<h2>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h2>
-<p>We install <a class="reference external" href="https://jupyter.org">JupyterLab</a> within your new virtual environment. Executing</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>kernel
+<section id="marimo">
+<h2>marimo<a class="headerlink" href="#marimo" title="Link to this heading">#</a></h2>
+<p>We install <a class="reference external" href="https://marimo.io">marimo</a> on the fly within the aforementioned
+virtual environment. Executing</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>task<span class="w"> </span>cvxrisk:marimo
 </pre></div>
 </div>
-<p>constructs a dedicated <a class="reference external" href="https://docs.jupyter.org/en/latest/projects/kernels.html">Kernel</a> for the project.</p>
+<p>will install and start marimo.</p>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -565,7 +583,7 @@ The factor covariance matrix <span class="math notranslate nohighlight">\(\Sigma
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uv">uv</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marimo">marimo</a></li>
 </ul>
   </nav></div>
 
@@ -614,8 +632,8 @@ By Thomas Schmelzer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
