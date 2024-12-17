@@ -8,15 +8,17 @@ only_build_toc_files: true
 parse:
   myst_enable_extensions:
     # for conversion of the maths
-    #- amsmath
+    - amsmath
     - dollarmath
 
 # needed for plotly
 sphinx:
   config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
     #mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-    html_js_files:
-    - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
+    #html_js_files:
+    #- https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
 
 # Information about where the book exists on the web
 repository:
