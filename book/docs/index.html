@@ -61,7 +61,7 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/index';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -454,9 +454,10 @@ changing dimensions of the underlying weight space.</p>
 <h3>Factor risk models<a class="headerlink" href="#factor-risk-models" title="Link to this heading">#</a></h3>
 <p>Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of <span class="math notranslate nohighlight">\(k\)</span> factors.</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[
+r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i
+\]</div>
 <p>The factor time series are <span class="math notranslate nohighlight">\(f_1, \ldots, f_k\)</span>. The loadings are the coefficients
 <span class="math notranslate nohighlight">\(\beta_{ji}\)</span>.
 The residual returns <span class="math notranslate nohighlight">\(\epsilon_i\)</span> are assumed to be uncorrelated with the f
@@ -465,13 +466,15 @@ actors.</p>
 factor space. The variance for a position <span class="math notranslate nohighlight">\(w\)</span> is the sum of the variance of the
 systematic returns explained by the factors and the variance of the
 idiosyncratic returns.</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = Var(\beta^T w) + Var(\epsilon w)
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[
+Var(r) = Var(\beta^T w) + Var(\epsilon w)
+\]</div>
 <p>We assume the residual returns are uncorrelated and hence</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[
+Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)
+\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Sigma_f\)</span> is the covariance matrix of the factors and <span class="math notranslate nohighlight">\(Var(\epsilon_i)\)</span>
 is the variance of the idiosyncratic returns.</p>
 <p>Factor risk models are widely used in practice. Usually two scenarios are
