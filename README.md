@@ -4,6 +4,8 @@
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/cvxrisk?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month)](https://pepy.tech/project/cvxrisk)
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/cvxgrp/cvxrisk)
+
 We provide an abstract `Model` class.
 The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
 Using this class, we can formulate a function computing a standard minimum
