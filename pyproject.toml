@@ -12,6 +12,8 @@ dependencies = [
     "scipy>=1.14.1",
 ]
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
+
+[project.urls]
 repository = "https://github.com/cvxgrp/cvxrisk"
 
 [dependency-groups]
