@@ -1,6 +1,6 @@
 ---
 title: Large
-marimo-version: 0.10.2
+marimo-version: 0.10.4
 ---
 
 # Large problem with 1000 assets and 100 factors
