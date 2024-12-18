@@ -112,7 +112,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#risk.linalg.cholesky" title="risk.linalg.cholesky"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cholesky</span></code></a>(cov)</p></td>
-<td><p></p></td>
+<td><p>upper triangular part of the cholesky decomposition</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pca/index.html#module-risk.linalg.pca" title="risk.linalg.pca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pca</span></code></a>(returns[, n_components])</p></td>
 <td><p>Compute the first n principal components for a return matrix</p></td>
@@ -128,7 +128,9 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="risk.linalg.cholesky">
 <span class="sig-prename descclassname"><span class="pre">risk.linalg.</span></span><span class="sig-name descname"><span class="pre">cholesky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/risk/linalg/cholesky.html#cholesky"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#risk.linalg.cholesky" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>upper triangular part of the cholesky decomposition
+Note that np.linalg.cholesky(cov) is the lower triangular part</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="risk.linalg.pca">

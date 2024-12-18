@@ -17,3 +17,7 @@ Module Contents
 
 .. py:function:: cholesky(cov)
 
+   upper triangular part of the cholesky decomposition
+   Note that np.linalg.cholesky(cov) is the lower triangular part
+
+
