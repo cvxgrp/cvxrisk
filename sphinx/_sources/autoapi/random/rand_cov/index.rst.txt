@@ -17,3 +17,6 @@ Module Contents
 
 .. py:function:: rand_cov(n)
 
+   Construct a random covariance matrix of size n x n
+
+
