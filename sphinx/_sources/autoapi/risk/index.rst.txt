@@ -40,6 +40,8 @@ Package Contents
    .. py:attribute:: parameter
       :type:  dict[str, cvxpy.Parameter]
 
+      parameter for the riskmodel
+
 
    .. py:method:: estimate(weights, **kwargs)
       :abstractmethod:

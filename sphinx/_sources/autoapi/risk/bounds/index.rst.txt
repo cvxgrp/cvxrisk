@@ -33,11 +33,15 @@ Module Contents
       :value: 0
 
 
+      Maximal number of bounds
+
 
    .. py:attribute:: name
       :type:  str
       :value: ''
 
+
+      Name for the bounds, e.g. assets or factors
 
 
    .. py:method:: estimate(weights, **kwargs)

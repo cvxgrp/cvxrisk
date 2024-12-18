@@ -37,11 +37,15 @@ Package Contents
       :value: 0
 
 
+      Maximal number of assets
+
 
    .. py:attribute:: k
       :type:  int
       :value: 0
 
+
+      Maximal number of factors
 
 
    .. py:method:: __post_init__()

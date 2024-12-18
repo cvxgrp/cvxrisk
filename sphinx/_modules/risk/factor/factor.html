@@ -106,17 +106,17 @@
 <span class="k">class</span> <span class="nc">FactorModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Factor risk model&quot;&quot;&quot;</span>
 
-    <span class="c1"># number of assets</span>
 <div class="viewcode-block" id="FactorModel.assets">
 <a class="viewcode-back" href="../../../autoapi/risk/factor/factor/index.html#risk.factor.factor.FactorModel.assets">[docs]</a>
     <span class="n">assets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximal number of assets&quot;&quot;&quot;</span>
 
-    <span class="c1"># number of factors</span>
 <div class="viewcode-block" id="FactorModel.k">
 <a class="viewcode-back" href="../../../autoapi/risk/factor/factor/index.html#risk.factor.factor.FactorModel.k">[docs]</a>
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximal number of factors&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="FactorModel.__post_init__">
 <a class="viewcode-back" href="../../../autoapi/risk/factor/index.html#risk.factor.factor.FactorModel.__post_init__">[docs]</a>
@@ -161,8 +161,17 @@
 <div class="viewcode-block" id="FactorModel.update">
 <a class="viewcode-back" href="../../../autoapi/risk/factor/index.html#risk.factor.factor.FactorModel.update">[docs]</a>
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;idiosyncratic_risk&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
+
+        <span class="c1"># get the exposure</span>
         <span class="n">exposure</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span>
+
+        <span class="c1"># extract dimensions</span>
         <span class="n">k</span><span class="p">,</span> <span class="n">assets</span> <span class="o">=</span> <span class="n">exposure</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="k">assert</span> <span class="n">assets</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;idiosyncratic_risk&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span>
