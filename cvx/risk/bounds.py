@@ -25,7 +25,10 @@ from .model import Model
 @dataclass
 class Bounds(Model):
     m: int = 0
+    """Maximal number of bounds"""
+
     name: str = ""
+    """Name for the bounds, e.g. assets or factors"""
 
     def estimate(self, weights, **kwargs):
         """No estimation for bounds"""

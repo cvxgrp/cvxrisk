@@ -101,3 +101,32 @@ def test_estimate_risk():
     assert np.all([y.value <= 0.1 + 1e-6])
     # test all entries of y are larger than -0.1
     assert np.all([y.value >= -(0.1 + 1e-6)])
+
+
+def test_dynamic_exposure():
+    model = FactorModel(assets=3, k=2)
+    model.update(
+        exposure=np.array([[1.0, 2.0]]),
+        idiosyncratic_risk=np.array([1.0, 1.0]),
+        cov=np.array([[1.0]]),
+        lower_assets=np.array([0.0]),
+        upper_assets=np.array([1.0]),
+        lower_factors=np.array([0.0]),
+        upper_factors=np.array([1.0]),
+    )
+
+    model.update(
+        exposure=np.array([[1.0]]),
+        idiosyncratic_risk=np.array([1.0]),
+        cov=np.array([[1.0]]),
+        lower_assets=np.array([0.0]),
+        upper_assets=np.array([1.0]),
+        lower_factors=np.array([0.0]),
+        upper_factors=np.array([1.0]),
+    )
+
+    np.testing.assert_array_equal(
+        model.parameter["exposure"].value, np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+    )
+
+    # assert False

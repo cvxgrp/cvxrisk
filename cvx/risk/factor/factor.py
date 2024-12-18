@@ -29,11 +29,11 @@ from ..model import Model
 class FactorModel(Model):
     """Factor risk model"""
 
-    # number of assets
     assets: int = 0
+    """Maximal number of assets"""
 
-    # number of factors
     k: int = 0
+    """Maximal number of factors"""
 
     def __post_init__(self):
         self.parameter["exposure"] = cvx.Parameter(
@@ -70,8 +70,17 @@ class FactorModel(Model):
         )
 
     def update(self, **kwargs):
+        self.parameter["exposure"].value = np.zeros((self.k, self.assets))
+        self.parameter["chol"].value = np.zeros((self.k, self.k))
+        self.parameter["idiosyncratic_risk"].value = np.zeros(self.assets)
+
+        # get the exposure
         exposure = kwargs["exposure"]
+
+        # extract dimensions
         k, assets = exposure.shape
+        assert k <= self.k
+        assert assets <= self.assets
 
         self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
         self.parameter["idiosyncratic_risk"].value[:assets] = kwargs[

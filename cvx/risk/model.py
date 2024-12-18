@@ -26,6 +26,7 @@ class Model(ABC):
     """Abstract risk model"""
 
     parameter: dict[str, cp.Parameter] = field(default_factory=dict)
+    """parameter for the riskmodel"""
 
     @abstractmethod
     def estimate(self, weights, **kwargs):
