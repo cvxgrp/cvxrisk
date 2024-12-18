@@ -17,5 +17,8 @@ import numpy as np
 
 
 def rand_cov(n):
+    """
+    Construct a random covariance matrix of size n x n
+    """
     a = np.random.randn(n, n)
     return np.transpose(a) @ a

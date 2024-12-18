@@ -27,8 +27,13 @@ class CVar(Model):
     """Conditional value at risk model"""
 
     alpha: float = 0.95
+    """alpha parameter to determine the size of the tail"""
+
     n: int = 0
+    """number of samples"""
+
     m: int = 0
+    """number of assets"""
 
     def __post_init__(self):
         self.k = int(self.n * (1 - self.alpha))
