@@ -17,6 +17,8 @@ import scipy as sc
 
 
 def cholesky(cov):
-    # upper triangular part of the cholesky decomposition
-    # np.linalg.cholesky(cov) is the lower triangular part
+    """
+    upper triangular part of the cholesky decomposition
+    Note that np.linalg.cholesky(cov) is the lower triangular part
+    """
     return sc.linalg.cholesky(cov)

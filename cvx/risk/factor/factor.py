@@ -29,7 +29,10 @@ from ..model import Model
 class FactorModel(Model):
     """Factor risk model"""
 
+    # number of assets
     assets: int = 0
+
+    # number of factors
     k: int = 0
 
     def __post_init__(self):
