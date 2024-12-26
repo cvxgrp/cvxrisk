@@ -14,7 +14,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
-      - uses: cvxgrp/.github/actions/uv/sphinx@main
+      - uses: cvxgrp/.github/actions/uv/sphinx@main_claude
 
   test:
     runs-on: "ubuntu-latest"
