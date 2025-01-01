@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_baf40222e63b1267_valid_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.8">coverage.py v7.6.8</a>,
-            created at 2025-01-01 08:07 +0000
+            created at 2025-01-01 08:10 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -93,8 +93,8 @@
     <p class="pln"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="com">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="com">#    See the License for the specific language governing permissions and</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="com">#    limitations under the License.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="str">"""PCA analysis</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="str">"""PCA analysis"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="key">from</span> <span class="nam">__future__</span> <span class="key">import</span> <span class="nam">annotations</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t"><span class="key">from</span> <span class="nam">collections</span> <span class="key">import</span> <span class="nam">namedtuple</span>&nbsp;</span><span class="r"></span></p>
@@ -130,15 +130,13 @@
     <p class="pln"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">        <span class="nam">factors</span><span class="op">=</span><span class="nam">factors</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">        <span class="nam">exposure</span><span class="op">=</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">(</span><span class="nam">data</span><span class="op">=</span><span class="nam">exposure</span><span class="op">,</span> <span class="nam">columns</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">        <span class="nam">cov</span><span class="op">=</span><span class="nam">factors</span><span class="op">.</span><span class="nam">cov</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="nam">systematic</span><span class="op">=</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">            <span class="nam">data</span><span class="op">=</span><span class="nam">factors</span><span class="op">.</span><span class="nam">values</span> <span class="op">@</span> <span class="nam">exposure</span><span class="op">,</span> <span class="nam">index</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">index</span><span class="op">,</span> <span class="nam">columns</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">columns</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">        <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">        <span class="nam">idiosyncratic</span><span class="op">=</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">            <span class="nam">data</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">values</span> <span class="op">-</span> <span class="nam">factors</span><span class="op">.</span><span class="nam">values</span> <span class="op">@</span> <span class="nam">exposure</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">            <span class="nam">index</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">index</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">            <span class="nam">columns</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">columns</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">        <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="nam">systematic</span><span class="op">=</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">(</span><span class="nam">data</span><span class="op">=</span><span class="nam">factors</span><span class="op">.</span><span class="nam">values</span> <span class="op">@</span> <span class="nam">exposure</span><span class="op">,</span> <span class="nam">index</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">index</span><span class="op">,</span> <span class="nam">columns</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">        <span class="nam">idiosyncratic</span><span class="op">=</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">            <span class="nam">data</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">values</span> <span class="op">-</span> <span class="nam">factors</span><span class="op">.</span><span class="nam">values</span> <span class="op">@</span> <span class="nam">exposure</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">            <span class="nam">index</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">index</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">            <span class="nam">columns</span><span class="op">=</span><span class="nam">returns</span><span class="op">.</span><span class="nam">columns</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">        <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -148,7 +146,7 @@
             <a class="nav" href="z_baf40222e63b1267_valid_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.8">coverage.py v7.6.8</a>,
-            created at 2025-01-01 08:07 +0000
+            created at 2025-01-01 08:10 +0000
         </p>
     </div>
 </footer>
