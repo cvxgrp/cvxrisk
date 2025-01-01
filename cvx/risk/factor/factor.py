@@ -11,8 +11,8 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Factor risk model
-"""
+"""Factor risk model"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -59,15 +59,11 @@ class FactorModel(Model):
         """
         Compute the total variance
         """
-        var_residual = cvx.norm2(
-            cvx.multiply(self.parameter["idiosyncratic_risk"], weights)
-        )
+        var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))
 
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
 
-        return cvx.norm2(
-            cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual])
-        )
+        return cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual]))
 
     def update(self, **kwargs):
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
@@ -83,9 +79,7 @@ class FactorModel(Model):
         assert assets <= self.assets
 
         self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
-        self.parameter["idiosyncratic_risk"].value[:assets] = kwargs[
-            "idiosyncratic_risk"
-        ]
+        self.parameter["idiosyncratic_risk"].value[:assets] = kwargs["idiosyncratic_risk"]
         self.parameter["chol"].value[:k, :k] = cholesky(kwargs["cov"])
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)

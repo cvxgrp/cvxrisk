@@ -23,9 +23,7 @@ def __():
 @app.cell
 def __(path, pd):
     # Load some historic stock prices
-    prices = pd.read_csv(
-        path / "data" / "stock_prices.csv", index_col=0, parse_dates=True, header=0
-    )
+    prices = pd.read_csv(path / "data" / "stock_prices.csv", index_col=0, parse_dates=True, header=0)
 
     # Estimate a series of historic covariance matrices
     returns = prices.pct_change().dropna(axis=0, how="all")

@@ -13,9 +13,7 @@ from cvx.risk.linalg import pca as principal_components
 
 @pytest.fixture()
 def returns(resource_dir):
-    prices = pd.read_csv(
-        resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True
-    )
+    prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
     return prices.pct_change().fillna(0.0)
 
 
@@ -93,9 +91,7 @@ def test_estimate_risk():
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
 
     # test that the exposure is correct, e.g. the factor weights match the exposure * asset weights
-    assert model.parameter["exposure"].value @ weights.value == pytest.approx(
-        y.value, abs=1e-6
-    )
+    assert model.parameter["exposure"].value @ weights.value == pytest.approx(y.value, abs=1e-6)
 
     # test all entries of y are smaller than 0.1
     assert np.all([y.value <= 0.1 + 1e-6])
@@ -125,8 +121,6 @@ def test_dynamic_exposure():
         upper_factors=np.array([1.0]),
     )
 
-    np.testing.assert_array_equal(
-        model.parameter["exposure"].value, np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
-    )
+    np.testing.assert_array_equal(model.parameter["exposure"].value, np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 0.0]]))
 
     # assert False

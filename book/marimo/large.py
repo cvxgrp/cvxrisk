@@ -66,11 +66,7 @@ def __(beta, cvx, factors, minrisk_problem, np, pd, ret, triangle):
     triangle.update(
         exposure=beta.values,
         cov=factors.cov().values,
-        idiosyncratic_risk=pd.DataFrame(
-            data=ret - factors @ beta, index=ret.index, columns=ret.columns
-        )
-        .std()
-        .values,
+        idiosyncratic_risk=pd.DataFrame(data=ret - factors @ beta, index=ret.index, columns=ret.columns).std().values,
         lower_assets=np.zeros(1000),
         upper_assets=np.ones(1000),
         lower_factors=-0.1 * np.ones(100),
@@ -86,9 +82,7 @@ def __(beta, factors, minrisk_problem, np, pd, ret, triangle, w, y):
         triangle.update(
             exposure=beta.values,
             cov=factors.cov().values,
-            idiosyncratic_risk=pd.DataFrame(
-                data=ret - factors @ beta, index=ret.index, columns=ret.columns
-            )
+            idiosyncratic_risk=pd.DataFrame(data=ret - factors @ beta, index=ret.index, columns=ret.columns)
             .std()
             .values,
             lower_assets=np.zeros(1000),
