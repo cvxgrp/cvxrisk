@@ -37,9 +37,7 @@ class CVar(Model):
 
     def __post_init__(self):
         self.k = int(self.n * (1 - self.alpha))
-        self.parameter["R"] = cvx.Parameter(
-            shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m))
-        )
+        self.parameter["R"] = cvx.Parameter(shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m)))
         self.bounds = Bounds(m=self.m, name="assets")
 
     def estimate(self, weights, **kwargs):

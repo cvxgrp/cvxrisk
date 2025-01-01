@@ -11,8 +11,8 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""PCA analysis
-"""
+"""PCA analysis"""
+
 from __future__ import annotations
 
 from collections import namedtuple
@@ -48,9 +48,7 @@ def pca(returns, n_components=10):
         factors=factors,
         exposure=pd.DataFrame(data=exposure, columns=returns.columns),
         cov=factors.cov(),
-        systematic=pd.DataFrame(
-            data=factors.values @ exposure, index=returns.index, columns=returns.columns
-        ),
+        systematic=pd.DataFrame(data=factors.values @ exposure, index=returns.index, columns=returns.columns),
         idiosyncratic=pd.DataFrame(
             data=returns.values - factors.values @ exposure,
             index=returns.index,
