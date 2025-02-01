@@ -1,0 +1,63 @@
+risk.bounds
+===========
+
+.. py:module:: risk.bounds
+
+.. autoapi-nested-parse::
+
+   Bounds
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   risk.bounds.Bounds
+
+
+Module Contents
+---------------
+
+.. py:class:: Bounds
+
+   Bases: :py:obj:`risk.model.Model`
+
+
+   .. py:attribute:: m
+      :type:  int
+      :value: 0
+
+
+      Maximal number of bounds
+
+
+   .. py:attribute:: name
+      :type:  str
+      :value: ''
+
+
+      Name for the bounds, e.g. assets or factors
+
+
+   .. py:method:: estimate(weights, **kwargs)
+      :abstractmethod:
+
+
+      No estimation for bounds
+
+
+
+   .. py:method:: _f(str)
+
+
+   .. py:method:: __post_init__()
+
+
+   .. py:method:: update(**kwargs)
+
+
+   .. py:method:: constraints(weights, **kwargs)
+
+

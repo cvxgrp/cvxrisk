@@ -1,0 +1,71 @@
+risk.factor
+===========
+
+.. py:module:: risk.factor
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/risk/factor/factor/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   risk.factor.FactorModel
+
+
+Package Contents
+----------------
+
+.. py:class:: FactorModel
+
+   Bases: :py:obj:`risk.model.Model`
+
+
+   Factor risk model
+
+
+   .. py:attribute:: assets
+      :type:  int
+      :value: 0
+
+
+      Maximal number of assets
+
+
+   .. py:attribute:: k
+      :type:  int
+      :value: 0
+
+
+      Maximal number of factors
+
+
+   .. py:method:: __post_init__()
+
+
+   .. py:method:: estimate(weights, **kwargs)
+
+      Compute the total variance
+
+
+
+   .. py:method:: update(**kwargs)
+
+      Update the data in the risk model
+
+
+
+   .. py:method:: constraints(weights, **kwargs)
+
+      Return the constraints for the risk model
+
+
+

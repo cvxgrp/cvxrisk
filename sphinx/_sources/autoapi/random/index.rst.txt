@@ -1,0 +1,31 @@
+random
+======
+
+.. py:module:: random
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/random/rand_cov/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   random.rand_cov
+
+
+Package Contents
+----------------
+
+.. py:function:: rand_cov(n)
+
+   Construct a random covariance matrix of size n x n
+
+

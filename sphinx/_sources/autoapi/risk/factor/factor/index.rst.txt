@@ -1,0 +1,67 @@
+risk.factor.factor
+==================
+
+.. py:module:: risk.factor.factor
+
+.. autoapi-nested-parse::
+
+   Factor risk model
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   risk.factor.factor.FactorModel
+
+
+Module Contents
+---------------
+
+.. py:class:: FactorModel
+
+   Bases: :py:obj:`risk.model.Model`
+
+
+   Factor risk model
+
+
+   .. py:attribute:: assets
+      :type:  int
+      :value: 0
+
+
+      Maximal number of assets
+
+
+   .. py:attribute:: k
+      :type:  int
+      :value: 0
+
+
+      Maximal number of factors
+
+
+   .. py:method:: __post_init__()
+
+
+   .. py:method:: estimate(weights, **kwargs)
+
+      Compute the total variance
+
+
+
+   .. py:method:: update(**kwargs)
+
+      Update the data in the risk model
+
+
+
+   .. py:method:: constraints(weights, **kwargs)
+
+      Return the constraints for the risk model
+
+
+
