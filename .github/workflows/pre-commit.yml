@@ -1,38 +1,23 @@
 name: pre-commit
 
+permissions:
+  contents: read
+
 on:
   push:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
-      - uses: cvxgrp/.github/actions/uv/coverage@v2.0.17
-
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2
-        with:
-          files: artifacts/tests/coverage/coverage.info
-          format: lcov
-
   deptry:
-
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/uv/deptry@v2.0.17
+    steps:
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: cvxgrp/.github/actions/uv/environment@v2.1.0
+
+      - uses: cvxgrp/.github/actions/deptry@v2.1.0
+
 
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
-      - uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: '--verbose --all-files'
+      - uses: cvxgrp/.github/actions/pre-commit@v2.1.0
