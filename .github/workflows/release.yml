@@ -1,32 +1,23 @@
 name: Bump version and publish
 
 on:
-  workflow_dispatch:
-  #workflow_run:
-  #  workflows: [ "CI" ]
-  #  types: [ completed ]
+  workflow_dispatch
 
 jobs:
   tag:
     permissions:
       contents: write
 
-    #if: >
-    #  github.event_name == 'workflow_dispatch' ||
-    #  (github.event.workflow_run.conclusion == 'success' &&
-    #   github.event.workflow_run.head_branch == 'main')
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: cvxgrp/.github/actions/uv/environment@v2.1.0
 
       - name: Generate Tag
-        uses: cvxgrp/.github/actions/uv/tag@v2.0.17
+        uses: cvxgrp/.github/actions/tag@v2.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
 
   publish:
     needs: tag
@@ -39,9 +30,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
       - uses: actions/download-artifact@v4
         with:
           name: dist
@@ -49,3 +37,4 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
