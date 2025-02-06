@@ -1,47 +1,50 @@
 name: "book"
 
 on:
-- push
+  push
 
 jobs:
-  marimo:
+  setup:
     runs-on: "ubuntu-latest"
+    outputs:
+      environment_ready: ${{ steps.build.outputs.environment_ready }}
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
+        id: build
         uses: cvxgrp/.github/actions/environment@v2.2.1
 
+      - name: "Set up output"
+        id: set_output
+        run: echo "environment_ready=true" >> $GITHUB_OUTPUT
+
+  marimo:
+    runs-on: "ubuntu-latest"
+    needs: setup
+    steps:
       - uses: cvxgrp/.github/actions/marimo@v2.2.1
 
   pdoc:
     runs-on: "ubuntu-latest"
+    needs: setup
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.1
-
       - uses: cvxgrp/.github/actions/pdoc@v2.2.1
 
   test:
     runs-on: "ubuntu-latest"
+    needs: setup
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.1
-
       - uses: cvxgrp/.github/actions/coverage@v2.2.1
 
   jupyter:
     runs-on: "ubuntu-latest"
+    needs: setup
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.1
-
       - uses: cvxgrp/.github/actions/jupyter@v2.2.1
 
   book:
     runs-on: "ubuntu-latest"
     needs: [test, pdoc, jupyter, marimo]
-
     permissions:
       contents: write
-
     steps:
       - uses: cvxgrp/.github/actions/book@v2.2.1
