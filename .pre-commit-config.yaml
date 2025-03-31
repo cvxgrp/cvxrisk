@@ -48,7 +48,7 @@ repos:
         args: [-ignore, SC]
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.23
+    rev: v0.24.1
     hooks:
       - id: validate-pyproject
 
