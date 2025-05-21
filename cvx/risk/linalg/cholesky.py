@@ -18,7 +18,19 @@ import scipy as sc
 
 def cholesky(cov):
     """
-    upper triangular part of the cholesky decomposition
-    Note that np.linalg.cholesky(cov) is the lower triangular part
+    Compute the upper triangular part of the Cholesky decomposition.
+
+    This function computes the Cholesky decomposition of a positive definite matrix.
+    It returns the upper triangular matrix R such that R^T R = cov.
+
+    Args:
+        cov (numpy.ndarray): A positive definite covariance matrix
+
+    Returns:
+        numpy.ndarray: The upper triangular Cholesky factor
+
+    Note:
+        This uses scipy.linalg.cholesky which returns the upper triangular part,
+        unlike numpy.linalg.cholesky which returns the lower triangular part.
     """
     return sc.linalg.cholesky(cov)

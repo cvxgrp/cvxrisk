@@ -18,11 +18,22 @@ import numpy as np
 
 def valid(matrix):
     """
-    Construct the valid subset of matrix (correlation) matrix matrix
-    :param matrix: n x n matrix
+    Extract the valid subset of a matrix by removing rows/columns with non-finite values.
 
-    :return: Tuple of matrix boolean vector indicating if row/column
-    is valid and the valid subset of the matrix
+    This function identifies rows and columns in a matrix that contain non-finite values
+    (NaN or infinity) on the diagonal and removes them, returning both the indicator
+    vector and the resulting valid submatrix.
+
+    Args:
+        matrix (numpy.ndarray): An n x n matrix to be validated
+
+    Returns:
+        tuple: A tuple containing:
+            - numpy.ndarray: Boolean vector indicating which rows/columns are valid
+            - numpy.ndarray: The valid submatrix with invalid rows/columns removed
+
+    Raises:
+        AssertionError: If the input matrix is not square
     """
     # make sure matrix  is quadratic
     if matrix.shape[0] != matrix.shape[1]:

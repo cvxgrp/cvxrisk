@@ -32,6 +32,11 @@ class SampleCovariance(Model):
     num: int = 0
 
     def __post_init__(self):
+        """
+        Initialize the parameters after the class is instantiated.
+
+        Creates the Cholesky decomposition parameter and initializes the bounds.
+        """
         self.parameter["chol"] = cvx.Parameter(
             shape=(self.num, self.num),
             name="cholesky of covariance",
@@ -40,10 +45,30 @@ class SampleCovariance(Model):
         self.bounds = Bounds(m=self.num, name="assets")
 
     def estimate(self, weights, **kwargs):
-        """Estimate the risk by computing the Cholesky decomposition of self.cov"""
+        """
+        Estimate the portfolio risk using the Cholesky decomposition of the covariance matrix.
+
+        Computes the L2 norm of the product of the Cholesky factor and the weights vector,
+        which is equivalent to the square root of the portfolio variance.
+
+        Args:
+            weights: CVXPY variable representing portfolio weights
+            **kwargs: Additional keyword arguments (not used)
+
+        Returns:
+            CVXPY expression: The portfolio risk (standard deviation)
+        """
         return cvx.norm2(self.parameter["chol"] @ weights)
 
     def update(self, **kwargs):
+        """
+        Update the Cholesky decomposition parameter and bounds.
+
+        Args:
+            **kwargs: Keyword arguments containing:
+                - cov: Covariance matrix
+                - Other parameters passed to bounds.update()
+        """
         cov = kwargs["cov"]
         n = cov.shape[0]
 
@@ -51,4 +76,13 @@ class SampleCovariance(Model):
         self.bounds.update(**kwargs)
 
     def constraints(self, weights):
+        """
+        Return constraints for the sample covariance model.
+
+        Args:
+            weights: CVXPY variable representing portfolio weights
+
+        Returns:
+            list: List of CVXPY constraints from the bounds object
+        """
         return self.bounds.constraints(weights)
