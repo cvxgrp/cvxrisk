@@ -16,7 +16,7 @@ venv:
 
 install: venv ## Install all dependencies using uv
 	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
-	@uv sync --dev --frozen
+	@uv sync --all-extras --dev --frozen
 
 ##@ Code Quality
 
