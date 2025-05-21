@@ -74,10 +74,22 @@
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="k">def</span><span class="w"> </span><span class="nf">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">):</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    upper triangular part of the cholesky decomposition</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    Note that np.linalg.cholesky(cov) is the lower triangular part</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">return</span> <span class="n">sc</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    Compute the upper triangular part of the Cholesky decomposition.</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    This function computes the Cholesky decomposition of a positive definite matrix.</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    It returns the upper triangular matrix R such that R^T R = cov.</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    Args:</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        cov (numpy.ndarray): A positive definite covariance matrix</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    Returns:</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        numpy.ndarray: The upper triangular Cholesky factor</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    Note:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        This uses scipy.linalg.cholesky which returns the upper triangular part,</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        unlike numpy.linalg.cholesky which returns the lower triangular part.</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="k">return</span> <span class="n">sc</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -95,15 +107,39 @@
     <a class="headerlink" href="#cholesky"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="cholesky-20"><a href="#cholesky-20"><span class="linenos">20</span></a><span class="k">def</span><span class="w"> </span><span class="nf">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">):</span>
 </span><span id="cholesky-21"><a href="#cholesky-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="cholesky-22"><a href="#cholesky-22"><span class="linenos">22</span></a><span class="sd">    upper triangular part of the cholesky decomposition</span>
-</span><span id="cholesky-23"><a href="#cholesky-23"><span class="linenos">23</span></a><span class="sd">    Note that np.linalg.cholesky(cov) is the lower triangular part</span>
-</span><span id="cholesky-24"><a href="#cholesky-24"><span class="linenos">24</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="cholesky-25"><a href="#cholesky-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="n">sc</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</span><span id="cholesky-22"><a href="#cholesky-22"><span class="linenos">22</span></a><span class="sd">    Compute the upper triangular part of the Cholesky decomposition.</span>
+</span><span id="cholesky-23"><a href="#cholesky-23"><span class="linenos">23</span></a>
+</span><span id="cholesky-24"><a href="#cholesky-24"><span class="linenos">24</span></a><span class="sd">    This function computes the Cholesky decomposition of a positive definite matrix.</span>
+</span><span id="cholesky-25"><a href="#cholesky-25"><span class="linenos">25</span></a><span class="sd">    It returns the upper triangular matrix R such that R^T R = cov.</span>
+</span><span id="cholesky-26"><a href="#cholesky-26"><span class="linenos">26</span></a>
+</span><span id="cholesky-27"><a href="#cholesky-27"><span class="linenos">27</span></a><span class="sd">    Args:</span>
+</span><span id="cholesky-28"><a href="#cholesky-28"><span class="linenos">28</span></a><span class="sd">        cov (numpy.ndarray): A positive definite covariance matrix</span>
+</span><span id="cholesky-29"><a href="#cholesky-29"><span class="linenos">29</span></a>
+</span><span id="cholesky-30"><a href="#cholesky-30"><span class="linenos">30</span></a><span class="sd">    Returns:</span>
+</span><span id="cholesky-31"><a href="#cholesky-31"><span class="linenos">31</span></a><span class="sd">        numpy.ndarray: The upper triangular Cholesky factor</span>
+</span><span id="cholesky-32"><a href="#cholesky-32"><span class="linenos">32</span></a>
+</span><span id="cholesky-33"><a href="#cholesky-33"><span class="linenos">33</span></a><span class="sd">    Note:</span>
+</span><span id="cholesky-34"><a href="#cholesky-34"><span class="linenos">34</span></a><span class="sd">        This uses scipy.linalg.cholesky which returns the upper triangular part,</span>
+</span><span id="cholesky-35"><a href="#cholesky-35"><span class="linenos">35</span></a><span class="sd">        unlike numpy.linalg.cholesky which returns the lower triangular part.</span>
+</span><span id="cholesky-36"><a href="#cholesky-36"><span class="linenos">36</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="cholesky-37"><a href="#cholesky-37"><span class="linenos">37</span></a>    <span class="k">return</span> <span class="n">sc</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>upper triangular part of the cholesky decomposition
-Note that np.linalg.cholesky(cov) is the lower triangular part</p>
+            <div class="docstring"><p>Compute the upper triangular part of the Cholesky decomposition.</p>
+
+<p>This function computes the Cholesky decomposition of a positive definite matrix.
+It returns the upper triangular matrix R such that R^T R = cov.</p>
+
+<p>Args:
+    cov (numpy.ndarray): A positive definite covariance matrix</p>
+
+<p>Returns:
+    numpy.ndarray: The upper triangular Cholesky factor</p>
+
+<p>Note:
+    This uses scipy.linalg.cholesky which returns the upper triangular part,
+    unlike numpy.linalg.cholesky which returns the lower triangular part.</p>
 </div>
 
 
