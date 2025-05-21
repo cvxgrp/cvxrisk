@@ -124,26 +124,13 @@ We expose a method to compute the first $k$ principal components.
 We currently also support the conditional value at risk (CVaR) as a risk
 measure.
 
-## uv
-
-You need to install [task](https://taskfile.dev).
-Starting with
-
-```bash
-task cvxrisk:install
-```
-
-will install [uv](https://github.com/astral-sh/uv) and create
-the virtual environment defined in
-pyproject.toml and locked in uv.lock.
-
 ## marimo
 
 We install [marimo](https://marimo.io) on the fly within the aforementioned
 virtual environment. Executing
 
 ```bash
-task cvxrisk:marimo
+make marimo
 ```
 
 will install and start marimo.
