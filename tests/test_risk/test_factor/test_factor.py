@@ -13,11 +13,34 @@ from cvx.risk.linalg import pca as principal_components
 
 @pytest.fixture()
 def returns(resource_dir):
+    """
+    Pytest fixture that provides stock return data for testing.
+
+    This fixture loads stock price data from a CSV file, calculates returns
+    using percentage change, and fills any NaN values with zeros.
+
+    Args:
+        resource_dir: Pytest fixture providing the path to the test resources directory
+
+    Returns:
+        pandas.DataFrame: DataFrame containing stock returns
+    """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
     return prices.pct_change().fillna(0.0)
 
 
 def test_timeseries_model(returns):
+    """
+    Test the FactorModel with time series data.
+
+    This test verifies that:
+    1. Principal components can be computed from returns data
+    2. A FactorModel can be initialized and updated with the PCA results
+    3. The model's estimate method calculates the expected volatility for a given portfolio
+
+    Args:
+        returns: Pytest fixture providing stock return data
+    """
     # Here we compute the factors and regress the returns on them
     factors = principal_components(returns=returns, n_components=10)
 
@@ -41,6 +64,16 @@ def test_timeseries_model(returns):
 
 
 def test_minvar(returns):
+    """
+    Test the minimum variance problem with a factor model.
+
+    This test verifies that:
+    1. A minimum risk problem can be created with a FactorModel
+    2. The problem is disciplined parametrized programming (DPP) compliant
+
+    Args:
+        returns: Pytest fixture providing stock return data
+    """
     weights = cp.Variable(20)
     y = cp.Variable(10)
 

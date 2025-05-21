@@ -9,11 +9,33 @@ from cvx.risk.linalg import pca
 
 @pytest.fixture()
 def returns(resource_dir):
+    """
+    Pytest fixture that provides stock return data for testing.
+
+    This fixture loads stock price data from a CSV file, calculates returns
+    using percentage change, and fills any NaN values with zeros.
+
+    Args:
+        resource_dir: Pytest fixture providing the path to the test resources directory
+
+    Returns:
+        pandas.DataFrame: DataFrame containing stock returns
+    """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
     return prices.pct_change().fillna(0.0)
 
 
 def test_pca(returns):
+    """
+    Test that the pca function correctly calculates the principal components.
+
+    This test verifies that:
+    1. The pca function can process returns data
+    2. The explained variance ratios match the expected values
+
+    Args:
+        returns: Pytest fixture providing stock return data
+    """
     xxx = pca(returns)
 
     assert np.allclose(
