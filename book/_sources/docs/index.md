@@ -1,82 +1,100 @@
-# [cvxrisk](http://www.cvxgrp.org/cvxrisk/book)
+# cvxrisk: Convex Optimization for Portfolio Risk Management
 
 [![PyPI version](https://badge.fury.io/py/cvxrisk.svg)](https://badge.fury.io/py/cvxrisk)
-[![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
+[![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/cvxrisk/blob/master/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/cvxrisk?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month)](https://pepy.tech/project/cvxrisk)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
-
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/cvxgrp/cvxrisk)
 
-We provide an abstract `Model` class.
-The class is designed to be used in conjunction with [cvxpy](https://github.com/cvxpy/cvxpy).
-Using this class, we can formulate a function computing a standard minimum
-risk portfolio as
+## 📋 Overview
 
-```python
-import cvxpy as cp
+cvxrisk is a Python library for portfolio risk management using convex optimization.
+It provides a flexible framework for implementing various risk models that
+can be used with [CVXPY](https://github.com/cvxpy/cvxpy) to solve portfolio
+optimization problems.
 
-from cvx.risk import Model
+The library is built around an abstract `Model` class that standardizes
+the interface for different risk models, making it easy to swap between
+them in your optimization problems.
 
+## 🚀 Installation
 
-def minimum_risk(w: cp.Variable, risk_model: Model, **kwargs) -> cp.Problem:
-    """Constructs a minimum variance portfolio.
+```bash
+# Install from PyPI
+pip install cvxrisk
 
-    Args:
-        w: cp.Variable representing the portfolio weights.
-        risk_model: A risk model.
-
-    Returns:
-        A convex optimization problem.
-    """
-    return cp.Problem(
-        cp.Minimize(risk_model.estimate(w, **kwargs)),
-        [cp.sum(w) == 1, w >= 0] + risk_model.constraints(w, **kwargs)
-    )
+# For development installation
+git clone https://github.com/cvxgrp/cvxrisk.git
+cd cvxrisk
+make install
 ```
 
-The risk model is injected into the function.
-The function is not aware of the precise risk model used.
-All risk models are required to implement the `estimate` method.
+## 🔧 Quick Start
 
-Note that factor risk models work with weights for the assets but also with
-weights for the factors.
-To stay flexible we are applying the `**kwargs` pattern to the function above.
-
-## A first example
-
-A first example is a risk model based on the sample covariance matrix.
-We construct the risk model as follows
+cvxrisk makes it easy to formulate and solve portfolio optimization problems:
 
 ```python
-import numpy as np
 import cvxpy as cp
+import numpy as np
+from cvx.risk.sample import SampleCovariance
+from cvx.portfolio.min_risk import minrisk_problem
 
+# Create a risk model
+riskmodel = SampleCovariance(num=2)
+
+# Update the model with data
+riskmodel.update(
+    cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
+    lower_assets=np.zeros(2),
+    upper_assets=np.ones(2)
+)
+
+# Define portfolio weights variable
+weights = cp.Variable(2)
+
+# Create and solve the optimization problem
+problem = minrisk_problem(riskmodel, weights)
+problem.solve()
+
+# Print the optimal weights
+print(weights.value)  # [0.75, 0.25]
+```
+
+## 📊 Features
+
+cvxrisk provides several risk models:
+
+### Sample Covariance
+
+The simplest risk model based on the sample covariance matrix:
+
+```python
 from cvx.risk.sample import SampleCovariance
 
 riskmodel = SampleCovariance(num=2)
-w = cp.Variable(2)
-problem = minimum_risk(w, riskmodel)
-
 riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]))
-problem.solve()
-print(w.value)
 ```
 
-The risk model and the actual optimization problem are decoupled.
-This is good practice and keeps the code clean and maintainable.
+### Factor Risk Models
 
-In a backtest we don't have to reconstruct the problem in every iteration.
-We can simply update the risk model with the new data and solve the problem
-again. The implementation of the risk models is flexible enough to deal with
-changing dimensions of the underlying weight space.
+Factor models reduce dimensionality by projecting asset returns onto a
+smaller set of factors:
 
-## Risk models
+```python
+from cvx.risk.factor import FactorModel
+from cvx.risk.linalg import pca
 
-### Sample covariance
+# Compute principal components
+factors = pca(returns, n_components=10)
 
-We offer a `SampleCovariance` class as seen above.
-
-### Factor risk models
+# Create and update the factor model
+model = FactorModel(assets=25, k=10)
+model.update(
+    cov=factors.cov.values,
+    exposure=factors.exposure.values,
+    idiosyncratic_risk=factors.idiosyncratic.std().values
+)
+```
 
 Factor risk models use the projection of the weight vector into a lower
 dimensional subspace, e.g. each asset is the linear combination of $k$ factors.
@@ -85,8 +103,7 @@ $$r_i = \sum_{j=1}^k f_j \beta_{ji} + \epsilon_i$$
 
 The factor time series are $f_1, \ldots, f_k$. The loadings are the coefficients
 $\beta_{ji}$.
-The residual returns $\epsilon_i$ are assumed to be uncorrelated with the f
-actors.
+The residual returns $\epsilon_i$ are assumed to be uncorrelated with the factors.
 
 Any position $w$ in weight space projects to a position $y = \beta^T w$ in
 factor space. The variance for a position $w$ is the sum of the variance of the
@@ -102,35 +119,51 @@ $$Var(r) = y^T \Sigma_f y + \sum_i w_i^2 Var(\epsilon_i)$$
 where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$
 is the variance of the idiosyncratic returns.
 
-Factor risk models are widely used in practice. Usually two scenarios are
-distinguished. A first route is to rely on estimates for the factor covariance
-matrix $\Sigma_f$, the loadings $\beta$ and the volatilities of the
-idiosyncratic returns $\epsilon_i$. Usually those quantities are provided by
-external parties, e.g. Barra or Axioma.
+### Conditional Value at Risk (CVaR)
 
-An alternative would be to start with the estimation of factor time series
-$f_1, \ldots, f_k$.
-Usually they are estimated via a principal component analysis (PCA) of the
-asset returns.  It is then a simple linear regression to compute the loadings
-$\beta$. The volatilities of the idiosyncratic returns $\epsilon_i$ are computed
-as the standard deviation of the observed residuals.
-The factor covariance matrix $\Sigma_f$ may even be diagonal in this case as the
-factors are orthogonal.
+CVaR measures the expected loss in the worst-case scenarios:
 
-We expose a method to compute the first $k$ principal components.
+```python
+from cvx.risk.cvar import CVar
 
-### cvar
+model = CVar(alpha=0.95, n=50, m=14)
+model.update(returns=historical_returns)
+```
 
-We currently also support the conditional value at risk (CVaR) as a risk
-measure.
+## 📚 Documentation
 
-## marimo
+For more detailed documentation and examples, visit our [documentation site](http://www.cvxgrp.org/cvxrisk/book).
 
-We install [marimo](https://marimo.io) on the fly within the aforementioned
-virtual environment. Executing
+## 🛠️ Development
+
+cvxrisk uses modern Python development tools:
 
 ```bash
+# Install development dependencies
+make install
+
+# Run tests
+make test
+
+# Format code
+make fmt
+
+# Start interactive notebooks
 make marimo
 ```
 
-will install and start marimo.
+## 📄 License
+
+cvxrisk is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+
+## 👥 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+For more information, see [CONTRIBUTING.md](CONTRIBUTING.md).
