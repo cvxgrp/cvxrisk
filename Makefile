@@ -31,7 +31,7 @@ fmt: venv ## Run code formatting and linting
 test: install ## Run all tests
 	@printf "$(BLUE)Running tests...$(RESET)\n"
 	@uv pip install pytest
-	@uv run pytest src/tests
+	@uv run pytest tests
 
 ##@ Cleanup
 
