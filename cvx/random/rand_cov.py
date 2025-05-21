@@ -18,7 +18,16 @@ import numpy as np
 
 def rand_cov(n):
     """
-    Construct a random covariance matrix of size n x n
+    Construct a random positive semi-definite covariance matrix of size n x n.
+
+    The matrix is constructed as A^T A where A is a random n x n matrix with
+    elements drawn from a standard normal distribution.
+
+    Args:
+        n (int): Size of the covariance matrix
+
+    Returns:
+        numpy.ndarray: A random positive semi-definite n x n covariance matrix
     """
     a = np.random.randn(n, n)
     return np.transpose(a) @ a

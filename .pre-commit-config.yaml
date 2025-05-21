@@ -19,6 +19,7 @@ repos:
     rev: v0.44.0
     hooks:
       - id: markdownlint
+        exclude: .junie/guidelines.md
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.19.1

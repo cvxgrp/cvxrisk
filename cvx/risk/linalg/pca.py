@@ -25,15 +25,38 @@ PCA = namedtuple(
     "PCA",
     ["explained_variance", "factors", "exposure", "cov", "systematic", "idiosyncratic"],
 )
+"""
+A named tuple containing the results of PCA analysis.
+
+Attributes:
+    explained_variance (numpy.ndarray): The explained variance ratio for each component
+    factors (numpy.ndarray): The factor returns (principal components)
+    exposure (pandas.DataFrame): The factor exposures (loadings) for each asset
+    cov (pandas.DataFrame): The covariance matrix of the factors
+    systematic (pandas.DataFrame): The systematic returns explained by the factors
+    idiosyncratic (pandas.DataFrame): The idiosyncratic returns not explained by the factors
+"""
 
 
 def pca(returns, n_components=10):
     """
-    Compute the first n principal components for a return matrix
+    Compute the first n principal components for a return matrix.
+
+    Performs Principal Component Analysis (PCA) on the returns data to extract
+    the most important factors that explain the variance in the returns.
 
     Args:
-        returns: DataFrame of prices
-        n_components: Number of components
+        returns (pandas.DataFrame): DataFrame of asset returns
+        n_components (int, optional): Number of principal components to extract. Defaults to 10.
+
+    Returns:
+        PCA: A named tuple containing the PCA results with the following fields:
+            - explained_variance: The explained variance ratio for each component
+            - factors: The factor returns (principal components)
+            - exposure: The factor exposures (loadings) for each asset
+            - cov: The covariance matrix of the factors
+            - systematic: The systematic returns explained by the factors
+            - idiosyncratic: The idiosyncratic returns not explained by the factors
     """
 
     # USING SKLEARN. Let's look at the first n components

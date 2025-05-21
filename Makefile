@@ -16,7 +16,7 @@ venv:
 
 install: venv ## Install all dependencies using uv
 	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
-	@uv sync --dev --frozen
+	@uv sync --all-extras --dev --frozen
 
 ##@ Code Quality
 
@@ -31,7 +31,7 @@ fmt: venv ## Run code formatting and linting
 test: install ## Run all tests
 	@printf "$(BLUE)Running tests...$(RESET)\n"
 	@uv pip install pytest
-	@uv run pytest src/tests
+	@uv run pytest tests
 
 ##@ Cleanup
 
