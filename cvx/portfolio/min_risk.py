@@ -18,17 +18,23 @@ import cvxpy as cp
 
 def minrisk_problem(riskmodel, weights, base=0.0, constraints=None, **kwargs):
     """
-    Create a minimum risk portfolio optimization problem.
+    Creates a minimum-risk portfolio optimization problem.
 
     Args:
-        riskmodel: Risk model that implements the Model interface
-        weights: CVXPY variable representing portfolio weights
-        base: minrisk for weights - base
-        constraints: List of constraints applied to the portfolio
-        **kwargs: Additional keyword arguments to pass to the risk model
+        riskmodel (Model):
+            A risk model implementing the `Model` interface, used to compute portfolio risk.
+        weights (cvxpy.Variable):
+            CVXPY variable representing the portfolio weights.
+        base (cvxpy.Expression):
+            Expression representing the base portfolio (e.g. for tracking error minimization).
+        constraints (list[cvxpy.Constraint]):
+            List of CVXPY constraints applied to the optimization problem.
+        **kwargs:
+            Additional keyword arguments passed to the risk model's risk expression.
 
     Returns:
-        cp.Problem: A CVXPY problem that minimizes the risk subject to constraints
+        cvxpy.Problem:
+            A CVXPY problem that minimizes portfolio risk subject to the given constraints.
     """
     # if no constraints are specified
     constraints = constraints or []
