@@ -46,7 +46,7 @@ class CVar(Model):
         self.parameter["R"] = cvx.Parameter(shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m)))
         self.bounds = Bounds(m=self.m, name="assets")
 
-    def estimate(self, weights, **kwargs):
+    def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
         """
         Estimate the Conditional Value at Risk (CVaR) for the given weights.
 
@@ -65,7 +65,7 @@ class CVar(Model):
         # average value of the k elements in the left tail
         return -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> None:
         """
         Update the returns data and bounds parameters.
 
@@ -80,7 +80,7 @@ class CVar(Model):
         self.parameter["R"].value[:, :m] = kwargs["returns"]
         self.bounds.update(**kwargs)
 
-    def constraints(self, weights, **kwargs):
+    def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
         """
         Return constraints for the CVaR model.
 
@@ -89,6 +89,6 @@ class CVar(Model):
             **kwargs: Additional keyword arguments passed to bounds.constraints()
 
         Returns:
-            list: List of CVXPY constraints from the bounds object
+            List of CVXPY constraints from the bounds object
         """
         return self.bounds.constraints(weights)

@@ -13,10 +13,11 @@
 #    limitations under the License.
 from __future__ import annotations
 
+import numpy as np
 import scipy as sc
 
 
-def cholesky(cov):
+def cholesky(cov: np.ndarray) -> np.ndarray:
     """
     Compute the upper triangular part of the Cholesky decomposition.
 
@@ -24,10 +25,10 @@ def cholesky(cov):
     It returns the upper triangular matrix R such that R^T R = cov.
 
     Args:
-        cov (numpy.ndarray): A positive definite covariance matrix
+        cov: A positive definite covariance matrix
 
     Returns:
-        numpy.ndarray: The upper triangular Cholesky factor
+        The upper triangular Cholesky factor
 
     Note:
         This uses scipy.linalg.cholesky which returns the upper triangular part,

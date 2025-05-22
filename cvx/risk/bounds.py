@@ -31,7 +31,7 @@ class Bounds(Model):
     name: str = ""
     """Name for the bounds, e.g. assets or factors"""
 
-    def estimate(self, weights, **kwargs):
+    def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
         """
         No estimation for bounds.
 
@@ -44,17 +44,17 @@ class Bounds(Model):
         """
         raise NotImplementedError("No estimation for bounds")
 
-    def _f(self, str):
+    def _f(self, str_prefix: str) -> str:
         """
         Create a parameter name by appending the name attribute.
 
         Args:
-            str (str): Base string for the parameter name
+            str_prefix: Base string for the parameter name
 
         Returns:
-            str: Combined parameter name in the format "{str}_{self.name}"
+            Combined parameter name in the format "{str_prefix}_{self.name}"
         """
-        return f"{str}_{self.name}"
+        return f"{str_prefix}_{self.name}"
 
     def __post_init__(self):
         """
@@ -73,7 +73,7 @@ class Bounds(Model):
             value=np.ones(self.m),
         )
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> None:
         """
         Update the lower and upper bound parameters.
 
@@ -89,7 +89,7 @@ class Bounds(Model):
         self.parameter[self._f("upper")].value = np.zeros(self.m)
         self.parameter[self._f("upper")].value[: len(upper)] = upper
 
-    def constraints(self, weights, **kwargs):
+    def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
         """
         Return constraints that enforce the bounds on weights.
 
@@ -98,7 +98,7 @@ class Bounds(Model):
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
-            list: List of CVXPY constraints enforcing lower and upper bounds
+            List of CVXPY constraints enforcing lower and upper bounds
         """
         return [
             weights >= self.parameter[self._f("lower")],

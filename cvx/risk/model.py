@@ -29,19 +29,36 @@ class Model(ABC):
     """parameter for the riskmodel"""
 
     @abstractmethod
-    def estimate(self, weights, **kwargs):
+    def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
         """
         Estimate the variance given the portfolio weights
+
+        Args:
+            weights: CVXPY variable representing portfolio weights
+            **kwargs: Additional keyword arguments
+
+        Returns:
+            CVXPY expression representing the estimated risk
         """
 
     @abstractmethod
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> None:
         """
         Update the data in the risk model
+
+        Args:
+            **kwargs: Keyword arguments containing data to update the model
         """
 
     @abstractmethod
-    def constraints(self, weights, **kwargs):
+    def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
         """
         Return the constraints for the risk model
+
+        Args:
+            weights: CVXPY variable representing portfolio weights
+            **kwargs: Additional keyword arguments
+
+        Returns:
+            List of CVXPY constraints for the risk model
         """
