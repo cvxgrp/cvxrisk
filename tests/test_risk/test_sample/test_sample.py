@@ -79,3 +79,19 @@ def test_min_variance():
     )
     problem.solve()
     np.testing.assert_almost_equal(weights.value, np.array([0.875, 0.125, 0.0, 0.0]), decimal=5)
+
+
+def test_min_risk_constraints():
+    weights = cp.Variable(4)
+    riskmodel = SampleCovariance(num=4)
+    # inject some constraints
+    constraints = [weights[0] == 0.0]
+    problem = minrisk_problem(riskmodel, weights, constraints=constraints)
+
+    riskmodel.update(
+        cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
+        lower_assets=np.zeros(2),
+        upper_assets=np.ones(2),
+    )
+    problem.solve()
+    np.testing.assert_almost_equal(weights.value, np.array([0.0, 1.0, 0.0, 0.0]), decimal=5)

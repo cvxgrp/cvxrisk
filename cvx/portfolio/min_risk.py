@@ -16,21 +16,25 @@ from __future__ import annotations
 import cvxpy as cp
 
 
-def minrisk_problem(riskmodel, weights, **kwargs):
+def minrisk_problem(riskmodel, weights, constraints=None, **kwargs):
     """
     Create a minimum risk portfolio optimization problem.
 
     Args:
         riskmodel: Risk model that implements the Model interface
         weights: CVXPY variable representing portfolio weights
+        constraints: List of constraints applied to the portfolio
         **kwargs: Additional keyword arguments to pass to the risk model
 
     Returns:
         cp.Problem: A CVXPY problem that minimizes the risk subject to constraints
     """
+    # if no constraints are specified
+    constraints = constraints or []
+
     problem = cp.Problem(
         cp.Minimize(riskmodel.estimate(weights, **kwargs)),
-        [cp.sum(weights) == 1.0, weights >= 0] + riskmodel.constraints(weights, **kwargs),
+        [cp.sum(weights) == 1.0, weights >= 0] + riskmodel.constraints(weights, **kwargs) + constraints,
     )
 
     return problem
