@@ -46,11 +46,13 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
     the most important factors that explain the variance in the returns.
 
     Args:
+
         returns: DataFrame of asset returns
 
         n_components: Number of principal components to extract. Defaults to 10.
 
     Returns:
+
         A named tuple containing the PCA results with the following fields:
             - explained_variance: The explained variance ratio for each component
             - factors: The factor returns (principal components)

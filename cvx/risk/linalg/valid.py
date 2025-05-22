@@ -27,9 +27,11 @@ def valid(matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     vector and the resulting valid submatrix.
 
     Args:
+
         matrix: An n x n matrix to be validated
 
     Returns:
+
         A tuple containing:
             - Boolean vector indicating which rows/columns are valid
             - The valid submatrix with invalid rows/columns removed
