@@ -1,3 +1,5 @@
+"""Tests for the bounds module"""
+
 from __future__ import annotations
 
 import cvxpy as cp

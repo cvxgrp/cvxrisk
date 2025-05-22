@@ -1,4 +1,5 @@
-# Import necessary libraries
+"""Tests for the Conditional Value at Risk (CVaR) implementation"""
+
 from __future__ import annotations
 
 import cvxpy as cp
@@ -9,7 +10,7 @@ from cvx.portfolio.min_risk import minrisk_problem
 from cvx.risk.cvar import CVar
 
 
-def test_estimate_risk():
+def test_estimate_risk() -> None:
     """
     Test the estimate() method of the CVar class.
 
