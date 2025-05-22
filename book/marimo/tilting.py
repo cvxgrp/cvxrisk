@@ -28,10 +28,14 @@ def _(mo):
     Let S be a sample covariance matrix, let w_SP be the (market cap) weights of stocks in the S&P 500 index
     and let V be a vector of earning-price normalized "z-scores".  I want to solve the following for w:
 
-    Minimize (w - w_SP).transpose @ S @ (w - w_SP) subject to:
+    Minimize (w - w_SP).transpose @ S @ (w - w_SP)
+
+    subject to:
 
     w >= 0
+
     sum(w) = 1
+
     w.dot(V) = 0.5
 
     The exercise is to find a portfolio that is "close" to the S&P 500 index but
