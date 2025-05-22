@@ -7,7 +7,7 @@ import numpy as np
 from cvx.risk.bounds import Bounds
 
 
-def test_bounds_initialization():
+def test_bounds_initialization() -> None:
     """Test that Bounds can be initialized with default parameters."""
     bounds = Bounds(m=5, name="test")
 

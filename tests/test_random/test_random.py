@@ -7,7 +7,7 @@ import numpy as np
 from cvx.random import rand_cov
 
 
-def test_rand_cov():
+def test_rand_cov() -> None:
     """
     Test that the rand_cov function generates a positive definite matrix.
 
