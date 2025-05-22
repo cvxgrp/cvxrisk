@@ -22,19 +22,19 @@ def minrisk_problem(riskmodel, weights, base=0.0, constraints=None, **kwargs):
 
     Parameters
     ----------
-    riskmodel : Model
+    riskmodel: Model
         A risk model implementing the `Model` interface, used to compute portfolio risk.
 
-    weights : cvxpy.Variable
+    weights: cvxpy.Variable
         CVXPY variable representing the portfolio weights.
 
-    base : cvxpy.Expression
+    base: cvxpy.Expression
         Expression representing the base portfolio (e.g., for tracking error minimization).
 
-    constraints : list of cvxpy.Constraint
+    constraints: list of cvxpy.Constraint
         List of CVXPY constraints applied to the optimization problem.
 
-    **kwargs
+    **kwargs:
         Additional keyword arguments passed to the risk model's risk expression.
 
     Returns
