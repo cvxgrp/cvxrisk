@@ -1,3 +1,5 @@
+"""Tests for the sample covariance risk model implementation"""
+
 from __future__ import annotations
 
 import cvxpy as cp
@@ -7,7 +9,7 @@ from cvx.portfolio.min_risk import minrisk_problem
 from cvx.risk.sample import SampleCovariance
 
 
-def test_sample():
+def test_sample() -> None:
     """
     Test the SampleCovariance class with a small covariance matrix.
 
@@ -26,7 +28,7 @@ def test_sample():
     np.testing.assert_almost_equal(vola, 2.0)
 
 
-def test_sample_large():
+def test_sample_large() -> None:
     """
     Test the SampleCovariance class with a larger covariance matrix.
 
@@ -46,7 +48,7 @@ def test_sample_large():
     np.testing.assert_almost_equal(vola, 2.0)
 
 
-def test_min_variance():
+def test_min_variance() -> None:
     """
     Test the minimum variance problem with a sample covariance model.
 
@@ -81,7 +83,15 @@ def test_min_variance():
     np.testing.assert_almost_equal(weights.value, np.array([0.875, 0.125, 0.0, 0.0]), decimal=5)
 
 
-def test_min_risk_constraints():
+def test_min_risk_constraints() -> None:
+    """
+    Test the minimum risk problem with additional constraints.
+
+    This test verifies that:
+    1. A minimum risk problem can be created with a SampleCovariance model and additional constraints
+    2. The problem can be solved with a constraint that forces a specific weight to be zero
+    3. The optimal solution respects both the model constraints and the additional constraints
+    """
     weights = cp.Variable(4)
     riskmodel = SampleCovariance(num=4)
     # inject some constraints

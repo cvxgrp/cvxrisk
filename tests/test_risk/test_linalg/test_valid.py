@@ -1,3 +1,5 @@
+"""Tests for the matrix validation utility"""
+
 from __future__ import annotations
 
 import numpy as np
@@ -6,7 +8,7 @@ import pytest
 from cvx.risk.linalg import valid
 
 
-def test_valid():
+def test_valid() -> None:
     """
     Test that the valid function correctly identifies valid rows/columns in a matrix.
 
@@ -22,7 +24,7 @@ def test_valid():
     assert np.allclose(v, np.array([False, True]))
 
 
-def test_invalid():
+def test_invalid() -> None:
     """
     Test that the valid function raises an AssertionError for non-square matrices.
 

@@ -1,3 +1,4 @@
+"""Factor risk models for portfolio optimization"""
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");

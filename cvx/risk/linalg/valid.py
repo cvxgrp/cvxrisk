@@ -1,3 +1,5 @@
+"""Matrix validation utilities for handling non-finite values"""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +18,7 @@ from __future__ import annotations
 import numpy as np
 
 
-def valid(matrix):
+def valid(matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """
     Extract the valid subset of a matrix by removing rows/columns with non-finite values.
 
@@ -25,12 +27,12 @@ def valid(matrix):
     vector and the resulting valid submatrix.
 
     Args:
-        matrix (numpy.ndarray): An n x n matrix to be validated
+        matrix: An n x n matrix to be validated
 
     Returns:
-        tuple: A tuple containing:
-            - numpy.ndarray: Boolean vector indicating which rows/columns are valid
-            - numpy.ndarray: The valid submatrix with invalid rows/columns removed
+        A tuple containing:
+            - Boolean vector indicating which rows/columns are valid
+            - The valid submatrix with invalid rows/columns removed
 
     Raises:
         AssertionError: If the input matrix is not square

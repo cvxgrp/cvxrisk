@@ -1,3 +1,5 @@
+"""Minimum risk portfolio optimization"""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,31 +17,27 @@ from __future__ import annotations
 
 import cvxpy as cp
 
+from ..risk import Model
 
-def minrisk_problem(riskmodel, weights, base=0.0, constraints=None, **kwargs):
+
+def minrisk_problem(
+    riskmodel: Model, weights: cp.Variable, base: cp.Expression = 0.0, constraints: list[cp.Constraint] = None, **kwargs
+) -> cp.Problem:
     """
     Creates a minimum-risk portfolio optimization problem.
 
-    Parameters
-    ----------
-    riskmodel: Model
-        A risk model implementing the `Model` interface, used to compute portfolio risk.
+    Args:
+        riskmodel: A risk model implementing the `Model` interface, used to compute portfolio risk.
 
-    weights: cvxpy.Variable
-        CVXPY variable representing the portfolio weights.
+        weights: CVXPY variable representing the portfolio weights.
 
-    base: cvxpy.Expression
-        Expression representing the base portfolio (e.g. for tracking error minimization).
+        base: Expression representing the base portfolio (e.g. for tracking error minimization).
 
-    constraints: list of cvxpy.Constraint
-        List of CVXPY constraints applied to the optimization problem.
+        constraints: List of CVXPY constraints applied to the optimization problem.
 
-    **kwargs:
-        Additional keyword arguments passed to the risk model's risk expression.
+        **kwargs: Additional keyword arguments passed to the risk model's risk expression.
 
-    Returns
-    -------
-    cvxpy.Problem:
+    Returns:
         A CVXPY problem that minimizes portfolio risk subject to the given constraints.
     """
     # if no constraints are specified

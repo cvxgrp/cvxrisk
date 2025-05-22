@@ -1,3 +1,5 @@
+"""Tests for the bounds module"""
+
 from __future__ import annotations
 
 import cvxpy as cp
@@ -7,7 +9,7 @@ import pytest
 from cvx.risk.bounds import Bounds
 
 
-def test_raise_not_implemented():
+def test_raise_not_implemented() -> None:
     """
     Test that the estimate method of Bounds raises NotImplementedError.
 
@@ -21,7 +23,7 @@ def test_raise_not_implemented():
         bounds.estimate(weights)
 
 
-def test_constraints():
+def test_constraints() -> None:
     """
     Test that the constraints method of Bounds returns the expected constraints.
 

@@ -38,7 +38,7 @@ Attributes:
 """
 
 
-def pca(returns, n_components=10):
+def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
     """
     Compute the first n principal components for a return matrix.
 
@@ -46,11 +46,12 @@ def pca(returns, n_components=10):
     the most important factors that explain the variance in the returns.
 
     Args:
-        returns (pandas.DataFrame): DataFrame of asset returns
-        n_components (int, optional): Number of principal components to extract. Defaults to 10.
+        returns: DataFrame of asset returns
+
+        n_components: Number of principal components to extract. Defaults to 10.
 
     Returns:
-        PCA: A named tuple containing the PCA results with the following fields:
+        A named tuple containing the PCA results with the following fields:
             - explained_variance: The explained variance ratio for each component
             - factors: The factor returns (principal components)
             - exposure: The factor exposures (loadings) for each asset

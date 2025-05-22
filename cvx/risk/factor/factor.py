@@ -62,7 +62,7 @@ class FactorModel(Model):
         self.bounds_assets = Bounds(m=self.assets, name="assets")
         self.bounds_factors = Bounds(m=self.k, name="factors")
 
-    def estimate(self, weights, **kwargs):
+    def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
         """
         Compute the total portfolio risk using the factor model.
 
@@ -71,7 +71,9 @@ class FactorModel(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments, may include:
+
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
@@ -83,15 +85,19 @@ class FactorModel(Model):
 
         return cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual]))
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> None:
         """
         Update the factor model parameters.
 
         Args:
             **kwargs: Keyword arguments containing:
+
                 - exposure: Factor exposure matrix
+
                 - idiosyncratic_risk: Vector of idiosyncratic risks
+
                 - cov: Factor covariance matrix
+
                 - Other parameters passed to bounds_assets.update() and bounds_factors.update()
         """
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
@@ -112,18 +118,20 @@ class FactorModel(Model):
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)
 
-    def constraints(self, weights, **kwargs):
+    def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
         """
         Return constraints for the factor model.
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments, may include:
+
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
-            list: List of CVXPY constraints including asset bounds, factor bounds,
-                  and the constraint that y equals exposure @ weights
+            List of CVXPY constraints including asset bounds, factor bounds,
+            and the constraint that y equals exposure @ weights
         """
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
 
