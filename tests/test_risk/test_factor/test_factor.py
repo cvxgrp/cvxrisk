@@ -22,9 +22,11 @@ def returns(resource_dir) -> pd.DataFrame:
     using percentage change, and fills any NaN values with zeros.
 
     Args:
+
         resource_dir: Pytest fixture providing the path to the test resources directory
 
     Returns:
+
         pandas.DataFrame: DataFrame containing stock returns
     """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
@@ -41,6 +43,7 @@ def test_timeseries_model(returns: pd.DataFrame) -> None:
     3. The model's estimate method calculates the expected volatility for a given portfolio
 
     Args:
+
         returns: Pytest fixture providing stock return data
     """
     # Here we compute the factors and regress the returns on them
@@ -74,6 +77,7 @@ def test_minvar(returns: pd.DataFrame) -> None:
     2. The problem is disciplined parametrized programming (DPP) compliant
 
     Args:
+
         returns: Pytest fixture providing stock return data
     """
     weights = cp.Variable(20)

@@ -17,6 +17,7 @@ def resource_dir():
     which contains data files used by various tests.
 
     Returns:
+
         pathlib.Path: Path to the test resources directory
     """
     return Path(__file__).parent / "resources"
