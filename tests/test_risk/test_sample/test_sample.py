@@ -28,7 +28,7 @@ def test_sample() -> None:
     np.testing.assert_almost_equal(vola, 2.0)
 
 
-def test_sample_large():
+def test_sample_large() -> None:
     """
     Test the SampleCovariance class with a larger covariance matrix.
 
@@ -48,7 +48,7 @@ def test_sample_large():
     np.testing.assert_almost_equal(vola, 2.0)
 
 
-def test_min_variance():
+def test_min_variance() -> None:
     """
     Test the minimum variance problem with a sample covariance model.
 
