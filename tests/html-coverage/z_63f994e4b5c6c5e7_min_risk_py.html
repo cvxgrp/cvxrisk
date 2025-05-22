@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_70c0495403c02001___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.8.1">coverage.py v7.8.1</a>,
-            created at 2025-05-22 10:18 +0000
+            created at 2025-05-22 10:22 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -115,8 +115,8 @@
     <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">    <span class="nam">constraints</span> <span class="op">=</span> <span class="nam">constraints</span> <span class="key">or</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="nam">problem</span> <span class="op">=</span> <span class="nam">cp</span><span class="op">.</span><span class="nam">Problem</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">        <span class="nam">cp</span><span class="op">.</span><span class="nam">Minimize</span><span class="op">(</span><span class="nam">riskmodel</span><span class="op">.</span><span class="nam">estimate</span><span class="op">(</span><span class="nam">weights</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">        <span class="op">[</span><span class="nam">cp</span><span class="op">.</span><span class="nam">sum</span><span class="op">(</span><span class="nam">weights</span><span class="op">)</span> <span class="op">==</span> <span class="num">1.0</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">>=</span> <span class="num">0</span><span class="op">]</span> <span class="op">+</span> <span class="nam">riskmodel</span><span class="op">.</span><span class="nam">constraints</span><span class="op">(</span><span class="nam">weights</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span> <span class="op">+</span> <span class="nam">constraints</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">        <span class="nam">objective</span><span class="op">=</span><span class="nam">cp</span><span class="op">.</span><span class="nam">Minimize</span><span class="op">(</span><span class="nam">riskmodel</span><span class="op">.</span><span class="nam">estimate</span><span class="op">(</span><span class="nam">weights</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">        <span class="nam">constraints</span><span class="op">=</span><span class="op">[</span><span class="nam">cp</span><span class="op">.</span><span class="nam">sum</span><span class="op">(</span><span class="nam">weights</span><span class="op">)</span> <span class="op">==</span> <span class="num">1.0</span><span class="op">,</span> <span class="nam">weights</span> <span class="op">>=</span> <span class="num">0</span><span class="op">]</span> <span class="op">+</span> <span class="nam">riskmodel</span><span class="op">.</span><span class="nam">constraints</span><span class="op">(</span><span class="nam">weights</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span> <span class="op">+</span> <span class="nam">constraints</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t38" href="#t38">38</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t39" href="#t39">39</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t">    <span class="key">return</span> <span class="nam">problem</span>&nbsp;</span><span class="r"></span></p>
@@ -129,7 +129,7 @@
             <a class="nav" href="z_70c0495403c02001___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.8.1">coverage.py v7.8.1</a>,
-            created at 2025-05-22 10:18 +0000
+            created at 2025-05-22 10:22 +0000
         </p>
     </div>
 </footer>
