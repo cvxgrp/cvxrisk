@@ -1,4 +1,4 @@
-# cvxrisk: Convex Optimization for Portfolio Risk Management
+# [cvxrisk](https://www.cvxgrp.org/cvxrisk/book): Convex Optimization for Portfolio Risk Management
 
 [![PyPI version](https://badge.fury.io/py/cvxrisk.svg)](https://badge.fury.io/py/cvxrisk)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/cvxrisk/blob/master/LICENSE)
