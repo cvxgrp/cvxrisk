@@ -27,6 +27,7 @@ def minrisk_problem(
     Creates a minimum-risk portfolio optimization problem.
 
     Args:
+
         riskmodel: A risk model implementing the `Model` interface, used to compute portfolio risk.
 
         weights: CVXPY variable representing the portfolio weights.
@@ -38,7 +39,9 @@ def minrisk_problem(
         **kwargs: Additional keyword arguments passed to the risk model's risk expression.
 
     Returns:
+
         A CVXPY problem that minimizes portfolio risk subject to the given constraints.
+
     """
     # if no constraints are specified
     constraints = constraints or []
