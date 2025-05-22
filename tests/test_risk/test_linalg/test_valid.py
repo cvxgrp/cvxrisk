@@ -8,7 +8,7 @@ import pytest
 from cvx.risk.linalg import valid
 
 
-def test_valid():
+def test_valid() -> None:
     """
     Test that the valid function correctly identifies valid rows/columns in a matrix.
 
