@@ -1,3 +1,5 @@
+"""Minimum risk portfolio optimization"""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +15,13 @@
 #    limitations under the License.
 from __future__ import annotations
 
-"""Minimum risk portfolio optimization"""
-
 import cvxpy as cp
+
 from ..risk import Model
 
+
 def minrisk_problem(
-    riskmodel: Model,
-    weights: cp.Variable, 
-    base: cp.Expression = 0.0, 
-    constraints: list[cp.Constraint] = None, 
-    **kwargs
+    riskmodel: Model, weights: cp.Variable, base: cp.Expression = 0.0, constraints: list[cp.Constraint] = None, **kwargs
 ) -> cp.Problem:
     """
     Creates a minimum-risk portfolio optimization problem.
