@@ -29,7 +29,7 @@ def minrisk_problem(riskmodel, weights, base=0.0, constraints=None, **kwargs):
         CVXPY variable representing the portfolio weights.
 
     base: cvxpy.Expression
-        Expression representing the base portfolio (e.g., for tracking error minimization).
+        Expression representing the base portfolio (e.g. for tracking error minimization).
 
     constraints: list of cvxpy.Constraint
         List of CVXPY constraints applied to the optimization problem.
@@ -39,7 +39,7 @@ def minrisk_problem(riskmodel, weights, base=0.0, constraints=None, **kwargs):
 
     Returns
     -------
-    cvxpy.Problem
+    cvxpy.Problem:
         A CVXPY problem that minimizes portfolio risk subject to the given constraints.
     """
     # if no constraints are specified
