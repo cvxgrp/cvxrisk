@@ -35,6 +35,7 @@ class Model(ABC):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments
 
         Returns:
@@ -57,6 +58,7 @@ class Model(ABC):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments
 
         Returns:

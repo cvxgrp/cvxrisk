@@ -37,6 +37,7 @@ class Bounds(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments
 
         Raises:
@@ -79,6 +80,7 @@ class Bounds(Model):
 
         Args:
             **kwargs: Keyword arguments containing lower and upper bounds
+
                       with keys formatted as "{lower/upper}_{self.name}"
         """
         lower = kwargs[self._f("lower")]
@@ -95,6 +97,7 @@ class Bounds(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments (not used)
 
         Returns:

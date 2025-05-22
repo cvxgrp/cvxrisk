@@ -55,6 +55,7 @@ class CVar(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
@@ -71,7 +72,9 @@ class CVar(Model):
 
         Args:
             **kwargs: Keyword arguments containing:
-                - returns: Matrix of returns data
+
+                - returns: Matrix of returns
+
                 - Other parameters passed to bounds.update()
         """
         ret = kwargs["returns"]
@@ -86,6 +89,7 @@ class CVar(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments passed to bounds.constraints()
 
         Returns:

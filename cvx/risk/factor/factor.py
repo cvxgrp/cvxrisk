@@ -71,7 +71,9 @@ class FactorModel(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments, may include:
+
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
@@ -89,9 +91,13 @@ class FactorModel(Model):
 
         Args:
             **kwargs: Keyword arguments containing:
+
                 - exposure: Factor exposure matrix
+
                 - idiosyncratic_risk: Vector of idiosyncratic risks
+
                 - cov: Factor covariance matrix
+
                 - Other parameters passed to bounds_assets.update() and bounds_factors.update()
         """
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
@@ -118,7 +124,9 @@ class FactorModel(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments, may include:
+
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:

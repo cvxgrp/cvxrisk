@@ -47,6 +47,7 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
 
     Args:
         returns: DataFrame of asset returns
+
         n_components: Number of principal components to extract. Defaults to 10.
 
     Returns:

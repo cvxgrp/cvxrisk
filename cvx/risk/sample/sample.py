@@ -53,6 +53,7 @@ class SampleCovariance(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
@@ -81,6 +82,7 @@ class SampleCovariance(Model):
 
         Args:
             weights: CVXPY variable representing portfolio weights
+
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
