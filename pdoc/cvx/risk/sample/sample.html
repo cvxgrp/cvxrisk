@@ -129,40 +129,42 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        Args:</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        Returns:</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">            CVXPY expression: The portfolio risk (standard deviation)</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">cvx</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">)</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        Update the Cholesky decomposition parameter and bounds.</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">        Args:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">                - cov: Covariance matrix (numpy.ndarray)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">cov</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">]</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="sd">        Return constraints for the sample covariance model.</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="sd">        Args:</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        Returns:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">            CVXPY expression: The portfolio risk (standard deviation)</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">cvx</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">)</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        Update the Cholesky decomposition parameter and bounds.</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        Args:</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">                - cov: Covariance matrix (numpy.ndarray)</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="n">cov</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">]</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="sd">        Return constraints for the sample covariance model.</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="sd">        Args:</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="sd">        Returns:</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="sd">        Returns:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -207,40 +209,42 @@
 </span><span id="SampleCovariance-54"><a href="#SampleCovariance-54"><span class="linenos">54</span></a>
 </span><span id="SampleCovariance-55"><a href="#SampleCovariance-55"><span class="linenos">55</span></a><span class="sd">        Args:</span>
 </span><span id="SampleCovariance-56"><a href="#SampleCovariance-56"><span class="linenos">56</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="SampleCovariance-57"><a href="#SampleCovariance-57"><span class="linenos">57</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
-</span><span id="SampleCovariance-58"><a href="#SampleCovariance-58"><span class="linenos">58</span></a>
-</span><span id="SampleCovariance-59"><a href="#SampleCovariance-59"><span class="linenos">59</span></a><span class="sd">        Returns:</span>
-</span><span id="SampleCovariance-60"><a href="#SampleCovariance-60"><span class="linenos">60</span></a><span class="sd">            CVXPY expression: The portfolio risk (standard deviation)</span>
-</span><span id="SampleCovariance-61"><a href="#SampleCovariance-61"><span class="linenos">61</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SampleCovariance-62"><a href="#SampleCovariance-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">cvx</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">)</span>
-</span><span id="SampleCovariance-63"><a href="#SampleCovariance-63"><span class="linenos">63</span></a>
-</span><span id="SampleCovariance-64"><a href="#SampleCovariance-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="SampleCovariance-65"><a href="#SampleCovariance-65"><span class="linenos">65</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="SampleCovariance-66"><a href="#SampleCovariance-66"><span class="linenos">66</span></a><span class="sd">        Update the Cholesky decomposition parameter and bounds.</span>
-</span><span id="SampleCovariance-67"><a href="#SampleCovariance-67"><span class="linenos">67</span></a>
-</span><span id="SampleCovariance-68"><a href="#SampleCovariance-68"><span class="linenos">68</span></a><span class="sd">        Args:</span>
-</span><span id="SampleCovariance-69"><a href="#SampleCovariance-69"><span class="linenos">69</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
-</span><span id="SampleCovariance-70"><a href="#SampleCovariance-70"><span class="linenos">70</span></a><span class="sd">                - cov: Covariance matrix (numpy.ndarray)</span>
-</span><span id="SampleCovariance-71"><a href="#SampleCovariance-71"><span class="linenos">71</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
-</span><span id="SampleCovariance-72"><a href="#SampleCovariance-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SampleCovariance-73"><a href="#SampleCovariance-73"><span class="linenos">73</span></a>        <span class="n">cov</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">]</span>
-</span><span id="SampleCovariance-74"><a href="#SampleCovariance-74"><span class="linenos">74</span></a>        <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span id="SampleCovariance-75"><a href="#SampleCovariance-75"><span class="linenos">75</span></a>
-</span><span id="SampleCovariance-76"><a href="#SampleCovariance-76"><span class="linenos">76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
-</span><span id="SampleCovariance-77"><a href="#SampleCovariance-77"><span class="linenos">77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="SampleCovariance-78"><a href="#SampleCovariance-78"><span class="linenos">78</span></a>
-</span><span id="SampleCovariance-79"><a href="#SampleCovariance-79"><span class="linenos">79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="SampleCovariance-80"><a href="#SampleCovariance-80"><span class="linenos">80</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="SampleCovariance-81"><a href="#SampleCovariance-81"><span class="linenos">81</span></a><span class="sd">        Return constraints for the sample covariance model.</span>
-</span><span id="SampleCovariance-82"><a href="#SampleCovariance-82"><span class="linenos">82</span></a>
-</span><span id="SampleCovariance-83"><a href="#SampleCovariance-83"><span class="linenos">83</span></a><span class="sd">        Args:</span>
-</span><span id="SampleCovariance-84"><a href="#SampleCovariance-84"><span class="linenos">84</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="SampleCovariance-85"><a href="#SampleCovariance-85"><span class="linenos">85</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="SampleCovariance-57"><a href="#SampleCovariance-57"><span class="linenos">57</span></a>
+</span><span id="SampleCovariance-58"><a href="#SampleCovariance-58"><span class="linenos">58</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="SampleCovariance-59"><a href="#SampleCovariance-59"><span class="linenos">59</span></a>
+</span><span id="SampleCovariance-60"><a href="#SampleCovariance-60"><span class="linenos">60</span></a><span class="sd">        Returns:</span>
+</span><span id="SampleCovariance-61"><a href="#SampleCovariance-61"><span class="linenos">61</span></a><span class="sd">            CVXPY expression: The portfolio risk (standard deviation)</span>
+</span><span id="SampleCovariance-62"><a href="#SampleCovariance-62"><span class="linenos">62</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SampleCovariance-63"><a href="#SampleCovariance-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">cvx</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">)</span>
+</span><span id="SampleCovariance-64"><a href="#SampleCovariance-64"><span class="linenos">64</span></a>
+</span><span id="SampleCovariance-65"><a href="#SampleCovariance-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="SampleCovariance-66"><a href="#SampleCovariance-66"><span class="linenos">66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SampleCovariance-67"><a href="#SampleCovariance-67"><span class="linenos">67</span></a><span class="sd">        Update the Cholesky decomposition parameter and bounds.</span>
+</span><span id="SampleCovariance-68"><a href="#SampleCovariance-68"><span class="linenos">68</span></a>
+</span><span id="SampleCovariance-69"><a href="#SampleCovariance-69"><span class="linenos">69</span></a><span class="sd">        Args:</span>
+</span><span id="SampleCovariance-70"><a href="#SampleCovariance-70"><span class="linenos">70</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
+</span><span id="SampleCovariance-71"><a href="#SampleCovariance-71"><span class="linenos">71</span></a><span class="sd">                - cov: Covariance matrix (numpy.ndarray)</span>
+</span><span id="SampleCovariance-72"><a href="#SampleCovariance-72"><span class="linenos">72</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
+</span><span id="SampleCovariance-73"><a href="#SampleCovariance-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SampleCovariance-74"><a href="#SampleCovariance-74"><span class="linenos">74</span></a>        <span class="n">cov</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">]</span>
+</span><span id="SampleCovariance-75"><a href="#SampleCovariance-75"><span class="linenos">75</span></a>        <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="SampleCovariance-76"><a href="#SampleCovariance-76"><span class="linenos">76</span></a>
+</span><span id="SampleCovariance-77"><a href="#SampleCovariance-77"><span class="linenos">77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</span><span id="SampleCovariance-78"><a href="#SampleCovariance-78"><span class="linenos">78</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="SampleCovariance-79"><a href="#SampleCovariance-79"><span class="linenos">79</span></a>
+</span><span id="SampleCovariance-80"><a href="#SampleCovariance-80"><span class="linenos">80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="SampleCovariance-81"><a href="#SampleCovariance-81"><span class="linenos">81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SampleCovariance-82"><a href="#SampleCovariance-82"><span class="linenos">82</span></a><span class="sd">        Return constraints for the sample covariance model.</span>
+</span><span id="SampleCovariance-83"><a href="#SampleCovariance-83"><span class="linenos">83</span></a>
+</span><span id="SampleCovariance-84"><a href="#SampleCovariance-84"><span class="linenos">84</span></a><span class="sd">        Args:</span>
+</span><span id="SampleCovariance-85"><a href="#SampleCovariance-85"><span class="linenos">85</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
 </span><span id="SampleCovariance-86"><a href="#SampleCovariance-86"><span class="linenos">86</span></a>
-</span><span id="SampleCovariance-87"><a href="#SampleCovariance-87"><span class="linenos">87</span></a><span class="sd">        Returns:</span>
-</span><span id="SampleCovariance-88"><a href="#SampleCovariance-88"><span class="linenos">88</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
-</span><span id="SampleCovariance-89"><a href="#SampleCovariance-89"><span class="linenos">89</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SampleCovariance-90"><a href="#SampleCovariance-90"><span class="linenos">90</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span><span id="SampleCovariance-87"><a href="#SampleCovariance-87"><span class="linenos">87</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="SampleCovariance-88"><a href="#SampleCovariance-88"><span class="linenos">88</span></a>
+</span><span id="SampleCovariance-89"><a href="#SampleCovariance-89"><span class="linenos">89</span></a><span class="sd">        Returns:</span>
+</span><span id="SampleCovariance-90"><a href="#SampleCovariance-90"><span class="linenos">90</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
+</span><span id="SampleCovariance-91"><a href="#SampleCovariance-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SampleCovariance-92"><a href="#SampleCovariance-92"><span class="linenos">92</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -292,12 +296,13 @@
 </span><span id="SampleCovariance.estimate-54"><a href="#SampleCovariance.estimate-54"><span class="linenos">54</span></a>
 </span><span id="SampleCovariance.estimate-55"><a href="#SampleCovariance.estimate-55"><span class="linenos">55</span></a><span class="sd">        Args:</span>
 </span><span id="SampleCovariance.estimate-56"><a href="#SampleCovariance.estimate-56"><span class="linenos">56</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="SampleCovariance.estimate-57"><a href="#SampleCovariance.estimate-57"><span class="linenos">57</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
-</span><span id="SampleCovariance.estimate-58"><a href="#SampleCovariance.estimate-58"><span class="linenos">58</span></a>
-</span><span id="SampleCovariance.estimate-59"><a href="#SampleCovariance.estimate-59"><span class="linenos">59</span></a><span class="sd">        Returns:</span>
-</span><span id="SampleCovariance.estimate-60"><a href="#SampleCovariance.estimate-60"><span class="linenos">60</span></a><span class="sd">            CVXPY expression: The portfolio risk (standard deviation)</span>
-</span><span id="SampleCovariance.estimate-61"><a href="#SampleCovariance.estimate-61"><span class="linenos">61</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SampleCovariance.estimate-62"><a href="#SampleCovariance.estimate-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">cvx</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">)</span>
+</span><span id="SampleCovariance.estimate-57"><a href="#SampleCovariance.estimate-57"><span class="linenos">57</span></a>
+</span><span id="SampleCovariance.estimate-58"><a href="#SampleCovariance.estimate-58"><span class="linenos">58</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="SampleCovariance.estimate-59"><a href="#SampleCovariance.estimate-59"><span class="linenos">59</span></a>
+</span><span id="SampleCovariance.estimate-60"><a href="#SampleCovariance.estimate-60"><span class="linenos">60</span></a><span class="sd">        Returns:</span>
+</span><span id="SampleCovariance.estimate-61"><a href="#SampleCovariance.estimate-61"><span class="linenos">61</span></a><span class="sd">            CVXPY expression: The portfolio risk (standard deviation)</span>
+</span><span id="SampleCovariance.estimate-62"><a href="#SampleCovariance.estimate-62"><span class="linenos">62</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SampleCovariance.estimate-63"><a href="#SampleCovariance.estimate-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">cvx</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -307,8 +312,10 @@
 which is equivalent to the square root of the portfolio variance.</p>
 
 <p>Args:
-    weights: CVXPY variable representing portfolio weights
-    **kwargs: Additional keyword arguments (not used)</p>
+    weights: CVXPY variable representing portfolio weights</p>
+
+<pre><code>**kwargs: Additional keyword arguments (not used)
+</code></pre>
 
 <p>Returns:
     CVXPY expression: The portfolio risk (standard deviation)</p>
@@ -327,20 +334,20 @@ which is equivalent to the square root of the portfolio variance.</p>
 
     </div>
     <a class="headerlink" href="#SampleCovariance.update"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleCovariance.update-64"><a href="#SampleCovariance.update-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="SampleCovariance.update-65"><a href="#SampleCovariance.update-65"><span class="linenos">65</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="SampleCovariance.update-66"><a href="#SampleCovariance.update-66"><span class="linenos">66</span></a><span class="sd">        Update the Cholesky decomposition parameter and bounds.</span>
-</span><span id="SampleCovariance.update-67"><a href="#SampleCovariance.update-67"><span class="linenos">67</span></a>
-</span><span id="SampleCovariance.update-68"><a href="#SampleCovariance.update-68"><span class="linenos">68</span></a><span class="sd">        Args:</span>
-</span><span id="SampleCovariance.update-69"><a href="#SampleCovariance.update-69"><span class="linenos">69</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
-</span><span id="SampleCovariance.update-70"><a href="#SampleCovariance.update-70"><span class="linenos">70</span></a><span class="sd">                - cov: Covariance matrix (numpy.ndarray)</span>
-</span><span id="SampleCovariance.update-71"><a href="#SampleCovariance.update-71"><span class="linenos">71</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
-</span><span id="SampleCovariance.update-72"><a href="#SampleCovariance.update-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SampleCovariance.update-73"><a href="#SampleCovariance.update-73"><span class="linenos">73</span></a>        <span class="n">cov</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">]</span>
-</span><span id="SampleCovariance.update-74"><a href="#SampleCovariance.update-74"><span class="linenos">74</span></a>        <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span id="SampleCovariance.update-75"><a href="#SampleCovariance.update-75"><span class="linenos">75</span></a>
-</span><span id="SampleCovariance.update-76"><a href="#SampleCovariance.update-76"><span class="linenos">76</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
-</span><span id="SampleCovariance.update-77"><a href="#SampleCovariance.update-77"><span class="linenos">77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleCovariance.update-65"><a href="#SampleCovariance.update-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="SampleCovariance.update-66"><a href="#SampleCovariance.update-66"><span class="linenos">66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SampleCovariance.update-67"><a href="#SampleCovariance.update-67"><span class="linenos">67</span></a><span class="sd">        Update the Cholesky decomposition parameter and bounds.</span>
+</span><span id="SampleCovariance.update-68"><a href="#SampleCovariance.update-68"><span class="linenos">68</span></a>
+</span><span id="SampleCovariance.update-69"><a href="#SampleCovariance.update-69"><span class="linenos">69</span></a><span class="sd">        Args:</span>
+</span><span id="SampleCovariance.update-70"><a href="#SampleCovariance.update-70"><span class="linenos">70</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
+</span><span id="SampleCovariance.update-71"><a href="#SampleCovariance.update-71"><span class="linenos">71</span></a><span class="sd">                - cov: Covariance matrix (numpy.ndarray)</span>
+</span><span id="SampleCovariance.update-72"><a href="#SampleCovariance.update-72"><span class="linenos">72</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
+</span><span id="SampleCovariance.update-73"><a href="#SampleCovariance.update-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SampleCovariance.update-74"><a href="#SampleCovariance.update-74"><span class="linenos">74</span></a>        <span class="n">cov</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cov&quot;</span><span class="p">]</span>
+</span><span id="SampleCovariance.update-75"><a href="#SampleCovariance.update-75"><span class="linenos">75</span></a>        <span class="n">n</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="SampleCovariance.update-76"><a href="#SampleCovariance.update-76"><span class="linenos">76</span></a>
+</span><span id="SampleCovariance.update-77"><a href="#SampleCovariance.update-77"><span class="linenos">77</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;chol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</span><span id="SampleCovariance.update-78"><a href="#SampleCovariance.update-78"><span class="linenos">78</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -365,26 +372,29 @@ which is equivalent to the square root of the portfolio variance.</p>
 
     </div>
     <a class="headerlink" href="#SampleCovariance.constraints"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleCovariance.constraints-79"><a href="#SampleCovariance.constraints-79"><span class="linenos">79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="SampleCovariance.constraints-80"><a href="#SampleCovariance.constraints-80"><span class="linenos">80</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="SampleCovariance.constraints-81"><a href="#SampleCovariance.constraints-81"><span class="linenos">81</span></a><span class="sd">        Return constraints for the sample covariance model.</span>
-</span><span id="SampleCovariance.constraints-82"><a href="#SampleCovariance.constraints-82"><span class="linenos">82</span></a>
-</span><span id="SampleCovariance.constraints-83"><a href="#SampleCovariance.constraints-83"><span class="linenos">83</span></a><span class="sd">        Args:</span>
-</span><span id="SampleCovariance.constraints-84"><a href="#SampleCovariance.constraints-84"><span class="linenos">84</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="SampleCovariance.constraints-85"><a href="#SampleCovariance.constraints-85"><span class="linenos">85</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleCovariance.constraints-80"><a href="#SampleCovariance.constraints-80"><span class="linenos">80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="SampleCovariance.constraints-81"><a href="#SampleCovariance.constraints-81"><span class="linenos">81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SampleCovariance.constraints-82"><a href="#SampleCovariance.constraints-82"><span class="linenos">82</span></a><span class="sd">        Return constraints for the sample covariance model.</span>
+</span><span id="SampleCovariance.constraints-83"><a href="#SampleCovariance.constraints-83"><span class="linenos">83</span></a>
+</span><span id="SampleCovariance.constraints-84"><a href="#SampleCovariance.constraints-84"><span class="linenos">84</span></a><span class="sd">        Args:</span>
+</span><span id="SampleCovariance.constraints-85"><a href="#SampleCovariance.constraints-85"><span class="linenos">85</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
 </span><span id="SampleCovariance.constraints-86"><a href="#SampleCovariance.constraints-86"><span class="linenos">86</span></a>
-</span><span id="SampleCovariance.constraints-87"><a href="#SampleCovariance.constraints-87"><span class="linenos">87</span></a><span class="sd">        Returns:</span>
-</span><span id="SampleCovariance.constraints-88"><a href="#SampleCovariance.constraints-88"><span class="linenos">88</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
-</span><span id="SampleCovariance.constraints-89"><a href="#SampleCovariance.constraints-89"><span class="linenos">89</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SampleCovariance.constraints-90"><a href="#SampleCovariance.constraints-90"><span class="linenos">90</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span><span id="SampleCovariance.constraints-87"><a href="#SampleCovariance.constraints-87"><span class="linenos">87</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="SampleCovariance.constraints-88"><a href="#SampleCovariance.constraints-88"><span class="linenos">88</span></a>
+</span><span id="SampleCovariance.constraints-89"><a href="#SampleCovariance.constraints-89"><span class="linenos">89</span></a><span class="sd">        Returns:</span>
+</span><span id="SampleCovariance.constraints-90"><a href="#SampleCovariance.constraints-90"><span class="linenos">90</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
+</span><span id="SampleCovariance.constraints-91"><a href="#SampleCovariance.constraints-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SampleCovariance.constraints-92"><a href="#SampleCovariance.constraints-92"><span class="linenos">92</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Return constraints for the sample covariance model.</p>
 
 <p>Args:
-    weights: CVXPY variable representing portfolio weights
-    **kwargs: Additional keyword arguments (not used)</p>
+    weights: CVXPY variable representing portfolio weights</p>
+
+<pre><code>**kwargs: Additional keyword arguments (not used)
+</code></pre>
 
 <p>Returns:
     List of CVXPY constraints from the bounds object</p>

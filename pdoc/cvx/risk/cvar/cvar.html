@@ -135,43 +135,47 @@
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
 </span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        Args:</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        Returns:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">            CVXPY expression: The negative average of the k smallest returns</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="c1"># R is a matrix of returns, n is the number of rows in R</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="c1"># k is the number of returns in the left tail</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="c1"># average value of the k elements in the left tail</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        Update the returns data and bounds parameters.</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        Args:</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">                - returns: Matrix of returns data</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="n">ret</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="n">m</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">            CVXPY expression: The negative average of the k smallest returns</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="c1"># R is a matrix of returns, n is the number of rows in R</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="c1"># k is the number of returns in the left tail</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="c1"># average value of the k elements in the left tail</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        Update the returns data and bounds parameters.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">        Args:</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">                - returns: Matrix of returns</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="n">ret</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="n">m</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a><span class="sd">        Return constraints for the CVaR model.</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a><span class="sd">        Args:</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="sd">            **kwargs: Additional keyword arguments passed to bounds.constraints()</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="sd">        Returns:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="sd">        Return constraints for the CVaR model.</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a><span class="sd">        Args:</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="sd">            **kwargs: Additional keyword arguments passed to bounds.constraints()</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a><span class="sd">        Returns:</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos">97</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos">98</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -221,43 +225,47 @@
 </span><span id="CVar-56"><a href="#CVar-56"><span class="linenos">56</span></a>
 </span><span id="CVar-57"><a href="#CVar-57"><span class="linenos">57</span></a><span class="sd">        Args:</span>
 </span><span id="CVar-58"><a href="#CVar-58"><span class="linenos">58</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="CVar-59"><a href="#CVar-59"><span class="linenos">59</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
-</span><span id="CVar-60"><a href="#CVar-60"><span class="linenos">60</span></a>
-</span><span id="CVar-61"><a href="#CVar-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
-</span><span id="CVar-62"><a href="#CVar-62"><span class="linenos">62</span></a><span class="sd">            CVXPY expression: The negative average of the k smallest returns</span>
-</span><span id="CVar-63"><a href="#CVar-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CVar-64"><a href="#CVar-64"><span class="linenos">64</span></a>        <span class="c1"># R is a matrix of returns, n is the number of rows in R</span>
-</span><span id="CVar-65"><a href="#CVar-65"><span class="linenos">65</span></a>        <span class="c1"># k is the number of returns in the left tail</span>
-</span><span id="CVar-66"><a href="#CVar-66"><span class="linenos">66</span></a>        <span class="c1"># average value of the k elements in the left tail</span>
-</span><span id="CVar-67"><a href="#CVar-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
-</span><span id="CVar-68"><a href="#CVar-68"><span class="linenos">68</span></a>
-</span><span id="CVar-69"><a href="#CVar-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="CVar-70"><a href="#CVar-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CVar-71"><a href="#CVar-71"><span class="linenos">71</span></a><span class="sd">        Update the returns data and bounds parameters.</span>
-</span><span id="CVar-72"><a href="#CVar-72"><span class="linenos">72</span></a>
-</span><span id="CVar-73"><a href="#CVar-73"><span class="linenos">73</span></a><span class="sd">        Args:</span>
-</span><span id="CVar-74"><a href="#CVar-74"><span class="linenos">74</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
-</span><span id="CVar-75"><a href="#CVar-75"><span class="linenos">75</span></a><span class="sd">                - returns: Matrix of returns data</span>
-</span><span id="CVar-76"><a href="#CVar-76"><span class="linenos">76</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
-</span><span id="CVar-77"><a href="#CVar-77"><span class="linenos">77</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CVar-78"><a href="#CVar-78"><span class="linenos">78</span></a>        <span class="n">ret</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
-</span><span id="CVar-79"><a href="#CVar-79"><span class="linenos">79</span></a>        <span class="n">m</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span><span id="CVar-80"><a href="#CVar-80"><span class="linenos">80</span></a>
-</span><span id="CVar-81"><a href="#CVar-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
-</span><span id="CVar-82"><a href="#CVar-82"><span class="linenos">82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="CVar-59"><a href="#CVar-59"><span class="linenos">59</span></a>
+</span><span id="CVar-60"><a href="#CVar-60"><span class="linenos">60</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="CVar-61"><a href="#CVar-61"><span class="linenos">61</span></a>
+</span><span id="CVar-62"><a href="#CVar-62"><span class="linenos">62</span></a><span class="sd">        Returns:</span>
+</span><span id="CVar-63"><a href="#CVar-63"><span class="linenos">63</span></a><span class="sd">            CVXPY expression: The negative average of the k smallest returns</span>
+</span><span id="CVar-64"><a href="#CVar-64"><span class="linenos">64</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CVar-65"><a href="#CVar-65"><span class="linenos">65</span></a>        <span class="c1"># R is a matrix of returns, n is the number of rows in R</span>
+</span><span id="CVar-66"><a href="#CVar-66"><span class="linenos">66</span></a>        <span class="c1"># k is the number of returns in the left tail</span>
+</span><span id="CVar-67"><a href="#CVar-67"><span class="linenos">67</span></a>        <span class="c1"># average value of the k elements in the left tail</span>
+</span><span id="CVar-68"><a href="#CVar-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+</span><span id="CVar-69"><a href="#CVar-69"><span class="linenos">69</span></a>
+</span><span id="CVar-70"><a href="#CVar-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="CVar-71"><a href="#CVar-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CVar-72"><a href="#CVar-72"><span class="linenos">72</span></a><span class="sd">        Update the returns data and bounds parameters.</span>
+</span><span id="CVar-73"><a href="#CVar-73"><span class="linenos">73</span></a>
+</span><span id="CVar-74"><a href="#CVar-74"><span class="linenos">74</span></a><span class="sd">        Args:</span>
+</span><span id="CVar-75"><a href="#CVar-75"><span class="linenos">75</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
+</span><span id="CVar-76"><a href="#CVar-76"><span class="linenos">76</span></a>
+</span><span id="CVar-77"><a href="#CVar-77"><span class="linenos">77</span></a><span class="sd">                - returns: Matrix of returns</span>
+</span><span id="CVar-78"><a href="#CVar-78"><span class="linenos">78</span></a>
+</span><span id="CVar-79"><a href="#CVar-79"><span class="linenos">79</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
+</span><span id="CVar-80"><a href="#CVar-80"><span class="linenos">80</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CVar-81"><a href="#CVar-81"><span class="linenos">81</span></a>        <span class="n">ret</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
+</span><span id="CVar-82"><a href="#CVar-82"><span class="linenos">82</span></a>        <span class="n">m</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </span><span id="CVar-83"><a href="#CVar-83"><span class="linenos">83</span></a>
-</span><span id="CVar-84"><a href="#CVar-84"><span class="linenos">84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="CVar-85"><a href="#CVar-85"><span class="linenos">85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CVar-86"><a href="#CVar-86"><span class="linenos">86</span></a><span class="sd">        Return constraints for the CVaR model.</span>
-</span><span id="CVar-87"><a href="#CVar-87"><span class="linenos">87</span></a>
-</span><span id="CVar-88"><a href="#CVar-88"><span class="linenos">88</span></a><span class="sd">        Args:</span>
-</span><span id="CVar-89"><a href="#CVar-89"><span class="linenos">89</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="CVar-90"><a href="#CVar-90"><span class="linenos">90</span></a><span class="sd">            **kwargs: Additional keyword arguments passed to bounds.constraints()</span>
-</span><span id="CVar-91"><a href="#CVar-91"><span class="linenos">91</span></a>
-</span><span id="CVar-92"><a href="#CVar-92"><span class="linenos">92</span></a><span class="sd">        Returns:</span>
-</span><span id="CVar-93"><a href="#CVar-93"><span class="linenos">93</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
-</span><span id="CVar-94"><a href="#CVar-94"><span class="linenos">94</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CVar-95"><a href="#CVar-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span><span id="CVar-84"><a href="#CVar-84"><span class="linenos">84</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
+</span><span id="CVar-85"><a href="#CVar-85"><span class="linenos">85</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="CVar-86"><a href="#CVar-86"><span class="linenos">86</span></a>
+</span><span id="CVar-87"><a href="#CVar-87"><span class="linenos">87</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="CVar-88"><a href="#CVar-88"><span class="linenos">88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CVar-89"><a href="#CVar-89"><span class="linenos">89</span></a><span class="sd">        Return constraints for the CVaR model.</span>
+</span><span id="CVar-90"><a href="#CVar-90"><span class="linenos">90</span></a>
+</span><span id="CVar-91"><a href="#CVar-91"><span class="linenos">91</span></a><span class="sd">        Args:</span>
+</span><span id="CVar-92"><a href="#CVar-92"><span class="linenos">92</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="CVar-93"><a href="#CVar-93"><span class="linenos">93</span></a>
+</span><span id="CVar-94"><a href="#CVar-94"><span class="linenos">94</span></a><span class="sd">            **kwargs: Additional keyword arguments passed to bounds.constraints()</span>
+</span><span id="CVar-95"><a href="#CVar-95"><span class="linenos">95</span></a>
+</span><span id="CVar-96"><a href="#CVar-96"><span class="linenos">96</span></a><span class="sd">        Returns:</span>
+</span><span id="CVar-97"><a href="#CVar-97"><span class="linenos">97</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
+</span><span id="CVar-98"><a href="#CVar-98"><span class="linenos">98</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CVar-99"><a href="#CVar-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -339,15 +347,16 @@
 </span><span id="CVar.estimate-56"><a href="#CVar.estimate-56"><span class="linenos">56</span></a>
 </span><span id="CVar.estimate-57"><a href="#CVar.estimate-57"><span class="linenos">57</span></a><span class="sd">        Args:</span>
 </span><span id="CVar.estimate-58"><a href="#CVar.estimate-58"><span class="linenos">58</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="CVar.estimate-59"><a href="#CVar.estimate-59"><span class="linenos">59</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
-</span><span id="CVar.estimate-60"><a href="#CVar.estimate-60"><span class="linenos">60</span></a>
-</span><span id="CVar.estimate-61"><a href="#CVar.estimate-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
-</span><span id="CVar.estimate-62"><a href="#CVar.estimate-62"><span class="linenos">62</span></a><span class="sd">            CVXPY expression: The negative average of the k smallest returns</span>
-</span><span id="CVar.estimate-63"><a href="#CVar.estimate-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CVar.estimate-64"><a href="#CVar.estimate-64"><span class="linenos">64</span></a>        <span class="c1"># R is a matrix of returns, n is the number of rows in R</span>
-</span><span id="CVar.estimate-65"><a href="#CVar.estimate-65"><span class="linenos">65</span></a>        <span class="c1"># k is the number of returns in the left tail</span>
-</span><span id="CVar.estimate-66"><a href="#CVar.estimate-66"><span class="linenos">66</span></a>        <span class="c1"># average value of the k elements in the left tail</span>
-</span><span id="CVar.estimate-67"><a href="#CVar.estimate-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+</span><span id="CVar.estimate-59"><a href="#CVar.estimate-59"><span class="linenos">59</span></a>
+</span><span id="CVar.estimate-60"><a href="#CVar.estimate-60"><span class="linenos">60</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="CVar.estimate-61"><a href="#CVar.estimate-61"><span class="linenos">61</span></a>
+</span><span id="CVar.estimate-62"><a href="#CVar.estimate-62"><span class="linenos">62</span></a><span class="sd">        Returns:</span>
+</span><span id="CVar.estimate-63"><a href="#CVar.estimate-63"><span class="linenos">63</span></a><span class="sd">            CVXPY expression: The negative average of the k smallest returns</span>
+</span><span id="CVar.estimate-64"><a href="#CVar.estimate-64"><span class="linenos">64</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CVar.estimate-65"><a href="#CVar.estimate-65"><span class="linenos">65</span></a>        <span class="c1"># R is a matrix of returns, n is the number of rows in R</span>
+</span><span id="CVar.estimate-66"><a href="#CVar.estimate-66"><span class="linenos">66</span></a>        <span class="c1"># k is the number of returns in the left tail</span>
+</span><span id="CVar.estimate-67"><a href="#CVar.estimate-67"><span class="linenos">67</span></a>        <span class="c1"># average value of the k elements in the left tail</span>
+</span><span id="CVar.estimate-68"><a href="#CVar.estimate-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="o">-</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum_smallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
 </span></pre></div>
 
 
@@ -357,8 +366,10 @@
 where k is determined by the alpha parameter.</p>
 
 <p>Args:
-    weights: CVXPY variable representing portfolio weights
-    **kwargs: Additional keyword arguments (not used)</p>
+    weights: CVXPY variable representing portfolio weights</p>
+
+<pre><code>**kwargs: Additional keyword arguments (not used)
+</code></pre>
 
 <p>Returns:
     CVXPY expression: The negative average of the k smallest returns</p>
@@ -377,29 +388,34 @@ where k is determined by the alpha parameter.</p>
 
     </div>
     <a class="headerlink" href="#CVar.update"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CVar.update-69"><a href="#CVar.update-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="CVar.update-70"><a href="#CVar.update-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CVar.update-71"><a href="#CVar.update-71"><span class="linenos">71</span></a><span class="sd">        Update the returns data and bounds parameters.</span>
-</span><span id="CVar.update-72"><a href="#CVar.update-72"><span class="linenos">72</span></a>
-</span><span id="CVar.update-73"><a href="#CVar.update-73"><span class="linenos">73</span></a><span class="sd">        Args:</span>
-</span><span id="CVar.update-74"><a href="#CVar.update-74"><span class="linenos">74</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
-</span><span id="CVar.update-75"><a href="#CVar.update-75"><span class="linenos">75</span></a><span class="sd">                - returns: Matrix of returns data</span>
-</span><span id="CVar.update-76"><a href="#CVar.update-76"><span class="linenos">76</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
-</span><span id="CVar.update-77"><a href="#CVar.update-77"><span class="linenos">77</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CVar.update-78"><a href="#CVar.update-78"><span class="linenos">78</span></a>        <span class="n">ret</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
-</span><span id="CVar.update-79"><a href="#CVar.update-79"><span class="linenos">79</span></a>        <span class="n">m</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span><span id="CVar.update-80"><a href="#CVar.update-80"><span class="linenos">80</span></a>
-</span><span id="CVar.update-81"><a href="#CVar.update-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
-</span><span id="CVar.update-82"><a href="#CVar.update-82"><span class="linenos">82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CVar.update-70"><a href="#CVar.update-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="CVar.update-71"><a href="#CVar.update-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CVar.update-72"><a href="#CVar.update-72"><span class="linenos">72</span></a><span class="sd">        Update the returns data and bounds parameters.</span>
+</span><span id="CVar.update-73"><a href="#CVar.update-73"><span class="linenos">73</span></a>
+</span><span id="CVar.update-74"><a href="#CVar.update-74"><span class="linenos">74</span></a><span class="sd">        Args:</span>
+</span><span id="CVar.update-75"><a href="#CVar.update-75"><span class="linenos">75</span></a><span class="sd">            **kwargs: Keyword arguments containing:</span>
+</span><span id="CVar.update-76"><a href="#CVar.update-76"><span class="linenos">76</span></a>
+</span><span id="CVar.update-77"><a href="#CVar.update-77"><span class="linenos">77</span></a><span class="sd">                - returns: Matrix of returns</span>
+</span><span id="CVar.update-78"><a href="#CVar.update-78"><span class="linenos">78</span></a>
+</span><span id="CVar.update-79"><a href="#CVar.update-79"><span class="linenos">79</span></a><span class="sd">                - Other parameters passed to bounds.update()</span>
+</span><span id="CVar.update-80"><a href="#CVar.update-80"><span class="linenos">80</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CVar.update-81"><a href="#CVar.update-81"><span class="linenos">81</span></a>        <span class="n">ret</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
+</span><span id="CVar.update-82"><a href="#CVar.update-82"><span class="linenos">82</span></a>        <span class="n">m</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="CVar.update-83"><a href="#CVar.update-83"><span class="linenos">83</span></a>
+</span><span id="CVar.update-84"><a href="#CVar.update-84"><span class="linenos">84</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;returns&quot;</span><span class="p">]</span>
+</span><span id="CVar.update-85"><a href="#CVar.update-85"><span class="linenos">85</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Update the returns data and bounds parameters.</p>
 
 <p>Args:
-    **kwargs: Keyword arguments containing:
-        - returns: Matrix of returns data
-        - Other parameters passed to bounds.update()</p>
+    **kwargs: Keyword arguments containing:</p>
+
+<pre><code>    - returns: Matrix of returns
+
+    - Other parameters passed to bounds.update()
+</code></pre>
 </div>
 
 
@@ -415,26 +431,29 @@ where k is determined by the alpha parameter.</p>
 
     </div>
     <a class="headerlink" href="#CVar.constraints"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CVar.constraints-84"><a href="#CVar.constraints-84"><span class="linenos">84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="CVar.constraints-85"><a href="#CVar.constraints-85"><span class="linenos">85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CVar.constraints-86"><a href="#CVar.constraints-86"><span class="linenos">86</span></a><span class="sd">        Return constraints for the CVaR model.</span>
-</span><span id="CVar.constraints-87"><a href="#CVar.constraints-87"><span class="linenos">87</span></a>
-</span><span id="CVar.constraints-88"><a href="#CVar.constraints-88"><span class="linenos">88</span></a><span class="sd">        Args:</span>
-</span><span id="CVar.constraints-89"><a href="#CVar.constraints-89"><span class="linenos">89</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="CVar.constraints-90"><a href="#CVar.constraints-90"><span class="linenos">90</span></a><span class="sd">            **kwargs: Additional keyword arguments passed to bounds.constraints()</span>
-</span><span id="CVar.constraints-91"><a href="#CVar.constraints-91"><span class="linenos">91</span></a>
-</span><span id="CVar.constraints-92"><a href="#CVar.constraints-92"><span class="linenos">92</span></a><span class="sd">        Returns:</span>
-</span><span id="CVar.constraints-93"><a href="#CVar.constraints-93"><span class="linenos">93</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
-</span><span id="CVar.constraints-94"><a href="#CVar.constraints-94"><span class="linenos">94</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CVar.constraints-95"><a href="#CVar.constraints-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CVar.constraints-87"><a href="#CVar.constraints-87"><span class="linenos">87</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cvx</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="CVar.constraints-88"><a href="#CVar.constraints-88"><span class="linenos">88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CVar.constraints-89"><a href="#CVar.constraints-89"><span class="linenos">89</span></a><span class="sd">        Return constraints for the CVaR model.</span>
+</span><span id="CVar.constraints-90"><a href="#CVar.constraints-90"><span class="linenos">90</span></a>
+</span><span id="CVar.constraints-91"><a href="#CVar.constraints-91"><span class="linenos">91</span></a><span class="sd">        Args:</span>
+</span><span id="CVar.constraints-92"><a href="#CVar.constraints-92"><span class="linenos">92</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="CVar.constraints-93"><a href="#CVar.constraints-93"><span class="linenos">93</span></a>
+</span><span id="CVar.constraints-94"><a href="#CVar.constraints-94"><span class="linenos">94</span></a><span class="sd">            **kwargs: Additional keyword arguments passed to bounds.constraints()</span>
+</span><span id="CVar.constraints-95"><a href="#CVar.constraints-95"><span class="linenos">95</span></a>
+</span><span id="CVar.constraints-96"><a href="#CVar.constraints-96"><span class="linenos">96</span></a><span class="sd">        Returns:</span>
+</span><span id="CVar.constraints-97"><a href="#CVar.constraints-97"><span class="linenos">97</span></a><span class="sd">            List of CVXPY constraints from the bounds object</span>
+</span><span id="CVar.constraints-98"><a href="#CVar.constraints-98"><span class="linenos">98</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CVar.constraints-99"><a href="#CVar.constraints-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Return constraints for the CVaR model.</p>
 
 <p>Args:
-    weights: CVXPY variable representing portfolio weights
-    **kwargs: Additional keyword arguments passed to bounds.constraints()</p>
+    weights: CVXPY variable representing portfolio weights</p>
+
+<pre><code>**kwargs: Additional keyword arguments passed to bounds.constraints()
+</code></pre>
 
 <p>Returns:
     List of CVXPY constraints from the bounds object</p>

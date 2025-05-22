@@ -132,37 +132,38 @@
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    Args:</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        returns: DataFrame of asset returns</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        n_components: Number of principal components to extract. Defaults to 10.</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    Returns:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        A named tuple containing the PCA results with the following fields:</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">            - explained_variance: The explained variance ratio for each component</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">            - factors: The factor returns (principal components)</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">            - exposure: The factor exposures (loadings) for each asset</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">            - cov: The covariance matrix of the factors</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">            - systematic: The systematic returns explained by the factors</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">            - idiosyncratic: The idiosyncratic returns not explained by the factors</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="c1"># USING SKLEARN. Let&#39;s look at the first n components</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="n">sklearn_pca</span> <span class="o">=</span> <span class="n">sklearnPCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="n">exposure</span> <span class="o">=</span> <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="n">factors</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">exposure</span><span class="p">)</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="k">return</span> <span class="n">PCA</span><span class="p">(</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>        <span class="n">explained_variance</span><span class="o">=</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">,</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="n">factors</span><span class="o">=</span><span class="n">factors</span><span class="p">,</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">exposure</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">exposure</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="n">systematic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="n">idiosyncratic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>            <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="p">),</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="p">)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        n_components: Number of principal components to extract. Defaults to 10.</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    Returns:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        A named tuple containing the PCA results with the following fields:</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">            - explained_variance: The explained variance ratio for each component</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">            - factors: The factor returns (principal components)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">            - exposure: The factor exposures (loadings) for each asset</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">            - cov: The covariance matrix of the factors</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">            - systematic: The systematic returns explained by the factors</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">            - idiosyncratic: The idiosyncratic returns not explained by the factors</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="c1"># USING SKLEARN. Let&#39;s look at the first n components</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="n">sklearn_pca</span> <span class="o">=</span> <span class="n">sklearnPCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="n">exposure</span> <span class="o">=</span> <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="n">factors</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">exposure</span><span class="p">)</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="k">return</span> <span class="n">PCA</span><span class="p">(</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="n">explained_variance</span><span class="o">=</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">,</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">factors</span><span class="o">=</span><span class="n">factors</span><span class="p">,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="n">exposure</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">exposure</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="n">systematic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="n">idiosyncratic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="p">),</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -302,37 +303,38 @@
 </span><span id="pca-48"><a href="#pca-48"><span class="linenos">48</span></a>
 </span><span id="pca-49"><a href="#pca-49"><span class="linenos">49</span></a><span class="sd">    Args:</span>
 </span><span id="pca-50"><a href="#pca-50"><span class="linenos">50</span></a><span class="sd">        returns: DataFrame of asset returns</span>
-</span><span id="pca-51"><a href="#pca-51"><span class="linenos">51</span></a><span class="sd">        n_components: Number of principal components to extract. Defaults to 10.</span>
-</span><span id="pca-52"><a href="#pca-52"><span class="linenos">52</span></a>
-</span><span id="pca-53"><a href="#pca-53"><span class="linenos">53</span></a><span class="sd">    Returns:</span>
-</span><span id="pca-54"><a href="#pca-54"><span class="linenos">54</span></a><span class="sd">        A named tuple containing the PCA results with the following fields:</span>
-</span><span id="pca-55"><a href="#pca-55"><span class="linenos">55</span></a><span class="sd">            - explained_variance: The explained variance ratio for each component</span>
-</span><span id="pca-56"><a href="#pca-56"><span class="linenos">56</span></a><span class="sd">            - factors: The factor returns (principal components)</span>
-</span><span id="pca-57"><a href="#pca-57"><span class="linenos">57</span></a><span class="sd">            - exposure: The factor exposures (loadings) for each asset</span>
-</span><span id="pca-58"><a href="#pca-58"><span class="linenos">58</span></a><span class="sd">            - cov: The covariance matrix of the factors</span>
-</span><span id="pca-59"><a href="#pca-59"><span class="linenos">59</span></a><span class="sd">            - systematic: The systematic returns explained by the factors</span>
-</span><span id="pca-60"><a href="#pca-60"><span class="linenos">60</span></a><span class="sd">            - idiosyncratic: The idiosyncratic returns not explained by the factors</span>
-</span><span id="pca-61"><a href="#pca-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="pca-62"><a href="#pca-62"><span class="linenos">62</span></a>
-</span><span id="pca-63"><a href="#pca-63"><span class="linenos">63</span></a>    <span class="c1"># USING SKLEARN. Let&#39;s look at the first n components</span>
-</span><span id="pca-64"><a href="#pca-64"><span class="linenos">64</span></a>    <span class="n">sklearn_pca</span> <span class="o">=</span> <span class="n">sklearnPCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
-</span><span id="pca-65"><a href="#pca-65"><span class="linenos">65</span></a>    <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
-</span><span id="pca-66"><a href="#pca-66"><span class="linenos">66</span></a>
-</span><span id="pca-67"><a href="#pca-67"><span class="linenos">67</span></a>    <span class="n">exposure</span> <span class="o">=</span> <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span>
-</span><span id="pca-68"><a href="#pca-68"><span class="linenos">68</span></a>    <span class="n">factors</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">exposure</span><span class="p">)</span>
-</span><span id="pca-69"><a href="#pca-69"><span class="linenos">69</span></a>
-</span><span id="pca-70"><a href="#pca-70"><span class="linenos">70</span></a>    <span class="k">return</span> <span class="n">PCA</span><span class="p">(</span>
-</span><span id="pca-71"><a href="#pca-71"><span class="linenos">71</span></a>        <span class="n">explained_variance</span><span class="o">=</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">,</span>
-</span><span id="pca-72"><a href="#pca-72"><span class="linenos">72</span></a>        <span class="n">factors</span><span class="o">=</span><span class="n">factors</span><span class="p">,</span>
-</span><span id="pca-73"><a href="#pca-73"><span class="linenos">73</span></a>        <span class="n">exposure</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">exposure</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
-</span><span id="pca-74"><a href="#pca-74"><span class="linenos">74</span></a>        <span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
-</span><span id="pca-75"><a href="#pca-75"><span class="linenos">75</span></a>        <span class="n">systematic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
-</span><span id="pca-76"><a href="#pca-76"><span class="linenos">76</span></a>        <span class="n">idiosyncratic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-</span><span id="pca-77"><a href="#pca-77"><span class="linenos">77</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span>
-</span><span id="pca-78"><a href="#pca-78"><span class="linenos">78</span></a>            <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-</span><span id="pca-79"><a href="#pca-79"><span class="linenos">79</span></a>            <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
-</span><span id="pca-80"><a href="#pca-80"><span class="linenos">80</span></a>        <span class="p">),</span>
-</span><span id="pca-81"><a href="#pca-81"><span class="linenos">81</span></a>    <span class="p">)</span>
+</span><span id="pca-51"><a href="#pca-51"><span class="linenos">51</span></a>
+</span><span id="pca-52"><a href="#pca-52"><span class="linenos">52</span></a><span class="sd">        n_components: Number of principal components to extract. Defaults to 10.</span>
+</span><span id="pca-53"><a href="#pca-53"><span class="linenos">53</span></a>
+</span><span id="pca-54"><a href="#pca-54"><span class="linenos">54</span></a><span class="sd">    Returns:</span>
+</span><span id="pca-55"><a href="#pca-55"><span class="linenos">55</span></a><span class="sd">        A named tuple containing the PCA results with the following fields:</span>
+</span><span id="pca-56"><a href="#pca-56"><span class="linenos">56</span></a><span class="sd">            - explained_variance: The explained variance ratio for each component</span>
+</span><span id="pca-57"><a href="#pca-57"><span class="linenos">57</span></a><span class="sd">            - factors: The factor returns (principal components)</span>
+</span><span id="pca-58"><a href="#pca-58"><span class="linenos">58</span></a><span class="sd">            - exposure: The factor exposures (loadings) for each asset</span>
+</span><span id="pca-59"><a href="#pca-59"><span class="linenos">59</span></a><span class="sd">            - cov: The covariance matrix of the factors</span>
+</span><span id="pca-60"><a href="#pca-60"><span class="linenos">60</span></a><span class="sd">            - systematic: The systematic returns explained by the factors</span>
+</span><span id="pca-61"><a href="#pca-61"><span class="linenos">61</span></a><span class="sd">            - idiosyncratic: The idiosyncratic returns not explained by the factors</span>
+</span><span id="pca-62"><a href="#pca-62"><span class="linenos">62</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="pca-63"><a href="#pca-63"><span class="linenos">63</span></a>
+</span><span id="pca-64"><a href="#pca-64"><span class="linenos">64</span></a>    <span class="c1"># USING SKLEARN. Let&#39;s look at the first n components</span>
+</span><span id="pca-65"><a href="#pca-65"><span class="linenos">65</span></a>    <span class="n">sklearn_pca</span> <span class="o">=</span> <span class="n">sklearnPCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
+</span><span id="pca-66"><a href="#pca-66"><span class="linenos">66</span></a>    <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+</span><span id="pca-67"><a href="#pca-67"><span class="linenos">67</span></a>
+</span><span id="pca-68"><a href="#pca-68"><span class="linenos">68</span></a>    <span class="n">exposure</span> <span class="o">=</span> <span class="n">sklearn_pca</span><span class="o">.</span><span class="n">components_</span>
+</span><span id="pca-69"><a href="#pca-69"><span class="linenos">69</span></a>    <span class="n">factors</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">exposure</span><span class="p">)</span>
+</span><span id="pca-70"><a href="#pca-70"><span class="linenos">70</span></a>
+</span><span id="pca-71"><a href="#pca-71"><span class="linenos">71</span></a>    <span class="k">return</span> <span class="n">PCA</span><span class="p">(</span>
+</span><span id="pca-72"><a href="#pca-72"><span class="linenos">72</span></a>        <span class="n">explained_variance</span><span class="o">=</span><span class="n">sklearn_pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">,</span>
+</span><span id="pca-73"><a href="#pca-73"><span class="linenos">73</span></a>        <span class="n">factors</span><span class="o">=</span><span class="n">factors</span><span class="p">,</span>
+</span><span id="pca-74"><a href="#pca-74"><span class="linenos">74</span></a>        <span class="n">exposure</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">exposure</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+</span><span id="pca-75"><a href="#pca-75"><span class="linenos">75</span></a>        <span class="n">cov</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">cov</span><span class="p">(),</span>
+</span><span id="pca-76"><a href="#pca-76"><span class="linenos">76</span></a>        <span class="n">systematic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+</span><span id="pca-77"><a href="#pca-77"><span class="linenos">77</span></a>        <span class="n">idiosyncratic</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+</span><span id="pca-78"><a href="#pca-78"><span class="linenos">78</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">factors</span><span class="o">.</span><span class="n">values</span> <span class="o">@</span> <span class="n">exposure</span><span class="p">,</span>
+</span><span id="pca-79"><a href="#pca-79"><span class="linenos">79</span></a>            <span class="n">index</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+</span><span id="pca-80"><a href="#pca-80"><span class="linenos">80</span></a>            <span class="n">columns</span><span class="o">=</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+</span><span id="pca-81"><a href="#pca-81"><span class="linenos">81</span></a>        <span class="p">),</span>
+</span><span id="pca-82"><a href="#pca-82"><span class="linenos">82</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -342,8 +344,10 @@
 the most important factors that explain the variance in the returns.</p>
 
 <p>Args:
-    returns: DataFrame of asset returns
-    n_components: Number of principal components to extract. Defaults to 10.</p>
+    returns: DataFrame of asset returns</p>
+
+<pre><code>n_components: Number of principal components to extract. Defaults to 10.
+</code></pre>
 
 <p>Returns:
     A named tuple containing the PCA results with the following fields:
