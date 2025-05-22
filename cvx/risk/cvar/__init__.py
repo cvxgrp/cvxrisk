@@ -13,4 +13,6 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Conditional Value at Risk (CVaR) models for portfolio optimization"""
+
 from .cvar import CVar

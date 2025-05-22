@@ -13,6 +13,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Linear algebra utilities for risk models"""
+
 from .cholesky import cholesky
 from .pca import pca
 from .valid import valid

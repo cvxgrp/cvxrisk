@@ -13,4 +13,6 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Factor risk models for portfolio optimization"""
+
 from .factor import FactorModel

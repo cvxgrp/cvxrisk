@@ -13,4 +13,6 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Sample covariance risk models for portfolio optimization"""
+
 from .sample import SampleCovariance
