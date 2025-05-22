@@ -1,4 +1,8 @@
 SF:cvx/portfolio/__init__.py
+DA:14,1
+DA:16,1
+LF:2
+LH:2
 end_of_record
 SF:cvx/portfolio/min_risk.py
 DA:14,1
@@ -19,8 +23,9 @@ end_of_record
 SF:cvx/random/__init__.py
 DA:14,1
 DA:16,1
-LF:2
-LH:2
+DA:18,1
+LF:3
+LH:3
 end_of_record
 SF:cvx/random/rand_cov.py
 DA:14,1
