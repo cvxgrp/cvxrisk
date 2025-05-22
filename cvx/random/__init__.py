@@ -13,4 +13,6 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Random data generation utilities for testing and simulation"""
+
 from .rand_cov import rand_cov
