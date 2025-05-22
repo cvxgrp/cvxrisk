@@ -165,5 +165,3 @@ def test_dynamic_exposure() -> None:
     )
 
     np.testing.assert_array_equal(model.parameter["exposure"].value, np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 0.0]]))
-
-    # assert False

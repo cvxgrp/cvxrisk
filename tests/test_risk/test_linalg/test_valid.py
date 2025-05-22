@@ -1,3 +1,5 @@
+"""Tests for the matrix validation utility"""
+
 from __future__ import annotations
 
 import numpy as np
@@ -22,7 +24,7 @@ def test_valid():
     assert np.allclose(v, np.array([False, True]))
 
 
-def test_invalid():
+def test_invalid() -> None:
     """
     Test that the valid function raises an AssertionError for non-square matrices.
 

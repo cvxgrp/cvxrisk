@@ -1,3 +1,5 @@
+"""Tests for the Principal Component Analysis (PCA) utility"""
+
 from __future__ import annotations
 
 import numpy as np
@@ -8,7 +10,7 @@ from cvx.risk.linalg import pca
 
 
 @pytest.fixture()
-def returns(resource_dir):
+def returns(resource_dir) -> pd.DataFrame:
     """
     Pytest fixture that provides stock return data for testing.
 
@@ -25,7 +27,7 @@ def returns(resource_dir):
     return prices.pct_change().fillna(0.0)
 
 
-def test_pca(returns):
+def test_pca(returns: pd.DataFrame) -> None:
     """
     Test that the pca function correctly calculates the principal components.
 
@@ -55,4 +57,3 @@ def test_pca(returns):
             ]
         ),
     )
-    # assert False
