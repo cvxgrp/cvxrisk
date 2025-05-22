@@ -26,10 +26,13 @@ def rand_cov(n: int) -> np.ndarray:
     elements drawn from a standard normal distribution.
 
     Args:
+
         n: Size of the covariance matrix
 
     Returns:
+
         A random positive semi-definite n x n covariance matrix
+
     """
     a = np.random.randn(n, n)
     return np.transpose(a) @ a

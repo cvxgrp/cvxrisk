@@ -70,6 +70,7 @@ class FactorModel(Model):
         to calculate the total portfolio risk.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments, may include:
@@ -77,6 +78,7 @@ class FactorModel(Model):
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
+
             CVXPY expression: The total portfolio risk
         """
         var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))
@@ -90,6 +92,7 @@ class FactorModel(Model):
         Update the factor model parameters.
 
         Args:
+
             **kwargs: Keyword arguments containing:
 
                 - exposure: Factor exposure matrix
@@ -123,6 +126,7 @@ class FactorModel(Model):
         Return constraints for the factor model.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments, may include:
@@ -130,6 +134,7 @@ class FactorModel(Model):
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
+
             List of CVXPY constraints including asset bounds, factor bounds,
             and the constraint that y equals exposure @ weights
         """

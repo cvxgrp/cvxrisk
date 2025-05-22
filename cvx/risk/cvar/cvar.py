@@ -56,12 +56,15 @@ class CVar(Model):
         where k is determined by the alpha parameter.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
+
             CVXPY expression: The negative average of the k smallest returns
+
         """
         # R is a matrix of returns, n is the number of rows in R
         # k is the number of returns in the left tail
@@ -73,6 +76,7 @@ class CVar(Model):
         Update the returns data and bounds parameters.
 
         Args:
+
             **kwargs: Keyword arguments containing:
 
                 - returns: Matrix of returns
@@ -90,11 +94,13 @@ class CVar(Model):
         Return constraints for the CVaR model.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments passed to bounds.constraints()
 
         Returns:
+
             List of CVXPY constraints from the bounds object
         """
         return self.bounds.constraints(weights)

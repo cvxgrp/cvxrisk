@@ -36,8 +36,8 @@ class Bounds(Model):
         No estimation for bounds.
 
         Args:
-            weights: CVXPY variable representing portfolio weights
 
+            weights: CVXPY variable representing portfolio weights
             **kwargs: Additional keyword arguments
 
         Raises:
@@ -50,9 +50,11 @@ class Bounds(Model):
         Create a parameter name by appending the name attribute.
 
         Args:
+
             str_prefix: Base string for the parameter name
 
         Returns:
+
             Combined parameter name in the format "{str_prefix}_{self.name}"
         """
         return f"{str_prefix}_{self.name}"
@@ -79,6 +81,7 @@ class Bounds(Model):
         Update the lower and upper bound parameters.
 
         Args:
+
             **kwargs: Keyword arguments containing lower and upper bounds
 
                       with keys formatted as "{lower/upper}_{self.name}"
@@ -96,11 +99,13 @@ class Bounds(Model):
         Return constraints that enforce the bounds on weights.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
+
             List of CVXPY constraints enforcing lower and upper bounds
         """
         return [

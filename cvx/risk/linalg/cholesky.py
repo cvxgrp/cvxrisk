@@ -27,12 +27,15 @@ def cholesky(cov: np.ndarray) -> np.ndarray:
     It returns the upper triangular matrix R such that R^T R = cov.
 
     Args:
+
         cov: A positive definite covariance matrix
 
     Returns:
+
         The upper triangular Cholesky factor
 
     Note:
+
         This uses scipy.linalg.cholesky which returns the upper triangular part,
         unlike numpy.linalg.cholesky which returns the lower triangular part.
     """

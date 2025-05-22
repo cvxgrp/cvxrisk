@@ -34,11 +34,13 @@ class Model(ABC):
         Estimate the variance given the portfolio weights
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments
 
         Returns:
+
             CVXPY expression representing the estimated risk
         """
 
@@ -48,6 +50,7 @@ class Model(ABC):
         Update the data in the risk model
 
         Args:
+
             **kwargs: Keyword arguments containing data to update the model
         """
 
@@ -57,10 +60,12 @@ class Model(ABC):
         Return the constraints for the risk model
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments
 
         Returns:
+
             List of CVXPY constraints for the risk model
         """

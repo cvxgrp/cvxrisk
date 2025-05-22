@@ -52,12 +52,15 @@ class SampleCovariance(Model):
         which is equivalent to the square root of the portfolio variance.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
+
             CVXPY expression: The portfolio risk (standard deviation)
+
         """
         return cvx.norm2(self.parameter["chol"] @ weights)
 
@@ -66,6 +69,7 @@ class SampleCovariance(Model):
         Update the Cholesky decomposition parameter and bounds.
 
         Args:
+
             **kwargs: Keyword arguments containing:
                 - cov: Covariance matrix (numpy.ndarray)
                 - Other parameters passed to bounds.update()
@@ -81,11 +85,13 @@ class SampleCovariance(Model):
         Return constraints for the sample covariance model.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
+
             List of CVXPY constraints from the bounds object
         """
         return self.bounds.constraints(weights)
