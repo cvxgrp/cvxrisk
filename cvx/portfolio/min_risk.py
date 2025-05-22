@@ -16,7 +16,7 @@ from __future__ import annotations
 """Minimum risk portfolio optimization"""
 
 import cvxpy as cp
-from cvx.risk import Model
+from ..risk import Model
 
 def minrisk_problem(
     riskmodel: Model,
