@@ -84,13 +84,16 @@
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    elements drawn from a standard normal distribution.</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    Args:</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        n: Size of the covariance matrix</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    Returns:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">        A random positive semi-definite n x n covariance matrix</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">@</span> <span class="n">a</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        n: Size of the covariance matrix</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    Returns:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        A random positive semi-definite n x n covariance matrix</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">@</span> <span class="n">a</span>
 </span></pre></div>
 
 
@@ -114,13 +117,16 @@
 </span><span id="rand_cov-27"><a href="#rand_cov-27"><span class="linenos">27</span></a><span class="sd">    elements drawn from a standard normal distribution.</span>
 </span><span id="rand_cov-28"><a href="#rand_cov-28"><span class="linenos">28</span></a>
 </span><span id="rand_cov-29"><a href="#rand_cov-29"><span class="linenos">29</span></a><span class="sd">    Args:</span>
-</span><span id="rand_cov-30"><a href="#rand_cov-30"><span class="linenos">30</span></a><span class="sd">        n: Size of the covariance matrix</span>
-</span><span id="rand_cov-31"><a href="#rand_cov-31"><span class="linenos">31</span></a>
-</span><span id="rand_cov-32"><a href="#rand_cov-32"><span class="linenos">32</span></a><span class="sd">    Returns:</span>
-</span><span id="rand_cov-33"><a href="#rand_cov-33"><span class="linenos">33</span></a><span class="sd">        A random positive semi-definite n x n covariance matrix</span>
-</span><span id="rand_cov-34"><a href="#rand_cov-34"><span class="linenos">34</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="rand_cov-35"><a href="#rand_cov-35"><span class="linenos">35</span></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-</span><span id="rand_cov-36"><a href="#rand_cov-36"><span class="linenos">36</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">@</span> <span class="n">a</span>
+</span><span id="rand_cov-30"><a href="#rand_cov-30"><span class="linenos">30</span></a>
+</span><span id="rand_cov-31"><a href="#rand_cov-31"><span class="linenos">31</span></a><span class="sd">        n: Size of the covariance matrix</span>
+</span><span id="rand_cov-32"><a href="#rand_cov-32"><span class="linenos">32</span></a>
+</span><span id="rand_cov-33"><a href="#rand_cov-33"><span class="linenos">33</span></a><span class="sd">    Returns:</span>
+</span><span id="rand_cov-34"><a href="#rand_cov-34"><span class="linenos">34</span></a>
+</span><span id="rand_cov-35"><a href="#rand_cov-35"><span class="linenos">35</span></a><span class="sd">        A random positive semi-definite n x n covariance matrix</span>
+</span><span id="rand_cov-36"><a href="#rand_cov-36"><span class="linenos">36</span></a>
+</span><span id="rand_cov-37"><a href="#rand_cov-37"><span class="linenos">37</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="rand_cov-38"><a href="#rand_cov-38"><span class="linenos">38</span></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span><span id="rand_cov-39"><a href="#rand_cov-39"><span class="linenos">39</span></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">@</span> <span class="n">a</span>
 </span></pre></div>
 
 
@@ -129,11 +135,15 @@
 <p>The matrix is constructed as A^T A where A is a random n x n matrix with
 elements drawn from a standard normal distribution.</p>
 
-<p>Args:
-    n: Size of the covariance matrix</p>
+<p>Args:</p>
 
-<p>Returns:
-    A random positive semi-definite n x n covariance matrix</p>
+<pre><code>n: Size of the covariance matrix
+</code></pre>
+
+<p>Returns:</p>
+
+<pre><code>A random positive semi-definite n x n covariance matrix
+</code></pre>
 </div>
 
 

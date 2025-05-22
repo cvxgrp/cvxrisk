@@ -115,8 +115,8 @@
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">        No estimation for bounds.</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">        Args:</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">        Raises:</span>
@@ -129,63 +129,68 @@
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">        Create a parameter name by appending the name attribute.</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">        Args:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">            str_prefix: Base string for the parameter name</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">        Returns:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">            Combined parameter name in the format &quot;{str_prefix}_{self.name}&quot;</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">str_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">        Initialize the parameters after the class is instantiated.</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        Creates lower and upper bound parameters with appropriate shapes and default values.</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lower bound&quot;</span><span class="p">,</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="p">)</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;upper bound&quot;</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="p">)</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Update the lower and upper bound parameters.</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">        Args:</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">            **kwargs: Keyword arguments containing lower and upper bounds</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">                      with keys formatted as &quot;{lower/upper}_{self.name}&quot;</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="n">upper</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)]</span> <span class="o">=</span> <span class="n">upper</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        Return constraints that enforce the bounds on weights.</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Args:</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">            str_prefix: Base string for the parameter name</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">        Returns:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">            Combined parameter name in the format &quot;{str_prefix}_{self.name}&quot;</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">str_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        Initialize the parameters after the class is instantiated.</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">        Creates lower and upper bound parameters with appropriate shapes and default values.</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lower bound&quot;</span><span class="p">,</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="p">)</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;upper bound&quot;</span><span class="p">,</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>        <span class="p">)</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">        Update the lower and upper bound parameters.</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        Args:</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            **kwargs: Keyword arguments containing lower and upper bounds</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">                      with keys formatted as &quot;{lower/upper}_{self.name}&quot;</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="n">upper</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)]</span> <span class="o">=</span> <span class="n">upper</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        Return constraints that enforce the bounds on weights.</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        Args:</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">        Returns:</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">            List of CVXPY constraints enforcing lower and upper bounds</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>            <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>            <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="p">]</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        Returns:</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">            List of CVXPY constraints enforcing lower and upper bounds</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="p">[</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>            <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>            <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="p">]</span>
 </span></pre></div>
 
 
@@ -215,8 +220,8 @@
 </span><span id="Bounds-37"><a href="#Bounds-37"><span class="linenos"> 37</span></a><span class="sd">        No estimation for bounds.</span>
 </span><span id="Bounds-38"><a href="#Bounds-38"><span class="linenos"> 38</span></a>
 </span><span id="Bounds-39"><a href="#Bounds-39"><span class="linenos"> 39</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds-40"><a href="#Bounds-40"><span class="linenos"> 40</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="Bounds-41"><a href="#Bounds-41"><span class="linenos"> 41</span></a>
+</span><span id="Bounds-40"><a href="#Bounds-40"><span class="linenos"> 40</span></a>
+</span><span id="Bounds-41"><a href="#Bounds-41"><span class="linenos"> 41</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
 </span><span id="Bounds-42"><a href="#Bounds-42"><span class="linenos"> 42</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
 </span><span id="Bounds-43"><a href="#Bounds-43"><span class="linenos"> 43</span></a>
 </span><span id="Bounds-44"><a href="#Bounds-44"><span class="linenos"> 44</span></a><span class="sd">        Raises:</span>
@@ -229,63 +234,68 @@
 </span><span id="Bounds-51"><a href="#Bounds-51"><span class="linenos"> 51</span></a><span class="sd">        Create a parameter name by appending the name attribute.</span>
 </span><span id="Bounds-52"><a href="#Bounds-52"><span class="linenos"> 52</span></a>
 </span><span id="Bounds-53"><a href="#Bounds-53"><span class="linenos"> 53</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds-54"><a href="#Bounds-54"><span class="linenos"> 54</span></a><span class="sd">            str_prefix: Base string for the parameter name</span>
-</span><span id="Bounds-55"><a href="#Bounds-55"><span class="linenos"> 55</span></a>
-</span><span id="Bounds-56"><a href="#Bounds-56"><span class="linenos"> 56</span></a><span class="sd">        Returns:</span>
-</span><span id="Bounds-57"><a href="#Bounds-57"><span class="linenos"> 57</span></a><span class="sd">            Combined parameter name in the format &quot;{str_prefix}_{self.name}&quot;</span>
-</span><span id="Bounds-58"><a href="#Bounds-58"><span class="linenos"> 58</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bounds-59"><a href="#Bounds-59"><span class="linenos"> 59</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">str_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="Bounds-60"><a href="#Bounds-60"><span class="linenos"> 60</span></a>
-</span><span id="Bounds-61"><a href="#Bounds-61"><span class="linenos"> 61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Bounds-62"><a href="#Bounds-62"><span class="linenos"> 62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bounds-63"><a href="#Bounds-63"><span class="linenos"> 63</span></a><span class="sd">        Initialize the parameters after the class is instantiated.</span>
-</span><span id="Bounds-64"><a href="#Bounds-64"><span class="linenos"> 64</span></a>
-</span><span id="Bounds-65"><a href="#Bounds-65"><span class="linenos"> 65</span></a><span class="sd">        Creates lower and upper bound parameters with appropriate shapes and default values.</span>
-</span><span id="Bounds-66"><a href="#Bounds-66"><span class="linenos"> 66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bounds-67"><a href="#Bounds-67"><span class="linenos"> 67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-</span><span id="Bounds-68"><a href="#Bounds-68"><span class="linenos"> 68</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
-</span><span id="Bounds-69"><a href="#Bounds-69"><span class="linenos"> 69</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lower bound&quot;</span><span class="p">,</span>
-</span><span id="Bounds-70"><a href="#Bounds-70"><span class="linenos"> 70</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-</span><span id="Bounds-71"><a href="#Bounds-71"><span class="linenos"> 71</span></a>        <span class="p">)</span>
-</span><span id="Bounds-72"><a href="#Bounds-72"><span class="linenos"> 72</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-</span><span id="Bounds-73"><a href="#Bounds-73"><span class="linenos"> 73</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
-</span><span id="Bounds-74"><a href="#Bounds-74"><span class="linenos"> 74</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;upper bound&quot;</span><span class="p">,</span>
-</span><span id="Bounds-75"><a href="#Bounds-75"><span class="linenos"> 75</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-</span><span id="Bounds-76"><a href="#Bounds-76"><span class="linenos"> 76</span></a>        <span class="p">)</span>
-</span><span id="Bounds-77"><a href="#Bounds-77"><span class="linenos"> 77</span></a>
-</span><span id="Bounds-78"><a href="#Bounds-78"><span class="linenos"> 78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bounds-79"><a href="#Bounds-79"><span class="linenos"> 79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bounds-80"><a href="#Bounds-80"><span class="linenos"> 80</span></a><span class="sd">        Update the lower and upper bound parameters.</span>
-</span><span id="Bounds-81"><a href="#Bounds-81"><span class="linenos"> 81</span></a>
-</span><span id="Bounds-82"><a href="#Bounds-82"><span class="linenos"> 82</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds-83"><a href="#Bounds-83"><span class="linenos"> 83</span></a><span class="sd">            **kwargs: Keyword arguments containing lower and upper bounds</span>
-</span><span id="Bounds-84"><a href="#Bounds-84"><span class="linenos"> 84</span></a>
-</span><span id="Bounds-85"><a href="#Bounds-85"><span class="linenos"> 85</span></a><span class="sd">                      with keys formatted as &quot;{lower/upper}_{self.name}&quot;</span>
-</span><span id="Bounds-86"><a href="#Bounds-86"><span class="linenos"> 86</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bounds-87"><a href="#Bounds-87"><span class="linenos"> 87</span></a>        <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
-</span><span id="Bounds-88"><a href="#Bounds-88"><span class="linenos"> 88</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-</span><span id="Bounds-89"><a href="#Bounds-89"><span class="linenos"> 89</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
-</span><span id="Bounds-90"><a href="#Bounds-90"><span class="linenos"> 90</span></a>
-</span><span id="Bounds-91"><a href="#Bounds-91"><span class="linenos"> 91</span></a>        <span class="n">upper</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span>
-</span><span id="Bounds-92"><a href="#Bounds-92"><span class="linenos"> 92</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-</span><span id="Bounds-93"><a href="#Bounds-93"><span class="linenos"> 93</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)]</span> <span class="o">=</span> <span class="n">upper</span>
-</span><span id="Bounds-94"><a href="#Bounds-94"><span class="linenos"> 94</span></a>
-</span><span id="Bounds-95"><a href="#Bounds-95"><span class="linenos"> 95</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="Bounds-96"><a href="#Bounds-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bounds-97"><a href="#Bounds-97"><span class="linenos"> 97</span></a><span class="sd">        Return constraints that enforce the bounds on weights.</span>
-</span><span id="Bounds-98"><a href="#Bounds-98"><span class="linenos"> 98</span></a>
-</span><span id="Bounds-99"><a href="#Bounds-99"><span class="linenos"> 99</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds-100"><a href="#Bounds-100"><span class="linenos">100</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Bounds-54"><a href="#Bounds-54"><span class="linenos"> 54</span></a>
+</span><span id="Bounds-55"><a href="#Bounds-55"><span class="linenos"> 55</span></a><span class="sd">            str_prefix: Base string for the parameter name</span>
+</span><span id="Bounds-56"><a href="#Bounds-56"><span class="linenos"> 56</span></a>
+</span><span id="Bounds-57"><a href="#Bounds-57"><span class="linenos"> 57</span></a><span class="sd">        Returns:</span>
+</span><span id="Bounds-58"><a href="#Bounds-58"><span class="linenos"> 58</span></a>
+</span><span id="Bounds-59"><a href="#Bounds-59"><span class="linenos"> 59</span></a><span class="sd">            Combined parameter name in the format &quot;{str_prefix}_{self.name}&quot;</span>
+</span><span id="Bounds-60"><a href="#Bounds-60"><span class="linenos"> 60</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bounds-61"><a href="#Bounds-61"><span class="linenos"> 61</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">str_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="Bounds-62"><a href="#Bounds-62"><span class="linenos"> 62</span></a>
+</span><span id="Bounds-63"><a href="#Bounds-63"><span class="linenos"> 63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Bounds-64"><a href="#Bounds-64"><span class="linenos"> 64</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bounds-65"><a href="#Bounds-65"><span class="linenos"> 65</span></a><span class="sd">        Initialize the parameters after the class is instantiated.</span>
+</span><span id="Bounds-66"><a href="#Bounds-66"><span class="linenos"> 66</span></a>
+</span><span id="Bounds-67"><a href="#Bounds-67"><span class="linenos"> 67</span></a><span class="sd">        Creates lower and upper bound parameters with appropriate shapes and default values.</span>
+</span><span id="Bounds-68"><a href="#Bounds-68"><span class="linenos"> 68</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bounds-69"><a href="#Bounds-69"><span class="linenos"> 69</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+</span><span id="Bounds-70"><a href="#Bounds-70"><span class="linenos"> 70</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+</span><span id="Bounds-71"><a href="#Bounds-71"><span class="linenos"> 71</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lower bound&quot;</span><span class="p">,</span>
+</span><span id="Bounds-72"><a href="#Bounds-72"><span class="linenos"> 72</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+</span><span id="Bounds-73"><a href="#Bounds-73"><span class="linenos"> 73</span></a>        <span class="p">)</span>
+</span><span id="Bounds-74"><a href="#Bounds-74"><span class="linenos"> 74</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+</span><span id="Bounds-75"><a href="#Bounds-75"><span class="linenos"> 75</span></a>            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+</span><span id="Bounds-76"><a href="#Bounds-76"><span class="linenos"> 76</span></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;upper bound&quot;</span><span class="p">,</span>
+</span><span id="Bounds-77"><a href="#Bounds-77"><span class="linenos"> 77</span></a>            <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+</span><span id="Bounds-78"><a href="#Bounds-78"><span class="linenos"> 78</span></a>        <span class="p">)</span>
+</span><span id="Bounds-79"><a href="#Bounds-79"><span class="linenos"> 79</span></a>
+</span><span id="Bounds-80"><a href="#Bounds-80"><span class="linenos"> 80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Bounds-81"><a href="#Bounds-81"><span class="linenos"> 81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bounds-82"><a href="#Bounds-82"><span class="linenos"> 82</span></a><span class="sd">        Update the lower and upper bound parameters.</span>
+</span><span id="Bounds-83"><a href="#Bounds-83"><span class="linenos"> 83</span></a>
+</span><span id="Bounds-84"><a href="#Bounds-84"><span class="linenos"> 84</span></a><span class="sd">        Args:</span>
+</span><span id="Bounds-85"><a href="#Bounds-85"><span class="linenos"> 85</span></a>
+</span><span id="Bounds-86"><a href="#Bounds-86"><span class="linenos"> 86</span></a><span class="sd">            **kwargs: Keyword arguments containing lower and upper bounds</span>
+</span><span id="Bounds-87"><a href="#Bounds-87"><span class="linenos"> 87</span></a>
+</span><span id="Bounds-88"><a href="#Bounds-88"><span class="linenos"> 88</span></a><span class="sd">                      with keys formatted as &quot;{lower/upper}_{self.name}&quot;</span>
+</span><span id="Bounds-89"><a href="#Bounds-89"><span class="linenos"> 89</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bounds-90"><a href="#Bounds-90"><span class="linenos"> 90</span></a>        <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
+</span><span id="Bounds-91"><a href="#Bounds-91"><span class="linenos"> 91</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span><span id="Bounds-92"><a href="#Bounds-92"><span class="linenos"> 92</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
+</span><span id="Bounds-93"><a href="#Bounds-93"><span class="linenos"> 93</span></a>
+</span><span id="Bounds-94"><a href="#Bounds-94"><span class="linenos"> 94</span></a>        <span class="n">upper</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span>
+</span><span id="Bounds-95"><a href="#Bounds-95"><span class="linenos"> 95</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span><span id="Bounds-96"><a href="#Bounds-96"><span class="linenos"> 96</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)]</span> <span class="o">=</span> <span class="n">upper</span>
+</span><span id="Bounds-97"><a href="#Bounds-97"><span class="linenos"> 97</span></a>
+</span><span id="Bounds-98"><a href="#Bounds-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="Bounds-99"><a href="#Bounds-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bounds-100"><a href="#Bounds-100"><span class="linenos">100</span></a><span class="sd">        Return constraints that enforce the bounds on weights.</span>
 </span><span id="Bounds-101"><a href="#Bounds-101"><span class="linenos">101</span></a>
-</span><span id="Bounds-102"><a href="#Bounds-102"><span class="linenos">102</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="Bounds-102"><a href="#Bounds-102"><span class="linenos">102</span></a><span class="sd">        Args:</span>
 </span><span id="Bounds-103"><a href="#Bounds-103"><span class="linenos">103</span></a>
-</span><span id="Bounds-104"><a href="#Bounds-104"><span class="linenos">104</span></a><span class="sd">        Returns:</span>
-</span><span id="Bounds-105"><a href="#Bounds-105"><span class="linenos">105</span></a><span class="sd">            List of CVXPY constraints enforcing lower and upper bounds</span>
-</span><span id="Bounds-106"><a href="#Bounds-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bounds-107"><a href="#Bounds-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="Bounds-108"><a href="#Bounds-108"><span class="linenos">108</span></a>            <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
-</span><span id="Bounds-109"><a href="#Bounds-109"><span class="linenos">109</span></a>            <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
-</span><span id="Bounds-110"><a href="#Bounds-110"><span class="linenos">110</span></a>        <span class="p">]</span>
+</span><span id="Bounds-104"><a href="#Bounds-104"><span class="linenos">104</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Bounds-105"><a href="#Bounds-105"><span class="linenos">105</span></a>
+</span><span id="Bounds-106"><a href="#Bounds-106"><span class="linenos">106</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="Bounds-107"><a href="#Bounds-107"><span class="linenos">107</span></a>
+</span><span id="Bounds-108"><a href="#Bounds-108"><span class="linenos">108</span></a><span class="sd">        Returns:</span>
+</span><span id="Bounds-109"><a href="#Bounds-109"><span class="linenos">109</span></a>
+</span><span id="Bounds-110"><a href="#Bounds-110"><span class="linenos">110</span></a><span class="sd">            List of CVXPY constraints enforcing lower and upper bounds</span>
+</span><span id="Bounds-111"><a href="#Bounds-111"><span class="linenos">111</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bounds-112"><a href="#Bounds-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="p">[</span>
+</span><span id="Bounds-113"><a href="#Bounds-113"><span class="linenos">113</span></a>            <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
+</span><span id="Bounds-114"><a href="#Bounds-114"><span class="linenos">114</span></a>            <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
+</span><span id="Bounds-115"><a href="#Bounds-115"><span class="linenos">115</span></a>        <span class="p">]</span>
 </span></pre></div>
 
 
@@ -347,8 +357,8 @@
 </span><span id="Bounds.estimate-37"><a href="#Bounds.estimate-37"><span class="linenos">37</span></a><span class="sd">        No estimation for bounds.</span>
 </span><span id="Bounds.estimate-38"><a href="#Bounds.estimate-38"><span class="linenos">38</span></a>
 </span><span id="Bounds.estimate-39"><a href="#Bounds.estimate-39"><span class="linenos">39</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds.estimate-40"><a href="#Bounds.estimate-40"><span class="linenos">40</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="Bounds.estimate-41"><a href="#Bounds.estimate-41"><span class="linenos">41</span></a>
+</span><span id="Bounds.estimate-40"><a href="#Bounds.estimate-40"><span class="linenos">40</span></a>
+</span><span id="Bounds.estimate-41"><a href="#Bounds.estimate-41"><span class="linenos">41</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
 </span><span id="Bounds.estimate-42"><a href="#Bounds.estimate-42"><span class="linenos">42</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
 </span><span id="Bounds.estimate-43"><a href="#Bounds.estimate-43"><span class="linenos">43</span></a>
 </span><span id="Bounds.estimate-44"><a href="#Bounds.estimate-44"><span class="linenos">44</span></a><span class="sd">        Raises:</span>
@@ -360,10 +370,10 @@
 
             <div class="docstring"><p>No estimation for bounds.</p>
 
-<p>Args:
-    weights: CVXPY variable representing portfolio weights</p>
+<p>Args:</p>
 
-<pre><code>**kwargs: Additional keyword arguments
+<pre><code>weights: CVXPY variable representing portfolio weights
+**kwargs: Additional keyword arguments
 </code></pre>
 
 <p>Raises:
@@ -383,31 +393,33 @@
 
     </div>
     <a class="headerlink" href="#Bounds.update"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bounds.update-78"><a href="#Bounds.update-78"><span class="linenos">78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bounds.update-79"><a href="#Bounds.update-79"><span class="linenos">79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bounds.update-80"><a href="#Bounds.update-80"><span class="linenos">80</span></a><span class="sd">        Update the lower and upper bound parameters.</span>
-</span><span id="Bounds.update-81"><a href="#Bounds.update-81"><span class="linenos">81</span></a>
-</span><span id="Bounds.update-82"><a href="#Bounds.update-82"><span class="linenos">82</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds.update-83"><a href="#Bounds.update-83"><span class="linenos">83</span></a><span class="sd">            **kwargs: Keyword arguments containing lower and upper bounds</span>
-</span><span id="Bounds.update-84"><a href="#Bounds.update-84"><span class="linenos">84</span></a>
-</span><span id="Bounds.update-85"><a href="#Bounds.update-85"><span class="linenos">85</span></a><span class="sd">                      with keys formatted as &quot;{lower/upper}_{self.name}&quot;</span>
-</span><span id="Bounds.update-86"><a href="#Bounds.update-86"><span class="linenos">86</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bounds.update-87"><a href="#Bounds.update-87"><span class="linenos">87</span></a>        <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
-</span><span id="Bounds.update-88"><a href="#Bounds.update-88"><span class="linenos">88</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-</span><span id="Bounds.update-89"><a href="#Bounds.update-89"><span class="linenos">89</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
-</span><span id="Bounds.update-90"><a href="#Bounds.update-90"><span class="linenos">90</span></a>
-</span><span id="Bounds.update-91"><a href="#Bounds.update-91"><span class="linenos">91</span></a>        <span class="n">upper</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span>
-</span><span id="Bounds.update-92"><a href="#Bounds.update-92"><span class="linenos">92</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-</span><span id="Bounds.update-93"><a href="#Bounds.update-93"><span class="linenos">93</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)]</span> <span class="o">=</span> <span class="n">upper</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bounds.update-80"><a href="#Bounds.update-80"><span class="linenos">80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Bounds.update-81"><a href="#Bounds.update-81"><span class="linenos">81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bounds.update-82"><a href="#Bounds.update-82"><span class="linenos">82</span></a><span class="sd">        Update the lower and upper bound parameters.</span>
+</span><span id="Bounds.update-83"><a href="#Bounds.update-83"><span class="linenos">83</span></a>
+</span><span id="Bounds.update-84"><a href="#Bounds.update-84"><span class="linenos">84</span></a><span class="sd">        Args:</span>
+</span><span id="Bounds.update-85"><a href="#Bounds.update-85"><span class="linenos">85</span></a>
+</span><span id="Bounds.update-86"><a href="#Bounds.update-86"><span class="linenos">86</span></a><span class="sd">            **kwargs: Keyword arguments containing lower and upper bounds</span>
+</span><span id="Bounds.update-87"><a href="#Bounds.update-87"><span class="linenos">87</span></a>
+</span><span id="Bounds.update-88"><a href="#Bounds.update-88"><span class="linenos">88</span></a><span class="sd">                      with keys formatted as &quot;{lower/upper}_{self.name}&quot;</span>
+</span><span id="Bounds.update-89"><a href="#Bounds.update-89"><span class="linenos">89</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bounds.update-90"><a href="#Bounds.update-90"><span class="linenos">90</span></a>        <span class="n">lower</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span>
+</span><span id="Bounds.update-91"><a href="#Bounds.update-91"><span class="linenos">91</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span><span id="Bounds.update-92"><a href="#Bounds.update-92"><span class="linenos">92</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">)]</span> <span class="o">=</span> <span class="n">lower</span>
+</span><span id="Bounds.update-93"><a href="#Bounds.update-93"><span class="linenos">93</span></a>
+</span><span id="Bounds.update-94"><a href="#Bounds.update-94"><span class="linenos">94</span></a>        <span class="n">upper</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span>
+</span><span id="Bounds.update-95"><a href="#Bounds.update-95"><span class="linenos">95</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span><span id="Bounds.update-96"><a href="#Bounds.update-96"><span class="linenos">96</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper</span><span class="p">)]</span> <span class="o">=</span> <span class="n">upper</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Update the lower and upper bound parameters.</p>
 
-<p>Args:
-    **kwargs: Keyword arguments containing lower and upper bounds</p>
+<p>Args:</p>
 
-<pre><code>          with keys formatted as "{lower/upper}_{self.name}"
+<pre><code>**kwargs: Keyword arguments containing lower and upper bounds
+
+          with keys formatted as "{lower/upper}_{self.name}"
 </code></pre>
 </div>
 
@@ -424,35 +436,40 @@
 
     </div>
     <a class="headerlink" href="#Bounds.constraints"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bounds.constraints-95"><a href="#Bounds.constraints-95"><span class="linenos"> 95</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="Bounds.constraints-96"><a href="#Bounds.constraints-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bounds.constraints-97"><a href="#Bounds.constraints-97"><span class="linenos"> 97</span></a><span class="sd">        Return constraints that enforce the bounds on weights.</span>
-</span><span id="Bounds.constraints-98"><a href="#Bounds.constraints-98"><span class="linenos"> 98</span></a>
-</span><span id="Bounds.constraints-99"><a href="#Bounds.constraints-99"><span class="linenos"> 99</span></a><span class="sd">        Args:</span>
-</span><span id="Bounds.constraints-100"><a href="#Bounds.constraints-100"><span class="linenos">100</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bounds.constraints-98"><a href="#Bounds.constraints-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="Bounds.constraints-99"><a href="#Bounds.constraints-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bounds.constraints-100"><a href="#Bounds.constraints-100"><span class="linenos">100</span></a><span class="sd">        Return constraints that enforce the bounds on weights.</span>
 </span><span id="Bounds.constraints-101"><a href="#Bounds.constraints-101"><span class="linenos">101</span></a>
-</span><span id="Bounds.constraints-102"><a href="#Bounds.constraints-102"><span class="linenos">102</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="Bounds.constraints-102"><a href="#Bounds.constraints-102"><span class="linenos">102</span></a><span class="sd">        Args:</span>
 </span><span id="Bounds.constraints-103"><a href="#Bounds.constraints-103"><span class="linenos">103</span></a>
-</span><span id="Bounds.constraints-104"><a href="#Bounds.constraints-104"><span class="linenos">104</span></a><span class="sd">        Returns:</span>
-</span><span id="Bounds.constraints-105"><a href="#Bounds.constraints-105"><span class="linenos">105</span></a><span class="sd">            List of CVXPY constraints enforcing lower and upper bounds</span>
-</span><span id="Bounds.constraints-106"><a href="#Bounds.constraints-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bounds.constraints-107"><a href="#Bounds.constraints-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="Bounds.constraints-108"><a href="#Bounds.constraints-108"><span class="linenos">108</span></a>            <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
-</span><span id="Bounds.constraints-109"><a href="#Bounds.constraints-109"><span class="linenos">109</span></a>            <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
-</span><span id="Bounds.constraints-110"><a href="#Bounds.constraints-110"><span class="linenos">110</span></a>        <span class="p">]</span>
+</span><span id="Bounds.constraints-104"><a href="#Bounds.constraints-104"><span class="linenos">104</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Bounds.constraints-105"><a href="#Bounds.constraints-105"><span class="linenos">105</span></a>
+</span><span id="Bounds.constraints-106"><a href="#Bounds.constraints-106"><span class="linenos">106</span></a><span class="sd">            **kwargs: Additional keyword arguments (not used)</span>
+</span><span id="Bounds.constraints-107"><a href="#Bounds.constraints-107"><span class="linenos">107</span></a>
+</span><span id="Bounds.constraints-108"><a href="#Bounds.constraints-108"><span class="linenos">108</span></a><span class="sd">        Returns:</span>
+</span><span id="Bounds.constraints-109"><a href="#Bounds.constraints-109"><span class="linenos">109</span></a>
+</span><span id="Bounds.constraints-110"><a href="#Bounds.constraints-110"><span class="linenos">110</span></a><span class="sd">            List of CVXPY constraints enforcing lower and upper bounds</span>
+</span><span id="Bounds.constraints-111"><a href="#Bounds.constraints-111"><span class="linenos">111</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bounds.constraints-112"><a href="#Bounds.constraints-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="p">[</span>
+</span><span id="Bounds.constraints-113"><a href="#Bounds.constraints-113"><span class="linenos">113</span></a>            <span class="n">weights</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)],</span>
+</span><span id="Bounds.constraints-114"><a href="#Bounds.constraints-114"><span class="linenos">114</span></a>            <span class="n">weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">(</span><span class="s2">&quot;upper&quot;</span><span class="p">)],</span>
+</span><span id="Bounds.constraints-115"><a href="#Bounds.constraints-115"><span class="linenos">115</span></a>        <span class="p">]</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Return constraints that enforce the bounds on weights.</p>
 
-<p>Args:
-    weights: CVXPY variable representing portfolio weights</p>
+<p>Args:</p>
 
-<pre><code>**kwargs: Additional keyword arguments (not used)
+<pre><code>weights: CVXPY variable representing portfolio weights
+
+**kwargs: Additional keyword arguments (not used)
 </code></pre>
 
-<p>Returns:
-    List of CVXPY constraints enforcing lower and upper bounds</p>
+<p>Returns:</p>
+
+<pre><code>List of CVXPY constraints enforcing lower and upper bounds
+</code></pre>
 </div>
 
 

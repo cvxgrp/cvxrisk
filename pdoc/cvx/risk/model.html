@@ -107,36 +107,41 @@
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        Estimate the variance given the portfolio weights</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">        Args:</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        Returns:</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">            CVXPY expression representing the estimated risk</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        Update the data in the risk model</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        Args:</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">            **kwargs: Keyword arguments containing data to update the model</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        Returns:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">            CVXPY expression representing the estimated risk</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        Update the data in the risk model</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        Args:</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        Return the constraints for the risk model</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        Args:</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">            **kwargs: Keyword arguments containing data to update the model</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        Return the constraints for the risk model</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        Args:</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">            List of CVXPY constraints for the risk model</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        Returns:</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">            List of CVXPY constraints for the risk model</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -166,36 +171,41 @@
 </span><span id="Model-35"><a href="#Model-35"><span class="linenos">35</span></a><span class="sd">        Estimate the variance given the portfolio weights</span>
 </span><span id="Model-36"><a href="#Model-36"><span class="linenos">36</span></a>
 </span><span id="Model-37"><a href="#Model-37"><span class="linenos">37</span></a><span class="sd">        Args:</span>
-</span><span id="Model-38"><a href="#Model-38"><span class="linenos">38</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="Model-39"><a href="#Model-39"><span class="linenos">39</span></a>
-</span><span id="Model-40"><a href="#Model-40"><span class="linenos">40</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
-</span><span id="Model-41"><a href="#Model-41"><span class="linenos">41</span></a>
-</span><span id="Model-42"><a href="#Model-42"><span class="linenos">42</span></a><span class="sd">        Returns:</span>
-</span><span id="Model-43"><a href="#Model-43"><span class="linenos">43</span></a><span class="sd">            CVXPY expression representing the estimated risk</span>
-</span><span id="Model-44"><a href="#Model-44"><span class="linenos">44</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Model-45"><a href="#Model-45"><span class="linenos">45</span></a>
-</span><span id="Model-46"><a href="#Model-46"><span class="linenos">46</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Model-47"><a href="#Model-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Model-48"><a href="#Model-48"><span class="linenos">48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Model-49"><a href="#Model-49"><span class="linenos">49</span></a><span class="sd">        Update the data in the risk model</span>
-</span><span id="Model-50"><a href="#Model-50"><span class="linenos">50</span></a>
-</span><span id="Model-51"><a href="#Model-51"><span class="linenos">51</span></a><span class="sd">        Args:</span>
-</span><span id="Model-52"><a href="#Model-52"><span class="linenos">52</span></a><span class="sd">            **kwargs: Keyword arguments containing data to update the model</span>
-</span><span id="Model-53"><a href="#Model-53"><span class="linenos">53</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Model-38"><a href="#Model-38"><span class="linenos">38</span></a>
+</span><span id="Model-39"><a href="#Model-39"><span class="linenos">39</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Model-40"><a href="#Model-40"><span class="linenos">40</span></a>
+</span><span id="Model-41"><a href="#Model-41"><span class="linenos">41</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="Model-42"><a href="#Model-42"><span class="linenos">42</span></a>
+</span><span id="Model-43"><a href="#Model-43"><span class="linenos">43</span></a><span class="sd">        Returns:</span>
+</span><span id="Model-44"><a href="#Model-44"><span class="linenos">44</span></a>
+</span><span id="Model-45"><a href="#Model-45"><span class="linenos">45</span></a><span class="sd">            CVXPY expression representing the estimated risk</span>
+</span><span id="Model-46"><a href="#Model-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Model-47"><a href="#Model-47"><span class="linenos">47</span></a>
+</span><span id="Model-48"><a href="#Model-48"><span class="linenos">48</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Model-49"><a href="#Model-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Model-50"><a href="#Model-50"><span class="linenos">50</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Model-51"><a href="#Model-51"><span class="linenos">51</span></a><span class="sd">        Update the data in the risk model</span>
+</span><span id="Model-52"><a href="#Model-52"><span class="linenos">52</span></a>
+</span><span id="Model-53"><a href="#Model-53"><span class="linenos">53</span></a><span class="sd">        Args:</span>
 </span><span id="Model-54"><a href="#Model-54"><span class="linenos">54</span></a>
-</span><span id="Model-55"><a href="#Model-55"><span class="linenos">55</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Model-56"><a href="#Model-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="Model-57"><a href="#Model-57"><span class="linenos">57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Model-58"><a href="#Model-58"><span class="linenos">58</span></a><span class="sd">        Return the constraints for the risk model</span>
-</span><span id="Model-59"><a href="#Model-59"><span class="linenos">59</span></a>
-</span><span id="Model-60"><a href="#Model-60"><span class="linenos">60</span></a><span class="sd">        Args:</span>
-</span><span id="Model-61"><a href="#Model-61"><span class="linenos">61</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Model-55"><a href="#Model-55"><span class="linenos">55</span></a><span class="sd">            **kwargs: Keyword arguments containing data to update the model</span>
+</span><span id="Model-56"><a href="#Model-56"><span class="linenos">56</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Model-57"><a href="#Model-57"><span class="linenos">57</span></a>
+</span><span id="Model-58"><a href="#Model-58"><span class="linenos">58</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Model-59"><a href="#Model-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="Model-60"><a href="#Model-60"><span class="linenos">60</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Model-61"><a href="#Model-61"><span class="linenos">61</span></a><span class="sd">        Return the constraints for the risk model</span>
 </span><span id="Model-62"><a href="#Model-62"><span class="linenos">62</span></a>
-</span><span id="Model-63"><a href="#Model-63"><span class="linenos">63</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="Model-63"><a href="#Model-63"><span class="linenos">63</span></a><span class="sd">        Args:</span>
 </span><span id="Model-64"><a href="#Model-64"><span class="linenos">64</span></a>
-</span><span id="Model-65"><a href="#Model-65"><span class="linenos">65</span></a><span class="sd">        Returns:</span>
-</span><span id="Model-66"><a href="#Model-66"><span class="linenos">66</span></a><span class="sd">            List of CVXPY constraints for the risk model</span>
-</span><span id="Model-67"><a href="#Model-67"><span class="linenos">67</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Model-65"><a href="#Model-65"><span class="linenos">65</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Model-66"><a href="#Model-66"><span class="linenos">66</span></a>
+</span><span id="Model-67"><a href="#Model-67"><span class="linenos">67</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="Model-68"><a href="#Model-68"><span class="linenos">68</span></a>
+</span><span id="Model-69"><a href="#Model-69"><span class="linenos">69</span></a><span class="sd">        Returns:</span>
+</span><span id="Model-70"><a href="#Model-70"><span class="linenos">70</span></a>
+</span><span id="Model-71"><a href="#Model-71"><span class="linenos">71</span></a><span class="sd">            List of CVXPY constraints for the risk model</span>
+</span><span id="Model-72"><a href="#Model-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -234,26 +244,31 @@
 </span><span id="Model.estimate-35"><a href="#Model.estimate-35"><span class="linenos">35</span></a><span class="sd">        Estimate the variance given the portfolio weights</span>
 </span><span id="Model.estimate-36"><a href="#Model.estimate-36"><span class="linenos">36</span></a>
 </span><span id="Model.estimate-37"><a href="#Model.estimate-37"><span class="linenos">37</span></a><span class="sd">        Args:</span>
-</span><span id="Model.estimate-38"><a href="#Model.estimate-38"><span class="linenos">38</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
-</span><span id="Model.estimate-39"><a href="#Model.estimate-39"><span class="linenos">39</span></a>
-</span><span id="Model.estimate-40"><a href="#Model.estimate-40"><span class="linenos">40</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
-</span><span id="Model.estimate-41"><a href="#Model.estimate-41"><span class="linenos">41</span></a>
-</span><span id="Model.estimate-42"><a href="#Model.estimate-42"><span class="linenos">42</span></a><span class="sd">        Returns:</span>
-</span><span id="Model.estimate-43"><a href="#Model.estimate-43"><span class="linenos">43</span></a><span class="sd">            CVXPY expression representing the estimated risk</span>
-</span><span id="Model.estimate-44"><a href="#Model.estimate-44"><span class="linenos">44</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Model.estimate-38"><a href="#Model.estimate-38"><span class="linenos">38</span></a>
+</span><span id="Model.estimate-39"><a href="#Model.estimate-39"><span class="linenos">39</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Model.estimate-40"><a href="#Model.estimate-40"><span class="linenos">40</span></a>
+</span><span id="Model.estimate-41"><a href="#Model.estimate-41"><span class="linenos">41</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="Model.estimate-42"><a href="#Model.estimate-42"><span class="linenos">42</span></a>
+</span><span id="Model.estimate-43"><a href="#Model.estimate-43"><span class="linenos">43</span></a><span class="sd">        Returns:</span>
+</span><span id="Model.estimate-44"><a href="#Model.estimate-44"><span class="linenos">44</span></a>
+</span><span id="Model.estimate-45"><a href="#Model.estimate-45"><span class="linenos">45</span></a><span class="sd">            CVXPY expression representing the estimated risk</span>
+</span><span id="Model.estimate-46"><a href="#Model.estimate-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Estimate the variance given the portfolio weights</p>
 
-<p>Args:
-    weights: CVXPY variable representing portfolio weights</p>
+<p>Args:</p>
 
-<pre><code>**kwargs: Additional keyword arguments
+<pre><code>weights: CVXPY variable representing portfolio weights
+
+**kwargs: Additional keyword arguments
 </code></pre>
 
-<p>Returns:
-    CVXPY expression representing the estimated risk</p>
+<p>Returns:</p>
+
+<pre><code>CVXPY expression representing the estimated risk
+</code></pre>
 </div>
 
 
@@ -270,21 +285,24 @@
 
     </div>
     <a class="headerlink" href="#Model.update"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Model.update-46"><a href="#Model.update-46"><span class="linenos">46</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Model.update-47"><a href="#Model.update-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Model.update-48"><a href="#Model.update-48"><span class="linenos">48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Model.update-49"><a href="#Model.update-49"><span class="linenos">49</span></a><span class="sd">        Update the data in the risk model</span>
-</span><span id="Model.update-50"><a href="#Model.update-50"><span class="linenos">50</span></a>
-</span><span id="Model.update-51"><a href="#Model.update-51"><span class="linenos">51</span></a><span class="sd">        Args:</span>
-</span><span id="Model.update-52"><a href="#Model.update-52"><span class="linenos">52</span></a><span class="sd">            **kwargs: Keyword arguments containing data to update the model</span>
-</span><span id="Model.update-53"><a href="#Model.update-53"><span class="linenos">53</span></a><span class="sd">        &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Model.update-48"><a href="#Model.update-48"><span class="linenos">48</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Model.update-49"><a href="#Model.update-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Model.update-50"><a href="#Model.update-50"><span class="linenos">50</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Model.update-51"><a href="#Model.update-51"><span class="linenos">51</span></a><span class="sd">        Update the data in the risk model</span>
+</span><span id="Model.update-52"><a href="#Model.update-52"><span class="linenos">52</span></a>
+</span><span id="Model.update-53"><a href="#Model.update-53"><span class="linenos">53</span></a><span class="sd">        Args:</span>
+</span><span id="Model.update-54"><a href="#Model.update-54"><span class="linenos">54</span></a>
+</span><span id="Model.update-55"><a href="#Model.update-55"><span class="linenos">55</span></a><span class="sd">            **kwargs: Keyword arguments containing data to update the model</span>
+</span><span id="Model.update-56"><a href="#Model.update-56"><span class="linenos">56</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Update the data in the risk model</p>
 
-<p>Args:
-    **kwargs: Keyword arguments containing data to update the model</p>
+<p>Args:</p>
+
+<pre><code>**kwargs: Keyword arguments containing data to update the model
+</code></pre>
 </div>
 
 
@@ -301,32 +319,37 @@
 
     </div>
     <a class="headerlink" href="#Model.constraints"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Model.constraints-55"><a href="#Model.constraints-55"><span class="linenos">55</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Model.constraints-56"><a href="#Model.constraints-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
-</span><span id="Model.constraints-57"><a href="#Model.constraints-57"><span class="linenos">57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Model.constraints-58"><a href="#Model.constraints-58"><span class="linenos">58</span></a><span class="sd">        Return the constraints for the risk model</span>
-</span><span id="Model.constraints-59"><a href="#Model.constraints-59"><span class="linenos">59</span></a>
-</span><span id="Model.constraints-60"><a href="#Model.constraints-60"><span class="linenos">60</span></a><span class="sd">        Args:</span>
-</span><span id="Model.constraints-61"><a href="#Model.constraints-61"><span class="linenos">61</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Model.constraints-58"><a href="#Model.constraints-58"><span class="linenos">58</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Model.constraints-59"><a href="#Model.constraints-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+</span><span id="Model.constraints-60"><a href="#Model.constraints-60"><span class="linenos">60</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Model.constraints-61"><a href="#Model.constraints-61"><span class="linenos">61</span></a><span class="sd">        Return the constraints for the risk model</span>
 </span><span id="Model.constraints-62"><a href="#Model.constraints-62"><span class="linenos">62</span></a>
-</span><span id="Model.constraints-63"><a href="#Model.constraints-63"><span class="linenos">63</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="Model.constraints-63"><a href="#Model.constraints-63"><span class="linenos">63</span></a><span class="sd">        Args:</span>
 </span><span id="Model.constraints-64"><a href="#Model.constraints-64"><span class="linenos">64</span></a>
-</span><span id="Model.constraints-65"><a href="#Model.constraints-65"><span class="linenos">65</span></a><span class="sd">        Returns:</span>
-</span><span id="Model.constraints-66"><a href="#Model.constraints-66"><span class="linenos">66</span></a><span class="sd">            List of CVXPY constraints for the risk model</span>
-</span><span id="Model.constraints-67"><a href="#Model.constraints-67"><span class="linenos">67</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Model.constraints-65"><a href="#Model.constraints-65"><span class="linenos">65</span></a><span class="sd">            weights: CVXPY variable representing portfolio weights</span>
+</span><span id="Model.constraints-66"><a href="#Model.constraints-66"><span class="linenos">66</span></a>
+</span><span id="Model.constraints-67"><a href="#Model.constraints-67"><span class="linenos">67</span></a><span class="sd">            **kwargs: Additional keyword arguments</span>
+</span><span id="Model.constraints-68"><a href="#Model.constraints-68"><span class="linenos">68</span></a>
+</span><span id="Model.constraints-69"><a href="#Model.constraints-69"><span class="linenos">69</span></a><span class="sd">        Returns:</span>
+</span><span id="Model.constraints-70"><a href="#Model.constraints-70"><span class="linenos">70</span></a>
+</span><span id="Model.constraints-71"><a href="#Model.constraints-71"><span class="linenos">71</span></a><span class="sd">            List of CVXPY constraints for the risk model</span>
+</span><span id="Model.constraints-72"><a href="#Model.constraints-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Return the constraints for the risk model</p>
 
-<p>Args:
-    weights: CVXPY variable representing portfolio weights</p>
+<p>Args:</p>
 
-<pre><code>**kwargs: Additional keyword arguments
+<pre><code>weights: CVXPY variable representing portfolio weights
+
+**kwargs: Additional keyword arguments
 </code></pre>
 
-<p>Returns:
-    List of CVXPY constraints for the risk model</p>
+<p>Returns:</p>
+
+<pre><code>List of CVXPY constraints for the risk model
+</code></pre>
 </div>
 
 
