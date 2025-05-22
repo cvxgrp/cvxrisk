@@ -123,7 +123,7 @@
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="k">def</span><span class="w"> </span><span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="k">def</span><span class="w"> </span><span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PCA</span><span class="p">:</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">    Compute the first n principal components for a return matrix.</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
@@ -131,11 +131,11 @@
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">    the most important factors that explain the variance in the returns.</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    Args:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        returns (pandas.DataFrame): DataFrame of asset returns</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        n_components (int, optional): Number of principal components to extract. Defaults to 10.</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        returns: DataFrame of asset returns</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        n_components: Number of principal components to extract. Defaults to 10.</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
 </span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    Returns:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        PCA: A named tuple containing the PCA results with the following fields:</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        A named tuple containing the PCA results with the following fields:</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">            - explained_variance: The explained variance ratio for each component</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">            - factors: The factor returns (principal components)</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">            - exposure: The factor exposures (loadings) for each asset</span>
@@ -287,13 +287,13 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">pca</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">returns</span>, </span><span class="param"><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span></span><span class="return-annotation">):</span></span>
+        <span class="name">pca</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">returns</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span>,</span><span class="param">	<span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span></span><span class="return-annotation">) -> <span class="n"><a href="#PCA">PCA</a></span>:</span></span>
 
                 <label class="view-source-button" for="pca-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#pca"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="pca-42"><a href="#pca-42"><span class="linenos">42</span></a><span class="k">def</span><span class="w"> </span><span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="pca-42"><a href="#pca-42"><span class="linenos">42</span></a><span class="k">def</span><span class="w"> </span><span class="nf">pca</span><span class="p">(</span><span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PCA</span><span class="p">:</span>
 </span><span id="pca-43"><a href="#pca-43"><span class="linenos">43</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="pca-44"><a href="#pca-44"><span class="linenos">44</span></a><span class="sd">    Compute the first n principal components for a return matrix.</span>
 </span><span id="pca-45"><a href="#pca-45"><span class="linenos">45</span></a>
@@ -301,11 +301,11 @@
 </span><span id="pca-47"><a href="#pca-47"><span class="linenos">47</span></a><span class="sd">    the most important factors that explain the variance in the returns.</span>
 </span><span id="pca-48"><a href="#pca-48"><span class="linenos">48</span></a>
 </span><span id="pca-49"><a href="#pca-49"><span class="linenos">49</span></a><span class="sd">    Args:</span>
-</span><span id="pca-50"><a href="#pca-50"><span class="linenos">50</span></a><span class="sd">        returns (pandas.DataFrame): DataFrame of asset returns</span>
-</span><span id="pca-51"><a href="#pca-51"><span class="linenos">51</span></a><span class="sd">        n_components (int, optional): Number of principal components to extract. Defaults to 10.</span>
+</span><span id="pca-50"><a href="#pca-50"><span class="linenos">50</span></a><span class="sd">        returns: DataFrame of asset returns</span>
+</span><span id="pca-51"><a href="#pca-51"><span class="linenos">51</span></a><span class="sd">        n_components: Number of principal components to extract. Defaults to 10.</span>
 </span><span id="pca-52"><a href="#pca-52"><span class="linenos">52</span></a>
 </span><span id="pca-53"><a href="#pca-53"><span class="linenos">53</span></a><span class="sd">    Returns:</span>
-</span><span id="pca-54"><a href="#pca-54"><span class="linenos">54</span></a><span class="sd">        PCA: A named tuple containing the PCA results with the following fields:</span>
+</span><span id="pca-54"><a href="#pca-54"><span class="linenos">54</span></a><span class="sd">        A named tuple containing the PCA results with the following fields:</span>
 </span><span id="pca-55"><a href="#pca-55"><span class="linenos">55</span></a><span class="sd">            - explained_variance: The explained variance ratio for each component</span>
 </span><span id="pca-56"><a href="#pca-56"><span class="linenos">56</span></a><span class="sd">            - factors: The factor returns (principal components)</span>
 </span><span id="pca-57"><a href="#pca-57"><span class="linenos">57</span></a><span class="sd">            - exposure: The factor exposures (loadings) for each asset</span>
@@ -342,11 +342,11 @@
 the most important factors that explain the variance in the returns.</p>
 
 <p>Args:
-    returns (pandas.DataFrame): DataFrame of asset returns
-    n_components (int, optional): Number of principal components to extract. Defaults to 10.</p>
+    returns: DataFrame of asset returns
+    n_components: Number of principal components to extract. Defaults to 10.</p>
 
 <p>Returns:
-    PCA: A named tuple containing the PCA results with the following fields:
+    A named tuple containing the PCA results with the following fields:
         - explained_variance: The explained variance ratio for each component
         - factors: The factor returns (principal components)
         - exposure: The factor exposures (loadings) for each asset
