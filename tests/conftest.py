@@ -1,3 +1,5 @@
+"""Pytest configuration and fixtures for the cvxrisk test suite"""
+
 from __future__ import annotations
 
 from pathlib import Path
