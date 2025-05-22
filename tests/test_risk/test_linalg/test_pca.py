@@ -18,9 +18,11 @@ def returns(resource_dir) -> pd.DataFrame:
     using percentage change, and fills any NaN values with zeros.
 
     Args:
+
         resource_dir: Pytest fixture providing the path to the test resources directory
 
     Returns:
+
         pandas.DataFrame: DataFrame containing stock returns
     """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
@@ -36,6 +38,7 @@ def test_pca(returns: pd.DataFrame) -> None:
     2. The explained variance ratios match the expected values
 
     Args:
+
         returns: Pytest fixture providing stock return data
     """
     xxx = pca(returns)
