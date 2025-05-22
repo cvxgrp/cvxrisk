@@ -13,6 +13,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Conditional Value at Risk (CVaR) risk model implementation"""
+
 from dataclasses import dataclass
 
 import cvxpy as cvx

@@ -13,6 +13,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Random covariance matrix generation utilities"""
+
 import numpy as np
 
 

@@ -13,11 +13,13 @@
 #    limitations under the License.
 from __future__ import annotations
 
-import cvxpy as cp
+"""Minimum risk portfolio optimization"""
 
+import cvxpy as cp
+from cvx.risk import Model
 
 def minrisk_problem(
-    riskmodel: "Model", 
+    riskmodel: Model,
     weights: cp.Variable, 
     base: cp.Expression = 0.0, 
     constraints: list[cp.Constraint] = None, 
