@@ -13,6 +13,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Cholesky decomposition utilities for covariance matrices"""
+
 import numpy as np
 import scipy as sc
 

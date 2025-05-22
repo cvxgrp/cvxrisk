@@ -13,6 +13,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
+"""Matrix validation utilities for handling non-finite values"""
+
 import numpy as np
 
 
