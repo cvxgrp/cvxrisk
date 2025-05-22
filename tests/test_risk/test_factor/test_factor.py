@@ -1,3 +1,5 @@
+"""Tests for the factor risk model implementation"""
+
 from __future__ import annotations
 
 import cvxpy as cp
@@ -12,7 +14,7 @@ from cvx.risk.linalg import pca as principal_components
 
 
 @pytest.fixture()
-def returns(resource_dir):
+def returns(resource_dir) -> pd.DataFrame:
     """
     Pytest fixture that provides stock return data for testing.
 
@@ -29,7 +31,7 @@ def returns(resource_dir):
     return prices.pct_change().fillna(0.0)
 
 
-def test_timeseries_model(returns):
+def test_timeseries_model(returns: pd.DataFrame) -> None:
     """
     Test the FactorModel with time series data.
 
@@ -63,7 +65,7 @@ def test_timeseries_model(returns):
     np.testing.assert_almost_equal(vola, 0.00923407730537884)
 
 
-def test_minvar(returns):
+def test_minvar(returns: pd.DataFrame) -> None:
     """
     Test the minimum variance problem with a factor model.
 
@@ -84,7 +86,7 @@ def test_minvar(returns):
     assert problem.is_dpp()
 
 
-def test_estimate_risk():
+def test_estimate_risk() -> None:
     """Test the estimate() method"""
     model = FactorModel(assets=25, k=12)
 
@@ -132,7 +134,15 @@ def test_estimate_risk():
     assert np.all([y.value >= -(0.1 + 1e-6)])
 
 
-def test_dynamic_exposure():
+def test_dynamic_exposure() -> None:
+    """
+    Test the dynamic exposure update functionality of the FactorModel.
+
+    This test verifies that:
+    1. The FactorModel can be updated with different exposure matrices
+    2. The exposure parameter is correctly updated with the new values
+    3. The shape of the exposure parameter is maintained
+    """
     model = FactorModel(assets=3, k=2)
     model.update(
         exposure=np.array([[1.0, 2.0]]),
