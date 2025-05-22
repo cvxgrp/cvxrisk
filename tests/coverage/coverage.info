@@ -4,12 +4,12 @@ SF:cvx/portfolio/min_risk.py
 DA:14,1
 DA:16,1
 DA:19,1
-DA:33,1
-DA:35,1
-DA:40,1
+DA:34,1
+DA:36,1
+DA:41,1
 LF:6
 LH:6
-FN:19,40,minrisk_problem
+FN:19,41,minrisk_problem
 FNDA:1,minrisk_problem
 FNF:1
 FNH:1
