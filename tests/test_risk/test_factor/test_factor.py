@@ -112,7 +112,7 @@ def test_estimate_risk() -> None:
         lower_factors=np.zeros(10),
         upper_factors=np.ones(10),
     )
-    prob.solve()
+    prob.solve(solver="CLARABEL")
     assert prob.value == pytest.approx(0.14138117837204583)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
 
@@ -125,7 +125,7 @@ def test_estimate_risk() -> None:
         lower_factors=-0.1 * np.ones(10),
         upper_factors=0.1 * np.ones(10),
     )
-    prob.solve()
+    prob.solve(solver="CLARABEL")
     assert prob.value == pytest.approx(0.5454593844618784)
     assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
 

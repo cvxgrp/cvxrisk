@@ -90,7 +90,7 @@ def __(beta, factors, minrisk_problem, np, pd, ret, triangle, w, y):
             lower_factors=-0.1 * np.ones(100),
             upper_factors=0.1 * np.ones(100),
         )
-        _problem.solve(ignore_dpp=True)
+        _problem.solve(ignore_dpp=True, solver="CLARABEL")
     return (i,)
 
 

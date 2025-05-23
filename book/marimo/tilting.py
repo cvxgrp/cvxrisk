@@ -113,7 +113,7 @@ def _(assets, minrisk_problem, pd, riskmodel, w_sp, weights):
     problem = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=[])
 
     print(problem)
-    problem.solve()
+    problem.solve(solver="CLARABEL")
 
     solution = pd.Series(index=assets, data=weights.value)
     print(solution)
@@ -128,7 +128,7 @@ def _(assets, minrisk_problem, pd, riskmodel, v, w_sp, weights):
     problem_tilt = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=constraints)
 
     print(problem_tilt)
-    problem_tilt.solve()
+    problem_tilt.solve(solver="CLARABEL")
 
     # The solution is different from the previous problem
     solution_tilt = pd.Series(index=assets, data=weights.value)

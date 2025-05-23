@@ -21,8 +21,15 @@ dev = [
     "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
     "pre-commit>=4.0.1",
-    "clarabel>=0.9.0",
     "cvxsimulator>=1.2.1",
+]
+
+clarabel = [
+    "clarabel>=0.9.0",
+]
+
+mosek = [
+    "mosek>=11.0",
 ]
 
 [tool.ruff]
@@ -45,7 +52,7 @@ packages = ["cvx"]
 
 [tool.deptry.per_rule_ignores]
 DEP001 = ["cvxpy", "sklearn"]
-DEP002 = ["cvxpy-base", "scikit-learn"]
+DEP002 = ["cvxpy-base", "scikit-learn", "mosek", "clarabel"]
 
 [tool.deptry]
 # see https://deptry.com/usage/#pep-621-dev-dependency-groups

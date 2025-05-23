@@ -63,7 +63,7 @@ def __(cvx, minrisk_problem, model, np, pd, prices):
     y = cvx.Variable(10)
 
     problem = minrisk_problem(model, w, y=y)
-    problem.solve()
+    problem.solve(solver="CLARABEL")
 
     print(pd.Series(data=w.value, index=prices.columns))
     print(model.estimate(w, y=y).value)
