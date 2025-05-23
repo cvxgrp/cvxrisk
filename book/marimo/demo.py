@@ -71,7 +71,7 @@ def __(
         )
 
         # don't reconstruct the problem in every iteration!
-        _problem.solve()
+        _problem.solve(solver="CLARABEL")
 
         _builder.weights = _w.value
         _builder.aum = _state.aum
@@ -102,7 +102,7 @@ def __(Builder, cp, minrisk_problem, np, prices, returns, start):
         )
 
         # don't reconstruct the problem in every iteration!
-        _problem.solve()
+        _problem.solve(solver="CLARABEL")
 
         _builder.weights = _w.value
         _builder.aum = _state.aum
