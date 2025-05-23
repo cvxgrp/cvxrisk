@@ -70,7 +70,7 @@ def test_min_variance() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    problem.solve()
+    problem.solve(solver="CLARABEL")
     np.testing.assert_almost_equal(weights.value, np.array([0.75, 0.25, 0.0, 0.0]), decimal=5)
 
     # It's enough to only update the value for the cholesky decomposition
@@ -79,7 +79,7 @@ def test_min_variance() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    problem.solve()
+    problem.solve(solver="CLARABEL")
     np.testing.assert_almost_equal(weights.value, np.array([0.875, 0.125, 0.0, 0.0]), decimal=5)
 
 
@@ -103,5 +103,5 @@ def test_min_risk_constraints() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    problem.solve()
+    problem.solve(solver="CLARABEL")
     np.testing.assert_almost_equal(weights.value, np.array([0.0, 1.0, 0.0, 0.0]), decimal=5)
