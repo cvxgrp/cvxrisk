@@ -421,8 +421,13 @@ them in your optimization problems.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install from PyPI (without any convex solver)</span>
 pip<span class="w"> </span>install<span class="w"> </span>cvxrisk
 
+<span class="c1"># Install with Clarabel solver</span>
+pip<span class="w"> </span>install<span class="w"> </span>cvxrisk<span class="o">[</span>clarabel<span class="o">]</span>
+
+<span class="c1"># Install with Mosek solver</span>
+pip<span class="w"> </span>install<span class="w"> </span>cvxrisk<span class="o">[</span>mosek<span class="o">]</span>
+
 <span class="c1"># For development installation</span>
-<span class="c1"># This will also install clarabel as a dev dependency</span>
 git<span class="w"> </span>clone<span class="w"> </span>https://github.com/cvxgrp/cvxrisk.git
 <span class="nb">cd</span><span class="w"> </span>cvxrisk
 make<span class="w"> </span>install
@@ -431,10 +436,11 @@ make<span class="w"> </span>install
 make<span class="w"> </span>marimo
 </pre></div>
 </div>
-<p>⚠️ <strong>Warning!</strong> The package does not install a convex solver!
-It relies solely on cvxpy-base. If you use cvxrisk as a dependency
+<p>⚠️ <strong>Warning!</strong> The package does not install a convex solver if not explicitly desired.
+It relies on cvxpy-base. If you use cvxrisk as a dependency
 in your projects you may want to install <a class="reference external" href="https://github.com/oxfordcontrol/Clarabel.rs">clarabel</a>
-or <a class="reference external" href="https://www.mosek.com">mosek</a>.</p>
+using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cvxrisk[clarabel]</span></code> or <a class="reference external" href="https://www.mosek.com">mosek</a>
+using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cvxrisk[mosek]</span></code>.</p>
 </section>
 <section id="quick-start">
 <h2>🔧 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>

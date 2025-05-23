@@ -23,8 +23,13 @@ them in your optimization problems.
 # Install from PyPI (without any convex solver)
 pip install cvxrisk
 
+# Install with Clarabel solver
+pip install cvxrisk[clarabel]
+
+# Install with Mosek solver
+pip install cvxrisk[mosek]
+
 # For development installation
-# This will also install clarabel as a dev dependency
 git clone https://github.com/cvxgrp/cvxrisk.git
 cd cvxrisk
 make install
@@ -33,10 +38,11 @@ make install
 make marimo
 ```
 
-⚠️ **Warning!** The package does not install a convex solver!
-It relies solely on cvxpy-base. If you use cvxrisk as a dependency
+⚠️ **Warning!** The package does not install a convex solver if not explicitly desired.
+It relies on cvxpy-base. If you use cvxrisk as a dependency
 in your projects you may want to install [clarabel](https://github.com/oxfordcontrol/Clarabel.rs)
-or [mosek](https://www.mosek.com).
+using `pip install cvxrisk[clarabel]` or [mosek](https://www.mosek.com)
+using `pip install cvxrisk[mosek]`.
 
 ## 🔧 Quick Start
 
