@@ -27,6 +27,9 @@ pip install cvxrisk
 git clone https://github.com/cvxgrp/cvxrisk.git
 cd cvxrisk
 make install
+
+# For experimenting with the notebooks
+make marimo
 ```
 
 ## 🔧 Quick Start
