@@ -11,16 +11,22 @@ on:
 
 jobs:
   deptry:
+    # Dependency validation job
+    # Checks for dependency issues like unused or missing dependencies
+    # using the deptry tool
     runs-on: ubuntu-latest
 
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
 
-      - uses: cvxgrp/.github/actions/deptry@v2.2.8
+      - uses: cvxgrp/.github/actions/deptry@v2.2.8  # Run deptry to check dependencies
 
 
   pre-commit:
+    # Code quality check job
+    # Runs pre-commit hooks to enforce code style, formatting,
+    # and other quality standards
     runs-on: ubuntu-latest
     steps:
-      - uses: cvxgrp/.github/actions/pre-commit@v2.2.8
+      - uses: cvxgrp/.github/actions/pre-commit@v2.2.8  # Run pre-commit hooks
