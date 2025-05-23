@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.portfolio.min_risk import minrisk_problem
+from cvx.portfolio import minrisk_problem
 from cvx.random import rand_cov
 from cvx.risk.factor import FactorModel
 from cvx.risk.linalg import pca as principal_components

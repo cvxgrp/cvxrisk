@@ -12,7 +12,7 @@ def __(__file__):
     import numpy as np
     import pandas as pd
 
-    from cvx.portfolio.min_risk import minrisk_problem
+    from cvx.portfolio import minrisk_problem
     from cvx.risk.sample import SampleCovariance
     from cvx.simulator import Builder
 
