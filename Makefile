@@ -22,7 +22,7 @@ install: venv ## Install all dependencies using uv
 
 fmt: venv ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uv pip install pre-commit
+	@uv pip install --no-cache-dir pre-commit
 	@uv run pre-commit install
 	@uv run pre-commit run --all-files
 
@@ -30,7 +30,7 @@ fmt: venv ## Run code formatting and linting
 
 test: install ## Run all tests
 	@printf "$(BLUE)Running tests...$(RESET)\n"
-	@uv pip install pytest
+	@uv pip install --no-cache-dir pytest
 	@uv run pytest tests
 
 ##@ Cleanup
@@ -43,7 +43,7 @@ clean: ## Clean generated files and directories
 
 marimo: install ## Start a Marimo server
 	@printf "$(BLUE)Start Marimo server...$(RESET)\n"
-	@uv pip install marimo
+	@uv pip install --no-cache-dir marimo
 	@uv run marimo edit book/marimo
 
 ##@ Help
