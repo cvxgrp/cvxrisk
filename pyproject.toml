@@ -52,7 +52,7 @@ packages = ["cvx"]
 
 [tool.deptry.per_rule_ignores]
 DEP001 = ["cvxpy", "sklearn"]
-DEP002 = ["cvxpy-base", "scikit-learn"]
+DEP002 = ["cvxpy-base", "scikit-learn", "mosek", "clarabel"]
 
 [tool.deptry]
 # see https://deptry.com/usage/#pep-621-dev-dependency-groups
