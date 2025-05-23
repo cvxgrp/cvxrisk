@@ -17,7 +17,7 @@ def __():
     import pandas as pd
     from util.random import random_assets, random_beta, random_factors, random_noise
 
-    from cvx.portfolio.min_risk import minrisk_problem
+    from cvx.portfolio import minrisk_problem
     from cvx.risk.factor import FactorModel
 
     return (

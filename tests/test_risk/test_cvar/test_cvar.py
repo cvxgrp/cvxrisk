@@ -6,7 +6,7 @@ import cvxpy as cp
 import numpy as np
 import pytest
 
-from cvx.portfolio.min_risk import minrisk_problem
+from cvx.portfolio import minrisk_problem
 from cvx.risk.cvar import CVar
 
 

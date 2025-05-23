@@ -15,7 +15,7 @@ def __():
     import cvxpy as cp
     import numpy as np
 
-    from cvx.portfolio.min_risk import minrisk_problem
+    from cvx.portfolio import minrisk_problem
     from cvx.random import rand_cov
     from cvx.risk.sample import SampleCovariance
 
