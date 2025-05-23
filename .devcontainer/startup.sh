@@ -1,5 +1,7 @@
 #!/bin/bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
-uv sync -v --extra Clarabel --frozen
+uv venv
+uv sync --all-extras --dev --frozen
+uv pip install --no-cache-dir marimo
 
 uv pip install marimo

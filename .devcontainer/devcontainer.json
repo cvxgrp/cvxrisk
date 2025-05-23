@@ -2,7 +2,14 @@
 	"name": "Python 3",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
-	"onCreateCommand": ".devcontainer/startup.sh",
+	"hostRequirements": {
+        "cpus": 4
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {}
+    },
+    "forwardPorts": [8080],
+
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -19,5 +26,8 @@
 				"ms-toolsai.jupyter"
 			]
 		}
-	}
+	},
+    "onCreateCommand": ".devcontainer/startup.sh",
+    "postStartCommand": "uv run marimo --yes edit --host=localhost --port=8080 --headless --no-token",
+    "remoteUser": "vscode"
 }
