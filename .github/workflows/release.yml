@@ -1,10 +1,13 @@
 name: Bump version and publish
+# Release workflow for publishing to PyPI
+# This workflow handles version bumping, package building, and publishing to PyPI.
+# It is manually triggered and requires appropriate permissions.
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manually triggered by a user with appropriate permissions
 
 permissions:
-  contents: write
+  contents: write  # Write access to repository contents for tagging
 
 jobs:
   tagging:

@@ -1,10 +1,13 @@
 name: pre-commit
+# Code quality and dependency check workflow
+# This workflow runs code quality checks and dependency validation
+# to ensure the codebase meets standards and has no dependency issues.
 
 permissions:
-  contents: read
+  contents: read  # Read-only access to repository contents
 
 on:
-  push:
+  push:  # Triggered on every push to the repository
 
 jobs:
   deptry:

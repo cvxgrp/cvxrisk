@@ -1,33 +1,40 @@
 {
+	// Name of the dev container displayed in VS Code
 	"name": "Python 3",
+	// Base container image to use
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
+	// Minimum host requirements for the container
 	"hostRequirements": {
-        "cpus": 4
+        "cpus": 4  // Require at least 4 CPU cores
     },
+    // Additional container features to install
     "features": {
-        "ghcr.io/devcontainers/features/common-utils:2": {}
+        "ghcr.io/devcontainers/features/common-utils:2": {}  // Common utilities like git, wget, etc.
     },
-    "forwardPorts": [8080],
+    // Ports to forward from the container to the local machine
+    "forwardPorts": [8080],  // Forward port 8080 for marimo server
 
+	// VS Code specific customizations
 	"customizations": {
 		"vscode": {
+			// VS Code settings specific to this container
 			"settings": {
-				"python.testing.pytestEnabled": true,
-				"python.testing.unittestEnabled": false,
+				"python.testing.pytestEnabled": true,  // Enable pytest for testing
+				"python.testing.unittestEnabled": false,  // Disable unittest
 				"python.testing.pytestArgs": [
-					"."
+					"."  // Run tests from the root directory
 				],
-				"python.pythonPath": ".venv/bin/python",
-				"python.defaultInterpreterPath": ".venv/bin/python",
-				"python.terminal.activateEnvInCurrentTerminal": true
-			},
-			"extensions": [
-				"ms-toolsai.jupyter"
-			]
+				"python.pythonPath": ".venv/bin/python",  // Path to Python interpreter
+				"python.defaultInterpreterPath": ".venv/bin/python",  // Default Python interpreter
+				"python.terminal.activateEnvInCurrentTerminal": true  // Activate virtual environment in terminal
+			}
 		}
 	},
-    "onCreateCommand": ".devcontainer/startup.sh",
-    "postStartCommand": "uv run marimo --yes edit --host=localhost --port=8080 --headless --no-token",
-    "remoteUser": "vscode"
+    // Command to run when the container is created
+    "onCreateCommand": ".devcontainer/startup.sh",  // Run startup script to set up environment
+    // Command to run after the container is started
+    "postStartCommand": "uv run marimo --yes edit --host=localhost --port=8080 --headless --no-token",  // Start marimo server
+    // User to run as inside the container
+    "remoteUser": "vscode"  // Run as the vscode user instead of root
 }
