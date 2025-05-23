@@ -33,7 +33,7 @@ make install
 make marimo
 ```
 
-Note that the package does not install a convex solver. 
+⚠️ **Warning!** The package does not install a convex solver!
 It relies solely on cvxpy-base. If you use cvxrisk as a dependency
 in your projects you may want to install [clarabel](https://github.com/oxfordcontrol/Clarabel.rs)
 or [mosek](https://www.mosek.com).
