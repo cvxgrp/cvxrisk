@@ -53,7 +53,7 @@ def __(np, problem, rand_cov):
     for _i in range(100):
         _problem, _riskmodel = problem(_a.shape[0])
         _riskmodel.update(cov=_a, lower_assets=np.zeros(48), upper_assets=np.ones(48))
-        _problem.solve()
+        _problem.solve(solver="CLARABEL")
     return
 
 
