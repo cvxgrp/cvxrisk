@@ -1,0 +1,107 @@
+from __future__ import annotations
+
+import cvxpy as cp
+import numpy as np
+
+from cvx.portfolio.min_risk import minrisk_problem
+from cvx.risk.sample import SampleCovariance
+
+
+def test_minrisk_problem_basic():
+    """Test that minrisk_problem creates a valid problem with basic constraints."""
+    # Create a simple risk model
+    riskmodel = SampleCovariance(num=2)
+    riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
+
+    # Define portfolio weights variable
+    weights = cp.Variable(2)
+
+    # Create the optimization problem
+    problem = minrisk_problem(riskmodel, weights)
+
+    # Check that the problem is valid
+    assert isinstance(problem, cp.Problem)
+    assert problem.is_dcp()
+
+    # Solve the problem
+    problem.solve()
+
+    # Check that the problem was solved successfully
+    assert problem.status == cp.OPTIMAL
+
+    # Check that the weights sum to 1
+    assert np.isclose(np.sum(weights.value), 1.0)
+
+    # Check that the weights are non-negative
+    assert np.all(weights.value >= 0)
+
+    # For this specific covariance matrix, we expect more weight on the first asset
+    # since it has lower variance
+    assert weights.value[0] > weights.value[1]
+
+
+def test_minrisk_problem_with_base():
+    """Test that minrisk_problem works with a base portfolio."""
+    # Create a simple risk model
+    riskmodel = SampleCovariance(num=2)
+    riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
+
+    # Define portfolio weights variable
+    weights = cp.Variable(2)
+
+    # Define a base portfolio (e.g., for tracking error minimization)
+    base = np.array([0.5, 0.5])
+
+    # Create the optimization problem
+    problem = minrisk_problem(riskmodel, weights, base=base)
+
+    # Check that the problem is valid
+    assert isinstance(problem, cp.Problem)
+    assert problem.is_dcp()
+
+    # Solve the problem
+    problem.solve()
+
+    # Check that the problem was solved successfully
+    assert problem.status == cp.OPTIMAL
+
+    # Check that the weights sum to 1
+    assert np.isclose(np.sum(weights.value), 1.0)
+
+    # Check that the weights are non-negative
+    assert np.all(weights.value >= 0)
+
+
+def test_minrisk_problem_with_additional_constraints():
+    """Test that minrisk_problem works with additional constraints."""
+    # Create a simple risk model
+    riskmodel = SampleCovariance(num=2)
+    riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
+
+    # Define portfolio weights variable
+    weights = cp.Variable(2)
+
+    # Define additional constraints
+    additional_constraints = [weights[0] >= 0.3]  # At least 30% in the first asset
+
+    # Create the optimization problem
+    problem = minrisk_problem(riskmodel, weights, constraints=additional_constraints)
+
+    # Check that the problem is valid
+    assert isinstance(problem, cp.Problem)
+    assert problem.is_dcp()
+
+    # Solve the problem
+    problem.solve()
+
+    # Check that the problem was solved successfully
+    assert problem.status == cp.OPTIMAL
+
+    # Check that the weights sum to 1
+    assert np.isclose(np.sum(weights.value), 1.0)
+
+    # Check that the weights are non-negative
+    assert np.all(weights.value >= 0)
+
+    # Check that the additional constraint is satisfied
+    assert weights.value[0] >= 0.3
