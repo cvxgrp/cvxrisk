@@ -24,7 +24,7 @@ def test_minrisk_problem_basic():
     assert problem.is_dcp()
 
     # Solve the problem
-    problem.solve()
+    problem.solve(solver="CLARABEL")
 
     # Check that the problem was solved successfully
     assert problem.status == cp.OPTIMAL
@@ -60,7 +60,7 @@ def test_minrisk_problem_with_base():
     assert problem.is_dcp()
 
     # Solve the problem
-    problem.solve()
+    problem.solve(solver="CLARABEL")
 
     # Check that the problem was solved successfully
     assert problem.status == cp.OPTIMAL
@@ -92,7 +92,7 @@ def test_minrisk_problem_with_additional_constraints():
     assert problem.is_dcp()
 
     # Solve the problem
-    problem.solve()
+    problem.solve(solver="CLARABEL")
 
     # Check that the problem was solved successfully
     assert problem.status == cp.OPTIMAL
