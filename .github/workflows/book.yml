@@ -4,7 +4,9 @@ name: "book"
 # test coverage reports, and interactive notebooks.
 
 on:
-- push  # Triggered on every push to the repository
+  push:
+    branches:
+      - main
 
 jobs:
   marimo:
