@@ -41,6 +41,9 @@ jobs:
         uses: tschm/cradle/actions/environment@v0.1.71
 
       - uses: tschm/cradle/actions/coverage@v0.1.71  # Run tests and generate coverage reports
+        with:
+          source-folder: cvx
+          tests-folder: tests
 
   jupyter:
     # Process Jupyter notebooks for documentation
