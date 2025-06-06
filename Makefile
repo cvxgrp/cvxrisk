@@ -26,6 +26,9 @@ fmt: venv ## Run code formatting and linting
 	@uv run pre-commit install
 	@uv run pre-commit run --all-files
 
+ty: install
+	@uvx ty check
+
 ##@ Testing
 
 test: install ## Run all tests

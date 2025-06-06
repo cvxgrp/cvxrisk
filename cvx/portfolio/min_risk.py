@@ -21,7 +21,11 @@ from ..risk import Model
 
 
 def minrisk_problem(
-    riskmodel: Model, weights: cp.Variable, base: cp.Expression = 0.0, constraints: list[cp.Constraint] = None, **kwargs
+    riskmodel: Model,
+    weights: cp.Variable,
+    base: cp.Expression | float = 0.0,
+    constraints: list[cp.Constraint] | None = None,
+    **kwargs,
 ) -> cp.Problem:
     """
     Creates a minimum-risk portfolio optimization problem.

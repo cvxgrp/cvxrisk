@@ -113,8 +113,10 @@ def test_estimate_risk() -> None:
         upper_factors=np.ones(10),
     )
     prob.solve(solver="CLARABEL")
+    w = np.array(weights.value)
+
     assert prob.value == pytest.approx(0.14138117837204583)
-    assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
+    assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     model.update(
         cov=rand_cov(10),
@@ -126,8 +128,9 @@ def test_estimate_risk() -> None:
         upper_factors=0.1 * np.ones(10),
     )
     prob.solve(solver="CLARABEL")
+    w = np.array(weights.value)
     assert prob.value == pytest.approx(0.5454593844618784)
-    assert np.array(weights.value[20:]) == pytest.approx(np.zeros(5), abs=1e-6)
+    assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     # test that the exposure is correct, e.g. the factor weights match the exposure * asset weights
     assert model.parameter["exposure"].value @ weights.value == pytest.approx(y.value, abs=1e-6)

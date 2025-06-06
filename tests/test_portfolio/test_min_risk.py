@@ -26,18 +26,20 @@ def test_minrisk_problem_basic():
     # Solve the problem
     problem.solve(solver="CLARABEL")
 
+    w = np.array(weights.value)
+
     # Check that the problem was solved successfully
     assert problem.status == cp.OPTIMAL
 
     # Check that the weights sum to 1
-    assert np.isclose(np.sum(weights.value), 1.0)
+    assert np.isclose(np.sum(w), 1.0)
 
     # Check that the weights are non-negative
-    assert np.all(weights.value >= 0)
+    assert np.all(w >= 0)
 
     # For this specific covariance matrix, we expect more weight on the first asset
     # since it has lower variance
-    assert weights.value[0] > weights.value[1]
+    assert float(w[0]) > float(w[1])
 
 
 def test_minrisk_problem_with_base():
@@ -69,7 +71,7 @@ def test_minrisk_problem_with_base():
     assert np.isclose(np.sum(weights.value), 1.0)
 
     # Check that the weights are non-negative
-    assert np.all(weights.value >= 0)
+    assert np.all(np.array(weights.value) >= 0)
 
 
 def test_minrisk_problem_with_additional_constraints():
@@ -94,14 +96,16 @@ def test_minrisk_problem_with_additional_constraints():
     # Solve the problem
     problem.solve(solver="CLARABEL")
 
+    w = np.array(weights.value)
+
     # Check that the problem was solved successfully
     assert problem.status == cp.OPTIMAL
 
     # Check that the weights sum to 1
-    assert np.isclose(np.sum(weights.value), 1.0)
+    assert np.isclose(np.sum(w), 1.0)
 
     # Check that the weights are non-negative
-    assert np.all(weights.value >= 0)
+    assert np.all(w >= 0)
 
     # Check that the additional constraint is satisfied
-    assert weights.value[0] >= 0.3
+    assert w[0] >= 0.3
