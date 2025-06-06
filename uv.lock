@@ -230,15 +230,15 @@ mosek = [
 [package.metadata]
 requires-dist = [
     { name = "clarabel", marker = "extra == 'clarabel'", specifier = ">=0.9.0" },
-    { name = "cvxpy-base", specifier = ">=1.6.0" },
+    { name = "cvxpy-base", specifier = ">=1.5.0" },
     { name = "cvxsimulator", marker = "extra == 'dev'", specifier = ">=1.2.1" },
     { name = "mosek", marker = "extra == 'mosek'", specifier = ">=11.0" },
-    { name = "numpy", specifier = ">=2.1.3" },
+    { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.0.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.0.0" },
-    { name = "scikit-learn", specifier = ">=1.5.2" },
+    { name = "scikit-learn", specifier = ">=1.6.1" },
     { name = "scipy", specifier = ">=1.14.1" },
 ]
 provides-extras = ["dev", "clarabel", "mosek"]

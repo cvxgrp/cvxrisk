@@ -1,13 +1,11 @@
 import marimo
 
-__generated_with = "0.9.27"
+__generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 
 @app.cell
-def __(__file__):
-    from pathlib import Path
-
+def _():
     import cvxpy as cp
     import numpy as np
     import pandas as pd
@@ -17,24 +15,15 @@ def __(__file__):
     from cvx.simulator import Builder
 
     pd.options.plotting.backend = "plotly"
-
-    path = Path(__file__).parent
-    return (
-        Builder,
-        Path,
-        SampleCovariance,
-        cp,
-        minrisk_problem,
-        np,
-        path,
-        pd,
-    )
+    return Builder, SampleCovariance, cp, minrisk_problem, np, pd
 
 
 @app.cell
-def __(path, pd):
+def _(mo, pd):
     # Load some historic stock prices
-    prices = pd.read_csv(path / "data" / "stock_prices.csv", index_col=0, parse_dates=True, header=0)
+    prices = pd.read_csv(
+        str(mo.notebook_location() / "public" / "stock_prices.csv"), index_col=0, parse_dates=True, header=0
+    )
 
     # Estimate a series of historic covariance matrices
     returns = prices.pct_change().dropna(axis=0, how="all")
@@ -42,15 +31,7 @@ def __(path, pd):
 
 
 @app.cell
-def __(
-    Builder,
-    SampleCovariance,
-    cp,
-    minrisk_problem,
-    np,
-    prices,
-    returns,
-):
+def _(Builder, SampleCovariance, cp, minrisk_problem, np, prices, returns):
     cov = returns.ewm(com=60, min_periods=100).cov().dropna(axis=0, how="all")
     start = cov.index[0][0]
 
@@ -79,11 +60,11 @@ def __(
     _portfolio = _builder.build()
 
     _portfolio.nav.plot()
-    return cov, start
+    return (start,)
 
 
 @app.cell
-def __(Builder, cp, minrisk_problem, np, prices, returns, start):
+def _(Builder, cp, minrisk_problem, np, prices, returns, start):
     from cvx.risk.cvar import CVar
 
     _risk_model = CVar(alpha=0.80, n=40, m=20)
@@ -109,7 +90,7 @@ def __(Builder, cp, minrisk_problem, np, prices, returns, start):
 
     _portfolio = _builder.build()
     _portfolio.nav.plot()
-    return (CVar,)
+    return
 
 
 if __name__ == "__main__":

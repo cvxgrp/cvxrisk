@@ -5,4 +5,18 @@ root: docs/index
 chapters:
     - file: docs/api
     - file: docs/reports
-    - file: docs/marimo
+
+    - url: https://cvxgrp.org/cvxrisk/marimo/demo/index.html
+      title: First Demo
+
+    - url: https://cvxgrp.org/cvxrisk/marimo/factormodel/index.html
+      title: Simple Factor Model
+
+    - url: https://cvxgrp.org/cvxrisk/marimo/large/index.html
+      title: Large Factor Model
+
+    - url: https://cvxgrp.org/cvxrisk/marimo/sample/index.html
+      title: Sample Covariance Matrix
+
+    - url: https://cvxgrp.org/cvxrisk/marimo/tilting/index.html
+      title: Tilting

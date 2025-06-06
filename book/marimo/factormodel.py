@@ -1,14 +1,13 @@
 import marimo
 
-__generated_with = "0.9.27"
+__generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 
 @app.cell
-def __():
-    from pathlib import Path
-
+def _():
     import cvxpy as cvx
+    import marimo as mo
     import numpy as np
     import pandas as pd
 
@@ -16,14 +15,15 @@ def __():
     from cvx.risk.factor import FactorModel
     from cvx.risk.linalg import pca
 
-    path = Path(__file__).parent
-    return FactorModel, cvx, minrisk_problem, np, pca, path, pd
+    return FactorModel, cvx, minrisk_problem, mo, np, pca, pd
 
 
 @app.cell
-def __(path, pd):
+def _(mo, pd):
     # Load some historic stock prices
-    prices = pd.read_csv(path / "data" / "stock_prices.csv", index_col=0, parse_dates=True, header=0)
+    prices = pd.read_csv(
+        str(mo.notebook_location() / "public" / "stock_prices.csv"), index_col=0, parse_dates=True, header=0
+    )
 
     # Estimate a series of historic covariance matrices
     returns = prices.pct_change().dropna(axis=0, how="all")
@@ -31,13 +31,13 @@ def __(path, pd):
 
 
 @app.cell
-def __(pca, returns):
+def _(pca, returns):
     factors = pca(returns=returns, n_components=10)
     return (factors,)
 
 
 @app.cell
-def __(FactorModel, factors, np, returns):
+def _(FactorModel, factors, np, returns):
     model = FactorModel(assets=len(returns.columns), k=10)
 
     # update the model parameters
@@ -54,11 +54,11 @@ def __(FactorModel, factors, np, returns):
     # test the risk model with uniform weights
     weights = 0.05 * np.ones(20)
     model.estimate(weights).value
-    return model, weights
+    return (model,)
 
 
 @app.cell
-def __(cvx, minrisk_problem, model, np, pd, prices):
+def _(cvx, minrisk_problem, model, np, pd, prices):
     w = cvx.Variable(20)
     y = cvx.Variable(10)
 
@@ -72,7 +72,7 @@ def __(cvx, minrisk_problem, model, np, pd, prices):
     assert np.isclose(w.value.sum(), 1.0)
     assert np.all(w.value > -0.01)
     print(y.value)
-    return problem, w, y
+    return
 
 
 if __name__ == "__main__":

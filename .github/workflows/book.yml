@@ -10,15 +10,32 @@ on:
 
 jobs:
   marimo:
-    # Process marimo interactive notebooks for documentation
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
+      # Step: Set up the virtual environment
+      - name: "Build the virtual environment"
         uses: tschm/cradle/actions/environment@v0.1.71
 
-      - uses: tschm/cradle/actions/marimo@v0.1.71  # Process marimo notebooks
+      - name: Export notebook via wasm
+        run: |
+          uv pip install --no-cache-dir marimo
+
+          # export all .py files in book/marimo directory
+          for py_file in book/marimo/*.py; do
+            if [ -f "$py_file" ]; then
+              filename=$(basename "$py_file" .py)
+              echo "Processing $py_file"
+              mkdir -p "artifacts/marimo/$filename"
+              uv run marimo export html-wasm "$py_file" -o "artifacts/marimo/$filename/index.html" --mode edit
+            fi
+          done
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: marimo
+          path: artifacts/marimo
+          retention-days: 1
 
   pdoc:
     # Generate API documentation using pdoc

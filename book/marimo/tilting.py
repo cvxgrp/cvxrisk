@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.13.11"
+__generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 
@@ -76,6 +76,7 @@ def _():
 @app.cell
 def _():
     import cvxpy as cp
+    import marimo as mo
     import numpy as np
     import pandas as pd
 
@@ -83,7 +84,7 @@ def _():
     from cvx.random import rand_cov
     from cvx.risk.sample import SampleCovariance
 
-    return SampleCovariance, cp, minrisk_problem, np, pd, rand_cov
+    return SampleCovariance, cp, minrisk_problem, mo, np, pd, rand_cov
 
 
 @app.cell
@@ -137,18 +138,6 @@ def _(assets, minrisk_problem, pd, riskmodel, v, w_sp, weights):
     print("Tilting value. Should be close to 0.5:")
     print(solution_tilt.values @ v.values)
     return
-
-
-@app.cell
-def _():
-    return
-
-
-@app.cell
-def _():
-    import marimo as mo
-
-    return (mo,)
 
 
 if __name__ == "__main__":
