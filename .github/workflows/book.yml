@@ -62,6 +62,6 @@ jobs:
       contents: write  # Need write access to publish to gh-pages branch
       pages: write            # Permission to deploy to Pages
       id-token: write         # Permission to verify deployment origin
-    
+
     steps:
       - uses: cvxgrp/.github/actions/book@v2.2.8  # Build and publish the documentation book
