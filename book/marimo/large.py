@@ -94,7 +94,7 @@ def _():
 @app.cell
 def _(random_factors):
     t = 2000
-    factors = random_factors(t=t, m=100, const_factor=False)
+    factors = random_factors(t=t, n=100, const_factor=False)
     return (factors,)
 
 
