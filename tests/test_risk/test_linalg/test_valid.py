@@ -1,4 +1,4 @@
-"""Tests for the matrix validation utility"""
+"""Tests for the matrix validation utility."""
 
 from __future__ import annotations
 
@@ -9,8 +9,7 @@ from cvx.risk.linalg import valid
 
 
 def test_valid() -> None:
-    """
-    Test that the valid function correctly identifies valid rows/columns in a matrix.
+    """Test that the valid function correctly identifies valid rows/columns in a matrix.
 
     This test verifies that:
     1. The valid function can process a matrix with NaN values
@@ -25,8 +24,7 @@ def test_valid() -> None:
 
 
 def test_invalid() -> None:
-    """
-    Test that the valid function raises an AssertionError for non-square matrices.
+    """Test that the valid function raises an AssertionError for non-square matrices.
 
     This test verifies that:
     1. The valid function checks that the input matrix is square
