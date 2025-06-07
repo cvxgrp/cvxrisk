@@ -33,6 +33,7 @@ async def _():
     return (mo, cvx, np, pd)
 
 
+@app.cell
 def _random(np, pd):
     import uuid
 
@@ -84,6 +85,7 @@ def _random(np, pd):
     return random_weights, random_assets, random_noise, random_factors, random_beta
 
 
+@app.cell
 def _():
     from cvx.portfolio import minrisk_problem
     from cvx.risk.factor import FactorModel

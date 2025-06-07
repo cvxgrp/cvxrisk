@@ -20,8 +20,10 @@ async def _():
         pass
 
     import cvxpy as cp
+    import marimo as mo
     import numpy as np
     import pandas as pd
+    import polars as pl
 
     from cvx.portfolio import minrisk_problem
     from cvx.risk.sample import SampleCovariance
@@ -35,15 +37,15 @@ async def _():
     print(f"Risk version: {risk_version}")
     print(f"Simulator version: {simulator_version}")
 
-    return Builder, SampleCovariance, cp, minrisk_problem, np, pd
+    return Builder, SampleCovariance, minrisk_problem, mo, cp, np, pl
 
 
 @app.cell
-def _(mo, pd):
+def _(mo, pl):
     # Load some historic stock prices
-    prices = pd.read_csv(
-        str(mo.notebook_location() / "public" / "stock_prices.csv"), index_col=0, parse_dates=True, header=0
-    )
+    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
+
+    prices = prices.to_pandas().set_index("date")
 
     # Estimate a series of historic covariance matrices
     returns = prices.pct_change().dropna(axis=0, how="all")

@@ -93,6 +93,8 @@ async def _():
     import numpy as np
     import pandas as pd
 
+    pd.options.plotting.backend = "plotly"
+
     from cvx.portfolio import minrisk_problem
     from cvx.random import rand_cov
     from cvx.risk.sample import SampleCovariance

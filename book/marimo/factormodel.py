@@ -22,20 +22,23 @@ async def _():
     import marimo as mo
     import numpy as np
     import pandas as pd
+    import polars as pl
+
+    pd.options.plotting.backend = "plotly"
 
     from cvx.portfolio import minrisk_problem
     from cvx.risk.factor import FactorModel
     from cvx.risk.linalg import pca
 
-    return FactorModel, cvx, minrisk_problem, mo, np, pca, pd
+    return FactorModel, cvx, minrisk_problem, mo, cvx, np, pca, pl
 
 
 @app.cell
-def _(mo, pd):
+def _(mo, pl):
     # Load some historic stock prices
-    prices = pd.read_csv(
-        str(mo.notebook_location() / "public" / "stock_prices.csv"), index_col=0, parse_dates=True, header=0
-    )
+    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
+
+    prices = prices.to_pandas().set_index("date")
 
     # Estimate a series of historic covariance matrices
     returns = prices.pct_change().dropna(axis=0, how="all")
