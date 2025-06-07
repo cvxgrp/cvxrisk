@@ -1,4 +1,4 @@
-"""Tests for the Conditional Value at Risk (CVaR) implementation"""
+"""Tests for the Conditional Value at Risk (CVaR) implementation."""
 
 from __future__ import annotations
 
@@ -11,8 +11,7 @@ from cvx.risk.cvar import CVar
 
 
 def test_estimate_risk() -> None:
-    """
-    Test the estimate() method of the CVar class.
+    """Test the estimate() method of the CVar class.
 
     This test verifies that:
     1. The CVar model can be initialized with specified parameters
@@ -23,7 +22,7 @@ def test_estimate_risk() -> None:
     """
     model = CVar(alpha=0.95, n=50, m=14)
 
-    np.random.seed(42)
+    rng = np.random.default_rng(42)
 
     # define the problem
     weights = cp.Variable(14)
@@ -31,18 +30,18 @@ def test_estimate_risk() -> None:
     assert prob.is_dpp()
 
     model.update(
-        returns=np.random.randn(50, 10),
+        returns=rng.standard_normal((50, 10)),
         lower_assets=np.zeros(10),
         upper_assets=np.ones(10),
     )
     prob.solve(solver="CLARABEL")
-    assert prob.value == pytest.approx(0.5058720677762698)
+    assert prob.value == pytest.approx(0.37293694583777964)
 
     # it's enough to only update the R value...
     model.update(
-        returns=np.random.randn(50, 10),
+        returns=rng.standard_normal((50, 10)),
         lower_assets=np.zeros(10),
         upper_assets=np.ones(10),
     )
     prob.solve(solver="CLARABEL")
-    assert prob.value == pytest.approx(0.43559171295408616)
+    assert prob.value == pytest.approx(0.40960097904559756)

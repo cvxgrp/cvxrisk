@@ -1,4 +1,4 @@
-"""Conditional Value at Risk (CVaR) risk model implementation"""
+"""Conditional Value at Risk (CVaR) risk model implementation."""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
@@ -26,7 +26,7 @@ from ..model import Model
 
 @dataclass
 class CVar(Model):
-    """Conditional value at risk model"""
+    """Conditional value at risk model."""
 
     alpha: float = 0.95
     """alpha parameter to determine the size of the tail"""
@@ -38,8 +38,7 @@ class CVar(Model):
     """number of assets"""
 
     def __post_init__(self):
-        """
-        Initialize the parameters after the class is instantiated.
+        """Initialize the parameters after the class is instantiated.
 
         Calculates the number of samples in the tail (k) based on alpha,
         creates the returns parameter matrix, and initializes the bounds.
@@ -49,20 +48,17 @@ class CVar(Model):
         self.bounds = Bounds(m=self.m, name="assets")
 
     def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
-        """
-        Estimate the Conditional Value at Risk (CVaR) for the given weights.
+        """Estimate the Conditional Value at Risk (CVaR) for the given weights.
 
         Computes the negative average of the k smallest returns in the portfolio,
         where k is determined by the alpha parameter.
 
         Args:
-
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
-
             CVXPY expression: The negative average of the k smallest returns
 
         """
@@ -72,16 +68,15 @@ class CVar(Model):
         return -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k
 
     def update(self, **kwargs) -> None:
-        """
-        Update the returns data and bounds parameters.
+        """Update the returns data and bounds parameters.
 
         Args:
-
             **kwargs: Keyword arguments containing:
 
                 - returns: Matrix of returns
 
                 - Other parameters passed to bounds.update()
+
         """
         ret = kwargs["returns"]
         m = ret.shape[1]
@@ -90,17 +85,15 @@ class CVar(Model):
         self.bounds.update(**kwargs)
 
     def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
-        """
-        Return constraints for the CVaR model.
+        """Return constraints for the CVaR model.
 
         Args:
-
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments passed to bounds.constraints()
 
         Returns:
-
             List of CVXPY constraints from the bounds object
+
         """
         return self.bounds.constraints(weights)

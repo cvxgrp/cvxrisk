@@ -1,4 +1,4 @@
-"""Tests for the bounds module"""
+"""Tests for the bounds module."""
 
 from __future__ import annotations
 
@@ -10,8 +10,7 @@ from cvx.risk.bounds import Bounds
 
 
 def test_raise_not_implemented() -> None:
-    """
-    Test that the estimate method of Bounds raises NotImplementedError.
+    """Test that the estimate method of Bounds raises NotImplementedError.
 
     This test verifies that calling the estimate method on a Bounds object
     raises a NotImplementedError, as this method is not implemented for Bounds.
@@ -24,8 +23,7 @@ def test_raise_not_implemented() -> None:
 
 
 def test_constraints() -> None:
-    """
-    Test that the constraints method of Bounds returns the expected constraints.
+    """Test that the constraints method of Bounds returns the expected constraints.
 
     This test verifies that:
     1. The update method correctly sets the lower and upper bound parameters

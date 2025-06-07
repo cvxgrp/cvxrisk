@@ -1,4 +1,4 @@
-"""Tests for the factor risk model implementation"""
+"""Tests for the factor risk model implementation."""
 
 from __future__ import annotations
 
@@ -15,27 +15,24 @@ from cvx.risk.linalg import pca as principal_components
 
 @pytest.fixture()
 def returns(resource_dir) -> pd.DataFrame:
-    """
-    Pytest fixture that provides stock return data for testing.
+    """Pytest fixture that provides stock return data for testing.
 
     This fixture loads stock price data from a CSV file, calculates returns
     using percentage change, and fills any NaN values with zeros.
 
     Args:
-
         resource_dir: Pytest fixture providing the path to the test resources directory
 
     Returns:
-
         pandas.DataFrame: DataFrame containing stock returns
+
     """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
     return prices.pct_change().fillna(0.0)
 
 
 def test_timeseries_model(returns: pd.DataFrame) -> None:
-    """
-    Test the FactorModel with time series data.
+    """Test the FactorModel with time series data.
 
     This test verifies that:
     1. Principal components can be computed from returns data
@@ -43,8 +40,8 @@ def test_timeseries_model(returns: pd.DataFrame) -> None:
     3. The model's estimate method calculates the expected volatility for a given portfolio
 
     Args:
-
         returns: Pytest fixture providing stock return data
+
     """
     # Here we compute the factors and regress the returns on them
     factors = principal_components(returns=returns, n_components=10)
@@ -69,16 +66,15 @@ def test_timeseries_model(returns: pd.DataFrame) -> None:
 
 
 def test_minvar(returns: pd.DataFrame) -> None:
-    """
-    Test the minimum variance problem with a factor model.
+    """Test the minimum variance problem with a factor model.
 
     This test verifies that:
     1. A minimum risk problem can be created with a FactorModel
     2. The problem is disciplined parametrized programming (DPP) compliant
 
     Args:
-
         returns: Pytest fixture providing stock return data
+
     """
     weights = cp.Variable(20)
     y = cp.Variable(10)
@@ -91,10 +87,10 @@ def test_minvar(returns: pd.DataFrame) -> None:
 
 
 def test_estimate_risk() -> None:
-    """Test the estimate() method"""
+    """Test the estimate() method."""
     model = FactorModel(assets=25, k=12)
 
-    np.random.seed(42)
+    rng = np.random.default_rng(42)
 
     # define the problem
     weights = cp.Variable(25)
@@ -104,9 +100,9 @@ def test_estimate_risk() -> None:
     assert prob.is_dpp()
 
     model.update(
-        cov=rand_cov(10),
-        exposure=np.random.randn(10, 20),
-        idiosyncratic_risk=np.random.randn(20),
+        cov=rand_cov(10, seed=42),
+        exposure=rng.standard_normal((10, 20)),
+        idiosyncratic_risk=rng.standard_normal(20),
         lower_assets=np.zeros(20),
         upper_assets=np.ones(20),
         lower_factors=np.zeros(10),
@@ -115,13 +111,13 @@ def test_estimate_risk() -> None:
     prob.solve(solver="CLARABEL")
     w = np.array(weights.value)
 
-    assert prob.value == pytest.approx(0.14138117837204583)
+    assert prob.value == pytest.approx(0.19926997253968454)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     model.update(
-        cov=rand_cov(10),
-        exposure=np.random.randn(10, 20),
-        idiosyncratic_risk=np.random.randn(20),
+        cov=rand_cov(10, seed=42),
+        exposure=rng.standard_normal((10, 20)),
+        idiosyncratic_risk=rng.standard_normal(20),
         lower_assets=np.zeros(20),
         upper_assets=np.ones(20),
         lower_factors=-0.1 * np.ones(10),
@@ -129,7 +125,7 @@ def test_estimate_risk() -> None:
     )
     prob.solve(solver="CLARABEL")
     w = np.array(weights.value)
-    assert prob.value == pytest.approx(0.5454593844618784)
+    assert prob.value == pytest.approx(0.18811759576078277)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     # test that the exposure is correct, e.g. the factor weights match the exposure * asset weights
@@ -142,8 +138,7 @@ def test_estimate_risk() -> None:
 
 
 def test_dynamic_exposure() -> None:
-    """
-    Test the dynamic exposure update functionality of the FactorModel.
+    """Test the dynamic exposure update functionality of the FactorModel.
 
     This test verifies that:
     1. The FactorModel can be updated with different exposure matrices

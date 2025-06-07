@@ -1,4 +1,4 @@
-"""Tests for the Cholesky decomposition utility"""
+"""Tests for the Cholesky decomposition utility."""
 
 from __future__ import annotations
 
@@ -9,8 +9,7 @@ from cvx.risk.linalg import cholesky
 
 
 def test_cholesky() -> None:
-    """
-    Test that the cholesky function correctly decomposes a covariance matrix.
+    """Test that the cholesky function correctly decomposes a covariance matrix.
 
     This test verifies that:
     1. A random covariance matrix can be generated

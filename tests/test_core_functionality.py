@@ -27,8 +27,7 @@ from cvx.risk.sample import SampleCovariance
 
 
 def test_sample_covariance_optimization():
-    """
-    Test portfolio optimization using the Sample Covariance risk model.
+    """Test portfolio optimization using the Sample Covariance risk model.
 
     This test demonstrates:
     1. Creating a Sample Covariance risk model
@@ -64,8 +63,7 @@ def test_sample_covariance_optimization():
 
 
 def test_factor_model_optimization():
-    """
-    Test portfolio optimization using the Factor Model risk model.
+    """Test portfolio optimization using the Factor Model risk model.
 
     This test demonstrates:
     1. Creating a Factor Model risk model
@@ -74,6 +72,9 @@ def test_factor_model_optimization():
     4. Creating and solving a minimum risk portfolio optimization problem
     5. Verifying the solution satisfies basic constraints
     """
+    # Create a random number generator
+    rng = np.random.default_rng(42)
+
     # Create a factor model
     n_assets = 20
     n_factors = 5
@@ -81,7 +82,7 @@ def test_factor_model_optimization():
 
     # Generate random returns data
     n_periods = 100
-    returns = pd.DataFrame(np.random.randn(n_periods, n_assets))
+    returns = pd.DataFrame(rng.standard_normal((n_periods, n_assets)))
 
     # Compute principal components
     factors = pca(returns, n_components=n_factors)
@@ -117,8 +118,7 @@ def test_factor_model_optimization():
 
 
 def test_cvar_optimization():
-    """
-    Test portfolio optimization using the Conditional Value at Risk (CVaR) model.
+    """Test portfolio optimization using the Conditional Value at Risk (CVaR) model.
 
     This test demonstrates:
     1. Creating a CVaR risk model
@@ -127,6 +127,9 @@ def test_cvar_optimization():
     4. Creating and solving a minimum risk portfolio optimization problem
     5. Verifying the solution satisfies basic constraints
     """
+    # Create a random number generator
+    rng = np.random.default_rng(42)
+
     # Create a CVaR model
     n_assets = 15
     n_periods = 200
@@ -134,7 +137,7 @@ def test_cvar_optimization():
     model = CVar(alpha=alpha, n=n_periods, m=n_assets)
 
     # Generate random historical returns
-    historical_returns = np.random.randn(n_periods, n_assets)
+    historical_returns = rng.standard_normal((n_periods, n_assets))
 
     # Update the CVaR model
     model.update(returns=historical_returns, lower_assets=np.zeros(n_assets), upper_assets=np.ones(n_assets))
@@ -157,8 +160,7 @@ def test_cvar_optimization():
 
 
 def test_combined_optimization():
-    """
-    Test portfolio optimization comparing different risk models on the same data.
+    """Test portfolio optimization comparing different risk models on the same data.
 
     This test demonstrates:
     1. Creating multiple risk models
@@ -166,12 +168,15 @@ def test_combined_optimization():
     3. Solving optimization problems with each model
     4. Comparing the results
     """
+    # Create a random number generator
+    rng = np.random.default_rng(42)
+
     # Set up common parameters
     n_assets = 8
     n_periods = 150
 
     # Generate random returns data
-    returns = np.random.randn(n_periods, n_assets)
+    returns = rng.standard_normal((n_periods, n_assets))
     cov_matrix = np.cov(returns.T)
 
     # Create risk models
@@ -213,8 +218,7 @@ def test_combined_optimization():
 
 
 def test_custom_constraints():
-    """
-    Test portfolio optimization with custom constraints.
+    """Test portfolio optimization with custom constraints.
 
     This test demonstrates:
     1. Creating a risk model

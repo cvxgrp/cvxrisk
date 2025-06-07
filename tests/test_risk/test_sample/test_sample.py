@@ -1,4 +1,4 @@
-"""Tests for the sample covariance risk model implementation"""
+"""Tests for the sample covariance risk model implementation."""
 
 from __future__ import annotations
 
@@ -10,8 +10,7 @@ from cvx.risk.sample import SampleCovariance
 
 
 def test_sample() -> None:
-    """
-    Test the SampleCovariance class with a small covariance matrix.
+    """Test the SampleCovariance class with a small covariance matrix.
 
     This test verifies that:
     1. A SampleCovariance model can be initialized with specified dimensions
@@ -29,8 +28,7 @@ def test_sample() -> None:
 
 
 def test_sample_large() -> None:
-    """
-    Test the SampleCovariance class with a larger covariance matrix.
+    """Test the SampleCovariance class with a larger covariance matrix.
 
     This test verifies that:
     1. A SampleCovariance model can be initialized with dimensions larger than the data
@@ -49,8 +47,7 @@ def test_sample_large() -> None:
 
 
 def test_min_variance() -> None:
-    """
-    Test the minimum variance problem with a sample covariance model.
+    """Test the minimum variance problem with a sample covariance model.
 
     This test verifies that:
     1. A minimum risk problem can be created with a SampleCovariance model
@@ -84,8 +81,7 @@ def test_min_variance() -> None:
 
 
 def test_min_risk_constraints() -> None:
-    """
-    Test the minimum risk problem with additional constraints.
+    """Test the minimum risk problem with additional constraints.
 
     This test verifies that:
     1. A minimum risk problem can be created with a SampleCovariance model and additional constraints

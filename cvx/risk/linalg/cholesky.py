@@ -1,4 +1,4 @@
-"""Cholesky decomposition utilities for covariance matrices"""
+"""Cholesky decomposition utilities for covariance matrices."""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
@@ -20,23 +20,20 @@ from scipy.linalg import cholesky as _cholesky
 
 
 def cholesky(cov: np.ndarray) -> np.ndarray:
-    """
-    Compute the upper triangular part of the Cholesky decomposition.
+    """Compute the upper triangular part of the Cholesky decomposition.
 
     This function computes the Cholesky decomposition of a positive definite matrix.
     It returns the upper triangular matrix R such that R^T R = cov.
 
     Args:
-
         cov: A positive definite covariance matrix
 
     Returns:
-
         The upper triangular Cholesky factor
 
     Note:
-
         This uses scipy.linalg.cholesky which returns the upper triangular part,
         unlike numpy.linalg.cholesky which returns the lower triangular part.
+
     """
     return _cholesky(cov)
