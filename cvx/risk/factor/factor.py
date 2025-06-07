@@ -11,7 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Factor risk model."""
+"""Factor risk model"""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ from ..model import Model
 
 @dataclass
 class FactorModel(Model):
-    """Factor risk model."""
+    """Factor risk model"""
 
     assets: int = 0
     """Maximal number of assets"""
@@ -36,7 +36,8 @@ class FactorModel(Model):
     """Maximal number of factors"""
 
     def __post_init__(self):
-        """Initialize the parameters after the class is instantiated.
+        """
+        Initialize the parameters after the class is instantiated.
 
         Creates parameters for factor exposure, idiosyncratic risk, and the Cholesky
         decomposition of the factor covariance matrix. Also initializes bounds for
@@ -62,12 +63,14 @@ class FactorModel(Model):
         self.bounds_factors = Bounds(m=self.k, name="factors")
 
     def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
-        """Compute the total portfolio risk using the factor model.
+        """
+        Compute the total portfolio risk using the factor model.
 
         Combines systematic risk (from factor exposures) and idiosyncratic risk
         to calculate the total portfolio risk.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments, may include:
@@ -75,8 +78,8 @@ class FactorModel(Model):
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
-            CVXPY expression: The total portfolio risk
 
+            CVXPY expression: The total portfolio risk
         """
         var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))
 
@@ -85,9 +88,11 @@ class FactorModel(Model):
         return cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual]))
 
     def update(self, **kwargs) -> None:
-        """Update the factor model parameters.
+        """
+        Update the factor model parameters.
 
         Args:
+
             **kwargs: Keyword arguments containing:
 
                 - exposure: Factor exposure matrix
@@ -97,7 +102,6 @@ class FactorModel(Model):
                 - cov: Factor covariance matrix
 
                 - Other parameters passed to bounds_assets.update() and bounds_factors.update()
-
         """
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
         self.parameter["chol"].value = np.zeros((self.k, self.k))
@@ -109,12 +113,9 @@ class FactorModel(Model):
         # extract dimensions
         k, assets = exposure.shape
         if k > self.k:
-            raise ValueError("exposure has more factors than allowed")
-
+            raise ValueError("Number of factors exceeds maximal number of factors")
         if assets > self.assets:
-            raise ValueError("exposure has more assets than allowed")
-
-        # assert assets <= self.assets
+            raise ValueError("Number of assets exceeds maximal number of assets")
 
         self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
         self.parameter["idiosyncratic_risk"].value[:assets] = kwargs["idiosyncratic_risk"]
@@ -123,9 +124,11 @@ class FactorModel(Model):
         self.bounds_factors.update(**kwargs)
 
     def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
-        """Return constraints for the factor model.
+        """
+        Return constraints for the factor model.
 
         Args:
+
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments, may include:
@@ -133,9 +136,9 @@ class FactorModel(Model):
                 - y: Factor exposures (if not provided, calculated as exposure @ weights)
 
         Returns:
+
             List of CVXPY constraints including asset bounds, factor bounds,
             and the constraint that y equals exposure @ weights
-
         """
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
 
