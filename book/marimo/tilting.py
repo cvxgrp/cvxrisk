@@ -1,3 +1,5 @@
+"""Tilting problem."""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -106,7 +108,7 @@ async def _():
 def _(SampleCovariance, cp, np, pd, rand_cov):
     # Let's start without the tilting constraint
     assets = ["A", "B", "C", "D", "E"]
-    S = pd.DataFrame(index=assets, columns=assets, data=rand_cov(len(assets)))
+    s = pd.DataFrame(index=assets, columns=assets, data=rand_cov(len(assets)))
 
     # those are the market weights for our 5 markets
     w_sp = pd.Series(index=assets, data=[0.1, 0.2, 0.3, 0.1, 0.3])
@@ -116,7 +118,7 @@ def _(SampleCovariance, cp, np, pd, rand_cov):
 
     # Let's define a sample covariance riskmodel
     riskmodel = SampleCovariance(num=len(assets))
-    riskmodel.update(cov=S.values, lower_assets=np.zeros(len(assets)), upper_assets=np.ones(len(assets)))
+    riskmodel.update(cov=s.to_numpy(), lower_assets=np.zeros(len(assets)), upper_assets=np.ones(len(assets)))
 
     # the tilting vector
     v = pd.Series(index=assets, data=[0.1, 0.1, 0.5, 0.0, 0.5])
@@ -151,7 +153,7 @@ def _(assets, minrisk_problem, pd, riskmodel, v, w_sp, weights):
     print(solution_tilt)
     # We check whether the tilting constraint is respected
     print("Tilting value. Should be close to 0.5:")
-    print(solution_tilt.values @ v.to_numpy())
+    print(solution_tilt.to_numpy() @ v.to_numpy())
     return
 
 

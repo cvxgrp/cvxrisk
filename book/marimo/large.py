@@ -1,3 +1,5 @@
+"""Large problem with 1000 assets and 100 factors."""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -37,22 +39,21 @@ async def _():
 def _random(np, pd):
     import uuid
 
+    # Create a single random number generator instance
+    rng = np.random.default_rng(42)
+
     def random_weights(assets):
-        """
-        Construct a vector of non-negative random weights. Their sum shall be 1
-        """
+        """Construct a vector of non-negative random weights. Their sum shall be 1."""
         # Get some random weights
-        weights = pd.Series(index=assets, data=np.random.rand(len(assets)))
+        weights = pd.Series(index=assets, data=rng.random(len(assets)))
         return weights / weights.sum()
 
-    def random_factors(T, N=2, const_factor=True):
-        """
-        Construct N random factor time series for T timestamps
-        """
+    def random_factors(t, n=2, const_factor=True):
+        """Construct N random factor time series for T timestamps."""
         factors = pd.DataFrame(
-            index=range(1, T + 1),
-            columns=[f"F{i}" for i in range(N)],
-            data=np.random.randn(T, N),
+            index=range(1, t + 1),
+            columns=[f"F{i}" for i in range(n)],
+            data=rng.standard_normal((t, n)),
         )
         # add the constant factor
         if const_factor:
@@ -60,26 +61,20 @@ def _random(np, pd):
         return factors
 
     def random_beta(assets, factors):
-        """
-        Construct a random exposure matrix
-        """
-        data = np.random.randn(factors.shape[1], len(assets))
+        """Construct a random exposure matrix."""
+        data = rng.standard_normal((factors.shape[1], len(assets)))
         return pd.DataFrame(columns=assets, index=factors.columns, data=data)
 
     def random_noise(frame):
-        """
-        Construct a frame of random noise with exactly the same dimensions as the input frame
-        """
+        """Construct a frame of random noise with exactly the same dimensions as the input frame."""
         return pd.DataFrame(
             columns=frame.columns,
             index=frame.index,
-            data=np.random.randn(frame.shape[0], frame.shape[1]),
+            data=rng.standard_normal((frame.shape[0], frame.shape[1])),
         )
 
     def random_assets(num):
-        """
-        Construct a vector of random assets
-        """
+        """Construct a vector of random assets."""
         return [str(uuid.uuid4())[:7] for _ in range(num)]
 
     return random_weights, random_assets, random_noise, random_factors, random_beta
@@ -98,8 +93,8 @@ def _():
 
 @app.cell
 def _(random_factors):
-    T = 2000
-    factors = random_factors(T=T, N=100, const_factor=False)
+    t = 2000
+    factors = random_factors(t=t, m=100, const_factor=False)
     return (factors,)
 
 
@@ -140,7 +135,7 @@ def _(beta, cvx, factors, minrisk_problem, np, pd, ret, triangle):
 
 @app.cell
 def _(beta, factors, minrisk_problem, np, pd, ret, triangle, w, y):
-    for i in range(1):
+    for _i in range(1):
         _problem = minrisk_problem(triangle, w, y=y)
         triangle.update(
             exposure=beta.values,

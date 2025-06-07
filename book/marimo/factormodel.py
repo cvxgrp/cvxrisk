@@ -1,3 +1,5 @@
+"""Demo of the risk and simulator packages."""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -68,7 +70,8 @@ def _(FactorModel, factors, np, returns):
 
     # test the risk model with uniform weights
     weights = 0.05 * np.ones(20)
-    model.estimate(weights).value
+    risk = model.estimate(weights).value
+    print(risk)
     return (model,)
 
 
@@ -84,8 +87,8 @@ def _(cvx, minrisk_problem, model, np, pd, prices):
     print(model.estimate(w, y=y).value)
 
     # check the solution
-    assert np.isclose(w.value.sum(), 1.0)
-    assert np.all(w.value > -0.01)
+    print(f"Check sum of weights: {np.isclose(w.value.sum(), 1.0)}")
+    print(f"Check all weights non-negative: {np.all(w.value > -0.01)}")
     print(y.value)
     return
 

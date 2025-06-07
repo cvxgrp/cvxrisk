@@ -1,3 +1,5 @@
+"""Demo of the risk and simulator packages."""
+
 import marimo
 
 __generated_with = "0.13.15"
