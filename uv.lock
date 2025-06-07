@@ -247,6 +247,7 @@ clarabel = [
 dev = [
     { name = "cvxsimulator" },
     { name = "marimo" },
+    { name = "polars" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -264,6 +265,7 @@ requires-dist = [
     { name = "mosek", marker = "extra == 'mosek'", specifier = ">=11.0" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2.3" },
+    { name = "polars", marker = "extra == 'dev'", specifier = ">=1.24.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.0.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.0.0" },
