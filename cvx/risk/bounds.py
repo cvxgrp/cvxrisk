@@ -11,7 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Bounds"""
+"""Bounds."""
 
 from __future__ import annotations
 
@@ -25,6 +25,18 @@ from .model import Model
 
 @dataclass
 class Bounds(Model):
+    """Representation of bounds for a model, defining constraints and parameters.
+
+    This dataclass provides functionality to establish and manage bounds for a model. It
+    includes methods to handle bound parameters, update them dynamically, and generate
+    constraints that can be used in optimization models.
+
+    Attributes:
+        m: Maximal number of bounds.
+        name: Name for the bounds, e.g., assets or factors.
+
+    """
+
     m: int = 0
     """Maximal number of bounds"""
 
@@ -32,36 +44,32 @@ class Bounds(Model):
     """Name for the bounds, e.g. assets or factors"""
 
     def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
-        """
-        No estimation for bounds.
+        """No estimation for bounds.
 
         Args:
-
             weights: CVXPY variable representing portfolio weights
             **kwargs: Additional keyword arguments
 
         Raises:
             NotImplementedError: This method is not implemented for Bounds
+
         """
         raise NotImplementedError("No estimation for bounds")
 
     def _f(self, str_prefix: str) -> str:
-        """
-        Create a parameter name by appending the name attribute.
+        """Create a parameter name by appending the name attribute.
 
         Args:
-
             str_prefix: Base string for the parameter name
 
         Returns:
-
             Combined parameter name in the format "{str_prefix}_{self.name}"
+
         """
         return f"{str_prefix}_{self.name}"
 
     def __post_init__(self):
-        """
-        Initialize the parameters after the class is instantiated.
+        """Initialize the parameters after the class is instantiated.
 
         Creates lower and upper bound parameters with appropriate shapes and default values.
         """
@@ -77,14 +85,13 @@ class Bounds(Model):
         )
 
     def update(self, **kwargs) -> None:
-        """
-        Update the lower and upper bound parameters.
+        """Update the lower and upper bound parameters.
 
         Args:
-
             **kwargs: Keyword arguments containing lower and upper bounds
 
                       with keys formatted as "{lower/upper}_{self.name}"
+
         """
         lower = kwargs[self._f("lower")]
         self.parameter[self._f("lower")].value = np.zeros(self.m)
@@ -95,18 +102,16 @@ class Bounds(Model):
         self.parameter[self._f("upper")].value[: len(upper)] = upper
 
     def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
-        """
-        Return constraints that enforce the bounds on weights.
+        """Return constraints that enforce the bounds on weights.
 
         Args:
-
             weights: CVXPY variable representing portfolio weights
 
             **kwargs: Additional keyword arguments (not used)
 
         Returns:
-
             List of CVXPY constraints enforcing lower and upper bounds
+
         """
         return [
             weights >= self.parameter[self._f("lower")],

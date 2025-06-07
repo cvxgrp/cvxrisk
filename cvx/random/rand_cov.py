@@ -1,4 +1,4 @@
-"""Random covariance matrix generation utilities"""
+"""Random covariance matrix generation utilities."""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
@@ -18,21 +18,20 @@ from __future__ import annotations
 import numpy as np
 
 
-def rand_cov(n: int) -> np.ndarray:
-    """
-    Construct a random positive semi-definite covariance matrix of size n x n.
+def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
+    """Construct a random positive semi-definite covariance matrix of size n x n.
 
     The matrix is constructed as A^T A where A is a random n x n matrix with
     elements drawn from a standard normal distribution.
 
     Args:
-
         n: Size of the covariance matrix
+        seed: Random seed for reproducibility (optional)
 
     Returns:
-
         A random positive semi-definite n x n covariance matrix
 
     """
-    a = np.random.randn(n, n)
+    rng = np.random.default_rng(seed)
+    a = rng.standard_normal((n, n))
     return np.transpose(a) @ a

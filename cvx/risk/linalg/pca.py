@@ -11,7 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""PCA analysis"""
+"""PCA analysis."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
-from sklearn.decomposition import PCA as sklearnPCA
+import sklearn.decomposition as skdecomp
 
 PCA = namedtuple(
     "PCA",
@@ -39,20 +39,17 @@ Attributes:
 
 
 def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
-    """
-    Compute the first n principal components for a return matrix.
+    """Compute the first n principal components for a return matrix.
 
     Performs Principal Component Analysis (PCA) on the returns data to extract
     the most important factors that explain the variance in the returns.
 
     Args:
-
         returns: DataFrame of asset returns
 
         n_components: Number of principal components to extract. Defaults to 10.
 
     Returns:
-
         A named tuple containing the PCA results with the following fields:
             - explained_variance: The explained variance ratio for each component
             - factors: The factor returns (principal components)
@@ -60,10 +57,10 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
             - cov: The covariance matrix of the factors
             - systematic: The systematic returns explained by the factors
             - idiosyncratic: The idiosyncratic returns not explained by the factors
-    """
 
+    """
     # USING SKLEARN. Let's look at the first n components
-    sklearn_pca = sklearnPCA(n_components=n_components)
+    sklearn_pca = skdecomp.PCA(n_components=n_components)
     sklearn_pca.fit_transform(returns)
 
     exposure = sklearn_pca.components_
@@ -74,9 +71,9 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
         factors=factors,
         exposure=pd.DataFrame(data=exposure, columns=returns.columns),
         cov=factors.cov(),
-        systematic=pd.DataFrame(data=factors.values @ exposure, index=returns.index, columns=returns.columns),
+        systematic=pd.DataFrame(data=factors.to_numpy() @ exposure, index=returns.index, columns=returns.columns),
         idiosyncratic=pd.DataFrame(
-            data=returns.values - factors.values @ exposure,
+            data=returns.to_numpy() - factors.to_numpy() @ exposure,
             index=returns.index,
             columns=returns.columns,
         ),
