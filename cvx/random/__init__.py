@@ -13,3 +13,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from .rand_cov import rand_cov
+
+import importlib.metadata
+__version__ = importlib.metadata.version("cvxrisk")
