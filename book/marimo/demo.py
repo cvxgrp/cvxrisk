@@ -28,6 +28,13 @@ async def _():
     from cvx.simulator import Builder
 
     pd.options.plotting.backend = "plotly"
+
+    from cvx.risk import __version__ as risk_version
+    from cvx.simulator import __version__ as simulator_version
+
+    print(f"Risk version: {risk_version}")
+    print(f"Simulator version: {simulator_version}")
+
     return Builder, SampleCovariance, cp, minrisk_problem, np, pd
 
 
