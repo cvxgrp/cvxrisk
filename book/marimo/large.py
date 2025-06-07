@@ -11,7 +11,20 @@ def _(mo):
 
 
 @app.cell
-def _():
+async def _():
+    # Check if running in WebAssembly environment
+    try:
+        import sys
+
+        if "pyodide" in sys.modules:
+            import micropip
+
+            await micropip.install("cvxrisk")
+            await micropip.install("cvxsimulator")
+
+    except ImportError:
+        pass
+
     import cvxpy as cvx
     import marimo as mo
     import numpy as np
