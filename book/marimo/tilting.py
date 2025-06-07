@@ -139,7 +139,7 @@ def _(assets, minrisk_problem, pd, riskmodel, w_sp, weights):
 @app.cell
 def _(assets, minrisk_problem, pd, riskmodel, v, w_sp, weights):
     # Now we specify the tilting constraint
-    constraints = [v.values @ weights == 0.5]
+    constraints = [v.to_numpy() @ weights == 0.5]
     # We inject the constraints
     problem_tilt = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=constraints)
 
@@ -151,7 +151,7 @@ def _(assets, minrisk_problem, pd, riskmodel, v, w_sp, weights):
     print(solution_tilt)
     # We check whether the tilting constraint is respected
     print("Tilting value. Should be close to 0.5:")
-    print(solution_tilt.values @ v.values)
+    print(solution_tilt.values @ v.to_numpy())
     return
 
 
