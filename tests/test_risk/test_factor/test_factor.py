@@ -100,7 +100,7 @@ def test_estimate_risk() -> None:
     assert prob.is_dpp()
 
     model.update(
-        cov=rand_cov(10),
+        cov=rand_cov(10, seed=42),
         exposure=rng.standard_normal((10, 20)),
         idiosyncratic_risk=rng.standard_normal(20),
         lower_assets=np.zeros(20),
@@ -111,11 +111,11 @@ def test_estimate_risk() -> None:
     prob.solve(solver="CLARABEL")
     w = np.array(weights.value)
 
-    assert prob.value == pytest.approx(0.14138117837204583)
+    assert prob.value == pytest.approx(0.19926997253968454)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     model.update(
-        cov=rand_cov(10),
+        cov=rand_cov(10, seed=42),
         exposure=rng.standard_normal((10, 20)),
         idiosyncratic_risk=rng.standard_normal(20),
         lower_assets=np.zeros(20),
@@ -125,7 +125,7 @@ def test_estimate_risk() -> None:
     )
     prob.solve(solver="CLARABEL")
     w = np.array(weights.value)
-    assert prob.value == pytest.approx(0.5454593844618784)
+    assert prob.value == pytest.approx(0.18811759576078277)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     # test that the exposure is correct, e.g. the factor weights match the exposure * asset weights
