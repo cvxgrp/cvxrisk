@@ -1,3 +1,5 @@
+"""Testing MinVar."""
+
 from __future__ import annotations
 
 import cvxpy as cp
@@ -8,7 +10,18 @@ from cvx.risk.sample import SampleCovariance
 
 
 def test_minrisk_problem_basic():
-    """Test that minrisk_problem creates a valid problem with basic constraints."""
+    """Test the functionality and correctness of the minrisk_problem setup and solution.
+
+    This function verifies that a simple risk optimization problem can be created, solved
+    successfully, and yields expected solutions under given conditions. It checks for
+    validity, optimality, and adherence to portfolio constraints using basic assertions.
+
+    Raises:
+        AssertionError: If any of the validation checks fail, such as problem validity,
+        DCP compliance, solution optimality, portfolio constraints (e.g., weights summing
+        to 1), or specific expected behavior derived from the covariance matrix.
+
+    """
     # Create a simple risk model
     riskmodel = SampleCovariance(num=2)
     riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))

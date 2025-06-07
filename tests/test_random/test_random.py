@@ -1,4 +1,4 @@
-"""Tests for the random covariance matrix generation utilities"""
+"""Tests for the random covariance matrix generation utilities."""
 
 from __future__ import annotations
 
@@ -8,8 +8,7 @@ from cvx.random import rand_cov
 
 
 def test_rand_cov() -> None:
-    """
-    Test that the rand_cov function generates a positive definite matrix.
+    """Test that the rand_cov function generates a positive definite matrix.
 
     This test verifies that:
     1. The rand_cov function can generate a random covariance matrix
