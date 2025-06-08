@@ -11,7 +11,7 @@ dependencies = [
     "numpy>=2.0",          # Numerical computing library for array operations
     "pandas>=2.2.3",       # Data manipulation and analysis library
     "scikit-learn>=1.6.1", # Machine learning library (used for PCA and other algorithms)
-    "scipy>=1.14.1",      # Scientific computing library
+    "scipy>=1.14.1",       # Scientific computing library
 ]
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 
