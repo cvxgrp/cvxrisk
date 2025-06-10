@@ -59,8 +59,8 @@ The simplest risk model in cvxrisk is the sample covariance model. Here's how to
 ```python
 import cvxpy as cp
 import numpy as np
-from cvx.risk.sample import SampleCovariance
-from cvx.portfolio.min_risk import minrisk_problem
+from cvxrisk.sample import SampleCovariance
+from cvxrisk.portfolio.min_risk import minrisk_problem
 
 # Create a risk model
 riskmodel = SampleCovariance(num=2)
@@ -90,9 +90,9 @@ Factor models reduce dimensionality by projecting asset returns onto a smaller s
 ```python
 import numpy as np
 import pandas as pd
-from cvx.risk.factor import FactorModel
-from cvx.risk.linalg import pca
-from cvx.portfolio.min_risk import minrisk_problem
+from cvxrisk.factor import FactorModel
+from cvxrisk.linalg import pca
+from cvxrisk.portfolio.min_risk import minrisk_problem
 import cvxpy as cp
 
 # Load returns data
@@ -132,8 +132,8 @@ CVaR measures the expected loss in the worst-case scenarios:
 ```python
 import numpy as np
 import cvxpy as cp
-from cvx.risk.cvar import CVar
-from cvx.portfolio.min_risk import minrisk_problem
+from cvxrisk.cvar import CVar
+from cvxrisk.portfolio.min_risk import minrisk_problem
 
 # Create a CVaR model
 model = CVar(alpha=0.95, n=50, m=10)
@@ -168,8 +168,8 @@ You can add custom constraints to the optimization problem:
 ```python
 import cvxpy as cp
 import numpy as np
-from cvx.risk.sample import SampleCovariance
-from cvx.portfolio.min_risk import minrisk_problem
+from cvxrisk.sample import SampleCovariance
+from cvxrisk.portfolio.min_risk import minrisk_problem
 
 # Create a risk model
 riskmodel = SampleCovariance(num=4)
@@ -200,8 +200,8 @@ You can minimize the tracking error relative to a benchmark portfolio:
 ```python
 import cvxpy as cp
 import numpy as np
-from cvx.risk.sample import SampleCovariance
-from cvx.portfolio.min_risk import minrisk_problem
+from cvxrisk.sample import SampleCovariance
+from cvxrisk.portfolio.min_risk import minrisk_problem
 
 # Create a risk model
 riskmodel = SampleCovariance(num=3)
@@ -231,7 +231,7 @@ cvxrisk provides utilities for generating random covariance matrices for testing
 
 ```python
 import numpy as np
-from cvx.random import rand_cov
+from cvxrisk.random import rand_cov
 
 # Generate a random 5x5 covariance matrix
 cov = rand_cov(5)
