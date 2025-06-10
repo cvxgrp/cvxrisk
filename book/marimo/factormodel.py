@@ -5,38 +5,20 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
-
-@app.cell
-async def _():
-    # Check if running in WebAssembly environment
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxrisk")
-            await micropip.install("cvxsimulator")
-    except ImportError:
-        pass
-
-    import cvxpy as cvx
+with app.setup:
+    import cvxpy as cp
     import marimo as mo
     import numpy as np
     import pandas as pd
     import polars as pl
 
-    pd.options.plotting.backend = "plotly"
-
     from cvxrisk.factor import FactorModel
     from cvxrisk.linalg import pca
     from cvxrisk.portfolio import minrisk_problem
 
-    return FactorModel, cvx, minrisk_problem, mo, cvx, np, pca, pl
-
 
 @app.cell
-def _(mo, pl):
+def _():
     # Load some historic stock prices
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
 
@@ -48,13 +30,13 @@ def _(mo, pl):
 
 
 @app.cell
-def _(pca, returns):
+def _(returns):
     factors = pca(returns=returns, n_components=10)
     return (factors,)
 
 
 @app.cell
-def _(FactorModel, factors, np, returns):
+def _(factors, returns):
     model = FactorModel(assets=len(returns.columns), k=10)
 
     # update the model parameters
@@ -76,9 +58,9 @@ def _(FactorModel, factors, np, returns):
 
 
 @app.cell
-def _(cvx, minrisk_problem, model, np, pd, prices):
-    w = cvx.Variable(20)
-    y = cvx.Variable(10)
+def _(model, prices):
+    w = cp.Variable(20)
+    y = cp.Variable(10)
 
     problem = minrisk_problem(model, w, y=y)
     problem.solve(solver="CLARABEL")

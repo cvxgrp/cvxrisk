@@ -82,23 +82,6 @@ def _():
 
 @app.cell
 def _():
-    # Check if running in WebAssembly environment
-    import cvxpy as cp
-    import marimo as mo
-    import numpy as np
-    import pandas as pd
-
-    pd.options.plotting.backend = "plotly"
-
-    from cvxrisk.portfolio import minrisk_problem
-    from cvxrisk.random import rand_cov
-    from cvxrisk.sample import SampleCovariance
-
-    return SampleCovariance, cp, minrisk_problem, mo, np, pd, rand_cov
-
-
-@app.cell
-def _():
     # Let's start without the tilting constraint
     assets = ["A", "B", "C", "D", "E"]
     s = pd.DataFrame(index=assets, columns=assets, data=rand_cov(len(assets)))
