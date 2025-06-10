@@ -194,7 +194,7 @@ mosek = [
 requires-dist = [
     { name = "clarabel", marker = "extra == 'clarabel'", specifier = ">=0.9.0" },
     { name = "cvxpy-base", specifier = ">=1.5.0" },
-    { name = "cvxsimulator", marker = "extra == 'dev'", specifier = ">=1.3.14" },
+    { name = "cvxsimulator", marker = "extra == 'dev'", specifier = ">=1.4.0" },
     { name = "marimo", marker = "extra == 'dev'", specifier = ">=0.13.15" },
     { name = "micropip", marker = "extra == 'dev'", specifier = ">=0.9.0" },
     { name = "mosek", marker = "extra == 'mosek'", specifier = ">=11.0" },
@@ -211,16 +211,17 @@ provides-extras = ["dev", "clarabel", "mosek"]
 
 [[package]]
 name = "cvxsimulator"
-version = "1.3.14"
+version = "1.4.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jquantstats" },
     { name = "numpy" },
     { name = "pandas" },
+    { name = "polars" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9d/72/1319a64784595faa3abb2174bba568797074bbec9dd6ff9ad8aab5fb0b9e/cvxsimulator-1.3.14.tar.gz", hash = "sha256:42f05ac3b941492251bd0756c2cf439867979622d0e13e79a6a3352369ccb9a0", size = 7430183, upload-time = "2025-05-31T18:17:42.227Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/40/80fd3b077a854864e10ab23d6d67dd502cacc77bc1518b59a40488c4ca22/cvxsimulator-1.4.3.tar.gz", hash = "sha256:d4b2cd8424d2386ca193d6afefddecf2cd146920d4070f71b1000b4d1e653180", size = 7436495, upload-time = "2025-06-10T02:31:38.704Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/eb/59/2594fa07f58760e47e204ddcd78c24c3911ac06110ced0515ec145be8faf/cvxsimulator-1.3.14-py3-none-any.whl", hash = "sha256:05a8381b11bf205d548836cbd6d247a9d989f1ec247c062915e19a9324148390", size = 23323, upload-time = "2025-05-31T18:17:40.003Z" },
+    { url = "https://files.pythonhosted.org/packages/61/76/9f90da812aabecb4b2cf22915a18a0cfe822182a003359a2aac4acfd5993/cvxsimulator-1.4.3-py3-none-any.whl", hash = "sha256:023b0aca6fb9d95dc6e8c8ac47560b331b4f815c59a8f7737138e7f041dc663e", size = 23333, upload-time = "2025-06-10T02:31:36.188Z" },
 ]
 
 [[package]]
