@@ -18,9 +18,9 @@ jobs:
 
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.71
+        uses: tschm/cradle/actions/environment@v0.1.72
 
-      - uses: tschm/cradle/actions/deptry@v0.1.71  # Run deptry to check dependencies
+      - uses: tschm/cradle/actions/deptry@v0.1.72  # Run deptry to check dependencies
         with:
           source-folder: 'cvxrisk'
 
@@ -30,4 +30,4 @@ jobs:
     # and other quality standards
     runs-on: ubuntu-latest
     steps:
-      - uses: tschm/cradle/actions/pre-commit@v0.1.71  # Run pre-commit hooks
+      - uses: tschm/cradle/actions/pre-commit@v0.1.72  # Run pre-commit hooks
