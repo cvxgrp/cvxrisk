@@ -21,7 +21,8 @@ jobs:
         uses: tschm/cradle/actions/environment@v0.1.71
 
       - uses: tschm/cradle/actions/deptry@v0.1.71  # Run deptry to check dependencies
-
+        with:
+          source-folder: 'cvxrisk'
 
   pre-commit:
     # Code quality check job
