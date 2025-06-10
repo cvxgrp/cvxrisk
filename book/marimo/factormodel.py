@@ -28,9 +28,9 @@ async def _():
 
     pd.options.plotting.backend = "plotly"
 
-    from cvx.portfolio import minrisk_problem
-    from cvx.risk.factor import FactorModel
-    from cvx.risk.linalg import pca
+    from cvxrisk.factor import FactorModel
+    from cvxrisk.linalg import pca
+    from cvxrisk.portfolio import minrisk_problem
 
     return FactorModel, cvx, minrisk_problem, mo, cvx, np, pca, pl
 

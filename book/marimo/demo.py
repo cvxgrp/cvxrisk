@@ -27,14 +27,14 @@ async def _():
     import pandas as pd
     import polars as pl
 
-    from cvx.portfolio import minrisk_problem
-    from cvx.risk.sample import SampleCovariance
-    from cvx.simulator import Builder
+    from cvxrisk.portfolio import minrisk_problem
+    from cvxrisk.sample import SampleCovariance
+    from cvxrisk.simulator import Builder
 
     pd.options.plotting.backend = "plotly"
 
-    from cvx.risk import __version__ as risk_version
-    from cvx.simulator import __version__ as simulator_version
+    from cvxrisk import __version__ as risk_version
+    from cvxrisk.simulator import __version__ as simulator_version
 
     print(f"Risk version: {risk_version}")
     print(f"Simulator version: {simulator_version}")
@@ -89,7 +89,7 @@ def _(Builder, SampleCovariance, cp, minrisk_problem, np, prices, returns):
 
 @app.cell
 def _(Builder, cp, minrisk_problem, np, prices, returns, start):
-    from cvx.risk.cvar import CVar
+    from cvxrisk.cvar import CVar
 
     _risk_model = CVar(alpha=0.80, n=40, m=20)
 

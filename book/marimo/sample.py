@@ -31,9 +31,9 @@ async def _():
     import marimo as mo
     import numpy as np
 
-    from cvx.portfolio import minrisk_problem
-    from cvx.random import rand_cov
-    from cvx.risk.sample import SampleCovariance
+    from cvxrisk.portfolio import minrisk_problem
+    from cvxrisk.random import rand_cov
+    from cvxrisk.sample import SampleCovariance
 
     _n = 6
     return SampleCovariance, cp, minrisk_problem, mo, np, rand_cov
