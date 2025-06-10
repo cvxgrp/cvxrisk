@@ -136,7 +136,7 @@ build-backend = "hatchling.build"
 
 # Hatch configuration for building the package
 [tool.hatch.build.targets.wheel]
-packages = ["cvx"]  # Only include the cvx package in the wheel
+packages = ["cvxrisk"]  # Only include the cvx package in the wheel
 
 # Deptry configuration for dependency checking
 # Rule ignores for specific dependencies
