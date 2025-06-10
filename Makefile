@@ -22,9 +22,8 @@ install: venv ## Install all dependencies using uv
 
 fmt: venv ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uv pip install --no-cache-dir pre-commit
-	@uv run pre-commit install
-	@uv run pre-commit run --all-files
+	@uvx pre-commit install
+	@uvx pre-commit run --all-files
 
 ty: install
 	@uvx ty check
