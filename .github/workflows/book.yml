@@ -47,7 +47,8 @@ jobs:
         uses: tschm/cradle/actions/environment@v0.1.71
 
       - uses: tschm/cradle/actions/pdoc@v0.1.71  # Generate API documentation
-
+        with:
+          source-folder: 'cvxrisk'
   test:
     # Run tests and generate coverage reports
     runs-on: "ubuntu-latest"
@@ -59,7 +60,7 @@ jobs:
 
       - uses: tschm/cradle/actions/coverage@v0.1.71  # Run tests and generate coverage reports
         with:
-          source-folder: cvx
+          source-folder: cvxrisk
           tests-folder: tests
 
   jupyter:
