@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from cvx.random import rand_cov
-from cvx.risk.linalg import cholesky
+from cvxrisk.linalg import cholesky
+from cvxrisk.random import rand_cov
 
 
 def test_cholesky() -> None:
