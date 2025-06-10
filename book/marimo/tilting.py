@@ -5,9 +5,19 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
+with app.setup:
+    import cvxpy as cp
+    import marimo as mo
+    import numpy as np
+    import pandas as pd
+
+    from cvxrisk.portfolio import minrisk_problem
+    from cvxrisk.random import rand_cov
+    from cvxrisk.sample import SampleCovariance
+
 
 @app.cell
-def _(mo):
+def _():
     mo.md(
         r"""
     This notebook is based on an idea by Nicholas Gunther
@@ -19,7 +29,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md(
         r"""
     Can you give some guidance on how to include constraints in cvxrisk?
@@ -49,7 +59,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md(
         r"""
     We shall first observe that if we drop the constraint w.dot(V)
@@ -60,7 +70,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md(
         r"""
     For this problem we have enhanced the builtin minrisk function.
@@ -72,24 +82,7 @@ def _(mo):
 
 @app.cell
 def _():
-    return
-
-
-@app.cell
-async def _():
     # Check if running in WebAssembly environment
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxrisk")
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
-
     import cvxpy as cp
     import marimo as mo
     import numpy as np
@@ -105,7 +98,7 @@ async def _():
 
 
 @app.cell
-def _(SampleCovariance, cp, np, pd, rand_cov):
+def _():
     # Let's start without the tilting constraint
     assets = ["A", "B", "C", "D", "E"]
     s = pd.DataFrame(index=assets, columns=assets, data=rand_cov(len(assets)))
@@ -126,7 +119,7 @@ def _(SampleCovariance, cp, np, pd, rand_cov):
 
 
 @app.cell
-def _(assets, minrisk_problem, pd, riskmodel, w_sp, weights):
+def _(assets, riskmodel, w_sp, weights):
     # without the tilting constraint. We reproduce (as predicted) w_sp.
     problem = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=[])
 
@@ -139,7 +132,7 @@ def _(assets, minrisk_problem, pd, riskmodel, w_sp, weights):
 
 
 @app.cell
-def _(assets, minrisk_problem, pd, riskmodel, v, w_sp, weights):
+def _(assets, riskmodel, v, w_sp, weights):
     # Now we specify the tilting constraint
     constraints = [v.to_numpy() @ weights == 0.5]
     # We inject the constraints
