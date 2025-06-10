@@ -5,40 +5,26 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import uuid
+
+    import cvxpy as cp
+    import marimo as mo
+    import numpy as np
+    import pandas as pd
+
+    from cvxrisk.factor import FactorModel
+    from cvxrisk.portfolio import minrisk_problem
+
 
 @app.cell
-def _(mo):
+def _():
     mo.md(r"""# Large problem with 1000 assets and 100 factors""")
     return
 
 
 @app.cell
-async def _():
-    # Check if running in WebAssembly environment
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxrisk")
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
-
-    import cvxpy as cvx
-    import marimo as mo
-    import numpy as np
-    import pandas as pd
-
-    return (mo, cvx, np, pd)
-
-
-@app.cell
-def _random(np, pd):
-    import uuid
-
+def _random():
     # Create a single random number generator instance
     rng = np.random.default_rng(42)
 
@@ -81,17 +67,6 @@ def _random(np, pd):
 
 
 @app.cell
-def _():
-    from cvxrisk.factor import FactorModel
-    from cvxrisk.portfolio import minrisk_problem
-
-    return (
-        FactorModel,
-        minrisk_problem,
-    )
-
-
-@app.cell
 def _(random_factors):
     t = 2000
     factors = random_factors(t=t, n=100, const_factor=False)
@@ -111,15 +86,15 @@ def _(beta, factors, random_noise):
 
 
 @app.cell
-def _(FactorModel, ret):
+def _(ret):
     triangle = FactorModel(assets=len(ret.columns), k=100)
     return (triangle,)
 
 
 @app.cell
-def _(beta, cvx, factors, minrisk_problem, np, pd, ret, triangle):
-    w = cvx.Variable(1000)
-    y = cvx.Variable(100)
+def _(beta, factors, ret, triangle):
+    w = cp.Variable(1000)
+    y = cp.Variable(100)
     _problem = minrisk_problem(triangle, w, y=y)
     triangle.update(
         exposure=beta.values,
@@ -134,7 +109,7 @@ def _(beta, cvx, factors, minrisk_problem, np, pd, ret, triangle):
 
 
 @app.cell
-def _(beta, factors, minrisk_problem, np, pd, ret, triangle, w, y):
+def _(beta, factors, ret, triangle, w, y):
     for _i in range(1):
         _problem = minrisk_problem(triangle, w, y=y)
         triangle.update(
