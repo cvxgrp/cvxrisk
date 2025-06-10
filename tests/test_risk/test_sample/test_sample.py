@@ -5,8 +5,8 @@ from __future__ import annotations
 import cvxpy as cp
 import numpy as np
 
-from cvx.portfolio import minrisk_problem
-from cvx.risk.sample import SampleCovariance
+from cvxrisk.portfolio import minrisk_problem
+from cvxrisk.sample import SampleCovariance
 
 
 def test_sample() -> None:

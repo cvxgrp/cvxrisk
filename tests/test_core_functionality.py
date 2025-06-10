@@ -18,12 +18,12 @@ import cvxpy as cp
 import numpy as np
 import pandas as pd
 
-from cvx.portfolio import minrisk_problem
-from cvx.random import rand_cov
-from cvx.risk.cvar import CVar
-from cvx.risk.factor import FactorModel
-from cvx.risk.linalg import pca
-from cvx.risk.sample import SampleCovariance
+from cvxrisk.cvar import CVar
+from cvxrisk.factor import FactorModel
+from cvxrisk.linalg import pca
+from cvxrisk.portfolio import minrisk_problem
+from cvxrisk.random import rand_cov
+from cvxrisk.sample import SampleCovariance
 
 
 def test_sample_covariance_optimization():

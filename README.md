@@ -50,30 +50,33 @@ using `pip install cvxrisk[mosek]`.
 cvxrisk makes it easy to formulate and solve portfolio optimization problems:
 
 ```python
->>> import cvxpy as cp
->>> import numpy as np
->>> from cvx.risk.sample import SampleCovariance
->>> from cvx.portfolio import minrisk_problem
->>>
->>> # Create a risk model
->>> riskmodel = SampleCovariance(num=2)
->>>
->>> # Update the model with data
->>> riskmodel.update(
-...     cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
-...     lower_assets=np.zeros(2),
-...     upper_assets=np.ones(2)
+>> > import cvxpy as cp
+>> > import numpy as np
+>> > from cvxrisk.sample import SampleCovariance
+>> > from cvxrisk.portfolio import minrisk_problem
+>> >
+>> >  # Create a risk model
+>> > riskmodel = SampleCovariance(num=2)
+>> >
+>> >  # Update the model with data
+>> > riskmodel.update(
+    ...
+cov = np.array([[1.0, 0.5], [0.5, 2.0]]),
+...
+lower_assets = np.zeros(2),
+...
+upper_assets = np.ones(2)
 ... )
->>>
->>> # Define portfolio weights variable
->>> weights = cp.Variable(2)
->>>
->>> # Create and solve the optimization problem
->>> problem = minrisk_problem(riskmodel, weights)
->>> problem.solve()
->>>
->>> # Print the optimal weights
->>> print(np.round(weights.value, 2))
+>> >
+>> >  # Define portfolio weights variable
+>> > weights = cp.Variable(2)
+>> >
+>> >  # Create and solve the optimization problem
+>> > problem = minrisk_problem(riskmodel, weights)
+>> > problem.solve()
+>> >
+>> >  # Print the optimal weights
+>> > print(np.round(weights.value, 2))
 [0.8 0.2]
 ```
 
@@ -86,14 +89,14 @@ cvxrisk provides several risk models:
 The simplest risk model based on the sample covariance matrix:
 
 ```python
->>> from cvx.risk.sample import SampleCovariance
->>> import numpy as np
->>>
->>> riskmodel = SampleCovariance(num=2)
->>> riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]))
->>> riskmodel.parameter["cov"].value
-array([[1. , 0.5],
-       [0.5, 2. ]])
+>> > from cvxrisk.sample import SampleCovariance
+>> > import numpy as np
+>> >
+>> > riskmodel = SampleCovariance(num=2)
+>> > riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]))
+>> > riskmodel.parameter["cov"].value
+array([[1., 0.5],
+       [0.5, 2.]])
 ```
 
 ### Factor Risk Models
@@ -102,27 +105,30 @@ Factor models reduce dimensionality by projecting asset returns onto a
 smaller set of factors:
 
 ```python
->>> import numpy as np
->>> from cvx.risk.factor import FactorModel
->>> from cvx.risk.linalg import pca
->>> import pandas as pd
->>>
->>> # Create some sample returns data
->>> returns = pd.DataFrame(np.random.randn(100, 25))
->>>
->>> # Compute principal components
->>> factors = pca(returns, n_components=10)
->>>
->>> # Create and update the factor model
->>> model = FactorModel(assets=25, k=10)
->>> model.update(
-...     cov=factors.cov.values,
-...     exposure=factors.exposure.values,
-...     idiosyncratic_risk=factors.idiosyncratic.std().values
+>> > import numpy as np
+>> > from cvxrisk.factor import FactorModel
+>> > from cvxrisk.linalg import pca
+>> > import pandas as pd
+>> >
+>> >  # Create some sample returns data
+>> > returns = pd.DataFrame(np.random.randn(100, 25))
+>> >
+>> >  # Compute principal components
+>> > factors = pca(returns, n_components=10)
+>> >
+>> >  # Create and update the factor model
+>> > model = FactorModel(assets=25, k=10)
+>> > model.update(
+    ...
+cov = factors.cov.values,
+...
+exposure = factors.exposure.values,
+...
+idiosyncratic_risk = factors.idiosyncratic.std().values
 ... )
->>>
->>> # Verify the model has the correct dimensions
->>> model.parameter["exposure"].value.shape
+>> >
+>> >  # Verify the model has the correct dimensions
+>> > model.parameter["exposure"].value.shape
 (10, 25)
 ```
 
@@ -154,20 +160,20 @@ is the variance of the idiosyncratic returns.
 CVaR measures the expected loss in the worst-case scenarios:
 
 ```python
->>> import numpy as np
->>> from cvx.risk.cvar import CVar
->>>
->>> # Create some sample historical returns
->>> historical_returns = np.random.randn(50, 14)
->>>
->>> # Create and update the CVaR model
->>> model = CVar(alpha=0.95, n=50, m=14)
->>> model.update(returns=historical_returns)
->>>
->>> # Verify the model parameters
->>> model.alpha
+>> > import numpy as np
+>> > from cvxrisk.cvar import CVar
+>> >
+>> >  # Create some sample historical returns
+>> > historical_returns = np.random.randn(50, 14)
+>> >
+>> >  # Create and update the CVaR model
+>> > model = CVar(alpha=0.95, n=50, m=14)
+>> > model.update(returns=historical_returns)
+>> >
+>> >  # Verify the model parameters
+>> > model.alpha
 0.95
->>> model.parameter["returns"].value.shape
+>> > model.parameter["returns"].value.shape
 (50, 14)
 ```
 

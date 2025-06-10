@@ -82,8 +82,8 @@ def _random(np, pd):
 
 @app.cell
 def _():
-    from cvx.portfolio import minrisk_problem
-    from cvx.risk.factor import FactorModel
+    from cvxrisk.factor import FactorModel
+    from cvxrisk.portfolio import minrisk_problem
 
     return (
         FactorModel,
