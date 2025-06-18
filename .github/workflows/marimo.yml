@@ -10,42 +10,7 @@ permissions:
   contents: read  # Read-only access to repository contents
 
 jobs:
-  list-notebooks:
-    name: List Marimo Notebooks
-    runs-on: ubuntu-latest
-    outputs:
-      notebooks: ${{ steps.set-notebooks.outputs.notebooks }}
-
-    steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
-
-      - name: List notebooks
-        id: set-notebooks
-        run: |
-          cd book/marimo
-          # Get all .py files, excluding directories
-          NOTEBOOKS=$(ls -p | grep -v / | grep '\.py$' | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "notebooks=$NOTEBOOKS" >> $GITHUB_OUTPUT
-          echo "Found notebooks: $NOTEBOOKS"
-
-  run-notebook:
-    name: Run ${{ matrix.notebook }}
-    needs: list-notebooks
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false  # Continue with other notebooks even if one fails
-      matrix:
-        notebook: ${{ fromJson(needs.list-notebooks.outputs.notebooks) }}
-
-    steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
-
-      - name: Run notebook
-        run: |
-          uv pip install --no-cache-dir marimo
-
-          cd book/marimo
-          echo "Processing ${{ matrix.notebook }}"
-          uv run python "${{ matrix.notebook }}"
+  test:
+    uses: jebel-quant/marimushka/.github/workflows/test.yml@v0.1.1
+    with:
+      notebook-dir: book/marimo
