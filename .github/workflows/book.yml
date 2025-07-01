@@ -23,9 +23,9 @@ jobs:
       contents: read
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.1.73
 
-      - uses: tschm/cradle/actions/pdoc@v0.1.72  # Generate API documentation
+      - uses: tschm/cradle/actions/pdoc@v0.1.73  # Generate API documentation
         with:
           source-folder: 'cvxrisk'
   test:
@@ -35,9 +35,9 @@ jobs:
       contents: read
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.1.73
 
-      - uses: tschm/cradle/actions/coverage@v0.1.72  # Run tests and generate coverage reports
+      - uses: tschm/cradle/actions/coverage@v0.1.73  # Run tests and generate coverage reports
         with:
           source-folder: cvxrisk
           tests-folder: tests
@@ -58,4 +58,4 @@ jobs:
         if: ${{ github.event.repository.fork }}
         run: echo "This is a fork; skipping publish." && exit 0
 
-      - uses: tschm/cradle/actions/book@v0.1.72  # Build and publish the documentation book
+      - uses: tschm/cradle/actions/book@v0.1.75  # Build and publish the documentation book
