@@ -26,8 +26,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.1.75
         with:
           python-version: ${{ matrix.python-version }}  # Use the Python version from the matrix
 
-      - uses: tschm/cradle/actions/test@v0.1.72  # Run the test suite
+      - uses: tschm/cradle/actions/test@v0.1.75  # Run the test suite
