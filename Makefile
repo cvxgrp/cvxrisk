@@ -22,7 +22,6 @@ install: venv ## Install all dependencies using uv
 
 fmt: venv ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uvx pre-commit install
 	@uvx pre-commit run --all-files
 
 ty: install
