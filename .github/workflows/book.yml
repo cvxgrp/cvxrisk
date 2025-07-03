@@ -58,4 +58,10 @@ jobs:
         if: ${{ github.event.repository.fork }}
         run: echo "This is a fork; skipping publish." && exit 0
 
-      - uses: tschm/cradle/actions/book@v0.1.75  # Build and publish the documentation book
+      - uses: tschm/cradle/actions/book@v0.1.75
+        with:
+          title: "cvxRisk"
+          links: |
+            {
+              "API": "./pdoc/index.html"
+            }
