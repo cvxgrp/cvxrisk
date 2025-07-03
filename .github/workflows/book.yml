@@ -42,26 +42,20 @@ jobs:
           source-folder: cvxrisk
           tests-folder: tests
 
-  jupyter:
-    # Process Jupyter notebooks for documentation
-    runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
-    steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
-
-      - uses: tschm/cradle/actions/jupyter@v0.1.72  # Process Jupyter notebooks
-
   book:
     # Combine all documentation and publish to GitHub Pages
     runs-on: "ubuntu-latest"
-    needs: [test, pdoc, jupyter, marimo]  # Wait for all other jobs to complete
+    needs: [test, pdoc, marimo]  # Wait for all other jobs to complete
 
     permissions:
-      contents: write  # Need write access to publish to gh-pages branch
+      contents: read
       pages: write            # Permission to deploy to Pages
       id-token: write         # Permission to verify deployment origin
 
     steps:
+      - # Skip publish on forks
+        name: Skip on fork
+        if: ${{ github.event.repository.fork }}
+        run: echo "This is a fork; skipping publish." && exit 0
+
       - uses: tschm/cradle/actions/book@v0.1.72  # Build and publish the documentation book
