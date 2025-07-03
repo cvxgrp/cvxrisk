@@ -59,6 +59,7 @@ jobs:
         run: echo "This is a fork; skipping publish." && exit 0
 
       - uses: tschm/cradle/actions/book@v0.1.75
+        if: ${{ !github.event.repository.fork }}
         with:
           title: "cvxRisk"
           links: |
