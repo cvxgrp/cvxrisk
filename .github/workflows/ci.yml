@@ -1,35 +1,43 @@
+# This file is part of the tschm/.config-templates repository
+# (https://github.com/tschm/.config-templates).
+#
+# Workflow: Continuous Integration
+# Purpose: This workflow runs tests on multiple Python versions to ensure
+#          compatibility and code quality across different environments.
+#
+# Trigger: This workflow runs on every push
+#
+# Components:
+#   - 🧪 Run tests on multiple Python versions
+#   - 🔄 Matrix strategy for testing on different environments
+
 name: "CI"
-# Continuous Integration workflow
-# This workflow runs tests across multiple operating systems and Python versions
-# to ensure cross-platform compatibility.
 
 on:
-- push  # Triggered on every push to the repository
+- push
 
 permissions:
-  contents: read  # Read-only access to repository contents
+  contents: read
 
 jobs:
   test:
-    # Cross-platform testing job
-    # Tests the package on multiple operating systems and Python versions
-    # to ensure compatibility across different environments
+    if: github.repository != 'tschm/.config-templates'
+    # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        # Test on all major operating systems
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        # Test on multiple Python versions
-        python-version: [ '3.12', '3.13' ]
+        # mongo container action only supported on Linux
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.12', '3.13' ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.3.04
         with:
-          python-version: ${{ matrix.python-version }}  # Use the Python version from the matrix
+          python-version: ${{ matrix.python-version }}
 
-      - uses: tschm/cradle/actions/test@v0.3.04  # Run the test suite
+      - uses: tschm/cradle/actions/test@v0.3.04
         with:
-          tests-folder: 'src/tests'
+          tests-folder: src/tests

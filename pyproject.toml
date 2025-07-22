@@ -4,7 +4,7 @@ name = "cvxrisk"
 version = "0.0.0"
 description = "Simple riskengine for cvxpy"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 # List of core dependencies required for the package to function
 dependencies = [
     "cvxpy-base>=1.5.0",   # Core convex optimization modeling framework
@@ -26,10 +26,10 @@ dev = [
     "pytest-cov>=6.0.0",  # Test coverage reporting
     "pytest>=8.3.3",      # Testing framework
     "pre-commit>=4.0.1",  # Git pre-commit hooks for code quality
-    "cvxsimulator>=1.4.0", # Simulation framework for portfolio optimization
+    "cvxsimulator>=1.4.4", # Simulation framework for portfolio optimization
     "marimo>=0.13.15",    # Interactive notebook environment
     "polars>=1.24.0",     # Fast DataFrame library (alternative to pandas)
-    "micropip>=0.9.0",    # Package installer for WebAssembly/Pyodide
+    #"micropip>=0.9.0",    # Package installer for WebAssembly/Pyodide
     "python-dotenv==1.1.1"
 ]
 

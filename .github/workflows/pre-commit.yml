@@ -1,33 +1,27 @@
-name: pre-commit
-# Code quality and dependency check workflow
-# This workflow runs code quality checks and dependency validation
-# to ensure the codebase meets standards and has no dependency issues.
+# This file is part of the tschm/.config-templates repository
+# (https://github.com/tschm/.config-templates).
+#
+# Workflow: Pre-commit
+# Purpose: This workflow runs pre-commit checks to ensure code quality
+#          and consistency across the codebase. It helps catch issues
+#          like formatting errors, linting issues, and other code quality
+#          problems before they are merged.
+#
+# Trigger: This workflow runs on every push
+#
+# Components:
+#   - 🔍 Run pre-commit checks using reusable action
 
-permissions:
-  contents: read  # Read-only access to repository contents
+name: "PRE-COMMIT"
 
 on:
-  push:  # Triggered on every push to the repository
+  push:
+
+permissions:
+  contents: read
 
 jobs:
-  deptry:
-    # Dependency validation job
-    # Checks for dependency issues like unused or missing dependencies
-    # using the deptry tool
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.3.04
-
-      - uses: tschm/cradle/actions/deptry@v0.3.04  # Run deptry to check dependencies
-        with:
-          source-folder: 'src/cvxrisk'
-
   pre-commit:
-    # Code quality check job
-    # Runs pre-commit hooks to enforce code style, formatting,
-    # and other quality standards
     runs-on: ubuntu-latest
     steps:
-      - uses: tschm/cradle/actions/pre-commit@v0.3.04  # Run pre-commit hooks
+      - uses: tschm/cradle/actions/pre-commit@v0.3.04
