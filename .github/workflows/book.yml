@@ -40,7 +40,7 @@ jobs:
       - uses: tschm/cradle/actions/coverage@v0.3.04  # Run tests and generate coverage reports
         with:
           source-folder: cvxrisk
-          tests-folder: tests
+          tests-folder: src/tests
 
   book:
     # Combine all documentation and publish to GitHub Pages
