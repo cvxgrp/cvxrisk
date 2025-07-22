@@ -1,4 +1,5 @@
-"""Random data generation utilities for testing and simulation"""
+"""Random data generation utilities for testing and simulation."""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +13,8 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from .rand_cov import rand_cov
-
 import importlib.metadata
+
+from .rand_cov import rand_cov as rand_cov  # noqa: F401
+
 __version__ = importlib.metadata.version("cvxrisk")

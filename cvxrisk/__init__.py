@@ -1,4 +1,5 @@
-"""Risk models for portfolio optimization"""
+"""Risk models for portfolio optimization."""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +14,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import importlib.metadata
+
 __version__ = importlib.metadata.version("cvxrisk")
 
-from .model import Model
+from .model import Model as Model  # noqa: F401

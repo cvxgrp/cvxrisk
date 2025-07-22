@@ -1,4 +1,5 @@
-"""Linear algebra utilities for risk models"""
+"""Linear algebra utilities for risk models."""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,6 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from .cholesky import cholesky
-from .pca import pca
-from .valid import valid
+from .cholesky import cholesky as cholesky  # noqa: F401
+from .pca import pca as pca  # noqa: F401
+from .valid import valid as valid  # noqa: F401
