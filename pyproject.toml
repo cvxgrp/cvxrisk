@@ -4,7 +4,7 @@ name = "cvxrisk"
 version = "0.0.0"
 description = "Simple riskengine for cvxpy"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 # List of core dependencies required for the package to function
 dependencies = [
     "cvxpy-base>=1.5.0",   # Core convex optimization modeling framework
@@ -26,10 +26,11 @@ dev = [
     "pytest-cov>=6.0.0",  # Test coverage reporting
     "pytest>=8.3.3",      # Testing framework
     "pre-commit>=4.0.1",  # Git pre-commit hooks for code quality
-    "cvxsimulator>=1.4.0", # Simulation framework for portfolio optimization
+    "cvxsimulator>=1.4.4", # Simulation framework for portfolio optimization
     "marimo>=0.13.15",    # Interactive notebook environment
     "polars>=1.24.0",     # Fast DataFrame library (alternative to pandas)
-    "micropip>=0.9.0"     # Package installer for WebAssembly/Pyodide
+    #"micropip>=0.9.0",    # Package installer for WebAssembly/Pyodide
+    "python-dotenv==1.1.1"
 ]
 
 # Clarabel solver dependencies (optional)
@@ -42,93 +43,6 @@ mosek = [
     "mosek>=11.0",
 ]
 
-# Ruff configuration for code linting and formatting
-[tool.ruff]
-line-length = 120  # Maximum line length
-target-version = "py310"  # Target Python version for linting
-exclude = [
-    "*__init__.py"  # Exclude __init__.py files from linting
-]
-
-# Linting rules configuration
-[tool.ruff.lint]
-# Available rule sets in Ruff:
-# A: flake8-builtins - Check for python builtins being used as variables or parameters
-# B: flake8-bugbear - Find likely bugs and design problems
-# C4: flake8-comprehensions - Helps write better list/set/dict comprehensions
-# D: pydocstyle - Check docstring style
-# E: pycodestyle errors - PEP 8 style guide
-# ERA: eradicate - Find commented out code
-# F: pyflakes - Detect logical errors
-# I: isort - Sort imports
-# N: pep8-naming - Check PEP 8 naming conventions
-# PT: flake8-pytest-style - Check pytest best practices
-# RUF: Ruff-specific rules
-# S: flake8-bandit - Find security issues
-# SIM: flake8-simplify - Simplify code
-# T10: flake8-debugger - Check for debugger imports and calls
-# UP: pyupgrade - Upgrade syntax for newer Python
-# W: pycodestyle warnings - PEP 8 style guide warnings
-# ANN: flake8-annotations - Type annotation checks
-# ARG: flake8-unused-arguments - Unused arguments
-# BLE: flake8-blind-except - Check for blind except statements
-# COM: flake8-commas - Trailing comma enforcement
-# DTZ: flake8-datetimez - Ensure timezone-aware datetime objects
-# EM: flake8-errmsg - Check error message strings
-# FBT: flake8-boolean-trap - Boolean argument checks
-# ICN: flake8-import-conventions - Import convention enforcement
-# ISC: flake8-implicit-str-concat - Implicit string concatenation
-# NPY: NumPy-specific rules
-# PD: pandas-specific rules
-# PGH: pygrep-hooks - Grep-based checks
-# PIE: flake8-pie - Miscellaneous rules
-# PL: Pylint rules
-# Q: flake8-quotes - Quotation style enforcement
-# RSE: flake8-raise - Raise statement checks
-# RET: flake8-return - Return statement checks
-# SLF: flake8-self - Check for self references
-# TCH: flake8-type-checking - Type checking imports
-# TID: flake8-tidy-imports - Import tidying
-# TRY: flake8-try-except-raise - Try/except/raise checks
-# YTT: flake8-2020 - Python 2020+ compatibility
-
-# Current configuration:
-select = ["E", "F", "I", "N", "D", "UP", "NPY", "PD", "C4", "B", "S", "W"]
-
-# Per-file rule ignores
-[tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["S101"]  # Allow assert statements in tests
-"book/marimo/*.py" = ["N803"]
-
-# Example of a more comprehensive configuration:
-# select = [
-#     "E",   # pycodestyle errors
-#     "F",   # pyflakes
-#     "I",   # isort
-#     "B",   # bugbear: finds likely bugs and design problems
-#     "C4",  # comprehensions: helps write better list/set/dict comprehensions
-#     "N",   # naming: enforces PEP 8 naming conventions
-#     "UP",  # pyupgrade: upgrades syntax for newer Python
-#     "S",   # security: finds potential security issues
-#     "RUF", # Ruff-specific rules
-#     "W",   # pycodestyle warnings
-#     "SIM", # simplify: suggests code simplifications
-# ]
-
-# You can also ignore specific rules:
-# ignore = [
-#     "E501",    # Line too long (handled by formatter)
-#     "B905",    # `zip()` without an explicit `strict=` parameter
-#     "N806",    # Variable in function should be lowercase
-# ]
-
-# Additional configuration options:
-# fixable = ["A", "B", "C", "D", "E", "F", "I"]  # Rules that can be auto-fixed
-# unfixable = ["B007", "ERA001"]  # Rules that should not be auto-fixed
-# extend-select = ["C4", "SIM", "UP"]  # Add rules to the selected set
-# extend-ignore = ["E203", "E501"]  # Add rules to the ignored set
-
-
 # Build system configuration
 [build-system]
 requires = ["hatchling"]  # Hatchling is used as the build backend
@@ -136,7 +50,7 @@ build-backend = "hatchling.build"
 
 # Hatch configuration for building the package
 [tool.hatch.build.targets.wheel]
-packages = ["cvxrisk"]  # Only include the cvx package in the wheel
+packages = ["src/cvxrisk"]  # Only include the cvx package in the wheel
 
 # Deptry configuration for dependency checking
 # Rule ignores for specific dependencies
