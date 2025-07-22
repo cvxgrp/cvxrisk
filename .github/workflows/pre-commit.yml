@@ -22,7 +22,7 @@ jobs:
 
       - uses: tschm/cradle/actions/deptry@v0.3.04  # Run deptry to check dependencies
         with:
-          source-folder: 'cvxrisk'
+          source-folder: 'src/cvxrisk'
 
   pre-commit:
     # Code quality check job
