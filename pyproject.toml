@@ -23,12 +23,12 @@ repository = "https://github.com/cvxgrp/cvxrisk"
 [project.optional-dependencies]
 # Development dependencies for testing, linting, and documentation
 dev = [
-    "pytest-cov>=6.0.0",  # Test coverage reporting
-    "pytest>=8.3.3",      # Testing framework
-    "pre-commit>=4.0.1",  # Git pre-commit hooks for code quality
-    "cvxsimulator>=1.4.4", # Simulation framework for portfolio optimization
-    "marimo>=0.13.15",    # Interactive notebook environment
-    "polars>=1.24.0",     # Fast DataFrame library (alternative to pandas)
+    "pytest-cov>=6.0.0",   # Test coverage reporting
+    "pytest>=8.3.3",       # Testing framework
+    "pre-commit>=4.0.1",   # Git pre-commit hooks for code quality
+    "cvxsimulator>=1.4.5", # Simulation framework for portfolio optimization
+    "marimo>=0.13.15",     # Interactive notebook environment
+    "polars>=1.24.0",      # Fast DataFrame library (alternative to pandas)
     #"micropip>=0.9.0",    # Package installer for WebAssembly/Pyodide
     "python-dotenv==1.1.1"
 ]
