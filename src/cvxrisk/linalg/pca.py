@@ -11,7 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""PCA analysis."""
+"""PCA analysis (pure NumPy implementation)."""
 
 from __future__ import annotations
 
@@ -19,7 +19,6 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
-import sklearn.decomposition as skdecomp
 
 PCA = namedtuple(
     "PCA",
@@ -29,52 +28,68 @@ PCA = namedtuple(
 A named tuple containing the results of PCA analysis.
 
 Attributes:
-    explained_variance (numpy.ndarray): The explained variance ratio for each component
-    factors (numpy.ndarray): The factor returns (principal components)
-    exposure (pandas.DataFrame): The factor exposures (loadings) for each asset
-    cov (pandas.DataFrame): The covariance matrix of the factors
-    systematic (pandas.DataFrame): The systematic returns explained by the factors
-    idiosyncratic (pandas.DataFrame): The idiosyncratic returns not explained by the factors
+    explained_variance (numpy.ndarray): Explained variance ratio for each component
+    factors (pandas.DataFrame): Factor returns (principal components)
+    exposure (pandas.DataFrame): Factor exposures (loadings) for each asset
+    cov (pandas.DataFrame): Covariance matrix of the factors
+    systematic (pandas.DataFrame): Systematic returns explained by the factors
+    idiosyncratic (pandas.DataFrame): Idiosyncratic returns not explained by the factors
 """
 
 
 def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
-    """Compute the first n principal components for a return matrix.
-
-    Performs Principal Component Analysis (PCA) on the returns data to extract
-    the most important factors that explain the variance in the returns.
+    """Compute the first n principal components for a return matrix using SVD.
 
     Args:
-        returns: DataFrame of asset returns
-
+        returns: DataFrame of asset returns (rows: time, columns: assets)
         n_components: Number of principal components to extract. Defaults to 10.
 
     Returns:
-        A named tuple containing the PCA results with the following fields:
-            - explained_variance: The explained variance ratio for each component
-            - factors: The factor returns (principal components)
-            - exposure: The factor exposures (loadings) for each asset
-            - cov: The covariance matrix of the factors
-            - systematic: The systematic returns explained by the factors
-            - idiosyncratic: The idiosyncratic returns not explained by the factors
-
+        PCA named tuple with the results.
     """
-    # USING SKLEARN. Let's look at the first n components
-    sklearn_pca = skdecomp.PCA(n_components=n_components)
-    sklearn_pca.fit_transform(returns)
+    # Demean the returns
+    x = returns.to_numpy()
+    x_mean = x.mean(axis=0)
+    x_centered = x - x_mean
 
-    exposure = sklearn_pca.components_
-    factors = returns @ np.transpose(exposure)
+    # Singular Value Decomposition
+    # x = u s V^T, where columns of V are principal axes
+    u, s_full, vt = np.linalg.svd(x_centered, full_matrices=False)
+
+    # Take only the first n components
+    u = u[:, :n_components]
+    s = s_full[:n_components]
+    vt = vt[:n_components, :]
+
+    # Factor exposures (loadings): each component's weight per asset
+    exposure = pd.DataFrame(vt, columns=returns.columns)
+
+    # Factor returns (scores): projection of data onto components
+    factors = pd.DataFrame(u * s, index=returns.index, columns=[f"PC{i + 1}" for i in range(n_components)])
+
+    # Explained variance ratio (normalize by total variance across ALL components)
+    explained_variance = (s**2) / np.sum(s_full**2)
+
+    # Covariance of factor returns
+    cov = factors.cov()
+
+    # Systematic + Idiosyncratic returns
+    systematic = pd.DataFrame(
+        data=(u * s) @ vt + x_mean,
+        index=returns.index,
+        columns=returns.columns,
+    )
+    idiosyncratic = pd.DataFrame(
+        data=x_centered - (u * s) @ vt,
+        index=returns.index,
+        columns=returns.columns,
+    )
 
     return PCA(
-        explained_variance=sklearn_pca.explained_variance_ratio_,
+        explained_variance=explained_variance,
         factors=factors,
-        exposure=pd.DataFrame(data=exposure, columns=returns.columns),
-        cov=factors.cov(),
-        systematic=pd.DataFrame(data=factors.to_numpy() @ exposure, index=returns.index, columns=returns.columns),
-        idiosyncratic=pd.DataFrame(
-            data=returns.to_numpy() - factors.to_numpy() @ exposure,
-            index=returns.index,
-            columns=returns.columns,
-        ),
+        exposure=exposure,
+        cov=cov,
+        systematic=systematic,
+        idiosyncratic=idiosyncratic,
     )
