@@ -16,7 +16,7 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy.linalg import cholesky as _cholesky
+from numpy.linalg import cholesky as _cholesky
 
 
 def cholesky(cov: np.ndarray) -> np.ndarray:
@@ -36,4 +36,4 @@ def cholesky(cov: np.ndarray) -> np.ndarray:
         unlike numpy.linalg.cholesky which returns the lower triangular part.
 
     """
-    return _cholesky(cov)
+    return _cholesky(cov).transpose()
