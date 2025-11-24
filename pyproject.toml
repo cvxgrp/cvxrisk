@@ -21,9 +21,10 @@ repository = "https://github.com/cvxgrp/cvxrisk"
 [project.optional-dependencies]
 # Development dependencies for testing, linting, and documentation
 dev = [
+    "clarabel>=0.11.1",
     "pytest-cov>=6.3.0",   # Test coverage reporting
-    "pytest>=8.4.2",       # Testing framework
-    "pre-commit>=4.3.0",   # Git pre-commit hooks for code quality
+    "pytest>=9.0.1",       # Testing framework
+    "pre-commit>=4.5.0",   # Git pre-commit hooks for code quality
     "cvxsimulator>=1.4.5", # Simulation framework for portfolio optimization
     "marimo>=0.17.0",     # Interactive notebook environment
     "polars>=1.34.0",      # Fast DataFrame library (alternative to pandas)
