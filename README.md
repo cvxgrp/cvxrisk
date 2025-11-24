@@ -24,12 +24,6 @@ them in your optimization problems.
 # Install from PyPI (without any convex solver)
 pip install cvxrisk
 
-# Install with Clarabel solver
-pip install cvxrisk[clarabel]
-
-# Install with Mosek solver
-pip install cvxrisk[mosek]
-
 # For development installation
 git clone https://github.com/cvxgrp/cvxrisk.git
 cd cvxrisk
@@ -70,7 +64,7 @@ weights = cp.Variable(2)
 
 # Create and solve the optimization problem
 problem = minrisk_problem(riskmodel, weights)
-problem.solve()
+problem.solve(solver=cp.CLARABEL)
 
 # Print the optimal weights with deterministic spacing
 print(np.array2string(np.round(weights.value, 2), separator=" "))

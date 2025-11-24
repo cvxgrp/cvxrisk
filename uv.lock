@@ -231,9 +231,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-clarabel = [
-    { name = "clarabel" },
-]
 dev = [
     { name = "clarabel" },
     { name = "cvxsimulator" },
@@ -244,18 +241,13 @@ dev = [
     { name = "pytest-cov" },
     { name = "python-dotenv" },
 ]
-mosek = [
-    { name = "mosek" },
-]
 
 [package.metadata]
 requires-dist = [
-    { name = "clarabel", marker = "extra == 'clarabel'", specifier = ">=0.9.0" },
     { name = "clarabel", marker = "extra == 'dev'", specifier = ">=0.11.1" },
-    { name = "cvxpy-base", specifier = ">=1.7.0" },
+    { name = "cvxpy-base", specifier = ">=1.7.2" },
     { name = "cvxsimulator", marker = "extra == 'dev'", specifier = ">=1.4.5" },
     { name = "marimo", marker = "extra == 'dev'", specifier = ">=0.17.0" },
-    { name = "mosek", marker = "extra == 'mosek'", specifier = ">=11.0" },
     { name = "numpy", specifier = ">=2.3.0" },
     { name = "pandas", specifier = ">=2.3.0" },
     { name = "polars", marker = "extra == 'dev'", specifier = ">=1.34.0" },
@@ -264,7 +256,7 @@ requires-dist = [
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.3.0" },
     { name = "python-dotenv", marker = "extra == 'dev'", specifier = "==1.1.1" },
 ]
-provides-extras = ["dev", "clarabel", "mosek"]
+provides-extras = ["dev"]
 
 [[package]]
 name = "cvxsimulator"
@@ -491,20 +483,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/8d/37/02347f6d6d8279247a5837082ebc26fc0d5aaeaf75aa013fcbb433c777ab/markdown-3.9.tar.gz", hash = "sha256:d2900fe1782bd33bdbbd56859defef70c2e78fc46668f8eb9df3128138f2cb6a", size = 364585, upload-time = "2025-09-04T20:25:22.885Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/70/ae/44c4a6a4cbb496d93c6257954260fe3a6e91b7bed2240e5dad2a717f5111/markdown-3.9-py3-none-any.whl", hash = "sha256:9f4d91ed810864ea88a6f32c07ba8bee1346c0cc1f6b1f9f6c822f2a9667d280", size = 107441, upload-time = "2025-09-04T20:25:21.784Z" },
-]
-
-[[package]]
-name = "mosek"
-version = "11.0.28"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c1/c7/bdc5759e37b7ca13b82ea9e0623e6bfaaf092c38a8197531e1962f0b2bf4/mosek-11.0.28-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:544a6d22698ea075b41cc4a231436ff40e2134bcfd76590d36806829056531f7", size = 8346748, upload-time = "2025-08-25T14:14:33.269Z" },
-    { url = "https://files.pythonhosted.org/packages/2c/a2/1c31b75ccefaa110f16ee431317ab510b9d04dd759408e43412bc365a0ca/mosek-11.0.28-cp39-abi3-manylinux2014_x86_64.whl", hash = "sha256:5167f6d2d7ab88d36a76a972aba67d23b1a397eb7943038762b52ef9ba2dc041", size = 14740036, upload-time = "2025-08-25T14:14:37.454Z" },
-    { url = "https://files.pythonhosted.org/packages/cc/43/b6b268c152119705ed45367893e00c77057c5d5c8dfe08c064fa80e429eb/mosek-11.0.28-cp39-abi3-manylinux_2_29_aarch64.whl", hash = "sha256:d07526b8bbf1ea7aa492b11f1ecc653b38a76ae21822d52df5a8863328f34beb", size = 10267441, upload-time = "2025-08-25T14:14:39.853Z" },
-    { url = "https://files.pythonhosted.org/packages/01/17/e30aa099b39de859dc38b01362b0b6b8de6c7d757513d9b386dce2621f0a/mosek-11.0.28-cp39-abi3-win_amd64.whl", hash = "sha256:89aa9a7795eed0772500fd899539b09c1803c35c053a3fcdab2d8483c1cf7e8c", size = 10650003, upload-time = "2025-08-25T14:14:42.391Z" },
 ]
 
 [[package]]
