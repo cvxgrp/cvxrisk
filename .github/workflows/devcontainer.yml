@@ -1,4 +1,6 @@
 name: DEVCONTAINER
+permissions:
+  contents: read
 
 # Building these containers is expensive initially, so only run on changes to devcontainer files
 on:
