@@ -46,8 +46,8 @@ cvxrisk makes it easy to formulate and solve portfolio optimization problems:
 ```python
 import cvxpy as cp
 import numpy as np
-from cvxrisk.sample import SampleCovariance
-from cvxrisk.portfolio import minrisk_problem
+from cvx.risk.sample import SampleCovariance
+from cvx.risk.portfolio import minrisk_problem
 
 # Create a risk model
 riskmodel = SampleCovariance(num=2)
@@ -83,7 +83,7 @@ cvxrisk provides several risk models:
 The simplest risk model based on the sample covariance matrix:
 
 ```python
-from cvxrisk.sample import SampleCovariance
+from cvx.risk.sample import SampleCovariance
 import numpy as np
 
 riskmodel = SampleCovariance(num=2)
@@ -108,8 +108,8 @@ smaller set of factors:
 
 ```python
 import numpy as np
-from cvxrisk.factor import FactorModel
-from cvxrisk.linalg import pca
+from cvx.risk.factor import FactorModel
+from cvx.risk.linalg import pca
 import pandas as pd
 
 # Create some sample returns data
@@ -169,7 +169,7 @@ CVaR measures the expected loss in the worst-case scenarios:
 
 ```python
 import numpy as np
-from cvxrisk.cvar import CVar
+from cvx.risk.cvar import CVar
 
 # Create some sample historical returns (deterministic)
 np.random.seed(0)

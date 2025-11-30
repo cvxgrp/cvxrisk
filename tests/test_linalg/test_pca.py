@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvxrisk.linalg import pca
+from cvx.risk.linalg import pca
 
 
 @pytest.fixture()

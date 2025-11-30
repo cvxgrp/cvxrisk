@@ -20,9 +20,9 @@ from dataclasses import dataclass
 import cvxpy as cvx
 import numpy as np
 
-from ..bounds import Bounds
-from ..linalg import cholesky
-from ..model import Model
+from cvx.risk.bounds import Bounds
+from cvx.risk.linalg import cholesky
+from cvx.risk.model import Model
 
 
 @dataclass

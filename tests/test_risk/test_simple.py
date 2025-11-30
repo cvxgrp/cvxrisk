@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from cvxrisk.bounds import Bounds
+from cvx.risk.bounds import Bounds
 
 
 def test_bounds_initialization() -> None:

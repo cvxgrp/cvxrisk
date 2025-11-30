@@ -7,10 +7,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvxrisk.factor import FactorModel
-from cvxrisk.linalg import pca as principal_components
-from cvxrisk.portfolio import minrisk_problem
-from cvxrisk.random import rand_cov
+from cvx.risk.factor import FactorModel
+from cvx.risk.linalg import pca as principal_components
+from cvx.risk.portfolio import minrisk_problem
+from cvx.risk.random import rand_cov
 
 
 @pytest.fixture()

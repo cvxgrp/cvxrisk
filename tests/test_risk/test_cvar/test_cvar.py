@@ -6,8 +6,8 @@ import cvxpy as cp
 import numpy as np
 import pytest
 
-from cvxrisk.cvar import CVar
-from cvxrisk.portfolio import minrisk_problem
+from cvx.risk.cvar import CVar
+from cvx.risk.portfolio import minrisk_problem
 
 
 def test_estimate_risk() -> None:
