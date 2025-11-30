@@ -1,4 +1,27 @@
-"""Sample covariance risk models for portfolio optimization."""
+"""Sample covariance risk models for portfolio optimization.
+
+This subpackage provides the SampleCovariance class for risk estimation
+based on the sample covariance matrix.
+
+Example:
+    >>> import cvxpy as cp
+    >>> import numpy as np
+    >>> from cvx.risk.sample import SampleCovariance
+    >>> model = SampleCovariance(num=3)
+    >>> model.update(
+    ...     cov=np.eye(3),
+    ...     lower_assets=np.zeros(3),
+    ...     upper_assets=np.ones(3)
+    ... )
+    >>> weights = cp.Variable(3)
+    >>> risk = model.estimate(weights)
+    >>> isinstance(risk, cp.Expression)
+    True
+
+Classes:
+    SampleCovariance: Risk model based on sample covariance matrix
+
+"""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #

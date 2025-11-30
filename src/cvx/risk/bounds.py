@@ -11,7 +11,31 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Bounds."""
+"""Bounds for portfolio optimization.
+
+This module provides the Bounds class for defining and enforcing lower and upper
+bounds on portfolio weights or other variables in optimization problems.
+
+Example:
+    Create bounds for a portfolio and use them as constraints:
+
+    >>> import cvxpy as cp
+    >>> import numpy as np
+    >>> from cvx.risk.bounds import Bounds
+    >>> # Create bounds for 3 assets
+    >>> bounds = Bounds(m=3, name="assets")
+    >>> # Update bounds with actual values
+    >>> bounds.update(
+    ...     lower_assets=np.array([0.0, 0.1, 0.0]),
+    ...     upper_assets=np.array([0.5, 0.4, 0.3])
+    ... )
+    >>> # Create constraints
+    >>> weights = cp.Variable(3)
+    >>> constraints = bounds.constraints(weights)
+    >>> len(constraints)
+    2
+
+"""
 
 from __future__ import annotations
 
@@ -27,31 +51,67 @@ from .model import Model
 class Bounds(Model):
     """Representation of bounds for a model, defining constraints and parameters.
 
-    This dataclass provides functionality to establish and manage bounds for a model. It
-    includes methods to handle bound parameters, update them dynamically, and generate
-    constraints that can be used in optimization models.
+    This dataclass provides functionality to establish and manage bounds for a model.
+    It includes methods to handle bound parameters, update them dynamically, and
+    generate constraints that can be used in optimization models.
+
+    The Bounds class creates CVXPY Parameter objects for lower and upper bounds,
+    which can be updated without reconstructing the optimization problem.
 
     Attributes:
-        m: Maximal number of bounds.
-        name: Name for the bounds, e.g., assets or factors.
+        m: Maximum number of bounds (e.g., number of assets or factors).
+        name: Name for the bounds used in parameter naming (e.g., "assets" or "factors").
+
+    Example:
+        Create and use bounds for portfolio weights:
+
+        >>> import cvxpy as cp
+        >>> import numpy as np
+        >>> from cvx.risk.bounds import Bounds
+        >>> # Create bounds with capacity for 5 assets
+        >>> bounds = Bounds(m=5, name="assets")
+        >>> # Initialize with actual bounds (can be smaller than m)
+        >>> bounds.update(
+        ...     lower_assets=np.array([0.0, 0.0, 0.1]),
+        ...     upper_assets=np.array([0.5, 0.5, 0.4])
+        ... )
+        >>> # Check parameter values
+        >>> bounds.parameter["lower_assets"].value[:3]
+        array([0. , 0. , 0.1])
+        >>> bounds.parameter["upper_assets"].value[:3]
+        array([0.5, 0.5, 0.4])
 
     """
 
     m: int = 0
-    """Maximal number of bounds"""
+    """Maximum number of bounds (e.g., number of assets)."""
 
     name: str = ""
-    """Name for the bounds, e.g. assets or factors"""
+    """Name for the bounds, used in parameter naming (e.g., 'assets' or 'factors')."""
 
     def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
         """No estimation for bounds.
 
+        Bounds do not provide a risk estimate; they only provide constraints.
+        This method raises NotImplementedError.
+
         Args:
-            weights: CVXPY variable representing portfolio weights
-            **kwargs: Additional keyword arguments
+            weights: CVXPY variable representing portfolio weights.
+            **kwargs: Additional keyword arguments.
 
         Raises:
-            NotImplementedError: This method is not implemented for Bounds
+            NotImplementedError: Always raised as bounds do not provide risk estimates.
+
+        Example:
+            >>> import cvxpy as cp
+            >>> from cvx.risk.bounds import Bounds
+            >>> bounds = Bounds(m=3, name="assets")
+            >>> weights = cp.Variable(3)
+            >>> try:
+            ...     bounds.estimate(weights)
+            ... except NotImplementedError:
+            ...     print("estimate not implemented for Bounds")
+            estimate not implemented for Bounds
 
         """
         raise NotImplementedError("No estimation for bounds")
@@ -59,11 +119,22 @@ class Bounds(Model):
     def _f(self, str_prefix: str) -> str:
         """Create a parameter name by appending the name attribute.
 
+        This internal method creates consistent parameter names by combining
+        a prefix with the bounds name (e.g., "lower_assets" or "upper_factors").
+
         Args:
-            str_prefix: Base string for the parameter name
+            str_prefix: Base string for the parameter name (e.g., "lower" or "upper").
 
         Returns:
-            Combined parameter name in the format "{str_prefix}_{self.name}"
+            Combined parameter name in the format "{str_prefix}_{self.name}".
+
+        Example:
+            >>> from cvx.risk.bounds import Bounds
+            >>> bounds = Bounds(m=3, name="assets")
+            >>> bounds._f("lower")
+            'lower_assets'
+            >>> bounds._f("upper")
+            'upper_assets'
 
         """
         return f"{str_prefix}_{self.name}"
@@ -71,7 +142,19 @@ class Bounds(Model):
     def __post_init__(self):
         """Initialize the parameters after the class is instantiated.
 
-        Creates lower and upper bound parameters with appropriate shapes and default values.
+        Creates lower and upper bound CVXPY Parameter objects with appropriate
+        shapes and default values. Lower bounds default to zeros, upper bounds
+        default to ones.
+
+        Example:
+            >>> from cvx.risk.bounds import Bounds
+            >>> bounds = Bounds(m=3, name="assets")
+            >>> # Parameters are automatically created
+            >>> bounds.parameter["lower_assets"].shape
+            (3,)
+            >>> bounds.parameter["upper_assets"].shape
+            (3,)
+
         """
         self.parameter[self._f("lower")] = cp.Parameter(
             shape=self.m,
@@ -87,10 +170,25 @@ class Bounds(Model):
     def update(self, **kwargs) -> None:
         """Update the lower and upper bound parameters.
 
+        This method updates the bound parameters with new values. The input
+        arrays can be shorter than m, in which case remaining values are set
+        to zero.
+
         Args:
             **kwargs: Keyword arguments containing lower and upper bounds
+                with keys formatted as "{lower/upper}_{self.name}".
 
-                      with keys formatted as "{lower/upper}_{self.name}"
+        Example:
+            >>> import numpy as np
+            >>> from cvx.risk.bounds import Bounds
+            >>> bounds = Bounds(m=5, name="assets")
+            >>> # Update with bounds for only 3 assets
+            >>> bounds.update(
+            ...     lower_assets=np.array([0.0, 0.1, 0.2]),
+            ...     upper_assets=np.array([0.5, 0.4, 0.3])
+            ... )
+            >>> bounds.parameter["lower_assets"].value[:3]
+            array([0. , 0.1, 0.2])
 
         """
         lower = kwargs[self._f("lower")]
@@ -104,13 +202,29 @@ class Bounds(Model):
     def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
         """Return constraints that enforce the bounds on weights.
 
-        Args:
-            weights: CVXPY variable representing portfolio weights
+        Creates CVXPY constraints that enforce the lower and upper bounds
+        on the weights variable.
 
-            **kwargs: Additional keyword arguments (not used)
+        Args:
+            weights: CVXPY variable representing portfolio weights.
+            **kwargs: Additional keyword arguments (not used).
 
         Returns:
-            List of CVXPY constraints enforcing lower and upper bounds
+            List of two CVXPY constraints: lower bound and upper bound.
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.bounds import Bounds
+            >>> bounds = Bounds(m=2, name="assets")
+            >>> bounds.update(
+            ...     lower_assets=np.array([0.1, 0.2]),
+            ...     upper_assets=np.array([0.6, 0.7])
+            ... )
+            >>> weights = cp.Variable(2)
+            >>> constraints = bounds.constraints(weights)
+            >>> len(constraints)
+            2
 
         """
         return [

@@ -1,4 +1,23 @@
-"""Random data generation utilities for testing and simulation."""
+"""Random data generation utilities for testing and simulation.
+
+This subpackage provides functions for generating random data useful for
+testing portfolio optimization algorithms.
+
+Example:
+    >>> import numpy as np
+    >>> from cvx.risk.random import rand_cov
+    >>> # Generate a random 5x5 covariance matrix
+    >>> cov = rand_cov(5, seed=42)
+    >>> cov.shape
+    (5, 5)
+    >>> # Verify positive semi-definite
+    >>> bool(np.all(np.linalg.eigvals(cov) >= -1e-10))
+    True
+
+Functions:
+    rand_cov: Generate a random positive semi-definite covariance matrix
+
+"""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #

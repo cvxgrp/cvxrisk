@@ -11,7 +11,41 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Factor risk model."""
+"""Factor risk model.
+
+This module provides the FactorModel class, which implements a factor-based
+risk model for portfolio optimization. Factor models decompose portfolio risk
+into systematic (factor) risk and idiosyncratic (residual) risk.
+
+Example:
+    Create a factor model and estimate portfolio risk:
+
+    >>> import cvxpy as cp
+    >>> import numpy as np
+    >>> from cvx.risk.factor import FactorModel
+    >>> # Create factor model with 10 assets and 3 factors
+    >>> model = FactorModel(assets=10, k=3)
+    >>> # Set up factor exposure and covariance
+    >>> np.random.seed(42)
+    >>> exposure = np.random.randn(3, 10)  # 3 factors x 10 assets
+    >>> factor_cov = np.eye(3)  # Factor covariance matrix
+    >>> idio_risk = np.abs(np.random.randn(10))  # Idiosyncratic risk
+    >>> model.update(
+    ...     exposure=exposure,
+    ...     cov=factor_cov,
+    ...     idiosyncratic_risk=idio_risk,
+    ...     lower_assets=np.zeros(10),
+    ...     upper_assets=np.ones(10),
+    ...     lower_factors=-0.1 * np.ones(3),
+    ...     upper_factors=0.1 * np.ones(3)
+    ... )
+    >>> # Model is ready for optimization
+    >>> weights = cp.Variable(10)
+    >>> risk = model.estimate(weights)
+    >>> isinstance(risk, cp.Expression)
+    True
+
+"""
 
 from __future__ import annotations
 
@@ -27,13 +61,57 @@ from cvx.risk.model import Model
 
 @dataclass
 class FactorModel(Model):
-    """Factor risk model."""
+    """Factor risk model for portfolio optimization.
+
+    Factor models decompose portfolio risk into systematic risk (from factor
+    exposures) and idiosyncratic risk (residual risk). The total portfolio
+    variance is:
+
+        Var(w) = w' @ exposure' @ cov @ exposure @ w + sum((idio_risk * w)^2)
+
+    This implementation uses the Cholesky decomposition of the factor covariance
+    matrix for efficient risk computation.
+
+    Attributes:
+        assets: Maximum number of assets in the portfolio.
+        k: Maximum number of factors in the model.
+
+    Example:
+        Create and use a factor model:
+
+        >>> import cvxpy as cp
+        >>> import numpy as np
+        >>> from cvx.risk.factor import FactorModel
+        >>> # Create model
+        >>> model = FactorModel(assets=5, k=2)
+        >>> # Factor exposure: 2 factors x 5 assets
+        >>> exposure = np.array([[1.0, 0.8, 0.6, 0.4, 0.2],
+        ...                      [0.2, 0.4, 0.6, 0.8, 1.0]])
+        >>> # Factor covariance
+        >>> factor_cov = np.array([[1.0, 0.3], [0.3, 1.0]])
+        >>> # Idiosyncratic risk per asset
+        >>> idio_risk = np.array([0.1, 0.1, 0.1, 0.1, 0.1])
+        >>> model.update(
+        ...     exposure=exposure,
+        ...     cov=factor_cov,
+        ...     idiosyncratic_risk=idio_risk,
+        ...     lower_assets=np.zeros(5),
+        ...     upper_assets=np.ones(5),
+        ...     lower_factors=-0.5 * np.ones(2),
+        ...     upper_factors=0.5 * np.ones(2)
+        ... )
+        >>> weights = cp.Variable(5)
+        >>> risk = model.estimate(weights)
+        >>> isinstance(risk, cp.Expression)
+        True
+
+    """
 
     assets: int = 0
-    """Maximal number of assets"""
+    """Maximum number of assets in the portfolio."""
 
     k: int = 0
-    """Maximal number of factors"""
+    """Maximum number of factors in the model."""
 
     def __post_init__(self):
         """Initialize the parameters after the class is instantiated.
@@ -41,6 +119,18 @@ class FactorModel(Model):
         Creates parameters for factor exposure, idiosyncratic risk, and the Cholesky
         decomposition of the factor covariance matrix. Also initializes bounds for
         both assets and factors.
+
+        Example:
+            >>> from cvx.risk.factor import FactorModel
+            >>> model = FactorModel(assets=10, k=3)
+            >>> # Parameters are automatically created
+            >>> model.parameter["exposure"].shape
+            (3, 10)
+            >>> model.parameter["idiosyncratic_risk"].shape
+            (10,)
+            >>> model.parameter["chol"].shape
+            (3, 3)
+
         """
         self.parameter["exposure"] = cvx.Parameter(
             shape=(self.k, self.assets),
@@ -65,17 +155,40 @@ class FactorModel(Model):
         """Compute the total portfolio risk using the factor model.
 
         Combines systematic risk (from factor exposures) and idiosyncratic risk
-        to calculate the total portfolio risk.
+        to calculate the total portfolio risk. The formula is:
+
+            risk = sqrt(||chol @ y||^2 + ||idio_risk * w||^2)
+
+        where y = exposure @ weights (factor exposures).
 
         Args:
-            weights: CVXPY variable representing portfolio weights
-
+            weights: CVXPY variable representing portfolio weights.
             **kwargs: Additional keyword arguments, may include:
-
-                - y: Factor exposures (if not provided, calculated as exposure @ weights)
+                - y: Factor exposures variable. If not provided, calculated
+                  as exposure @ weights.
 
         Returns:
-            CVXPY expression: The total portfolio risk
+            CVXPY expression representing the total portfolio risk.
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.factor import FactorModel
+            >>> model = FactorModel(assets=3, k=2)
+            >>> model.update(
+            ...     exposure=np.array([[1.0, 0.5, 0.0], [0.0, 0.5, 1.0]]),
+            ...     cov=np.eye(2),
+            ...     idiosyncratic_risk=np.array([0.1, 0.1, 0.1]),
+            ...     lower_assets=np.zeros(3),
+            ...     upper_assets=np.ones(3),
+            ...     lower_factors=-np.ones(2),
+            ...     upper_factors=np.ones(2)
+            ... )
+            >>> weights = cp.Variable(3)
+            >>> y = cp.Variable(2)  # Factor exposures
+            >>> risk = model.estimate(weights, y=y)
+            >>> isinstance(risk, cp.Expression)
+            True
 
         """
         var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))
@@ -87,16 +200,37 @@ class FactorModel(Model):
     def update(self, **kwargs) -> None:
         """Update the factor model parameters.
 
+        Updates the factor exposure matrix, idiosyncratic risk vector, and
+        factor covariance Cholesky decomposition. The input dimensions can
+        be smaller than the maximum dimensions.
+
         Args:
             **kwargs: Keyword arguments containing:
+                - exposure: Factor exposure matrix (k x assets).
+                - idiosyncratic_risk: Vector of idiosyncratic risks.
+                - cov: Factor covariance matrix.
+                - lower_assets: Array of lower bounds for asset weights.
+                - upper_assets: Array of upper bounds for asset weights.
+                - lower_factors: Array of lower bounds for factor exposures.
+                - upper_factors: Array of upper bounds for factor exposures.
 
-                - exposure: Factor exposure matrix
+        Raises:
+            ValueError: If number of factors or assets exceeds maximum.
 
-                - idiosyncratic_risk: Vector of idiosyncratic risks
-
-                - cov: Factor covariance matrix
-
-                - Other parameters passed to bounds_assets.update() and bounds_factors.update()
+        Example:
+            >>> import numpy as np
+            >>> from cvx.risk.factor import FactorModel
+            >>> model = FactorModel(assets=5, k=3)
+            >>> # Update with 2 factors and 4 assets
+            >>> model.update(
+            ...     exposure=np.random.randn(2, 4),
+            ...     cov=np.eye(2),
+            ...     idiosyncratic_risk=np.abs(np.random.randn(4)),
+            ...     lower_assets=np.zeros(4),
+            ...     upper_assets=np.ones(4),
+            ...     lower_factors=-np.ones(2),
+            ...     upper_factors=np.ones(2)
+            ... )
 
         """
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
@@ -122,16 +256,38 @@ class FactorModel(Model):
     def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
         """Return constraints for the factor model.
 
+        Returns constraints including asset bounds, factor exposure bounds,
+        and the constraint that relates factor exposures to asset weights.
+
         Args:
-            weights: CVXPY variable representing portfolio weights
-
+            weights: CVXPY variable representing portfolio weights.
             **kwargs: Additional keyword arguments, may include:
-
-                - y: Factor exposures (if not provided, calculated as exposure @ weights)
+                - y: Factor exposures variable. If not provided, calculated
+                  as exposure @ weights.
 
         Returns:
             List of CVXPY constraints including asset bounds, factor bounds,
-            and the constraint that y equals exposure @ weights
+            and the constraint that y equals exposure @ weights.
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.factor import FactorModel
+            >>> model = FactorModel(assets=3, k=2)
+            >>> model.update(
+            ...     exposure=np.array([[1.0, 0.5, 0.0], [0.0, 0.5, 1.0]]),
+            ...     cov=np.eye(2),
+            ...     idiosyncratic_risk=np.array([0.1, 0.1, 0.1]),
+            ...     lower_assets=np.zeros(3),
+            ...     upper_assets=np.ones(3),
+            ...     lower_factors=-np.ones(2),
+            ...     upper_factors=np.ones(2)
+            ... )
+            >>> weights = cp.Variable(3)
+            >>> y = cp.Variable(2)
+            >>> constraints = model.constraints(weights, y=y)
+            >>> len(constraints) == 5  # 2 asset bounds + 2 factor bounds + 1 exposure
+            True
 
         """
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
