@@ -44,7 +44,7 @@ packages = ["src/cvx"]  # Only include the cvx package in the wheel
 # Deptry configuration for dependency checking
 # Rule ignores for specific dependencies
 [tool.deptry.per_rule_ignores]
-DEP001 = ["cvxpy", "sklearn"]  # Ignore missing imports (these are provided by other packages)
+DEP001 = ["cvx", "cvxpy", "sklearn"]  # Ignore missing imports (these are provided by other packages)
 DEP002 = ["cvxpy-base", "scikit-learn", "mosek", "clarabel"]  # Ignore unused direct dependencies
 
 [tool.deptry]
