@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import cvxpy as cp
 
-from .. import Model
+from cvx.risk import Model
 
 
 def minrisk_problem(

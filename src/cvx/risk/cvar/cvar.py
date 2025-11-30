@@ -20,8 +20,8 @@ from dataclasses import dataclass
 import cvxpy as cvx
 import numpy as np
 
-from ..bounds import Bounds
-from ..model import Model
+from cvx.risk.bounds import Bounds
+from cvx.risk.model import Model
 
 
 @dataclass

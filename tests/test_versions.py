@@ -4,7 +4,7 @@ import importlib.metadata
 
 import cvxsimulator
 
-import cvxrisk
+import cvx.risk
 
 
 def test_versions() -> None:
@@ -18,7 +18,7 @@ def test_versions() -> None:
     expected_version = importlib.metadata.version("cvxrisk")
 
     # Check that each submodule's __version__ matches the expected version
-    assert cvxrisk.__version__ == expected_version
+    assert cvx.risk.__version__ == expected_version
 
     # Print the versions for debugging purposes
     print(f"Package version: {expected_version}")

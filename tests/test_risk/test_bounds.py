@@ -6,7 +6,7 @@ import cvxpy as cp
 import numpy as np
 import pytest
 
-from cvxrisk.bounds import Bounds
+from cvx.risk.bounds import Bounds
 
 
 def test_raise_not_implemented() -> None:

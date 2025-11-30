@@ -13,8 +13,8 @@ with app.setup:
     import numpy as np
     import pandas as pd
 
-    from cvxrisk.factor import FactorModel
-    from cvxrisk.portfolio import minrisk_problem
+    from cvx.risk.factor import FactorModel
+    from cvx.risk.portfolio import minrisk_problem
 
 
 @app.cell
