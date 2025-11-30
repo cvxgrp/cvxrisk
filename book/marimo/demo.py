@@ -13,14 +13,14 @@ with app.setup:
     import polars as pl
     from cvxsimulator import Builder
 
-    from cvxrisk.portfolio import minrisk_problem
-    from cvxrisk.sample import SampleCovariance
+    from cvx.risk.portfolio import minrisk_problem
+    from cvx.risk.sample import SampleCovariance
 
     pd.options.plotting.backend = "plotly"
 
     from cvxsimulator import __version__ as simulator_version
 
-    from cvxrisk import __version__ as risk_version
+    from cvx.risk import __version__ as risk_version
 
     print(f"Risk version: {risk_version}")
     print(f"Simulator version: {simulator_version}")

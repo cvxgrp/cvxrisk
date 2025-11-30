@@ -12,9 +12,9 @@ with app.setup:
     import pandas as pd
     import polars as pl
 
-    from cvxrisk.factor import FactorModel
-    from cvxrisk.linalg import pca
-    from cvxrisk.portfolio import minrisk_problem
+    from cvx.risk.factor import FactorModel
+    from cvx.risk.linalg import pca
+    from cvx.risk.portfolio import minrisk_problem
 
 
 @app.cell

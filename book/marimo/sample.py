@@ -10,9 +10,9 @@ with app.setup:
     import marimo as mo
     import numpy as np
 
-    from cvxrisk.portfolio import minrisk_problem
-    from cvxrisk.random import rand_cov
-    from cvxrisk.sample import SampleCovariance
+    from cvx.risk.portfolio import minrisk_problem
+    from cvx.risk.random import rand_cov
+    from cvx.risk.sample import SampleCovariance
 
 
 @app.cell
