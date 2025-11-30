@@ -13,3 +13,4 @@ include: |
 exclude: |
     .github/workflows/_devcontainer.yml
     .github/workflows/devcontainer.yml
+    .github/workflows/docker.yml
