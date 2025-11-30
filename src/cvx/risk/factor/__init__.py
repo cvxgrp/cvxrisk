@@ -1,4 +1,31 @@
-"""Factor risk models for portfolio optimization."""
+"""Factor risk models for portfolio optimization.
+
+This subpackage provides factor-based risk models for portfolio optimization.
+Factor models decompose portfolio risk into systematic (factor) risk and
+idiosyncratic (residual) risk.
+
+Example:
+    >>> import cvxpy as cp
+    >>> import numpy as np
+    >>> from cvx.risk.factor import FactorModel
+    >>> # Create factor model with 5 assets and 2 factors
+    >>> model = FactorModel(assets=5, k=2)
+    >>> np.random.seed(42)
+    >>> model.update(
+    ...     exposure=np.random.randn(2, 5),
+    ...     cov=np.eye(2),
+    ...     idiosyncratic_risk=np.abs(np.random.randn(5)),
+    ...     lower_assets=np.zeros(5),
+    ...     upper_assets=np.ones(5),
+    ...     lower_factors=-np.ones(2),
+    ...     upper_factors=np.ones(2)
+    ... )
+    >>> weights = cp.Variable(5)
+    >>> risk = model.estimate(weights)
+    >>> isinstance(risk, cp.Expression)
+    True
+
+"""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #

@@ -1,4 +1,35 @@
-"""Conditional Value at Risk (CVaR) risk model implementation."""
+"""Conditional Value at Risk (CVaR) risk model implementation.
+
+This module provides the CVar class, which implements the Conditional Value at Risk
+(also known as Expected Shortfall) risk measure for portfolio optimization.
+
+CVaR measures the expected loss in the tail of the portfolio's return distribution,
+making it a popular choice for risk-averse portfolio optimization.
+
+Example:
+    Create a CVaR model and compute the tail risk:
+
+    >>> import cvxpy as cp
+    >>> import numpy as np
+    >>> from cvx.risk.cvar import CVar
+    >>> # Create CVaR model with 95% confidence level
+    >>> model = CVar(alpha=0.95, n=100, m=5)
+    >>> # Generate sample returns
+    >>> np.random.seed(42)
+    >>> returns = np.random.randn(100, 5)
+    >>> # Update model with returns data
+    >>> model.update(
+    ...     returns=returns,
+    ...     lower_assets=np.zeros(5),
+    ...     upper_assets=np.ones(5)
+    ... )
+    >>> # The model is ready for optimization
+    >>> weights = cp.Variable(5)
+    >>> risk = model.estimate(weights)
+    >>> isinstance(risk, cp.Expression)
+    True
+
+"""
 
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
@@ -26,22 +57,74 @@ from cvx.risk.model import Model
 
 @dataclass
 class CVar(Model):
-    """Conditional value at risk model."""
+    """Conditional Value at Risk (CVaR) risk model.
+
+    CVaR, also known as Expected Shortfall, measures the expected loss in the
+    worst (1-alpha) fraction of scenarios. For example, with alpha=0.95, CVaR
+    is the average of the worst 5% of returns.
+
+    This implementation uses historical returns to estimate CVaR, which is
+    computed as the negative average of the k smallest portfolio returns,
+    where k = n * (1 - alpha).
+
+    Attributes:
+        alpha: Confidence level, typically 0.95 or 0.99. Higher alpha means
+            focusing on more extreme tail events.
+        n: Number of historical return observations (scenarios).
+        m: Maximum number of assets in the portfolio.
+
+    Example:
+        Basic CVaR model setup and optimization:
+
+        >>> import cvxpy as cp
+        >>> import numpy as np
+        >>> from cvx.risk.cvar import CVar
+        >>> from cvx.risk.portfolio import minrisk_problem
+        >>> # Create model for 95% CVaR with 50 scenarios and 3 assets
+        >>> model = CVar(alpha=0.95, n=50, m=3)
+        >>> # Number of tail samples: k = 50 * (1 - 0.95) = 2.5 -> 2
+        >>> model.k
+        2
+        >>> # Generate sample returns
+        >>> np.random.seed(42)
+        >>> returns = np.random.randn(50, 3)
+        >>> model.update(
+        ...     returns=returns,
+        ...     lower_assets=np.zeros(3),
+        ...     upper_assets=np.ones(3)
+        ... )
+        >>> # Create and solve optimization
+        >>> weights = cp.Variable(3)
+        >>> problem = minrisk_problem(model, weights)
+        >>> _ = problem.solve(solver="CLARABEL")
+
+    """
 
     alpha: float = 0.95
-    """alpha parameter to determine the size of the tail"""
+    """Confidence level for CVaR (e.g., 0.95 for 95% CVaR)."""
 
     n: int = 0
-    """number of samples"""
+    """Number of historical return observations (scenarios)."""
 
     m: int = 0
-    """number of assets"""
+    """Maximum number of assets in the portfolio."""
 
     def __post_init__(self):
         """Initialize the parameters after the class is instantiated.
 
         Calculates the number of samples in the tail (k) based on alpha,
         creates the returns parameter matrix, and initializes the bounds.
+
+        Example:
+            >>> from cvx.risk.cvar import CVar
+            >>> model = CVar(alpha=0.95, n=100, m=5)
+            >>> # k is the number of samples in the tail
+            >>> model.k
+            5
+            >>> # Returns parameter is created
+            >>> model.parameter["R"].shape
+            (100, 5)
+
         """
         self.k = int(self.n * (1 - self.alpha))
         self.parameter["R"] = cvx.Parameter(shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m)))
@@ -51,15 +134,32 @@ class CVar(Model):
         """Estimate the Conditional Value at Risk (CVaR) for the given weights.
 
         Computes the negative average of the k smallest returns in the portfolio,
-        where k is determined by the alpha parameter.
+        where k is determined by the alpha parameter. This represents the expected
+        loss in the worst (1-alpha) fraction of scenarios.
 
         Args:
-            weights: CVXPY variable representing portfolio weights
-
-            **kwargs: Additional keyword arguments (not used)
+            weights: CVXPY variable representing portfolio weights.
+            **kwargs: Additional keyword arguments (not used).
 
         Returns:
-            CVXPY expression: The negative average of the k smallest returns
+            CVXPY expression representing the CVaR (expected tail loss).
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.cvar import CVar
+            >>> model = CVar(alpha=0.95, n=100, m=3)
+            >>> np.random.seed(42)
+            >>> returns = np.random.randn(100, 3)
+            >>> model.update(
+            ...     returns=returns,
+            ...     lower_assets=np.zeros(3),
+            ...     upper_assets=np.ones(3)
+            ... )
+            >>> weights = cp.Variable(3)
+            >>> cvar = model.estimate(weights)
+            >>> isinstance(cvar, cp.Expression)
+            True
 
         """
         # R is a matrix of returns, n is the number of rows in R
@@ -70,12 +170,30 @@ class CVar(Model):
     def update(self, **kwargs) -> None:
         """Update the returns data and bounds parameters.
 
+        Updates the returns matrix and asset bounds. The returns matrix can
+        have fewer columns than m (maximum assets), in which case only the
+        first columns are updated.
+
         Args:
             **kwargs: Keyword arguments containing:
+                - returns: Matrix of returns with shape (n, num_assets).
+                - lower_assets: Array of lower bounds for asset weights.
+                - upper_assets: Array of upper bounds for asset weights.
 
-                - returns: Matrix of returns
-
-                - Other parameters passed to bounds.update()
+        Example:
+            >>> import numpy as np
+            >>> from cvx.risk.cvar import CVar
+            >>> model = CVar(alpha=0.95, n=50, m=5)
+            >>> # Update with 3 assets (less than maximum of 5)
+            >>> np.random.seed(42)
+            >>> returns = np.random.randn(50, 3)
+            >>> model.update(
+            ...     returns=returns,
+            ...     lower_assets=np.zeros(3),
+            ...     upper_assets=np.ones(3)
+            ... )
+            >>> model.parameter["R"].value[:, :3].shape
+            (50, 3)
 
         """
         ret = kwargs["returns"]
@@ -87,13 +205,31 @@ class CVar(Model):
     def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
         """Return constraints for the CVaR model.
 
-        Args:
-            weights: CVXPY variable representing portfolio weights
+        Returns the asset bounds constraints from the internal bounds object.
 
-            **kwargs: Additional keyword arguments passed to bounds.constraints()
+        Args:
+            weights: CVXPY variable representing portfolio weights.
+            **kwargs: Additional keyword arguments passed to bounds.constraints().
 
         Returns:
-            List of CVXPY constraints from the bounds object
+            List of CVXPY constraints from the bounds object.
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.cvar import CVar
+            >>> model = CVar(alpha=0.95, n=50, m=3)
+            >>> np.random.seed(42)
+            >>> returns = np.random.randn(50, 3)
+            >>> model.update(
+            ...     returns=returns,
+            ...     lower_assets=np.zeros(3),
+            ...     upper_assets=np.ones(3)
+            ... )
+            >>> weights = cp.Variable(3)
+            >>> constraints = model.constraints(weights)
+            >>> len(constraints)
+            2
 
         """
         return self.bounds.constraints(weights)

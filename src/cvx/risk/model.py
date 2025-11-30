@@ -11,7 +11,31 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Abstract risk model."""
+"""Abstract risk model.
+
+This module provides the abstract base class for all risk models in cvxrisk.
+Risk models are used to estimate portfolio risk and provide constraints for
+portfolio optimization problems.
+
+Example:
+    All risk models inherit from the Model class and must implement
+    the estimate, update, and constraints methods:
+
+    >>> import cvxpy as cp
+    >>> import numpy as np
+    >>> from cvx.risk.sample import SampleCovariance
+    >>> # Create a sample covariance risk model
+    >>> model = SampleCovariance(num=3)
+    >>> # Update the model with a covariance matrix
+    >>> cov = np.array([[1.0, 0.5, 0.0], [0.5, 1.0, 0.5], [0.0, 0.5, 1.0]])
+    >>> model.update(cov=cov, lower_assets=np.zeros(3), upper_assets=np.ones(3))
+    >>> # Create a weights variable and estimate risk
+    >>> weights = cp.Variable(3)
+    >>> risk_expr = model.estimate(weights)
+    >>> isinstance(risk_expr, cp.Expression)
+    True
+
+"""
 
 from __future__ import annotations
 
@@ -23,22 +47,66 @@ import cvxpy as cp
 
 @dataclass
 class Model(ABC):
-    """Abstract risk model."""
+    """Abstract base class for risk models.
+
+    This class defines the interface that all risk models must implement.
+    Risk models are used in portfolio optimization to estimate portfolio risk
+    and provide constraints for the optimization problem.
+
+    Attributes:
+        parameter: Dictionary mapping parameter names to CVXPY Parameter objects.
+            These parameters can be updated without reconstructing the optimization problem.
+
+    Example:
+        Subclasses must implement the abstract methods:
+
+        >>> import cvxpy as cp
+        >>> import numpy as np
+        >>> from cvx.risk.sample import SampleCovariance
+        >>> model = SampleCovariance(num=2)
+        >>> model.update(
+        ...     cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
+        ...     lower_assets=np.zeros(2),
+        ...     upper_assets=np.ones(2)
+        ... )
+        >>> # Access model parameters
+        >>> 'chol' in model.parameter
+        True
+
+    """
 
     parameter: dict[str, cp.Parameter] = field(default_factory=dict)
-    """parameter for the riskmodel"""
+    """Dictionary of CVXPY parameters for the risk model."""
 
     @abstractmethod
     def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
         """Estimate the variance given the portfolio weights.
 
-        Args:
-            weights: CVXPY variable representing portfolio weights
+        This method returns a CVXPY expression representing the risk measure
+        for the given portfolio weights. The expression can be used as an
+        objective function in a convex optimization problem.
 
-            **kwargs: Additional keyword arguments
+        Args:
+            weights: CVXPY variable representing portfolio weights.
+            **kwargs: Additional keyword arguments specific to the risk model.
 
         Returns:
-            CVXPY expression representing the estimated risk
+            CVXPY expression representing the estimated risk (e.g., standard deviation).
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.sample import SampleCovariance
+            >>> model = SampleCovariance(num=2)
+            >>> model.update(
+            ...     cov=np.array([[1.0, 0.0], [0.0, 1.0]]),
+            ...     lower_assets=np.zeros(2),
+            ...     upper_assets=np.ones(2)
+            ... )
+            >>> weights = cp.Variable(2)
+            >>> risk = model.estimate(weights)
+            >>> isinstance(risk, cp.Expression)
+            True
 
         """
 
@@ -46,8 +114,25 @@ class Model(ABC):
     def update(self, **kwargs) -> None:
         """Update the data in the risk model.
 
+        This method updates the CVXPY parameters in the model with new data.
+        Because CVXPY supports parametric optimization, updating parameters
+        allows solving new problem instances without reconstructing the problem.
+
         Args:
-            **kwargs: Keyword arguments containing data to update the model
+            **kwargs: Keyword arguments containing data to update the model.
+                The specific arguments depend on the risk model implementation.
+
+        Example:
+            >>> import numpy as np
+            >>> from cvx.risk.sample import SampleCovariance
+            >>> model = SampleCovariance(num=3)
+            >>> # Update with new covariance data
+            >>> cov = np.array([[1.0, 0.5, 0.0], [0.5, 1.0, 0.5], [0.0, 0.5, 1.0]])
+            >>> model.update(
+            ...     cov=cov,
+            ...     lower_assets=np.zeros(3),
+            ...     upper_assets=np.ones(3)
+            ... )
 
         """
 
@@ -55,12 +140,30 @@ class Model(ABC):
     def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
         """Return the constraints for the risk model.
 
-        Args:
-            weights: CVXPY variable representing portfolio weights
+        This method returns a list of CVXPY constraints that should be included
+        in the portfolio optimization problem. Common constraints include bounds
+        on asset weights.
 
-            **kwargs: Additional keyword arguments
+        Args:
+            weights: CVXPY variable representing portfolio weights.
+            **kwargs: Additional keyword arguments specific to the risk model.
 
         Returns:
-            List of CVXPY constraints for the risk model
+            List of CVXPY constraints for the risk model.
+
+        Example:
+            >>> import cvxpy as cp
+            >>> import numpy as np
+            >>> from cvx.risk.sample import SampleCovariance
+            >>> model = SampleCovariance(num=2)
+            >>> model.update(
+            ...     cov=np.array([[1.0, 0.0], [0.0, 1.0]]),
+            ...     lower_assets=np.zeros(2),
+            ...     upper_assets=np.ones(2)
+            ... )
+            >>> weights = cp.Variable(2)
+            >>> constraints = model.constraints(weights)
+            >>> len(constraints) == 2  # Lower and upper bounds
+            True
 
         """
