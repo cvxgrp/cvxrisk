@@ -73,7 +73,7 @@ def _(prices, returns):
 
 @app.cell
 def _(prices, returns, start):
-    from cvxrisk.cvar import CVar
+    from cvx.risk.cvar import CVar
 
     _risk_model = CVar(alpha=0.80, n=40, m=20)
 
