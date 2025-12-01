@@ -11,6 +11,7 @@ import doctest
 import importlib
 import pkgutil
 import sys
+import warnings
 from pathlib import Path
 from collections.abc import Iterator
 from types import ModuleType
@@ -171,6 +172,9 @@ def test_docstrings() -> None:
 
     # Assert no failures
     assert total_failures == 0, f"Doctest failures in: {[m[0] for m in failed_modules]}"
-    #assert total_tests > 0, "No doctests were found"
+
+    # raise a warning if no tests were found
+    if total_tests == 0:
+        warnings.warn("No doctests were found")
 
 
