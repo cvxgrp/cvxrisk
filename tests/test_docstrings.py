@@ -3,6 +3,9 @@
 This module runs doctest on all modules in the source package(s) to ensure
 that the code examples in docstrings are correct and up-to-date, without
 hardcoding any project-specific module names.
+
+We assume the project is structured as a Python package with a "src" directory
+containing subpackages for each module.
 """
 
 from __future__ import annotations
