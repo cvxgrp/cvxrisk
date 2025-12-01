@@ -10,11 +10,12 @@
 #   - 🔖 Tagging the release (Git tag)
 #   - 🏗️ Building the package with Hatch
 #   - 🐳 Building and publishing Devcontainer image (if present)
-#   - 🚀 Publishing to PyPI using OIDC (no passwords or secrets)
+#   - 🚀 Publishing to PyPI using OIDC (no passwords or secrets) or custom feed
 #   - 📦 Creating a GitHub Release with artifacts (dist + devcontainer image)
 #
 # 🔐 Security:
 #   - No PyPI credentials are stored; relies on Trusted Publishing via GitHub OIDC.
+#   - For custom feeds, secrets are used, default username is `__token__`, which is set in action by default anyway.
 #
 # 📄 Requirements:
 #   - `pyproject.toml` with a top-level `version = "..."`
@@ -65,8 +66,13 @@ jobs:
             exit 1
           fi
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "::error::Release '$TAG' already exists. Please use a new tag."
-            exit 1
+            DRAFT_STATUS=$(gh release view "$TAG" --json isDraft --jq '.isDraft')
+            if [ "$DRAFT_STATUS" != "true" ]; then
+              echo "::error::Release '$TAG' already exists and is not a draft. Please use a new tag."
+              exit 1
+            else
+              echo "::warning::Release '$TAG' exists as a draft. Will proceed to update it."
+            fi
           fi
 
       - name: Check for .devcontainer
@@ -127,8 +133,8 @@ jobs:
           name: dist
           path: dist
 
-  release:
-    name: Create GitHub Release
+  draft-release:
+    name: Draft GitHub Release
     runs-on: ubuntu-latest
     needs: [tag, build]
 
@@ -150,12 +156,12 @@ jobs:
           files: "dist/**"
           draft: true
 
-  # Parse .env and decide at step-level whether to publish
+  # Decide at step-level whether to publish
   pypi:
     name: Publish to PyPI
     runs-on: ubuntu-latest
     environment: release
-    needs: [build, tag]
+    needs: [build, tag, draft-release]
     outputs:
       should_publish: ${{ steps.check_dist.outputs.should_publish }}
 
@@ -186,16 +192,19 @@ jobs:
           cat $GITHUB_OUTPUT
 
       # this should not take place, as "Private :: Do Not Upload" set in pyproject.toml
+      # repository-url and password only used for custom feeds, not for PyPI with OIDC
       - name: Publish to PyPI
         if: ${{ steps.check_dist.outputs.should_publish == 'true' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
           skip-existing: true
+          repository-url: ${{ vars.PYPI_REPOSITORY_URL }}
+          password: ${{ secrets.PYPI_TOKEN }}
 
   publish-devcontainer:
     name: Publish Devcontainer
-    needs: tag
+    needs: [tag, build, draft-release]
     if: needs.tag.outputs.devcontainer_exists == 'true'
     uses: ./.github/workflows/_devcontainer.yml
     with:
@@ -208,45 +217,25 @@ jobs:
   finalise-release:
     name: Finalise Release
     runs-on: ubuntu-latest
-    needs: [tag, release, pypi, publish-devcontainer]
-    if: always() && needs.release.result == 'success'
+    needs: [tag, draft-release, pypi, publish-devcontainer]
+    if: |
+      always() &&
+      needs.tag.result == 'success' &&
+      needs.draft-release.result == 'success' &&
+      (needs.pypi.result == 'success' || needs.pypi.result == 'skipped') &&
+      (needs.publish-devcontainer.result == 'success' || needs.publish-devcontainer.result == 'skipped')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
-      
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
-      - name: Login to Container Registry
-        if: needs.tag.outputs.devcontainer_exists == 'true' && needs.publish-devcontainer.result == 'success'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Pull and Save Devcontainer Image
-        if: needs.tag.outputs.devcontainer_exists == 'true' && needs.publish-devcontainer.result == 'success'
-        run: |
-          OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          IMAGE_NAME="${{ needs.tag.outputs.image_name }}"
-          FULL_IMAGE="ghcr.io/$OWNER_LC/$IMAGE_NAME:${{ github.event.inputs.tag }}"
-          docker pull $FULL_IMAGE
-          FILENAME="devcontainer-${{ github.event.inputs.tag }}.tar"
-          docker save $FULL_IMAGE -o $FILENAME
-
-      - name: Upload Devcontainer Artifact
-        if: needs.tag.outputs.devcontainer_exists == 'true' && needs.publish-devcontainer.result == 'success'
-        uses: actions/upload-artifact@v5
-        with:
-          name: devcontainer-image
-          path: devcontainer-*.tar
-
       - name: Generate Devcontainer Link
         id: devcontainer_link
-        if: needs.tag.outputs.devcontainer_exists == 'true' && needs.publish-devcontainer.result == 'success'
+        if: needs.publish-devcontainer.result == 'success'
         run: |
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           IMAGE_NAME="${{ needs.tag.outputs.image_name }}"
@@ -266,10 +255,19 @@ jobs:
           PACKAGE_NAME=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])")
           VERSION="${{ github.event.inputs.tag }}"
           VERSION=${VERSION#v}
-          LINK="https://pypi.org/project/$PACKAGE_NAME/$VERSION/"
+
+          REPO_URL="${{ vars.PYPI_REPOSITORY_URL || '' }}"
+          if [ -z "$REPO_URL" ]; then
+             LINK="https://pypi.org/project/$PACKAGE_NAME/$VERSION/"
+             NAME="PyPI Package"
+          else
+             LINK="$REPO_URL"
+             NAME="Custom Feed Package"
+          fi
+
           {
             echo "message<<EOF"
-            echo "### PyPI Package"
+            echo "### $NAME"
             echo ""
             echo "[$PACKAGE_NAME]($LINK)"
             echo "EOF"
@@ -284,6 +282,4 @@ jobs:
           body: |
             ${{ steps.devcontainer_link.outputs.message }}
             ${{ steps.pypi_link.outputs.message }}
-          files: |
-            devcontainer-*.tar
 
