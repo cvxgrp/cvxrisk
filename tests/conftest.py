@@ -1,49 +1,29 @@
-"""Pytest configuration and fixtures for the cvxrisk test suite."""
+"""Shared pytest fixtures for the test suite.
 
-from __future__ import annotations
+Provides the 'root' fixture that returns the repository root as a pathlib.Path,
+enabling tests to locate files and scripts relative to the project root.
+"""
 
-from pathlib import Path
+import logging
+import pathlib
 
 import pytest
 
 
 @pytest.fixture(scope="session")
-def resource_dir():
-    """Pytest fixture that provides the path to the test resources directory.
+def root():
+    """Return the repository root directory as a pathlib.Path.
 
-    This fixture has session scope, meaning it's created once per test session.
-    It returns the path to the 'resources' directory within the tests directory,
-    which contains data files used by various tests.
+    Used by tests to locate files and scripts relative to the project root.
+    """
+    return pathlib.Path(__file__).parent.parent
+
+
+@pytest.fixture(scope="session")
+def logger():
+    """Provide a session-scoped logger for tests.
 
     Returns:
-        pathlib.Path: Path to the test resources directory
-
+        logging.Logger: Logger configured for the test session.
     """
-    return Path(__file__).parent / "resources"
-
-
-@pytest.fixture()
-def readme_path() -> Path:
-    """Provide the path to the project's README.md file.
-
-    This fixture searches for the README.md file by starting in the current
-    directory and moving up through parent directories until it finds the file.
-
-    Returns:
-    -------
-    Path
-        Path to the README.md file
-
-    Raises:
-    ------
-    FileNotFoundError
-        If the README.md file cannot be found in any parent directory
-
-    """
-    current_dir = Path(__file__).resolve().parent
-    while current_dir != current_dir.parent:
-        candidate = current_dir / "README.md"
-        if candidate.is_file():
-            return candidate
-        current_dir = current_dir.parent
-    raise FileNotFoundError("README.md not found in any parent directory")
+    return logging.getLogger(__name__)
