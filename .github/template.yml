@@ -10,6 +10,7 @@ include: |
     CONTRIBUTING.md
     Makefile
     ruff.toml
+    pytest.ini
 exclude: |
     .github/workflows/_devcontainer.yml
     .github/workflows/devcontainer.yml
