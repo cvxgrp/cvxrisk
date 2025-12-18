@@ -1,3 +1,6 @@
+# This file is part of the jebel-quant/rhiza repository
+# (https://github.com/jebel-quant/rhiza).
+#
 # Release Workflow for Python Packages with Optional Devcontainer Publishing
 #
 # This workflow implements a secure, maintainable release pipeline with distinct phases:
