@@ -1,3 +1,17 @@
+# /// script
+# dependencies = [
+#     "marimo==0.18.4",
+#     "cvxpy-base",
+#     "numpy",
+#     "pandas",
+#     "clarabel==0.11.1",
+#     "cvxrisk"
+# ]
+#
+# [tool.uv.sources]
+# cvxrisk = { path = "../..", editable=true }
+# ///
+
 """Large problem with 1000 assets and 100 factors."""
 
 import marimo

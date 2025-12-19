@@ -1,3 +1,19 @@
+# /// script
+# dependencies = [
+#     "marimo==0.18.4",
+#     "cvxpy-base",
+#     "numpy",
+#     "pandas",
+#     "polars",
+#     "clarabel==0.11.1",
+#     "cvxrisk",
+#     "pyarrow"
+# ]
+#
+# [tool.uv.sources]
+# cvxrisk = { path = "../..", editable=true }
+# ///
+
 """Demo of the risk and simulator packages."""
 
 import marimo
