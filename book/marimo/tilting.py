@@ -4,6 +4,7 @@
 #     "cvxpy-base",
 #     "numpy",
 #     "pandas",
+#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #

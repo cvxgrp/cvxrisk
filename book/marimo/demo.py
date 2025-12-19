@@ -5,6 +5,7 @@
 #     "pandas",
 #     "polars",
 #     "cvxsimulator",
+#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #

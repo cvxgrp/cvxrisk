@@ -3,6 +3,7 @@
 #     "marimo==0.18.4",
 #     "cvxpy-base",
 #     "numpy",
+#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #
