@@ -28,8 +28,8 @@ dev = [
     "cvxsimulator>=1.4.5", # Simulation framework for portfolio optimization
     "marimo>=0.17.0",     # Interactive notebook environment
     "polars>=1.34.0",      # Fast DataFrame library (alternative to pandas)
-    #"micropip>=0.9.0",    # Package installer for WebAssembly/Pyodide
-    "python-dotenv==1.2.1"
+    "python-dotenv==1.2.1",
+    "pyarrow"
 ]
 
 # Build system configuration
