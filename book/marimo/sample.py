@@ -1,3 +1,15 @@
+# /// script
+# dependencies = [
+#     "marimo==0.18.4",
+#     "cvxpy-base",
+#     "numpy",
+#     "cvxrisk"
+# ]
+#
+# [tool.uv.sources]
+# cvxrisk = { path = "../..", editable=true }
+# ///
+
 """Sample covariance."""
 
 import marimo
