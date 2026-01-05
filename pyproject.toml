@@ -25,6 +25,7 @@ dev = [
     "cvxsimulator>=1.4.5", # Simulation framework for portfolio optimization
     "marimo>=0.17.0",     # Interactive notebook environment
     "polars>=1.34.0",      # Fast DataFrame library (alternative to pandas)
+    "plotly>=6.5",
 ]
 
 # Build system configuration

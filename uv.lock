@@ -170,6 +170,7 @@ dev = [
     { name = "clarabel" },
     { name = "cvxsimulator" },
     { name = "marimo" },
+    { name = "plotly" },
     { name = "polars" },
 ]
 
@@ -185,6 +186,7 @@ dev = [
     { name = "clarabel", specifier = ">=0.11.1" },
     { name = "cvxsimulator", specifier = ">=1.4.5" },
     { name = "marimo", specifier = ">=0.17.0" },
+    { name = "plotly", specifier = ">=6.5" },
     { name = "polars", specifier = ">=1.34.0" },
 ]
 
