@@ -13,7 +13,7 @@ from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.random import rand_cov
 
 
-@pytest.fixture()
+@pytest.fixture
 def returns(resource_dir) -> pd.DataFrame:
     """Pytest fixture that provides stock return data for testing.
 

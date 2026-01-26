@@ -125,7 +125,7 @@ def minrisk_problem(
 
     problem = cp.Problem(
         objective=cp.Minimize(riskmodel.estimate(weights - base, **kwargs)),
-        constraints=[cp.sum(weights) == 1.0, weights >= 0] + riskmodel.constraints(weights, **kwargs) + constraints,
+        constraints=[cp.sum(weights) == 1.0, weights >= 0, *riskmodel.constraints(weights, **kwargs), *constraints],
     )
 
     return problem

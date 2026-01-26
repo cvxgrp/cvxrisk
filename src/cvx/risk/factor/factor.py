@@ -243,9 +243,11 @@ class FactorModel(Model):
         # extract dimensions
         k, assets = exposure.shape
         if k > self.k:
-            raise ValueError("Number of factors exceeds maximal number of factors")
+            msg = "Too many factors"
+            raise ValueError(msg)
         if assets > self.assets:
-            raise ValueError("Number of assets exceeds maximal number of assets")
+            msg = "Too many assets"
+            raise ValueError(msg)
 
         self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
         self.parameter["idiosyncratic_risk"].value[:assets] = kwargs["idiosyncratic_risk"]

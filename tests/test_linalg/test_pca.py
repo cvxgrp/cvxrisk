@@ -9,7 +9,7 @@ import pytest
 from cvx.risk.linalg import pca
 
 
-@pytest.fixture()
+@pytest.fixture
 def returns(resource_dir) -> pd.DataFrame:
     """Pytest fixture that provides stock return data for testing.
 

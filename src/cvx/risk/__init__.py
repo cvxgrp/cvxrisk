@@ -55,4 +55,4 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("cvxrisk")
 
-from .model import Model as Model  # noqa: F401
+from .model import Model as Model

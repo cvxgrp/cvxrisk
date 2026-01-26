@@ -37,4 +37,4 @@ Functions:
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from .min_risk import minrisk_problem as minrisk_problem  # noqa: F401
+from .min_risk import minrisk_problem as minrisk_problem
