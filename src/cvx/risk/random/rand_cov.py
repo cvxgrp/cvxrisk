@@ -80,6 +80,58 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         >>> isinstance(risk, cp.Expression)
         True
 
+        Verify positive definiteness via Cholesky decomposition:
+
+        >>> cov = rand_cov(5, seed=123)
+        >>> # If Cholesky succeeds without error, matrix is positive definite
+        >>> L = np.linalg.cholesky(cov)
+        >>> bool(np.allclose(L @ L.T, cov))
+        True
+
+        Eigenvalue verification:
+
+        >>> cov = rand_cov(3, seed=99)
+        >>> eigenvalues = np.linalg.eigvalsh(cov)
+        >>> # All eigenvalues should be positive for PD matrix
+        >>> bool(np.all(eigenvalues > 0))
+        True
+
+        Different seeds produce different matrices:
+
+        >>> cov1 = rand_cov(3, seed=1)
+        >>> cov2 = rand_cov(3, seed=2)
+        >>> bool(not np.allclose(cov1, cov2))
+        True
+
+        Without seed, consecutive calls may differ (random state):
+
+        >>> # These may or may not be equal depending on random state
+        >>> cov_a = rand_cov(2, seed=None)
+        >>> cov_b = rand_cov(2, seed=None)
+        >>> cov_a.shape == cov_b.shape == (2, 2)
+        True
+
+        Monte Carlo simulation example:
+
+        >>> from cvx.risk.portfolio import minrisk_problem
+        >>> results = []
+        >>> for i in range(5):
+        ...     cov = rand_cov(3, seed=i)
+        ...     model = SampleCovariance(num=3)
+        ...     model.update(
+        ...         cov=cov,
+        ...         lower_assets=np.zeros(3),
+        ...         upper_assets=np.ones(3)
+        ...     )
+        ...     weights = cp.Variable(3)
+        ...     prob = minrisk_problem(model, weights)
+        ...     _ = prob.solve(solver="CLARABEL")
+        ...     results.append(prob.value)
+        >>> len(results)
+        5
+        >>> all(r > 0 for r in results)  # All risks are positive
+        True
+
     Note:
         The generated matrix is guaranteed to be positive semi-definite because
         it is constructed as A^T @ A. In practice, it will typically be positive

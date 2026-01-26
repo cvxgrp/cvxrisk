@@ -148,6 +148,44 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
         ...     upper_factors=np.ones(3)
         ... )
 
+        Verifying variance decomposition (systematic + idiosyncratic = total):
+
+        >>> np.random.seed(123)
+        >>> returns = pd.DataFrame(np.random.randn(50, 5))
+        >>> result = pca(returns, n_components=3)
+        >>> # Systematic variance + idiosyncratic variance ≈ total variance
+        >>> total_var = returns.var().sum()
+        >>> systematic_var = result.systematic.var().sum()
+        >>> idio_var = result.idiosyncratic.var().sum()
+        >>> # Note: small differences due to demeaning
+        >>> bool(np.isclose(systematic_var + idio_var, total_var, rtol=0.1))
+        True
+
+        Exposure matrix has orthonormal rows (loadings are orthogonal):
+
+        >>> np.random.seed(42)
+        >>> returns = pd.DataFrame(np.random.randn(100, 6))
+        >>> result = pca(returns, n_components=3)
+        >>> # V^T @ V should be identity (orthonormal loadings)
+        >>> VtV = result.exposure.values @ result.exposure.values.T
+        >>> bool(np.allclose(VtV, np.eye(3), atol=1e-10))
+        True
+
+        Explained variance is ordered (first component explains most):
+
+        >>> all(result.explained_variance[i] >= result.explained_variance[i+1]
+        ...     for i in range(len(result.explained_variance)-1))
+        True
+
+        Reconstructing returns from factors and exposures:
+
+        >>> # systematic = factors @ exposure (plus mean)
+        >>> reconstructed = result.factors.values @ result.exposure.values
+        >>> # Should match systematic (centered part)
+        >>> centered_systematic = result.systematic.values - returns.values.mean(axis=0)
+        >>> bool(np.allclose(reconstructed, centered_systematic, atol=1e-10))
+        True
+
     """
     # Demean the returns
     x = returns.to_numpy()

@@ -81,6 +81,35 @@ class Bounds(Model):
         >>> bounds.parameter["upper_assets"].value[:3]
         array([0.5, 0.5, 0.4])
 
+        Bounds can be used with different variable types (factors, sectors, etc.):
+
+        >>> factor_bounds = Bounds(m=3, name="factors")
+        >>> factor_bounds.update(
+        ...     lower_factors=np.array([-0.1, -0.2, -0.15]),
+        ...     upper_factors=np.array([0.1, 0.2, 0.15])
+        ... )
+        >>> # Factor exposure variable
+        >>> y = cp.Variable(3)
+        >>> factor_constraints = factor_bounds.constraints(y)
+        >>> len(factor_constraints)
+        2
+
+        Verify bounds are enforced correctly in optimization:
+
+        >>> weights = cp.Variable(5)
+        >>> bounds.update(
+        ...     lower_assets=np.array([0.3, 0.0, 0.0, 0.0, 0.0]),
+        ...     upper_assets=np.array([0.5, 0.2, 0.2, 0.2, 0.2])
+        ... )
+        >>> prob = cp.Problem(
+        ...     cp.Minimize(weights[0]),  # Minimize first weight
+        ...     bounds.constraints(weights) + [cp.sum(weights) == 1.0]
+        ... )
+        >>> _ = prob.solve(solver="CLARABEL")
+        >>> # First weight should be at lower bound (0.3)
+        >>> bool(np.isclose(weights.value[0], 0.3, atol=1e-4))
+        True
+
     """
 
     m: int = 0

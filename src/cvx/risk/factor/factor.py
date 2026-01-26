@@ -105,6 +105,62 @@ class FactorModel(Model):
         >>> isinstance(risk, cp.Expression)
         True
 
+        Mathematical verification of risk decomposition:
+
+        >>> model = FactorModel(assets=3, k=2)
+        >>> # Factor exposure: how much each asset is exposed to each factor
+        >>> exposure = np.array([[1.0, 0.5, 0.0],   # Market factor
+        ...                      [0.0, 0.5, 1.0]])  # Sector factor
+        >>> # Factor covariance (diagonal = uncorrelated factors)
+        >>> factor_cov = np.array([[0.04, 0.0],     # Market vol = 20%
+        ...                        [0.0, 0.0225]])  # Sector vol = 15%
+        >>> # Idiosyncratic risk per asset
+        >>> idio = np.array([0.10, 0.12, 0.08])
+        >>> model.update(
+        ...     exposure=exposure,
+        ...     cov=factor_cov,
+        ...     idiosyncratic_risk=idio,
+        ...     lower_assets=np.zeros(3),
+        ...     upper_assets=np.ones(3),
+        ...     lower_factors=-np.ones(2),
+        ...     upper_factors=np.ones(2)
+        ... )
+        >>> # Equal weight portfolio
+        >>> w = np.array([1/3, 1/3, 1/3])
+        >>> model_risk = model.estimate(w).value
+        >>> # Manual: total_var = y^T @ cov @ y + sum((idio * w)^2)
+        >>> y = exposure @ w  # Factor exposures
+        >>> systematic_var = y @ factor_cov @ y
+        >>> idio_var = np.sum((idio * w)**2)
+        >>> manual_risk = np.sqrt(systematic_var + idio_var)
+        >>> bool(np.isclose(model_risk, manual_risk, rtol=1e-5))
+        True
+
+        The y parameter allows pre-computed factor exposures:
+
+        >>> weights = cp.Variable(3)
+        >>> y = cp.Variable(2)  # Factor exposure variable
+        >>> risk_with_y = model.estimate(weights, y=y)
+        >>> isinstance(risk_with_y, cp.Expression)
+        True
+
+        Error handling for dimension violations:
+
+        >>> model = FactorModel(assets=3, k=2)
+        >>> try:
+        ...     model.update(
+        ...         exposure=np.random.randn(5, 3),  # 5 factors > k=2
+        ...         cov=np.eye(5),
+        ...         idiosyncratic_risk=np.ones(3),
+        ...         lower_assets=np.zeros(3),
+        ...         upper_assets=np.ones(3),
+        ...         lower_factors=-np.ones(5),
+        ...         upper_factors=np.ones(5)
+        ...     )
+        ... except ValueError as e:
+        ...     print("Caught:", str(e))
+        Caught: Too many factors
+
     """
 
     assets: int = 0
