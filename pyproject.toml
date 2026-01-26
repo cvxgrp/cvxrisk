@@ -38,6 +38,17 @@ build-backend = "hatchling.build"
 packages = ["src/cvx"]  # Only include the cvx package in the wheel
 
 # Deptry configuration for dependency checking
+# Map package names to their actual module names to suppress warnings
+[tool.deptry.package_module_name_map]
+cvxpy-base = "cvxpy"
+numpy = "numpy"
+pandas = "pandas"
+clarabel = "clarabel"
+cvxsimulator = "cvxsimulator"
+marimo = "marimo"
+plotly = "plotly"
+polars = "polars"
+
 # Rule ignores for specific dependencies
 [tool.deptry.per_rule_ignores]
 DEP001 = ["cvx", "cvxpy", "sklearn"]  # Ignore missing imports (these are provided by other packages)
