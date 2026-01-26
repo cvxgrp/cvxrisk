@@ -97,6 +97,44 @@ class SampleCovariance(Model):
         >>> bool(weights.value[0] > weights.value[1])
         True
 
+        Mathematical verification - the risk estimate equals sqrt(w^T @ cov @ w):
+
+        >>> model = SampleCovariance(num=3)
+        >>> cov = np.array([[0.04, 0.01, 0.02],
+        ...                 [0.01, 0.09, 0.01],
+        ...                 [0.02, 0.01, 0.16]])
+        >>> model.update(
+        ...     cov=cov,
+        ...     lower_assets=np.zeros(3),
+        ...     upper_assets=np.ones(3)
+        ... )
+        >>> w = np.array([0.4, 0.35, 0.25])
+        >>> # Model estimate
+        >>> model_risk = model.estimate(w).value
+        >>> # Manual calculation: sqrt(w^T @ cov @ w)
+        >>> manual_risk = np.sqrt(w @ cov @ w)
+        >>> bool(np.isclose(model_risk, manual_risk, rtol=1e-6))
+        True
+
+        Using with correlation matrix and volatilities:
+
+        >>> # Construct covariance from correlation and volatilities
+        >>> vols = np.array([0.15, 0.20, 0.25])  # 15%, 20%, 25% annual vol
+        >>> corr = np.array([[1.0, 0.3, 0.1],
+        ...                  [0.3, 1.0, 0.4],
+        ...                  [0.1, 0.4, 1.0]])
+        >>> cov = np.outer(vols, vols) * corr
+        >>> model.update(
+        ...     cov=cov,
+        ...     lower_assets=np.zeros(3),
+        ...     upper_assets=np.ones(3)
+        ... )
+        >>> equal_weight = np.array([1/3, 1/3, 1/3])
+        >>> portfolio_vol = model.estimate(equal_weight).value
+        >>> # Portfolio vol should be less than weighted average vol (diversification)
+        >>> bool(portfolio_vol < np.mean(vols))
+        True
+
     """
 
     num: int = 0

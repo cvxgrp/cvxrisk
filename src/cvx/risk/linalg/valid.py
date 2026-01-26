@@ -89,6 +89,64 @@ def valid(matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         >>> np.allclose(submatrix, cov)
         True
 
+        Handling infinity values:
+
+        >>> cov = np.array([[1.0, 0.5, 0.2],
+        ...                 [0.5, np.inf, 0.3],
+        ...                 [0.2, 0.3, 1.0]])
+        >>> v, submatrix = valid(cov)
+        >>> v
+        array([ True, False,  True])
+        >>> submatrix
+        array([[1. , 0.2],
+               [0.2, 1. ]])
+
+        Multiple invalid entries:
+
+        >>> cov = np.array([[np.nan, 0.1, 0.2, 0.3],
+        ...                 [0.1, 2.0, 0.4, 0.5],
+        ...                 [0.2, 0.4, np.nan, 0.6],
+        ...                 [0.3, 0.5, 0.6, 3.0]])
+        >>> v, submatrix = valid(cov)
+        >>> v
+        array([False,  True, False,  True])
+        >>> submatrix.shape
+        (2, 2)
+        >>> submatrix
+        array([[2. , 0.5],
+               [0.5, 3. ]])
+
+        Using with portfolio optimization (skip assets with missing data):
+
+        >>> from cvx.risk.sample import SampleCovariance
+        >>> import cvxpy as cp
+        >>> # Full covariance has invalid data for asset 1
+        >>> full_cov = np.array([[1.0, np.nan, 0.2],
+        ...                      [np.nan, np.nan, np.nan],
+        ...                      [0.2, np.nan, 1.0]])
+        >>> v, valid_cov = valid(full_cov)
+        >>> v
+        array([ True, False,  True])
+        >>> # Optimize only valid assets
+        >>> model = SampleCovariance(num=2)
+        >>> model.update(
+        ...     cov=valid_cov,
+        ...     lower_assets=np.zeros(2),
+        ...     upper_assets=np.ones(2)
+        ... )
+        >>> weights = cp.Variable(2)
+        >>> risk = model.estimate(weights)
+        >>> isinstance(risk, cp.Expression)
+        True
+
+        Non-square matrix raises assertion:
+
+        >>> try:
+        ...     valid(np.array([[1, 2, 3], [4, 5, 6]]))
+        ... except AssertionError:
+        ...     print("Caught assertion error for non-square matrix")
+        Caught assertion error for non-square matrix
+
     Note:
         The function checks only the diagonal elements for validity. It assumes
         that if the diagonal is finite, the entire row/column is valid. This is

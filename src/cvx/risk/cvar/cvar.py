@@ -98,6 +98,38 @@ class CVar(Model):
         >>> problem = minrisk_problem(model, weights)
         >>> _ = problem.solve(solver="CLARABEL")
 
+        Mathematical verification of CVaR calculation:
+
+        >>> model = CVar(alpha=0.95, n=20, m=2)
+        >>> # Simple returns: asset 1 always returns 0.05, asset 2 returns vary
+        >>> returns = np.zeros((20, 2))
+        >>> returns[:, 0] = 0.05  # Asset 1 constant return
+        >>> returns[:, 1] = np.linspace(-0.20, 0.18, 20)  # Asset 2 varying
+        >>> model.update(
+        ...     returns=returns,
+        ...     lower_assets=np.zeros(2),
+        ...     upper_assets=np.ones(2)
+        ... )
+        >>> # k = 20 * (1 - 0.95) = 1, so we take the single worst return
+        >>> model.k
+        1
+        >>> # For 100% in asset 2, worst return is -0.20
+        >>> w = np.array([0.0, 1.0])
+        >>> cvar = model.estimate(w).value
+        >>> expected_cvar = 0.20  # negative of worst return
+        >>> bool(np.isclose(cvar, expected_cvar, rtol=1e-6))
+        True
+
+        Different alpha values affect the tail focus:
+
+        >>> # Higher alpha = focus on more extreme events
+        >>> model_95 = CVar(alpha=0.95, n=100, m=2)
+        >>> model_95.k  # Only 5 worst scenarios
+        5
+        >>> model_75 = CVar(alpha=0.75, n=100, m=2)
+        >>> model_75.k  # 25 worst scenarios
+        25
+
     """
 
     alpha: float = 0.95

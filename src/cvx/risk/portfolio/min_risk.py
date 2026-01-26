@@ -119,13 +119,74 @@ def minrisk_problem(
         >>> bool(weights.value[0] >= 0.3 - 1e-6)
         True
 
+        Sector constraints example (limiting sector exposure):
+
+        >>> model = SampleCovariance(num=4)
+        >>> # Tech: assets 0,1; Finance: assets 2,3
+        >>> model.update(
+        ...     cov=np.eye(4) * 0.04,  # 20% vol each, uncorrelated
+        ...     lower_assets=np.zeros(4),
+        ...     upper_assets=np.ones(4)
+        ... )
+        >>> weights = cp.Variable(4)
+        >>> tech_constraint = [weights[0] + weights[1] <= 0.5]  # Max 50% tech
+        >>> problem = minrisk_problem(model, weights, constraints=tech_constraint)
+        >>> _ = problem.solve(solver="CLARABEL")
+        >>> tech_weight = weights.value[0] + weights.value[1]
+        >>> bool(tech_weight <= 0.5 + 1e-6)
+        True
+
+        Long-short portfolio (removing non-negativity by adjusting bounds):
+
+        >>> from cvx.risk.bounds import Bounds
+        >>> model = SampleCovariance(num=3)
+        >>> cov = np.array([[0.04, 0.01, 0.02],
+        ...                 [0.01, 0.09, 0.01],
+        ...                 [0.02, 0.01, 0.04]])
+        >>> model.update(
+        ...     cov=cov,
+        ...     lower_assets=np.array([-0.5, -0.5, -0.5]),  # Allow shorting
+        ...     upper_assets=np.array([1.5, 1.5, 1.5])
+        ... )
+        >>> weights = cp.Variable(3)
+        >>> # Override default non-negativity with custom constraints
+        >>> long_short_constraints = [weights >= -0.5, weights <= 1.5]
+        >>> problem = cp.Problem(
+        ...     cp.Minimize(model.estimate(weights)),
+        ...     [cp.sum(weights) == 1.0] + model.constraints(weights)
+        ... )
+        >>> _ = problem.solve(solver="CLARABEL")
+        >>> bool(np.isclose(np.sum(weights.value), 1.0, atol=1e-4))
+        True
+
+        Using with FactorModel and explicit factor exposure variable:
+
+        >>> from cvx.risk.factor import FactorModel
+        >>> factor_model = FactorModel(assets=4, k=2)
+        >>> factor_model.update(
+        ...     exposure=np.array([[1.0, 0.8, 0.2, 0.1],
+        ...                        [0.1, 0.2, 0.9, 1.0]]),
+        ...     cov=np.eye(2) * 0.04,
+        ...     idiosyncratic_risk=np.array([0.1, 0.1, 0.1, 0.1]),
+        ...     lower_assets=np.zeros(4),
+        ...     upper_assets=np.ones(4),
+        ...     lower_factors=-np.ones(2),
+        ...     upper_factors=np.ones(2)
+        ... )
+        >>> weights = cp.Variable(4)
+        >>> y = cp.Variable(2)  # Factor exposures
+        >>> problem = minrisk_problem(factor_model, weights, y=y)
+        >>> _ = problem.solve(solver="CLARABEL")
+        >>> bool(np.isclose(np.sum(weights.value), 1.0, atol=1e-4))
+        True
+
     """
     # if no constraints are specified
     constraints = constraints or []
 
     problem = cp.Problem(
         objective=cp.Minimize(riskmodel.estimate(weights - base, **kwargs)),
-        constraints=[cp.sum(weights) == 1.0, weights >= 0] + riskmodel.constraints(weights, **kwargs) + constraints,
+        constraints=[cp.sum(weights) == 1.0, weights >= 0, *riskmodel.constraints(weights, **kwargs), *constraints],
     )
 
     return problem

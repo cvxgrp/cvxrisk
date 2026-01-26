@@ -73,6 +73,28 @@ class Model(ABC):
         >>> 'chol' in model.parameter
         True
 
+        The parameter dictionary holds CVXPY Parameter objects that can be
+        updated without reconstructing the optimization problem:
+
+        >>> param = model.parameter['chol']
+        >>> isinstance(param, cp.Parameter)
+        True
+        >>> param.shape
+        (2, 2)
+
+        Multiple risk models can be composed by combining their constraints:
+
+        >>> from cvx.risk.bounds import Bounds
+        >>> extra_bounds = Bounds(m=2, name="extra")
+        >>> extra_bounds.update(
+        ...     lower_extra=np.array([0.2, 0.2]),
+        ...     upper_extra=np.array([0.8, 0.8])
+        ... )
+        >>> weights = cp.Variable(2)
+        >>> all_constraints = model.constraints(weights) + extra_bounds.constraints(weights)
+        >>> len(all_constraints)
+        4
+
     """
 
     parameter: dict[str, cp.Parameter] = field(default_factory=dict)

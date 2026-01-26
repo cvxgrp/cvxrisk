@@ -22,7 +22,7 @@ def resource_dir():
     return Path(__file__).parent / "resources"
 
 
-@pytest.fixture()
+@pytest.fixture
 def readme_path() -> Path:
     """Provide the path to the project's README.md file.
 
@@ -46,4 +46,5 @@ def readme_path() -> Path:
         if candidate.is_file():
             return candidate
         current_dir = current_dir.parent
-    raise FileNotFoundError("README.md not found in any parent directory")
+    msg = "README.md not found"
+    raise FileNotFoundError(msg)

@@ -34,6 +34,6 @@ Functions:
 #    limitations under the License.
 import importlib.metadata
 
-from .rand_cov import rand_cov as rand_cov  # noqa: F401
+from .rand_cov import rand_cov as rand_cov
 
 __version__ = importlib.metadata.version("cvxrisk")
