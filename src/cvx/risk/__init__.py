@@ -33,7 +33,7 @@ Modules:
     linalg: Linear algebra utilities (Cholesky, PCA, validation)
     model: Abstract base class for risk models
     portfolio: Portfolio optimization functions
-    random: Random data generation utilities
+    rand: Random data generation utilities
     sample: Sample covariance risk model
 
 """

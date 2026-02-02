@@ -24,7 +24,7 @@ with app.setup:
     import numpy as np
 
     from cvx.risk.portfolio import minrisk_problem
-    from cvx.risk.random import rand_cov
+    from cvx.risk.rand import rand_cov
     from cvx.risk.sample import SampleCovariance
 
 

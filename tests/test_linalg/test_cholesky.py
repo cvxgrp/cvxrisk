@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from cvx.risk.linalg import cholesky
-from cvx.risk.random import rand_cov
+from cvx.risk.rand import rand_cov
 
 
 def test_cholesky() -> None:
