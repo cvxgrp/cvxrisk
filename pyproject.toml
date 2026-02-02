@@ -53,3 +53,10 @@ polars = "polars"
 [tool.deptry.per_rule_ignores]
 DEP001 = ["cvx", "cvxpy", "sklearn"]  # Ignore missing imports (these are provided by other packages)
 DEP002 = ["cvxpy-base", "scikit-learn", "mosek", "clarabel"]  # Ignore unused direct dependencies
+
+# Mypy configuration for type checking
+[tool.mypy]
+mypy_path = "src"
+namespace_packages = true
+explicit_package_bases = true
+ignore_missing_imports = true

@@ -229,7 +229,9 @@ class SampleCovariance(Model):
         cov = kwargs["cov"]
         n = cov.shape[0]
 
-        self.parameter["chol"].value[:n, :n] = cholesky(cov)
+        chol = np.zeros((self.num, self.num))
+        chol[:n, :n] = cholesky(cov)
+        self.parameter["chol"].value = chol
         self.bounds.update(**kwargs)
 
     def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:

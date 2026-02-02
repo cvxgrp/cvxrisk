@@ -221,12 +221,14 @@ class Bounds(Model):
 
         """
         lower = kwargs[self._f("lower")]
-        self.parameter[self._f("lower")].value = np.zeros(self.m)
-        self.parameter[self._f("lower")].value[: len(lower)] = lower
+        lower_arr = np.zeros(self.m)
+        lower_arr[: len(lower)] = lower
+        self.parameter[self._f("lower")].value = lower_arr
 
         upper = kwargs[self._f("upper")]
-        self.parameter[self._f("upper")].value = np.zeros(self.m)
-        self.parameter[self._f("upper")].value[: len(upper)] = upper
+        upper_arr = np.zeros(self.m)
+        upper_arr[: len(upper)] = upper
+        self.parameter[self._f("upper")].value = upper_arr
 
     def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
         """Return constraints that enforce the bounds on weights.

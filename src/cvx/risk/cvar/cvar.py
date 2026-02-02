@@ -229,9 +229,11 @@ class CVar(Model):
 
         """
         ret = kwargs["returns"]
-        m = ret.shape[1]
+        num_assets = ret.shape[1]
 
-        self.parameter["R"].value[:, :m] = kwargs["returns"]
+        returns_arr = np.zeros((self.n, self.m))
+        returns_arr[:, :num_assets] = ret
+        self.parameter["R"].value = returns_arr
         self.bounds.update(**kwargs)
 
     def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
