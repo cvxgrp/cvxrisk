@@ -47,6 +47,7 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 import cvxpy as cvx
 import numpy as np
@@ -141,7 +142,7 @@ class CVar(Model):
     m: int = 0
     """Maximum number of assets in the portfolio."""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize the parameters after the class is instantiated.
 
         Calculates the number of samples in the tail (k) based on alpha,
@@ -162,7 +163,7 @@ class CVar(Model):
         self.parameter["R"] = cvx.Parameter(shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m)))
         self.bounds = Bounds(m=self.m, name="assets")
 
-    def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
+    def estimate(self, weights: cvx.Variable, **kwargs: Any) -> cvx.Expression:
         """Estimate the Conditional Value at Risk (CVaR) for the given weights.
 
         Computes the negative average of the k smallest returns in the portfolio,
@@ -197,9 +198,12 @@ class CVar(Model):
         # R is a matrix of returns, n is the number of rows in R
         # k is the number of returns in the left tail
         # average value of the k elements in the left tail
-        return -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k
+        return cast(
+            cvx.Expression,
+            -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k,  # type: ignore[attr-defined]
+        )
 
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs: Any) -> None:
         """Update the returns data and bounds parameters.
 
         Updates the returns matrix and asset bounds. The returns matrix can
@@ -229,12 +233,14 @@ class CVar(Model):
 
         """
         ret = kwargs["returns"]
-        m = ret.shape[1]
+        num_assets = ret.shape[1]
 
-        self.parameter["R"].value[:, :m] = kwargs["returns"]
+        returns_arr = np.zeros((self.n, self.m))
+        returns_arr[:, :num_assets] = ret
+        self.parameter["R"].value = returns_arr
         self.bounds.update(**kwargs)
 
-    def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
+    def constraints(self, weights: cvx.Variable, **kwargs: Any) -> list[cvx.Constraint]:
         """Return constraints for the CVaR model.
 
         Returns the asset bounds constraints from the internal bounds object.

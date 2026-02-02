@@ -5,5 +5,8 @@
 PROJECT_NAME_EXTRA := Rhiza Platform
 LOG_LEVEL ?= INFO
 
+# Source folder for mypy and other tools
+SOURCE_FOLDER := src/cvx/risk
+
 # Overriding core variables (be careful)
 # VENV := .venv_custom

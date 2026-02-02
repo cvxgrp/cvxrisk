@@ -41,6 +41,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import Any
 
 import cvxpy as cp
 
@@ -101,7 +102,7 @@ class Model(ABC):
     """Dictionary of CVXPY parameters for the risk model."""
 
     @abstractmethod
-    def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
+    def estimate(self, weights: cp.Variable, **kwargs: Any) -> cp.Expression:
         """Estimate the variance given the portfolio weights.
 
         This method returns a CVXPY expression representing the risk measure
@@ -133,7 +134,7 @@ class Model(ABC):
         """
 
     @abstractmethod
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs: Any) -> None:
         """Update the data in the risk model.
 
         This method updates the CVXPY parameters in the model with new data.
@@ -159,7 +160,7 @@ class Model(ABC):
         """
 
     @abstractmethod
-    def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
+    def constraints(self, weights: cp.Variable, **kwargs: Any) -> list[cp.Constraint]:
         """Return the constraints for the risk model.
 
         This method returns a list of CVXPY constraints that should be included

@@ -3,7 +3,7 @@
 This file and its associated tests flow down via a SYNC action from the jebel-quant/rhiza repository
 (https://github.com/jebel-quant/rhiza).
 
-Automatically discovers all packages under `src/` and runs doctests for each.
+Automatically discovers all packages and runs doctests for each.
 """
 
 from __future__ import annotations
@@ -16,13 +16,13 @@ from pathlib import Path
 import pytest
 
 
-def _iter_modules_from_path(logger, package_path: Path):
+def _iter_modules_from_path(logger, package_path: Path, src_path: Path):
     """Recursively find all Python modules in a directory."""
     for path in package_path.rglob("*.py"):
         if path.name == "__init__.py":
-            module_path = path.parent.relative_to(package_path.parent)
+            module_path = path.parent.relative_to(src_path)
         else:
-            module_path = path.relative_to(package_path.parent).with_suffix("")
+            module_path = path.relative_to(src_path).with_suffix("")
 
         # Convert path to module name in an OS-independent way
         module_name = ".".join(module_path.parts)
@@ -35,8 +35,18 @@ def _iter_modules_from_path(logger, package_path: Path):
             continue
 
 
-def test_doctests(logger, root, monkeypatch: pytest.MonkeyPatch):
-    """Run doctests for each package directory under src/."""
+def _find_packages(src_path: Path):
+    """Find all packages in the source path, including those nested under namespace packages."""
+    for init_file in src_path.rglob("__init__.py"):
+        package_dir = init_file.parent
+        # Only yield top-level packages (those whose parent doesn't have __init__.py or is src_path)
+        parent = package_dir.parent
+        if parent == src_path or not (parent / "__init__.py").exists():
+            yield package_dir
+
+
+def test_doctests(logger, root, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+    """Run doctests for each package directory."""
     src_path = root / "src"
 
     logger.info("Starting doctest discovery in: %s", src_path)
@@ -44,7 +54,7 @@ def test_doctests(logger, root, monkeypatch: pytest.MonkeyPatch):
         logger.info("Source directory not found: %s — skipping doctests", src_path)
         pytest.skip(f"Source directory not found: {src_path}")
 
-    # Add src to sys.path with automatic cleanup
+    # Add source path to sys.path with automatic cleanup
     monkeypatch.syspath_prepend(str(src_path))
     logger.debug("Prepended to sys.path: %s", src_path)
 
@@ -52,23 +62,25 @@ def test_doctests(logger, root, monkeypatch: pytest.MonkeyPatch):
     total_failures = 0
     failed_modules = []
 
-    # Find all packages in src
-    for package_dir in src_path.iterdir():
+    # Find all packages in the source path (supports namespace packages)
+    for package_dir in _find_packages(src_path):
         if package_dir.is_dir() and (package_dir / "__init__.py").exists():
             # Import the package
             package_name = package_dir.name
             logger.info("Discovered package: %s", package_name)
             try:
-                modules = list(_iter_modules_from_path(logger, package_dir))
+                modules = list(_iter_modules_from_path(logger, package_dir, src_path))
                 logger.debug("%d module(s) found in package %s", len(modules), package_name)
 
                 for module in modules:
                     logger.debug("Running doctests for module: %s", module.__name__)
-                    results = doctest.testmod(
-                        module,
-                        verbose=False,
-                        optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
-                    )
+                    # Disable pytest's stdout capture during doctest to avoid interference
+                    with capsys.disabled():
+                        results = doctest.testmod(
+                            module,
+                            verbose=False,
+                            optionflags=(doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE),
+                        )
                     total_tests += results.attempted
 
                     if results.failed:

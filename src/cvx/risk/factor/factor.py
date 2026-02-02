@@ -50,6 +50,7 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 import cvxpy as cvx
 import numpy as np
@@ -169,7 +170,7 @@ class FactorModel(Model):
     k: int = 0
     """Maximum number of factors in the model."""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize the parameters after the class is instantiated.
 
         Creates parameters for factor exposure, idiosyncratic risk, and the Cholesky
@@ -207,7 +208,7 @@ class FactorModel(Model):
         self.bounds_assets = Bounds(m=self.assets, name="assets")
         self.bounds_factors = Bounds(m=self.k, name="factors")
 
-    def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
+    def estimate(self, weights: cvx.Variable, **kwargs: Any) -> cvx.Expression:
         """Compute the total portfolio risk using the factor model.
 
         Combines systematic risk (from factor exposures) and idiosyncratic risk
@@ -247,13 +248,16 @@ class FactorModel(Model):
             True
 
         """
-        var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))
+        var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))  # type: ignore[attr-defined]
 
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
 
-        return cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual]))
+        return cast(
+            cvx.Expression,
+            cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual])),  # type: ignore[attr-defined]
+        )
 
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs: Any) -> None:
         """Update the factor model parameters.
 
         Updates the factor exposure matrix, idiosyncratic risk vector, and
@@ -311,7 +315,7 @@ class FactorModel(Model):
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)
 
-    def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
+    def constraints(self, weights: cvx.Variable, **kwargs: Any) -> list[cvx.Constraint]:
         """Return constraints for the factor model.
 
         Returns constraints including asset bounds, factor exposure bounds,

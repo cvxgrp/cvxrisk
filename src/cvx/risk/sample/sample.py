@@ -43,6 +43,7 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 import cvxpy as cvx
 import numpy as np
@@ -140,7 +141,7 @@ class SampleCovariance(Model):
     num: int = 0
     """Maximum number of assets the model can handle."""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize the parameters after the class is instantiated.
 
         Creates the Cholesky decomposition parameter and initializes the bounds.
@@ -162,7 +163,7 @@ class SampleCovariance(Model):
         )
         self.bounds = Bounds(m=self.num, name="assets")
 
-    def estimate(self, weights: cvx.Variable, **kwargs) -> cvx.Expression:
+    def estimate(self, weights: cvx.Variable, **kwargs: Any) -> cvx.Expression:
         """Estimate the portfolio risk using the Cholesky decomposition.
 
         Computes the L2 norm of the product of the Cholesky factor and the
@@ -193,9 +194,12 @@ class SampleCovariance(Model):
             True
 
         """
-        return cvx.norm2(self.parameter["chol"] @ weights)
+        return cast(
+            cvx.Expression,
+            cvx.norm2(self.parameter["chol"] @ weights),  # type: ignore[attr-defined]
+        )
 
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs: Any) -> None:
         """Update the Cholesky decomposition parameter and bounds.
 
         Computes the Cholesky decomposition of the provided covariance matrix
@@ -229,10 +233,12 @@ class SampleCovariance(Model):
         cov = kwargs["cov"]
         n = cov.shape[0]
 
-        self.parameter["chol"].value[:n, :n] = cholesky(cov)
+        chol = np.zeros((self.num, self.num))
+        chol[:n, :n] = cholesky(cov)
+        self.parameter["chol"].value = chol
         self.bounds.update(**kwargs)
 
-    def constraints(self, weights: cvx.Variable, **kwargs) -> list[cvx.Constraint]:
+    def constraints(self, weights: cvx.Variable, **kwargs: Any) -> list[cvx.Constraint]:
         """Return constraints for the sample covariance model.
 
         Returns the asset bounds constraints from the internal bounds object.
