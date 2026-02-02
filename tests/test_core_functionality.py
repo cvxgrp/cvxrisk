@@ -22,7 +22,7 @@ from cvx.risk.cvar import CVar
 from cvx.risk.factor import FactorModel
 from cvx.risk.linalg import pca
 from cvx.risk.portfolio import minrisk_problem
-from cvx.risk.random import rand_cov
+from cvx.risk.rand import rand_cov
 from cvx.risk.sample import SampleCovariance
 
 

@@ -5,7 +5,7 @@ testing portfolio optimization algorithms.
 
 Example:
     >>> import numpy as np
-    >>> from cvx.risk.random import rand_cov
+    >>> from cvx.risk.rand import rand_cov
     >>> # Generate a random 5x5 covariance matrix
     >>> cov = rand_cov(5, seed=42)
     >>> cov.shape

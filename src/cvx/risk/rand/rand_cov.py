@@ -7,7 +7,7 @@ Example:
     Generate a random covariance matrix:
 
     >>> import numpy as np
-    >>> from cvx.risk.random import rand_cov
+    >>> from cvx.risk.rand import rand_cov
     >>> # Generate a 5x5 random covariance matrix
     >>> cov = rand_cov(5, seed=42)
     >>> cov.shape
@@ -58,7 +58,7 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         Generate a reproducible random covariance matrix:
 
         >>> import numpy as np
-        >>> from cvx.risk.random import rand_cov
+        >>> from cvx.risk.rand import rand_cov
         >>> cov1 = rand_cov(3, seed=42)
         >>> cov2 = rand_cov(3, seed=42)
         >>> np.allclose(cov1, cov2)
