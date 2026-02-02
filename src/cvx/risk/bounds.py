@@ -40,6 +40,7 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 import cvxpy as cp
 import numpy as np
@@ -118,7 +119,7 @@ class Bounds(Model):
     name: str = ""
     """Name for the bounds, used in parameter naming (e.g., 'assets' or 'factors')."""
 
-    def estimate(self, weights: cp.Variable, **kwargs) -> cp.Expression:
+    def estimate(self, weights: cp.Variable, **kwargs: Any) -> cp.Expression:
         """No estimation for bounds.
 
         Bounds do not provide a risk estimate; they only provide constraints.
@@ -168,7 +169,7 @@ class Bounds(Model):
         """
         return f"{str_prefix}_{self.name}"
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize the parameters after the class is instantiated.
 
         Creates lower and upper bound CVXPY Parameter objects with appropriate
@@ -196,7 +197,7 @@ class Bounds(Model):
             value=np.ones(self.m),
         )
 
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs: Any) -> None:
         """Update the lower and upper bound parameters.
 
         This method updates the bound parameters with new values. The input
@@ -230,7 +231,7 @@ class Bounds(Model):
         upper_arr[: len(upper)] = upper
         self.parameter[self._f("upper")].value = upper_arr
 
-    def constraints(self, weights: cp.Variable, **kwargs) -> list[cp.Constraint]:
+    def constraints(self, weights: cp.Variable, **kwargs: Any) -> list[cp.Constraint]:
         """Return constraints that enforce the bounds on weights.
 
         Creates CVXPY constraints that enforce the lower and upper bounds

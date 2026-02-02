@@ -43,6 +43,8 @@ Example:
 #    limitations under the License.
 from __future__ import annotations
 
+from typing import Any
+
 import cvxpy as cp
 
 from cvx.risk import Model
@@ -53,7 +55,7 @@ def minrisk_problem(
     weights: cp.Variable,
     base: cp.Expression | float = 0.0,
     constraints: list[cp.Constraint] | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> cp.Problem:
     """Create a minimum-risk portfolio optimization problem.
 
@@ -186,7 +188,12 @@ def minrisk_problem(
 
     problem = cp.Problem(
         objective=cp.Minimize(riskmodel.estimate(weights - base, **kwargs)),
-        constraints=[cp.sum(weights) == 1.0, weights >= 0, *riskmodel.constraints(weights, **kwargs), *constraints],
+        constraints=[
+            cp.sum(weights) == 1.0,  # type: ignore[attr-defined]
+            weights >= 0,
+            *riskmodel.constraints(weights, **kwargs),
+            *constraints,
+        ],
     )
 
     return problem
