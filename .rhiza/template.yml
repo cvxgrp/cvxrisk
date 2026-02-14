@@ -1,5 +1,5 @@
-template-repository: jebel-quant/rhiza
-template-branch: v0.7.5
+template-repository: "jebel-quant/rhiza"
+template-branch: "v0.7.5"
 
 templates:
   - github
@@ -9,5 +9,5 @@ templates:
   - book
   - marimo
   
-exclude:
-  - .rhiza/.env
+#exclude:
+#  - .rhiza/.env
