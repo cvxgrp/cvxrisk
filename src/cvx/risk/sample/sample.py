@@ -196,7 +196,7 @@ class SampleCovariance(Model):
         """
         return cast(
             cvx.Expression,
-            cvx.norm2(self.parameter["chol"] @ weights),  # type: ignore[attr-defined]
+            cvx.norm2(self.parameter["chol"] @ weights),
         )
 
     def update(self, **kwargs: Any) -> None:
