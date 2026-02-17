@@ -200,7 +200,7 @@ class CVar(Model):
         # average value of the k elements in the left tail
         return cast(
             cvx.Expression,
-            -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k,  # type: ignore[attr-defined]
+            -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k,
         )
 
     def update(self, **kwargs: Any) -> None:

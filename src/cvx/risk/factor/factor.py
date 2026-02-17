@@ -248,13 +248,13 @@ class FactorModel(Model):
             True
 
         """
-        var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))  # type: ignore[attr-defined]
+        var_residual = cvx.norm2(cvx.multiply(self.parameter["idiosyncratic_risk"], weights))
 
         y = kwargs.get("y", self.parameter["exposure"] @ weights)
 
         return cast(
             cvx.Expression,
-            cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual])),  # type: ignore[attr-defined]
+            cvx.norm2(cvx.vstack([cvx.norm2(self.parameter["chol"] @ y), var_residual])),
         )
 
     def update(self, **kwargs: Any) -> None:
@@ -307,6 +307,16 @@ class FactorModel(Model):
             raise ValueError(msg)
         if assets > self.assets:
             msg = "Too many assets"
+            raise ValueError(msg)
+
+        if self.parameter["exposure"].value is None:
+            msg = "Parameter exposure value is not initialized"
+            raise ValueError(msg)
+        if self.parameter["idiosyncratic_risk"].value is None:
+            msg = "Parameter idiosyncratic_risk value is not initialized"
+            raise ValueError(msg)
+        if self.parameter["chol"].value is None:
+            msg = "Parameter chol value is not initialized"
             raise ValueError(msg)
 
         self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
