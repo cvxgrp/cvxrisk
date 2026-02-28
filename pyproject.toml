@@ -1,7 +1,7 @@
 # Main project metadata and configuration
 [project]
 name = "cvxrisk"
-version = "0.0.0"
+version = "1.4.12"
 description = "Simple riskengine for cvxpy"
 readme = "README.md"
 requires-python = ">=3.11"
