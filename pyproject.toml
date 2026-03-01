@@ -5,6 +5,7 @@ version = "1.4.13"
 description = "Simple riskengine for cvxpy"
 readme = "README.md"
 requires-python = ">=3.11"
+# Private :: Do Not Upload (prevents rhiza_release.yml from publishing to PyPI)
 # List of core dependencies required for the package to function
 dependencies = [
     "cvxpy-base>=1.7.2",    # Core convex optimization modeling framework
