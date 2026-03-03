@@ -26,14 +26,14 @@ with app.setup:
     import numpy as np
     import pandas as pd
     import polars as pl
-    from cvxsimulator import Builder
+    from cvx.simulator import Builder
 
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.sample import SampleCovariance
 
     pd.options.plotting.backend = "plotly"
 
-    from cvxsimulator import __version__ as simulator_version
+    from cvx.simulator import __version__ as simulator_version
 
     from cvx.risk import __version__ as risk_version
 
