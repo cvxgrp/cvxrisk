@@ -205,7 +205,7 @@ dev = [
 
 [[package]]
 name = "cvxsimulator"
-version = "1.4.5"
+version = "1.4.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jquantstats" },
@@ -213,9 +213,9 @@ dependencies = [
     { name = "pandas" },
     { name = "polars" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2d/e5/dbd0e2cbc4e54d86d321f3c07c3734e9a9cd71082c00efb8e121b1aeedb9/cvxsimulator-1.4.5.tar.gz", hash = "sha256:a09706d09b3d1258306e4653991a2b91341cfc8ee1b6688b76deb8434f0d754c", size = 7470835, upload-time = "2025-10-26T17:53:03.657Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f7/3c/7f4bb11015734c919d2608f9d72ae8cfe9a21cd61c8b04fdbba2a23a0682/cvxsimulator-1.4.6.tar.gz", hash = "sha256:14e68141cf85e339185afa2a981c94e72e675cc7d7d728d9f42431ea0c47ebd8", size = 7673492, upload-time = "2026-02-28T17:00:41.322Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5e/32/650a26a4834de9c0edf029882a5a932634d68d5bb904a7155d4fe9d92507/cvxsimulator-1.4.5-py3-none-any.whl", hash = "sha256:0276ccbbc19e4ef506a7da9ffc6274ebbca88fb28b3e7cd8bbaee7ab26bfd728", size = 20637, upload-time = "2025-10-26T17:53:01.601Z" },
+    { url = "https://files.pythonhosted.org/packages/4a/a4/f47e5020404a04f89a5f42d3a4725fb17fcb7354f8c661a9646e7465c0af/cvxsimulator-1.4.6-py3-none-any.whl", hash = "sha256:98d11b95dcab89945993286d29888f2983174c4a547f8e56334bde256de3c874", size = 19961, upload-time = "2026-02-28T17:00:39.244Z" },
 ]
 
 [[package]]
@@ -626,15 +626,15 @@ wheels = [
 
 [[package]]
 name = "plotly"
-version = "6.5.2"
+version = "6.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "narwhals" },
     { name = "packaging" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/4f/8a10a9b9f5192cb6fdef62f1d77fa7d834190b2c50c0cd256bd62879212b/plotly-6.5.2.tar.gz", hash = "sha256:7478555be0198562d1435dee4c308268187553cc15516a2f4dd034453699e393", size = 7015695, upload-time = "2026-01-14T21:26:51.222Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/fb/41efe84970cfddefd4ccf025e2cbfafe780004555f583e93dba3dac2cdef/plotly-6.6.0.tar.gz", hash = "sha256:b897f15f3b02028d69f755f236be890ba950d0a42d7dfc619b44e2d8cea8748c", size = 7027956, upload-time = "2026-03-02T21:10:25.321Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/67/f95b5460f127840310d2187f916cf0023b5875c0717fdf893f71e1325e87/plotly-6.5.2-py3-none-any.whl", hash = "sha256:91757653bd9c550eeea2fa2404dba6b85d1e366d54804c340b2c874e5a7eb4a4", size = 9895973, upload-time = "2026-01-14T21:26:47.135Z" },
+    { url = "https://files.pythonhosted.org/packages/52/d2/c6e44dba74f17c6216ce1b56044a9b93a929f1c2d5bdaff892512b260f5e/plotly-6.6.0-py3-none-any.whl", hash = "sha256:8d6daf0f87412e0c0bfe72e809d615217ab57cc715899a1e5145135a7800d1d0", size = 9910315, upload-time = "2026-03-02T21:10:18.131Z" },
 ]
 
 [[package]]
