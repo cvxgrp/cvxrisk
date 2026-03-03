@@ -2,7 +2,7 @@
 
 import importlib.metadata
 
-import cvxsimulator
+import cvx.simulator
 
 import cvx.risk
 
@@ -34,5 +34,5 @@ def test_version_simulator():
         AssertionError: If the simulator module's version is None.
 
     """
-    assert cvxsimulator.__version__ is not None
-    print(f"Risk version: {cvxsimulator.__version__}")
+    assert cvx.simulator.__version__ is not None
+    print(f"Risk version: {cvx.simulator.__version__}")
