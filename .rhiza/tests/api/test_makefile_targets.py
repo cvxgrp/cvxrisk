@@ -106,6 +106,8 @@ class TestMakefile:
         assert "mkdir -p _tests/html-coverage _tests/html-report" in out
         # Check for uv command running pytest
         assert "uv run pytest" in out
+        # Check for XML coverage report
+        assert "--cov-report=xml:_tests/coverage.xml" in out
 
     def test_test_target_without_source_folder(self, logger, tmp_path):
         """Test target should run without coverage when SOURCE_FOLDER doesn't exist."""
@@ -159,7 +161,7 @@ class TestMakefile:
         assert "--cov-fail-under=42" in proc_override.stdout
 
     def test_coverage_badge_target_dry_run(self, logger, tmp_path):
-        """Coverage-badge target should invoke genbadge via uvx in dry-run output."""
+        """Coverage-badge target should invoke genbadge via uvx and push to gh-pages in dry-run output."""
         # Create a mock coverage JSON file so the target proceeds past the guard
         tests_dir = tmp_path / "_tests"
         tests_dir.mkdir(exist_ok=True)
@@ -169,7 +171,44 @@ class TestMakefile:
         out = proc.stdout
         assert "genbadge coverage" in out
         assert "_tests/coverage.json" in out
-        assert "assets/coverage-badge.svg" in out
+        assert "coverage-badge.svg" in out
+        assert "gh-pages" in out
+
+    def test_coverage_badge_skips_without_source_folder(self, logger, tmp_path):
+        """Coverage-badge target should include a guard check for SOURCE_FOLDER in dry-run output."""
+        # Update .env to set SOURCE_FOLDER to a non-existent directory
+        env_file = tmp_path / ".rhiza" / ".env"
+        env_content = env_file.read_text()
+        env_content += "\nSOURCE_FOLDER=nonexistent_src\n"
+        env_file.write_text(env_content)
+
+        proc = run_make(logger, ["coverage-badge"])
+        out = proc.stdout
+        # Should contain the guard check for missing source folder
+        assert "if [ ! -d" in out
+        assert "nonexistent_src" in out
+        assert "skipping coverage-badge" in out
+
+    def test_suppression_audit_target_dry_run(self, logger):
+        """Suppression-audit target should invoke the Python audit script via uv run in dry-run output."""
+        proc = run_make(logger, ["suppression-audit"])
+        out = proc.stdout
+        assert "uv run python" in out
+        assert "suppression_audit.py" in out
+
+    def test_license_target_dry_run(self, logger):
+        """License target should invoke pip-licenses via uv run --with in dry-run output."""
+        proc = run_make(logger, ["license"])
+        out = proc.stdout
+        assert "uv run --with pip-licenses pip-licenses" in out
+        assert "--fail-on=" in out
+        assert "GPL" in out
+
+    def test_license_fail_on_is_configurable(self, logger):
+        """License target should use the LICENSE_FAIL_ON variable for the fail-on list."""
+        proc = run_make(logger, ["license", "LICENSE_FAIL_ON=MIT;Apache"])
+        out = proc.stdout
+        assert '--fail-on="MIT;Apache"' in out
 
 
 class TestMakefileRootFixture:
