@@ -4,6 +4,7 @@
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/cvxrisk/blob/master/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/cvxrisk?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month)](https://pepy.tech/project/cvxrisk)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
+[![Coverage](https://www.cvxgrp.org/cvxrisk/coverage-badge.svg)](https://www.cvxgrp.org/cvxrisk/reports/html-coverage/)
 
 ## 📋 Overview
 
