@@ -66,6 +66,23 @@ class TestSecurityConfiguration:
         # Check that "S" is in either select or extend-select
         assert '"S"' in content or "'S'" in content, "Ruff security checks (S) should be enabled in ruff.toml"
 
+    def test_no_python_cache_files_hook_configured(self) -> None:
+        """Verify that the no-python-cache-files hook is configured in pre-commit.
+
+        This ensures Python cache files (__pycache__, .pyc, .pyo, .pyd) cannot
+        be accidentally committed to the repository.
+        """
+        repo_root = pathlib.Path(__file__).parent.parent.parent.parent
+        precommit_config = repo_root / ".pre-commit-config.yaml"
+
+        assert precommit_config.exists(), ".pre-commit-config.yaml not found"
+
+        content = precommit_config.read_text()
+        assert "no-python-cache-files" in content, (
+            "no-python-cache-files hook should be configured in .pre-commit-config.yaml "
+            "to prevent committing Python cache files"
+        )
+
     def test_bandit_configured_in_precommit(self) -> None:
         """Verify that Bandit is configured in pre-commit hooks.
 
@@ -80,6 +97,30 @@ class TestSecurityConfiguration:
         content = precommit_config.read_text()
         assert "bandit" in content.lower(), "Bandit should be configured in pre-commit hooks"
 
+    def test_bandit_ini_file_exists(self) -> None:
+        """Verify that a .bandit INI configuration file exists.
+
+        CodeFactor runs ``bandit -r .`` without ``-c pyproject.toml``, so it
+        reads the ``.bandit`` INI file for configuration.  Without this file,
+        any ``[tool.bandit]`` settings in ``pyproject.toml`` are silently
+        ignored by CodeFactor, causing false-positive security warnings.
+
+        The ``.bandit`` file is the single source of truth for bandit
+        configuration and is read automatically by both bandit and CodeFactor.
+        """
+        repo_root = pathlib.Path(__file__).parent.parent.parent.parent
+        bandit_ini = repo_root / ".bandit"
+
+        assert bandit_ini.exists(), (
+            ".bandit INI file not found. "
+            "Create a .bandit file so that CodeFactor (which runs 'bandit -r .' "
+            "without '-c pyproject.toml') picks up the same configuration as "
+            "local runs and pre-commit hooks."
+        )
+
+        content = bandit_ini.read_text()
+        assert "[bandit]" in content, ".bandit file must contain a [bandit] section"
+
     def test_security_policy_exists(self) -> None:
         """Verify that a SECURITY.md file exists at the repository root.
 
@@ -89,12 +130,10 @@ class TestSecurityConfiguration:
         """
         repo_root = pathlib.Path(__file__).parent.parent.parent.parent
         root_security = repo_root / "SECURITY.md"
-        github_security = repo_root / ".github" / "SECURITY.md"
-        docs_security = repo_root / "docs" / "SECURITY.md"
 
-        assert root_security.exists() or github_security.exists() or docs_security.exists(), (
-            "No SECURITY.md found. Create SECURITY.md in the repository root, "
-            ".github/, or docs/ to publish a responsible disclosure policy."
+        assert root_security.exists(), (
+            "No SECURITY.md found. Create SECURITY.md in the repository root "
+            "to publish a responsible disclosure policy."
         )
 
     def test_secret_scanning_config_exists(self) -> None:
