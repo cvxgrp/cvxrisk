@@ -14,8 +14,16 @@ theme:
 
 nav:
   - Home: index.md
-  - Notebooks: notebooks.md
-  - Reports: reports.md
+  - Notebooks:
+    - Demo: notebooks/demo.html
+    - Factor Model: notebooks/factormodel.html
+    - Large: notebooks/large.html
+    - Sample: notebooks/sample.html
+    - Tilting: notebooks/tilting.html
+  - Reports:
+    - Test Report: reports/html-report/report.html
+    - Coverage Report: reports/html-coverage/index.html
+    - Benchmark Report: reports/benchmarks/report.html
   - Development:
     - Marimo: development/MARIMO.md
     - Tests: development/TESTS.md
