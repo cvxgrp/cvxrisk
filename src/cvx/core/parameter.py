@@ -20,7 +20,7 @@ Example:
     Create a parameter and update its value:
 
     >>> import numpy as np
-    >>> from cvx.risk.parameter import Parameter
+    >>> from cvx.core.parameter import Parameter
     >>> p = Parameter(shape=3, name="weights")
     >>> p.value
     array([0., 0., 0.])
@@ -55,7 +55,7 @@ class Parameter:
         1-D parameter (e.g., lower bounds):
 
         >>> import numpy as np
-        >>> from cvx.risk.parameter import Parameter
+        >>> from cvx.core.parameter import Parameter
         >>> p = Parameter(shape=4, name="lower_assets")
         >>> p.value.shape
         (4,)

@@ -22,7 +22,7 @@ Example:
     Create a variable and use it in an optimization problem:
 
     >>> import numpy as np
-    >>> from cvx.risk.variable import Variable
+    >>> from cvx.core.variable import Variable
     >>> w = Variable(3)
     >>> w.n
     3
@@ -51,7 +51,7 @@ class Variable:
             the problem has been solved.
 
     Example:
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.core.variable import Variable
         >>> w = Variable(4)
         >>> w.n
         4

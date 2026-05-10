@@ -25,10 +25,10 @@ with app.setup:
     import pandas as pd
     import polars as pl
 
+    from cvx.core.variable import Variable
     from cvx.risk.factor import FactorModel
     from cvx.risk.linalg import pca
     from cvx.risk.portfolio import minrisk_problem
-    from cvx.risk.variable import Variable
 
 
 @app.cell

@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from cvx.risk.bounds import Bounds
+from cvx.core.bounds import Bounds
 
 
 def test_raise_not_implemented() -> None:

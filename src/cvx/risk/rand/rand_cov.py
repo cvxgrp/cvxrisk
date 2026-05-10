@@ -68,7 +68,7 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
 
         >>> from cvx.risk.sample import SampleCovariance
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.core.variable import Variable
         >>> model = SampleCovariance(num=4)
         >>> cov = rand_cov(4, seed=42)
         >>> model.update(
@@ -115,7 +115,7 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         Monte Carlo simulation example:
 
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.core.variable import Variable
         >>> results = []
         >>> for i in range(5):
         ...     cov = rand_cov(3, seed=i)

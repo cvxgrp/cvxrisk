@@ -10,7 +10,7 @@ Example:
     >>> import numpy as np
     >>> from cvx.risk.sample import SampleCovariance
     >>> from cvx.risk.portfolio import minrisk_problem
-    >>> from cvx.risk.variable import Variable
+    >>> from cvx.core.variable import Variable
     >>> # Create risk model
     >>> model = SampleCovariance(num=3)
     >>> model.update(
@@ -51,11 +51,11 @@ import clarabel
 import numpy as np
 from scipy import sparse
 
+from cvx.core.model import Model
+from cvx.core.variable import Variable
 from cvx.risk.cvar.cvar import CVar
 from cvx.risk.factor.factor import FactorModel
-from cvx.risk.model import Model
 from cvx.risk.sample.sample import SampleCovariance
-from cvx.risk.variable import Variable
 
 # Type alias for user-supplied linear constraints: (a, lb, ub)
 # meaning lb <= a @ w <= ub.  Use None for one-sided bounds.
@@ -475,7 +475,7 @@ class MinRiskProblem:
         >>> import numpy as np
         >>> from cvx.risk.sample import SampleCovariance
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.core.variable import Variable
         >>> model = SampleCovariance(num=2)
         >>> model.update(
         ...     cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
@@ -533,7 +533,7 @@ class MinRiskProblem:
             >>> import numpy as np
             >>> from cvx.risk.sample import SampleCovariance
             >>> from cvx.risk.portfolio import minrisk_problem
-            >>> from cvx.risk.variable import Variable
+            >>> from cvx.core.variable import Variable
             >>> model = SampleCovariance(num=2)
             >>> weights = Variable(2)
             >>> problem = minrisk_problem(model, weights)
@@ -578,7 +578,7 @@ def minrisk_problem(
     directly with Clarabel.
 
     Args:
-        riskmodel: A risk model implementing the :class:`~cvx.risk.model.Model`
+        riskmodel: A risk model implementing the :class:`~cvx.core.model.Model`
             interface. Supported types: :class:`~cvx.risk.sample.SampleCovariance`,
             :class:`~cvx.risk.factor.FactorModel`,
             :class:`~cvx.risk.cvar.CVar`.
@@ -603,7 +603,7 @@ def minrisk_problem(
         >>> import numpy as np
         >>> from cvx.risk.sample import SampleCovariance
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.core.variable import Variable
         >>> model = SampleCovariance(num=2)
         >>> model.update(
         ...     cov=np.array([[1.0, 0.5], [0.5, 2.0]]),

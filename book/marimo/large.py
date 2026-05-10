@@ -24,9 +24,9 @@ with app.setup:
     import numpy as np
     import pandas as pd
 
+    from cvx.core.variable import Variable
     from cvx.risk.factor import FactorModel
     from cvx.risk.portfolio import minrisk_problem
-    from cvx.risk.variable import Variable
 
 
 @app.cell
