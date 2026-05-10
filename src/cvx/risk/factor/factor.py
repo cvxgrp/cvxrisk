@@ -175,7 +175,7 @@ class FactorModel(Model):
             >>> model.parameter["exposure"].shape
             (3, 10)
             >>> model.parameter["idiosyncratic_risk"].shape
-            (10,)
+            10
             >>> model.parameter["chol"].shape
             (3, 3)
 
@@ -185,9 +185,7 @@ class FactorModel(Model):
             name="exposure",
         )
 
-        self.parameter["idiosyncratic_risk"] = Parameter(
-            shape=self.assets, name="idiosyncratic risk"
-        )
+        self.parameter["idiosyncratic_risk"] = Parameter(shape=self.assets, name="idiosyncratic risk")
 
         self.parameter["chol"] = Parameter(
             shape=(self.k, self.k),

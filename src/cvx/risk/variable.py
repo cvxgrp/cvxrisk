@@ -34,7 +34,6 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 import numpy as np
 
@@ -64,5 +63,5 @@ class Variable:
     n: int
     """Dimension of the variable."""
 
-    value: Optional[np.ndarray] = field(default=None, init=False)
+    value: np.ndarray | None = field(default=None, init=False)
     """Optimal value set after solving, or ``None`` before solving."""

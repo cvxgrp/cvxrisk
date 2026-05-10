@@ -33,7 +33,6 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Union
 
 import numpy as np
 
@@ -62,7 +61,7 @@ class Parameter:
         (4,)
         >>> p.value = np.array([0.0, 0.1, 0.0, 0.2])
         >>> p.value[1]
-        0.1
+        np.float64(0.1)
 
         2-D parameter (e.g., Cholesky factor):
 
@@ -76,7 +75,7 @@ class Parameter:
 
     """
 
-    shape: Union[int, tuple[int, ...]]
+    shape: int | tuple[int, ...]
     """Shape of the parameter (int for 1-D, tuple for 2-D)."""
 
     name: str = ""

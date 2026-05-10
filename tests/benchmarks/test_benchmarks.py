@@ -39,7 +39,7 @@ except ImportError:
 def _make_cov(n: int, seed: int = 42) -> np.ndarray:
     """Return a random positive-definite n×n covariance matrix."""
     rng = np.random.default_rng(seed)
-    A = rng.standard_normal((n, n))
+    A = rng.standard_normal((n, n))  # noqa: N806
     return (A @ A.T) / n + np.eye(n) * 0.1
 
 
@@ -81,7 +81,7 @@ class TestClarabelDirect:
         assert result is not None
 
     @pytest.mark.parametrize(
-        "assets,k",
+        ("assets", "k"),
         [(20, 5), (100, 10), (200, 20)],
     )
     def test_factor_model(self, benchmark, assets, k):
@@ -109,7 +109,7 @@ class TestClarabelDirect:
 
 
 # ---------------------------------------------------------------------------
-# cvxpy benchmarks (old approach) – skipped when cvxpy-base is absent
+# cvxpy benchmarks (old approach) - skipped when cvxpy-base is absent
 # ---------------------------------------------------------------------------
 
 
@@ -121,7 +121,7 @@ class TestCvxpy:
     def test_sample_covariance(self, benchmark, n):
         """Time each cvxpy problem construction + solve."""
         cov = _make_cov(n)
-        L = cholesky(cov)  # upper-triangular Cholesky factor
+        L = cholesky(cov)  # upper-triangular Cholesky factor  # noqa: N806
 
         def solve():
             w = cp.Variable(n)
@@ -139,13 +139,13 @@ class TestCvxpy:
         assert result is not None
 
     @pytest.mark.parametrize(
-        "assets,k",
+        ("assets", "k"),
         [(20, 5), (100, 10), (200, 20)],
     )
     def test_factor_model(self, benchmark, assets, k):
         """Benchmark FactorModel equivalent using cvxpy."""
         exposure, factor_cov, idio_risk = _make_factor_data(assets, k)
-        L = cholesky(factor_cov)  # (k, k) upper-triangular Cholesky factor
+        L = cholesky(factor_cov)  # (k, k) upper-triangular Cholesky factor  # noqa: N806
 
         def solve():
             w = cp.Variable(assets)

@@ -45,7 +45,7 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 import clarabel
 import numpy as np
@@ -59,7 +59,7 @@ from cvx.risk.variable import Variable
 
 # Type alias for user-supplied linear constraints: (a, lb, ub)
 # meaning lb <= a @ w <= ub.  Use None for one-sided bounds.
-LinearConstraint = tuple[np.ndarray, Optional[float], Optional[float]]
+LinearConstraint = tuple[np.ndarray, float | None, float | None]
 
 
 def _clarabel_settings() -> clarabel.DefaultSettings:
@@ -74,7 +74,7 @@ def _solve_sample(
     weights: Variable,
     base: np.ndarray,
     extra_constraints: list[LinearConstraint],
-) -> tuple[Optional[float], Optional[float], str]:
+) -> tuple[float | None, float | None, str]:
     """Build and solve the Clarabel problem for a SampleCovariance model.
 
     The problem is:
@@ -100,27 +100,27 @@ def _solve_sample(
     # Variables: x = [t, w_0, ..., w_{n-1}]  (1 + n total)
     n_vars = 1 + n
 
-    P = sparse.csc_matrix((n_vars, n_vars))
+    P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
     q = np.zeros(n_vars)
     q[0] = 1.0  # minimize t
 
-    A_rows: list[np.ndarray] = []
+    A_rows: list[np.ndarray] = []  # noqa: N806
     b_rows: list[np.ndarray] = []
     cones: list[Any] = []
 
     # 1. SOC: [t; chol @ (w - base)] in SOC(n+1)
     #    b_soc - A_soc @ x in SOC  =>  b_soc - A_soc @ x = [t; chol@(w-base)]
-    A_soc = np.zeros((n + 1, n_vars))
-    A_soc[0, 0] = -1.0         # -t
-    A_soc[1:, 1:] = -chol      # -chol @ w
+    A_soc = np.zeros((n + 1, n_vars))  # noqa: N806
+    A_soc[0, 0] = -1.0  # -t
+    A_soc[1:, 1:] = -chol  # -chol @ w
     b_soc = np.zeros(n + 1)
-    b_soc[1:] = -chol @ base   # shift by base
+    b_soc[1:] = -chol @ base  # shift by base
     A_rows.append(A_soc)
     b_rows.append(b_soc)
     cones.append(clarabel.SecondOrderConeT(n + 1))
 
     # 2. Equality: sum(w) == 1
-    A_eq = np.zeros((1, n_vars))
+    A_eq = np.zeros((1, n_vars))  # noqa: N806
     A_eq[0, 1:] = 1.0
     b_eq = np.array([1.0])
     A_rows.append(A_eq)
@@ -128,14 +128,14 @@ def _solve_sample(
     cones.append(clarabel.ZeroConeT(1))
 
     # 3. Lower bound: w >= lb
-    A_lb = np.zeros((n, n_vars))
+    A_lb = np.zeros((n, n_vars))  # noqa: N806
     A_lb[:, 1:] = -np.eye(n)
     A_rows.append(A_lb)
     b_rows.append(-lb)
     cones.append(clarabel.NonnegativeConeT(n))
 
     # 4. Upper bound: w <= ub
-    A_ub = np.zeros((n, n_vars))
+    A_ub = np.zeros((n, n_vars))  # noqa: N806
     A_ub[:, 1:] = np.eye(n)
     A_rows.append(A_ub)
     b_rows.append(ub)
@@ -146,7 +146,7 @@ def _solve_sample(
         a = np.asarray(a)
         if lb_val is not None and ub_val is not None and lb_val == ub_val:
             # Equality constraint: a @ w == eq
-            A_extra = np.zeros((1, n_vars))
+            A_extra = np.zeros((1, n_vars))  # noqa: N806
             A_extra[0, 1:] = a
             A_rows.append(A_extra)
             b_rows.append(np.array([lb_val]))
@@ -154,20 +154,20 @@ def _solve_sample(
         else:
             if lb_val is not None:
                 # a @ w >= lb_val
-                A_extra = np.zeros((1, n_vars))
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
                 A_extra[0, 1:] = -a
                 A_rows.append(A_extra)
                 b_rows.append(np.array([-lb_val]))
                 cones.append(clarabel.NonnegativeConeT(1))
             if ub_val is not None:
                 # a @ w <= ub_val
-                A_extra = np.zeros((1, n_vars))
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
                 A_extra[0, 1:] = a
                 A_rows.append(A_extra)
                 b_rows.append(np.array([ub_val]))
                 cones.append(clarabel.NonnegativeConeT(1))
 
-    A = sparse.csc_matrix(np.vstack(A_rows))
+    A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
     b = np.concatenate(b_rows)
 
     sol = clarabel.DefaultSolver(P, q, A, b, cones, _clarabel_settings()).solve()
@@ -184,8 +184,8 @@ def _solve_factor(
     weights: Variable,
     base: np.ndarray,
     extra_constraints: list[LinearConstraint],
-    y_var: Optional[Variable],
-) -> tuple[Optional[float], Optional[float], str]:
+    y_var: Variable | None,
+) -> tuple[float | None, float | None, str]:
     """Build and solve the Clarabel problem for a FactorModel.
 
     The problem is:
@@ -210,7 +210,7 @@ def _solve_factor(
     n = weights.n
     k = riskmodel.k
 
-    chol = riskmodel.parameter["chol"].value          # (k, k) upper triangular
+    chol = riskmodel.parameter["chol"].value  # (k, k) upper triangular
     exposure = riskmodel.parameter["exposure"].value  # (k, n)
     idio = riskmodel.parameter["idiosyncratic_risk"].value  # (n,)
 
@@ -220,17 +220,17 @@ def _solve_factor(
     # Variables: x = [t, w_0..w_{n-1}, y_0..y_{k-1}]  (1 + n + k total)
     n_vars = 1 + n + k
 
-    P = sparse.csc_matrix((n_vars, n_vars))
+    P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
     q = np.zeros(n_vars)
     q[0] = 1.0  # minimize t
 
-    A_rows: list[np.ndarray] = []
+    A_rows: list[np.ndarray] = []  # noqa: N806
     b_rows: list[np.ndarray] = []
     cones: list[Any] = []
 
     # 1. SOC: [t; chol @ y; diag(idio) @ (w - base)] in SOC(1+k+n)
     soc_size = 1 + k + n
-    A_soc = np.zeros((soc_size, n_vars))
+    A_soc = np.zeros((soc_size, n_vars))  # noqa: N806
     # Row 0: -t
     A_soc[0, 0] = -1.0
     # Rows 1..k: -chol @ y  (y columns are indices 1+n..1+n+k-1)
@@ -247,7 +247,7 @@ def _solve_factor(
     cones.append(clarabel.SecondOrderConeT(soc_size))
 
     # 2. Equality: sum(w) == 1
-    A_eq_sum = np.zeros((1, n_vars))
+    A_eq_sum = np.zeros((1, n_vars))  # noqa: N806
     A_eq_sum[0, 1 : 1 + n] = 1.0
     A_rows.append(A_eq_sum)
     b_rows.append(np.array([1.0]))
@@ -255,7 +255,7 @@ def _solve_factor(
 
     # 3. Equality: y == exposure @ w  (k equations)
     #    b - A @ x = 0  where b=0, A=[0, -exposure, I_k]
-    A_eq_exp = np.zeros((k, n_vars))
+    A_eq_exp = np.zeros((k, n_vars))  # noqa: N806
     A_eq_exp[:, 1 : 1 + n] = -exposure
     A_eq_exp[:, 1 + n :] = np.eye(k)
     A_rows.append(A_eq_exp)
@@ -263,28 +263,28 @@ def _solve_factor(
     cones.append(clarabel.ZeroConeT(k))
 
     # 4. Lower bound: w >= lb_w
-    A_wlb = np.zeros((n, n_vars))
+    A_wlb = np.zeros((n, n_vars))  # noqa: N806
     A_wlb[:, 1 : 1 + n] = -np.eye(n)
     A_rows.append(A_wlb)
     b_rows.append(-lb_w)
     cones.append(clarabel.NonnegativeConeT(n))
 
     # 5. Upper bound: w <= ub_w
-    A_wub = np.zeros((n, n_vars))
+    A_wub = np.zeros((n, n_vars))  # noqa: N806
     A_wub[:, 1 : 1 + n] = np.eye(n)
     A_rows.append(A_wub)
     b_rows.append(ub_w)
     cones.append(clarabel.NonnegativeConeT(n))
 
     # 6. Lower bound: y >= lb_y
-    A_ylb = np.zeros((k, n_vars))
+    A_ylb = np.zeros((k, n_vars))  # noqa: N806
     A_ylb[:, 1 + n :] = -np.eye(k)
     A_rows.append(A_ylb)
     b_rows.append(-lb_y)
     cones.append(clarabel.NonnegativeConeT(k))
 
     # 7. Upper bound: y <= ub_y
-    A_yub = np.zeros((k, n_vars))
+    A_yub = np.zeros((k, n_vars))  # noqa: N806
     A_yub[:, 1 + n :] = np.eye(k)
     A_rows.append(A_yub)
     b_rows.append(ub_y)
@@ -294,26 +294,26 @@ def _solve_factor(
     for a, lb_val, ub_val in extra_constraints:
         a = np.asarray(a)
         if lb_val is not None and ub_val is not None and lb_val == ub_val:
-            A_extra = np.zeros((1, n_vars))
+            A_extra = np.zeros((1, n_vars))  # noqa: N806
             A_extra[0, 1 : 1 + n] = a
             A_rows.append(A_extra)
             b_rows.append(np.array([lb_val]))
             cones.append(clarabel.ZeroConeT(1))
         else:
             if lb_val is not None:
-                A_extra = np.zeros((1, n_vars))
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
                 A_extra[0, 1 : 1 + n] = -a
                 A_rows.append(A_extra)
                 b_rows.append(np.array([-lb_val]))
                 cones.append(clarabel.NonnegativeConeT(1))
             if ub_val is not None:
-                A_extra = np.zeros((1, n_vars))
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
                 A_extra[0, 1 : 1 + n] = a
                 A_rows.append(A_extra)
                 b_rows.append(np.array([ub_val]))
                 cones.append(clarabel.NonnegativeConeT(1))
 
-    A = sparse.csc_matrix(np.vstack(A_rows))
+    A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
     b = np.concatenate(b_rows)
 
     sol = clarabel.DefaultSolver(P, q, A, b, cones, _clarabel_settings()).solve()
@@ -332,7 +332,7 @@ def _solve_cvar(
     weights: Variable,
     base: np.ndarray,
     extra_constraints: list[LinearConstraint],
-) -> tuple[Optional[float], Optional[float], str]:
+) -> tuple[float | None, float | None, str]:
     """Build and solve the Clarabel LP for a CVar model.
 
     The CVaR minimization problem is formulated as an LP:
@@ -356,31 +356,31 @@ def _solve_cvar(
         Tuple of (objective_value, cvar_value, status_string).
     """
     n = weights.n
-    T = riskmodel.n  # number of scenarios
+    T = riskmodel.n  # number of scenarios  # noqa: N806
     k = riskmodel.k  # tail scenarios
-    R = riskmodel.parameter["R"].value  # (T, m) returns matrix, m >= n
+    R = riskmodel.parameter["R"].value  # (T, m) returns matrix, m >= n  # noqa: N806
     lb_w, ub_w = riskmodel.bounds.get_bounds()
 
     # Restrict R to first n columns (actual assets in problem)
-    R_n = R[:, :n]
+    R_n = R[:, :n]  # noqa: N806
 
     # Variables: x = [w_1..w_n, z, u_1..u_T]  (n + 1 + T total)
     n_vars = n + 1 + T
 
-    P = sparse.csc_matrix((n_vars, n_vars))
+    P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
     q = np.zeros(n_vars)
     # No cost on w
-    q[n] = 1.0          # cost z
+    q[n] = 1.0  # cost z
     q[n + 1 :] = 1.0 / k  # cost u_i
 
-    A_rows: list[np.ndarray] = []
+    A_rows: list[np.ndarray] = []  # noqa: N806
     b_rows: list[np.ndarray] = []
     cones: list[Any] = []
 
     # 1. Nonneg (T): u_i + R_i @ (w - base) + z >= 0
     #    b - A @ [w, z, u] = R_n @ (w - base) + z + u >= 0
     #    A = [-R_n, -1_col, -I_T], b = R_n @ base
-    A_cvar = np.zeros((T, n_vars))
+    A_cvar = np.zeros((T, n_vars))  # noqa: N806
     A_cvar[:, :n] = -R_n
     A_cvar[:, n] = -1.0
     A_cvar[:, n + 1 :] = -np.eye(T)
@@ -391,28 +391,28 @@ def _solve_cvar(
     cones.append(clarabel.NonnegativeConeT(T))
 
     # 2. Nonneg (T): u >= 0
-    A_u = np.zeros((T, n_vars))
+    A_u = np.zeros((T, n_vars))  # noqa: N806
     A_u[:, n + 1 :] = -np.eye(T)
     A_rows.append(A_u)
     b_rows.append(np.zeros(T))
     cones.append(clarabel.NonnegativeConeT(T))
 
     # 3. Equality: sum(w) == 1
-    A_eq = np.zeros((1, n_vars))
+    A_eq = np.zeros((1, n_vars))  # noqa: N806
     A_eq[0, :n] = 1.0
     A_rows.append(A_eq)
     b_rows.append(np.array([1.0]))
     cones.append(clarabel.ZeroConeT(1))
 
     # 4. Lower bound: w >= lb_w
-    A_lb = np.zeros((n, n_vars))
+    A_lb = np.zeros((n, n_vars))  # noqa: N806
     A_lb[:, :n] = -np.eye(n)
     A_rows.append(A_lb)
     b_rows.append(-lb_w[:n])
     cones.append(clarabel.NonnegativeConeT(n))
 
     # 5. Upper bound: w <= ub_w
-    A_ub = np.zeros((n, n_vars))
+    A_ub = np.zeros((n, n_vars))  # noqa: N806
     A_ub[:, :n] = np.eye(n)
     A_rows.append(A_ub)
     b_rows.append(ub_w[:n])
@@ -422,26 +422,26 @@ def _solve_cvar(
     for a, lb_val, ub_val in extra_constraints:
         a = np.asarray(a)
         if lb_val is not None and ub_val is not None and lb_val == ub_val:
-            A_extra = np.zeros((1, n_vars))
+            A_extra = np.zeros((1, n_vars))  # noqa: N806
             A_extra[0, :n] = a
             A_rows.append(A_extra)
             b_rows.append(np.array([lb_val]))
             cones.append(clarabel.ZeroConeT(1))
         else:
             if lb_val is not None:
-                A_extra = np.zeros((1, n_vars))
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
                 A_extra[0, :n] = -a
                 A_rows.append(A_extra)
                 b_rows.append(np.array([-lb_val]))
                 cones.append(clarabel.NonnegativeConeT(1))
             if ub_val is not None:
-                A_extra = np.zeros((1, n_vars))
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
                 A_extra[0, :n] = a
                 A_rows.append(A_extra)
                 b_rows.append(np.array([ub_val]))
                 cones.append(clarabel.NonnegativeConeT(1))
 
-    A = sparse.csc_matrix(np.vstack(A_rows))
+    A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
     b = np.concatenate(b_rows)
 
     sol = clarabel.DefaultSolver(P, q, A, b, cones, _clarabel_settings()).solve()
@@ -486,7 +486,7 @@ class MinRiskProblem:
         >>> problem = minrisk_problem(model, weights)
         >>> problem.solve()
         >>> problem.status
-        'SolverStatus.Solved'
+        'Solved'
         >>> bool(np.isclose(np.sum(weights.value), 1.0))
         True
 
@@ -498,9 +498,9 @@ class MinRiskProblem:
     _extra_constraints: list[LinearConstraint] = field(default_factory=list)
     _kwargs: dict[str, Any] = field(default_factory=dict)
 
-    value: Optional[float] = field(default=None, init=False)
-    status: Optional[str] = field(default=None, init=False)
-    _y_var: Optional[Variable] = field(default=None, init=False)
+    value: float | None = field(default=None, init=False)
+    status: str | None = field(default=None, init=False)
+    _y_var: Variable | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         """Extract and store the optional y Variable from kwargs."""
@@ -550,17 +550,11 @@ class MinRiskProblem:
         base = self._get_base_array()
 
         if isinstance(self.riskmodel, SampleCovariance):
-            obj, risk, status = _solve_sample(
-                self.riskmodel, self.weights, base, self._extra_constraints
-            )
+            obj, _risk, status = _solve_sample(self.riskmodel, self.weights, base, self._extra_constraints)
         elif isinstance(self.riskmodel, FactorModel):
-            obj, risk, status = _solve_factor(
-                self.riskmodel, self.weights, base, self._extra_constraints, self._y_var
-            )
+            obj, _risk, status = _solve_factor(self.riskmodel, self.weights, base, self._extra_constraints, self._y_var)
         elif isinstance(self.riskmodel, CVar):
-            obj, risk, status = _solve_cvar(
-                self.riskmodel, self.weights, base, self._extra_constraints
-            )
+            obj, _risk, status = _solve_cvar(self.riskmodel, self.weights, base, self._extra_constraints)
         else:
             msg = f"Unsupported risk model type: {type(self.riskmodel).__name__}"
             raise NotImplementedError(msg)
@@ -681,4 +675,3 @@ def minrisk_problem(
         _extra_constraints=constraints or [],
         _kwargs=kwargs,
     )
-
