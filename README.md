@@ -103,7 +103,7 @@ smaller set of factors:
 ```python
 import numpy as np
 from cvx.risk.factor import FactorModel
-from cvx.risk.linalg import pca
+from cvx.linalg import pca
 import pandas as pd
 
 # Create some sample returns data
