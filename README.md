@@ -59,11 +59,12 @@ weights = Variable(2)
 problem = minrisk_problem(riskmodel, weights)
 problem.solve()
 
-# Print the optimal weights with deterministic spacing
+print(problem.status)
 print(np.array2string(np.round(weights.value, 2), separator=" "))
 ```
 
 ```result
+Solved
 [0.75 0.25]
 ```
 
