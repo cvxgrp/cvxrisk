@@ -71,7 +71,7 @@ class Parameter:
         >>> import numpy as np
         >>> p2.value = np.eye(3)
         >>> p2.value[0, 0]
-        1.0
+        np.float64(1.0)
 
     """
 
