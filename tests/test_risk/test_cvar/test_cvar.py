@@ -34,6 +34,7 @@ def test_estimate_risk() -> None:
         upper_assets=np.ones(10),
     )
     prob.solve()
+    # rel=1e-4 reflects Clarabel's default solver tolerances when called directly
     assert prob.value == pytest.approx(0.37293694583777964, rel=1e-4)
 
     # it's enough to only update the R value...

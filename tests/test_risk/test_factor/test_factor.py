@@ -108,6 +108,7 @@ def test_estimate_risk() -> None:
     prob.solve()
     w = np.array(weights.value)
 
+    # rel=1e-4 reflects Clarabel's default solver tolerances when called directly
     assert prob.value == pytest.approx(0.19926997253968454, rel=1e-4)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
@@ -122,6 +123,7 @@ def test_estimate_risk() -> None:
     )
     prob.solve()
     w = np.array(weights.value)
+    # rel=1e-4 reflects Clarabel's default solver tolerances when called directly
     assert prob.value == pytest.approx(0.18811759576078277, rel=1e-4)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 

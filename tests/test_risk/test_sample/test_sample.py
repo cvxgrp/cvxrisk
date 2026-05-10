@@ -66,6 +66,8 @@ def test_min_variance() -> None:
         upper_assets=np.ones(2),
     )
     problem.solve()
+    # Decimal=4 (rather than 5) reflects Clarabel's default solver tolerances
+    # when called directly without cvxpy's tighter wrapper settings.
     np.testing.assert_almost_equal(weights.value, np.array([0.75, 0.25, 0.0, 0.0]), decimal=4)
 
     # It's enough to only update the value for the cholesky decomposition
