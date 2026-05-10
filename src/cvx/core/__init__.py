@@ -1,9 +1,11 @@
-"""Core building blocks for cvxrisk.
+"""Core building blocks shared across cvx packages.
 
-Exposes :class:`Variable` and :class:`Parameter`, the two fundamental types
-shared across all risk models and portfolio optimization problems.
+Exposes the fundamental types used to build parametric optimization models:
+:class:`Model`, :class:`Bounds`, :class:`Parameter`, and :class:`Variable`.
 
 """
 
+from .bounds import Bounds as Bounds
+from .model import Model as Model
 from .parameter import Parameter as Parameter
 from .variable import Variable as Variable

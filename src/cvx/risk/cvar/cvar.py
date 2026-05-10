@@ -50,9 +50,9 @@ from typing import Any
 
 import numpy as np
 
+from cvx.core.bounds import Bounds
+from cvx.core.model import Model
 from cvx.core.parameter import Parameter
-from cvx.risk.bounds import Bounds
-from cvx.risk.model import Model
 
 
 @dataclass

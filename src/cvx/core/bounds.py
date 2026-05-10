@@ -11,19 +11,16 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Bounds for portfolio optimization.
+"""Box constraints for optimization variables.
 
-This module provides the Bounds class for defining and enforcing lower and upper
-bounds on portfolio weights or other variables in optimization problems.
+This module provides the :class:`Bounds` class, which tracks lower and upper
+bound constraints for a named group of variables.  It works for any bounded
+quantity — portfolio weights, factor exposures, sector allocations, etc.
 
 Example:
-    Create bounds for a portfolio and query them:
-
     >>> import numpy as np
-    >>> from cvx.risk.bounds import Bounds
-    >>> # Create bounds for 3 assets
+    >>> from cvx.core.bounds import Bounds
     >>> bounds = Bounds(m=3, name="assets")
-    >>> # Update bounds with actual values
     >>> bounds.update(
     ...     lower_assets=np.array([0.0, 0.1, 0.0]),
     ...     upper_assets=np.array([0.5, 0.4, 0.3])
@@ -43,43 +40,38 @@ from typing import Any
 
 import numpy as np
 
+from cvx.core.model import Model
 from cvx.core.parameter import Parameter
-
-from .model import Model
 
 
 @dataclass
 class Bounds(Model):
-    """Representation of bounds for a model.
+    """Box constraints for a named group of optimization variables.
 
-    This dataclass provides functionality to establish and manage bounds for
-    a model. It includes methods to handle bound parameters and update them
-    dynamically. The bounds are stored as :class:`~cvx.risk.parameter.Parameter`
-    objects and are used internally by the portfolio optimizer.
+    Stores lower and upper bounds as :class:`~cvx.core.parameter.Parameter`
+    objects so they can be updated between solves without rebuilding the
+    problem structure.  The ``name`` attribute identifies the variable group
+    (e.g. ``"assets"``, ``"factors"``); bound keys are derived as
+    ``lower_{name}`` / ``upper_{name}``.
 
     Attributes:
-        m: Maximum number of bounds (e.g., number of assets or factors).
-        name: Name for the bounds used in parameter naming (e.g., "assets" or "factors").
+        m: Capacity — maximum number of variables in the group.
+        name: Label for the variable group, used to form parameter key names.
 
     Example:
-        Create and use bounds for portfolio weights:
-
         >>> import numpy as np
-        >>> from cvx.risk.bounds import Bounds
-        >>> # Create bounds with capacity for 5 assets
+        >>> from cvx.core.bounds import Bounds
         >>> bounds = Bounds(m=5, name="assets")
-        >>> # Initialize with actual bounds (can be smaller than m)
         >>> bounds.update(
         ...     lower_assets=np.array([0.0, 0.0, 0.1]),
         ...     upper_assets=np.array([0.5, 0.5, 0.4])
         ... )
-        >>> # Check parameter values
         >>> bounds.parameter["lower_assets"].value[:3]
         array([0. , 0. , 0.1])
         >>> bounds.parameter["upper_assets"].value[:3]
         array([0.5, 0.5, 0.4])
 
-        Bounds can be used with different variable types (factors, sectors, etc.):
+        Any variable group name works:
 
         >>> factor_bounds = Bounds(m=3, name="factors")
         >>> factor_bounds.update(
@@ -95,27 +87,24 @@ class Bounds(Model):
     """
 
     m: int = 0
-    """Maximum number of bounds (e.g., number of assets)."""
+    """Capacity — maximum number of variables."""
 
     name: str = ""
-    """Name for the bounds, used in parameter naming (e.g., 'assets' or 'factors')."""
+    """Label for the variable group."""
 
     def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:
-        """No estimation for bounds.
-
-        Bounds do not provide a risk estimate; they only provide bound constraints.
-        This method raises NotImplementedError.
+        """Not implemented — ``Bounds`` only provides constraint data.
 
         Args:
-            weights: Numpy array representing portfolio weights.
-            **kwargs: Additional keyword arguments.
+            weights: Ignored.
+            **kwargs: Ignored.
 
         Raises:
-            NotImplementedError: Always raised as bounds do not provide risk estimates.
+            NotImplementedError: Always.
 
         Example:
             >>> import numpy as np
-            >>> from cvx.risk.bounds import Bounds
+            >>> from cvx.core.bounds import Bounds
             >>> bounds = Bounds(m=3, name="assets")
             >>> try:
             ...     bounds.estimate(np.zeros(3))
@@ -124,19 +113,13 @@ class Bounds(Model):
             estimate not implemented for Bounds
 
         """
-        raise NotImplementedError("No estimation for bounds")
+        raise NotImplementedError("Bounds does not implement estimate")
 
     def _f(self, str_prefix: str) -> str:
-        """Create a parameter name by appending the name attribute.
-
-        Args:
-            str_prefix: Base string for the parameter name (e.g., "lower" or "upper").
-
-        Returns:
-            Combined parameter name in the format "{str_prefix}_{self.name}".
+        """Return the parameter key ``{str_prefix}_{name}``.
 
         Example:
-            >>> from cvx.risk.bounds import Bounds
+            >>> from cvx.core.bounds import Bounds
             >>> bounds = Bounds(m=3, name="assets")
             >>> bounds._f("lower")
             'lower_assets'
@@ -147,16 +130,11 @@ class Bounds(Model):
         return f"{str_prefix}_{self.name}"
 
     def __post_init__(self) -> None:
-        """Initialize the parameters after the class is instantiated.
-
-        Creates lower and upper bound Parameter objects with appropriate
-        shapes and default values. Lower bounds default to zeros, upper bounds
-        default to ones.
+        """Create lower (zeros) and upper (ones) bound parameters.
 
         Example:
-            >>> from cvx.risk.bounds import Bounds
+            >>> from cvx.core.bounds import Bounds
             >>> bounds = Bounds(m=3, name="assets")
-            >>> # Parameters are automatically created
             >>> bounds.parameter["lower_assets"].shape
             3
             >>> bounds.parameter["upper_assets"].shape
@@ -174,21 +152,18 @@ class Bounds(Model):
         self.parameter[self._f("upper")].value = np.ones(self.m)
 
     def update(self, **kwargs: Any) -> None:
-        """Update the lower and upper bound parameters.
+        """Update bound parameters from keyword arguments.
 
-        This method updates the bound parameters with new values. The input
-        arrays can be shorter than m, in which case remaining values are set
-        to zero.
+        Input arrays shorter than ``m`` are zero-padded on the right.
 
         Args:
-            **kwargs: Keyword arguments containing lower and upper bounds
-                with keys formatted as "{lower/upper}_{self.name}".
+            **kwargs: Must contain ``lower_{name}`` and ``upper_{name}`` keys
+                with numpy arrays of length ≤ ``m``.
 
         Example:
             >>> import numpy as np
-            >>> from cvx.risk.bounds import Bounds
+            >>> from cvx.core.bounds import Bounds
             >>> bounds = Bounds(m=5, name="assets")
-            >>> # Update with bounds for only 3 assets
             >>> bounds.update(
             ...     lower_assets=np.array([0.0, 0.1, 0.2]),
             ...     upper_assets=np.array([0.5, 0.4, 0.3])
@@ -208,15 +183,11 @@ class Bounds(Model):
         self.parameter[self._f("upper")].value = upper_arr
 
     def get_bounds(self) -> tuple[np.ndarray, np.ndarray]:
-        """Return the current lower and upper bound arrays.
-
-        Returns:
-            A tuple ``(lb, ub)`` where each element is a numpy array of
-            length ``m`` containing the current lower and upper bounds.
+        """Return ``(lower, upper)`` bound arrays of length ``m``.
 
         Example:
             >>> import numpy as np
-            >>> from cvx.risk.bounds import Bounds
+            >>> from cvx.core.bounds import Bounds
             >>> bounds = Bounds(m=3, name="assets")
             >>> bounds.update(
             ...     lower_assets=np.array([0.1, 0.2, 0.0]),

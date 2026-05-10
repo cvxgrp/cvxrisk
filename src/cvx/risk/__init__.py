@@ -27,12 +27,9 @@ Example:
     True
 
 Modules:
-    core: Core building blocks (Variable, Parameter)
-    bounds: Bounds constraints for portfolio weights
     cvar: Conditional Value at Risk risk model
     factor: Factor-based risk model
     linalg: Linear algebra utilities (Cholesky, PCA, validation)
-    model: Abstract base class for risk models
     portfolio: Portfolio optimization functions
     rand: Random data generation utilities
     sample: Sample covariance risk model
@@ -56,4 +53,4 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("cvxrisk")
 
-from .model import Model as Model
+from cvx.core.model import Model as Model

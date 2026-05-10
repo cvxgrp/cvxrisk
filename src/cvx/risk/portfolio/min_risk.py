@@ -51,10 +51,10 @@ import clarabel
 import numpy as np
 from scipy import sparse
 
+from cvx.core.model import Model
 from cvx.core.variable import Variable
 from cvx.risk.cvar.cvar import CVar
 from cvx.risk.factor.factor import FactorModel
-from cvx.risk.model import Model
 from cvx.risk.sample.sample import SampleCovariance
 
 # Type alias for user-supplied linear constraints: (a, lb, ub)
@@ -578,7 +578,7 @@ def minrisk_problem(
     directly with Clarabel.
 
     Args:
-        riskmodel: A risk model implementing the :class:`~cvx.risk.model.Model`
+        riskmodel: A risk model implementing the :class:`~cvx.core.model.Model`
             interface. Supported types: :class:`~cvx.risk.sample.SampleCovariance`,
             :class:`~cvx.risk.factor.FactorModel`,
             :class:`~cvx.risk.cvar.CVar`.
