@@ -60,6 +60,10 @@ polars = "polars"
 DEP001 = ["cvx", "sklearn"]  # Ignore missing imports (these are provided by other packages)
 DEP002 = ["scikit-learn", "mosek"]  # Ignore unused direct dependencies
 
+# ty type checker configuration
+[tool.ty.environment]
+extra-paths = ["stubs"]
+
 # Mypy configuration for type checking
 [tool.mypy]
 mypy_path = "src"

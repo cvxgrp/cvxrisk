@@ -124,6 +124,10 @@ line-ending = "auto"
     "RUF001",  # Allow ambiguous unicode in notebooks
     "RUF002",  # Allow ambiguous unicode in notebooks
 ]
+# Type stubs - allow uppercase argument names (conventional in math/solver APIs)
+"stubs/**/*.pyi" = [
+    "N803",  # Allow uppercase args like P, A (standard linear algebra notation)
+]
 # Internal utility scripts - specific exceptions for internal tooling
 ".rhiza/utils/*.py" = [
     "PLW2901",  # Allow loop variable overwriting in utility scripts
