@@ -51,4 +51,4 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("cvxrisk")
 
-from cvx.core.model import Model as Model
+from cvx.core import Model as Model

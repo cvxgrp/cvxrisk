@@ -48,11 +48,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+import clarabel
 import numpy as np
+from scipy import sparse
 
-from cvx.core.bounds import Bounds
-from cvx.core.model import Model
-from cvx.core.parameter import Parameter
+from cvx.core import Bounds, Model, Parameter, Variable
 
 
 @dataclass
@@ -234,3 +234,96 @@ class CVar(Model):
         returns_arr[:, :num_assets] = ret
         self.parameter["R"].value = returns_arr
         self.bounds.update(**kwargs)
+
+    def solve_minrisk(
+        self,
+        weights: Variable,
+        base: np.ndarray,
+        extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
+        y_var: Variable | None = None,
+    ) -> tuple[float | None, float | None, str]:
+        """Build and solve the Clarabel LP for this model."""
+        n = weights.n
+        T = self.n  # noqa: N806
+        k = self.k
+        R = self.parameter["R"].value  # noqa: N806
+        lb_w, ub_w = self.bounds.get_bounds()
+
+        R_n = R[:, :n]  # noqa: N806
+        n_vars = n + 1 + T
+        P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
+        q = np.zeros(n_vars)
+        q[n] = 1.0
+        q[n + 1 :] = 1.0 / k
+
+        A_rows: list[np.ndarray] = []  # noqa: N806
+        b_rows: list[np.ndarray] = []
+        cones: list[Any] = []
+
+        A_cvar = np.zeros((T, n_vars))  # noqa: N806
+        A_cvar[:, :n] = -R_n
+        A_cvar[:, n] = -1.0
+        A_cvar[:, n + 1 :] = -np.eye(T)
+        A_rows.append(A_cvar)
+        b_rows.append(R_n @ base)
+        cones.append(clarabel.NonnegativeConeT(T))
+
+        A_u = np.zeros((T, n_vars))  # noqa: N806
+        A_u[:, n + 1 :] = -np.eye(T)
+        A_rows.append(A_u)
+        b_rows.append(np.zeros(T))
+        cones.append(clarabel.NonnegativeConeT(T))
+
+        A_eq = np.zeros((1, n_vars))  # noqa: N806
+        A_eq[0, :n] = 1.0
+        A_rows.append(A_eq)
+        b_rows.append(np.array([1.0]))
+        cones.append(clarabel.ZeroConeT(1))
+
+        A_lb = np.zeros((n, n_vars))  # noqa: N806
+        A_lb[:, :n] = -np.eye(n)
+        A_rows.append(A_lb)
+        b_rows.append(-lb_w[:n])
+        cones.append(clarabel.NonnegativeConeT(n))
+
+        A_ub = np.zeros((n, n_vars))  # noqa: N806
+        A_ub[:, :n] = np.eye(n)
+        A_rows.append(A_ub)
+        b_rows.append(ub_w[:n])
+        cones.append(clarabel.NonnegativeConeT(n))
+
+        for a, lb_val, ub_val in extra_constraints:
+            a = np.asarray(a)
+            if lb_val is not None and ub_val is not None and lb_val == ub_val:
+                A_extra = np.zeros((1, n_vars))  # noqa: N806
+                A_extra[0, :n] = a
+                A_rows.append(A_extra)
+                b_rows.append(np.array([lb_val]))
+                cones.append(clarabel.ZeroConeT(1))
+            else:
+                if lb_val is not None:
+                    A_extra = np.zeros((1, n_vars))  # noqa: N806
+                    A_extra[0, :n] = -a
+                    A_rows.append(A_extra)
+                    b_rows.append(np.array([-lb_val]))
+                    cones.append(clarabel.NonnegativeConeT(1))
+                if ub_val is not None:
+                    A_extra = np.zeros((1, n_vars))  # noqa: N806
+                    A_extra[0, :n] = a
+                    A_rows.append(A_extra)
+                    b_rows.append(np.array([ub_val]))
+                    cones.append(clarabel.NonnegativeConeT(1))
+
+        A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
+        b = np.concatenate(b_rows)
+
+        settings = clarabel.DefaultSettings()
+        settings.verbose = False
+        sol = clarabel.DefaultSolver(P, q, A, b, cones, settings).solve()
+        status = str(sol.status)
+
+        if "Solved" in status:
+            weights.value = np.array(sol.x[:n])
+            cvar_val = float(q @ sol.x)
+            return cvar_val, cvar_val, status
+        return None, None, status
