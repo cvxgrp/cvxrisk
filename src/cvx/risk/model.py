@@ -44,7 +44,7 @@ from typing import Any
 
 import numpy as np
 
-from .parameter import Parameter
+from .core.parameter import Parameter
 
 
 @dataclass
@@ -79,7 +79,7 @@ class Model(ABC):
         updated without reconstructing the optimization problem:
 
         >>> param = model.parameter['chol']
-        >>> from cvx.risk.parameter import Parameter
+        >>> from cvx.risk.core.parameter import Parameter
         >>> isinstance(param, Parameter)
         True
         >>> param.shape

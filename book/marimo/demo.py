@@ -25,9 +25,9 @@ with app.setup:
     import polars as pl
     from cvx.simulator import Builder
 
+    from cvx.risk.core.variable import Variable
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.sample import SampleCovariance
-    from cvx.risk.variable import Variable
 
     pd.options.plotting.backend = "plotly"
 

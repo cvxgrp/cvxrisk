@@ -51,8 +51,8 @@ from typing import Any
 import numpy as np
 
 from cvx.risk.bounds import Bounds
+from cvx.risk.core.parameter import Parameter
 from cvx.risk.model import Model
-from cvx.risk.parameter import Parameter
 
 
 @dataclass
@@ -79,7 +79,7 @@ class CVar(Model):
         >>> import numpy as np
         >>> from cvx.risk.cvar import CVar
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.risk.core.variable import Variable
         >>> # Create model for 95% CVaR with 50 scenarios and 3 assets
         >>> model = CVar(alpha=0.95, n=50, m=3)
         >>> # Number of tail samples: k = 50 * (1 - 0.95) = 2.5 -> 2

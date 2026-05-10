@@ -6,11 +6,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from cvx.risk.core.variable import Variable
 from cvx.risk.factor import FactorModel
 from cvx.risk.linalg import pca as principal_components
 from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.rand import rand_cov
-from cvx.risk.variable import Variable
 
 
 @pytest.fixture

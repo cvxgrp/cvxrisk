@@ -17,13 +17,13 @@ and as examples of how to use the package in practice.
 import numpy as np
 import pandas as pd
 
+from cvx.risk.core.variable import Variable
 from cvx.risk.cvar import CVar
 from cvx.risk.factor import FactorModel
 from cvx.risk.linalg import pca
 from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.rand import rand_cov
 from cvx.risk.sample import SampleCovariance
-from cvx.risk.variable import Variable
 
 
 def test_sample_covariance_optimization():

@@ -47,9 +47,9 @@ from typing import Any
 import numpy as np
 
 from cvx.risk.bounds import Bounds
+from cvx.risk.core.parameter import Parameter
 from cvx.risk.linalg import cholesky
 from cvx.risk.model import Model
-from cvx.risk.parameter import Parameter
 
 
 @dataclass
@@ -89,7 +89,7 @@ class SampleCovariance(Model):
         Using in optimization:
 
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> from cvx.risk.variable import Variable
+        >>> from cvx.risk.core.variable import Variable
         >>> weights = Variable(2)
         >>> problem = minrisk_problem(model, weights)
         >>> problem.solve()

@@ -11,7 +11,7 @@ Example:
     >>> from cvx.risk import Model
     >>> from cvx.risk.sample import SampleCovariance
     >>> from cvx.risk.portfolio import minrisk_problem
-    >>> from cvx.risk.variable import Variable
+    >>> from cvx.risk.core.variable import Variable
     >>> # Create a risk model
     >>> model = SampleCovariance(num=3)
     >>> model.update(
@@ -27,16 +27,15 @@ Example:
     True
 
 Modules:
+    core: Core building blocks (Variable, Parameter)
     bounds: Bounds constraints for portfolio weights
     cvar: Conditional Value at Risk risk model
     factor: Factor-based risk model
     linalg: Linear algebra utilities (Cholesky, PCA, validation)
     model: Abstract base class for risk models
-    parameter: Parameter class for model parameters
     portfolio: Portfolio optimization functions
     rand: Random data generation utilities
     sample: Sample covariance risk model
-    variable: Variable class for decision variables
 
 """
 

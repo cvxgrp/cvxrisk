@@ -43,8 +43,8 @@ from typing import Any
 
 import numpy as np
 
+from .core.parameter import Parameter
 from .model import Model
-from .parameter import Parameter
 
 
 @dataclass
