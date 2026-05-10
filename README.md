@@ -9,9 +9,9 @@
 ## 📋 Overview
 
 cvxrisk is a Python library for portfolio risk management using convex optimization.
-It provides a flexible framework for implementing various risk models that
-can be used with [CVXPY](https://github.com/cvxpy/cvxpy) to solve portfolio
-optimization problems.
+It provides a flexible framework for implementing various risk models and solves
+optimization problems directly with the [Clarabel](https://github.com/oxfordcontrol/Clarabel.rs)
+conic solver — no cvxpy required.
 
 The library is built around an abstract `Model` class that standardizes
 the interface for different risk models, making it easy to swap between
@@ -20,7 +20,7 @@ them in your optimization problems.
 ## 🚀 Installation
 
 ```bash
-# Install from PyPI (without any convex solver)
+# Install from PyPI
 pip install cvxrisk
 
 # For development installation
@@ -32,21 +32,15 @@ make install
 make marimo
 ```
 
-⚠️ **Warning!** The package does not install a convex solver if not explicitly desired.
-It relies on cvxpy-base. If you use cvxrisk as a dependency
-in your projects you may want to install [clarabel](https://github.com/oxfordcontrol/Clarabel.rs)
-using `pip install cvxrisk[clarabel]` or [mosek](https://www.mosek.com)
-using `pip install cvxrisk[mosek]`.
-
 ## 🔧 Quick Start
 
 cvxrisk makes it easy to formulate and solve portfolio optimization problems:
 
 ```python
-import cvxpy as cp
 import numpy as np
 from cvx.risk.sample import SampleCovariance
 from cvx.risk.portfolio import minrisk_problem
+from cvx.risk.variable import Variable
 
 # Create a risk model
 riskmodel = SampleCovariance(num=2)
@@ -59,17 +53,18 @@ riskmodel.update(
 )
 
 # Define portfolio weights variable
-weights = cp.Variable(2)
+weights = Variable(2)
 
 # Create and solve the optimization problem
 problem = minrisk_problem(riskmodel, weights)
-problem.solve(solver=cp.CLARABEL)
+problem.solve()
 
-# Print the optimal weights with deterministic spacing
+print(problem.status)
 print(np.array2string(np.round(weights.value, 2), separator=" "))
 ```
 
 ```result
+Solved
 [0.75 0.25]
 ```
 

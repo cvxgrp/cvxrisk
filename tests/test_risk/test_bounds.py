@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import cvxpy as cp
 import numpy as np
 import pytest
 
@@ -15,11 +14,10 @@ def test_raise_not_implemented() -> None:
     This test verifies that calling the estimate method on a Bounds object
     raises a NotImplementedError, as this method is not implemented for Bounds.
     """
-    weights = cp.Variable(3)
     bounds = Bounds(m=3, name="assets")
 
     with pytest.raises(NotImplementedError):
-        bounds.estimate(weights)
+        bounds.estimate(np.zeros(3))
 
 
 def test_constraints() -> None:
@@ -27,13 +25,14 @@ def test_constraints() -> None:
 
     This test verifies that:
     1. The update method correctly sets the lower and upper bound parameters
-    2. The constraints method returns the expected number of constraints
+    2. The get_bounds method returns the expected arrays
     """
-    weights = cp.Variable(3)
     bounds = Bounds(m=3, name="assets")
     bounds.update(lower_assets=np.array([0.1, 0.2]), upper_assets=np.array([0.3, 0.4, 0.5]))
 
     assert bounds.parameter["lower_assets"].value == pytest.approx(np.array([0.1, 0.2, 0]))
     assert bounds.parameter["upper_assets"].value == pytest.approx(np.array([0.3, 0.4, 0.5]))
 
-    assert len(bounds.constraints(weights)) == 2
+    lb, ub = bounds.get_bounds()
+    assert lb == pytest.approx(np.array([0.1, 0.2, 0.0]))
+    assert ub == pytest.approx(np.array([0.3, 0.4, 0.5]))

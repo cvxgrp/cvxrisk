@@ -4,7 +4,6 @@ This subpackage provides the SampleCovariance class for risk estimation
 based on the sample covariance matrix.
 
 Example:
-    >>> import cvxpy as cp
     >>> import numpy as np
     >>> from cvx.risk.sample import SampleCovariance
     >>> model = SampleCovariance(num=3)
@@ -13,9 +12,8 @@ Example:
     ...     lower_assets=np.zeros(3),
     ...     upper_assets=np.ones(3)
     ... )
-    >>> weights = cp.Variable(3)
-    >>> risk = model.estimate(weights)
-    >>> isinstance(risk, cp.Expression)
+    >>> risk = model.estimate(np.array([1/3, 1/3, 1/3]))
+    >>> isinstance(risk, float)
     True
 
 Classes:

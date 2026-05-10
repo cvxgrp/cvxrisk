@@ -5,7 +5,6 @@ CVaR, also known as Expected Shortfall, measures the expected loss in the
 tail of the return distribution.
 
 Example:
-    >>> import cvxpy as cp
     >>> import numpy as np
     >>> from cvx.risk.cvar import CVar
     >>> # Create CVaR model
@@ -18,9 +17,9 @@ Example:
     ...     lower_assets=np.zeros(5),
     ...     upper_assets=np.ones(5)
     ... )
-    >>> weights = cp.Variable(5)
-    >>> cvar = model.estimate(weights)
-    >>> isinstance(cvar, cp.Expression)
+    >>> w = np.ones(5) / 5
+    >>> cvar = model.estimate(w)
+    >>> isinstance(cvar, float)
     True
 
 """

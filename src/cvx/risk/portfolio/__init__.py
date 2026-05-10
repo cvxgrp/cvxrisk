@@ -1,22 +1,23 @@
 """Portfolio optimization models.
 
 This subpackage provides functions for creating portfolio optimization problems
-using various risk models.
+using various risk models. Problems are solved directly with the Clarabel solver.
 
 Example:
-    >>> import cvxpy as cp
     >>> import numpy as np
     >>> from cvx.risk.sample import SampleCovariance
     >>> from cvx.risk.portfolio import minrisk_problem
+    >>> from cvx.risk.variable import Variable
     >>> model = SampleCovariance(num=3)
     >>> model.update(
     ...     cov=np.eye(3),
     ...     lower_assets=np.zeros(3),
     ...     upper_assets=np.ones(3)
     ... )
-    >>> weights = cp.Variable(3)
+    >>> weights = Variable(3)
     >>> problem = minrisk_problem(model, weights)
-    >>> problem.is_dcp()
+    >>> problem.solve()
+    >>> bool(abs(sum(weights.value) - 1.0) < 1e-5)
     True
 
 Functions:

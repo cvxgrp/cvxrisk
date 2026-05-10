@@ -1,10 +1,8 @@
 # /// script
 # dependencies = [
 #     "marimo==0.18.4",
-#     "cvxpy-base",
 #     "numpy",
 #     "pandas",
-#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #
@@ -22,13 +20,13 @@ app = marimo.App()
 with app.setup:
     import uuid
 
-    import cvxpy as cp
     import marimo as mo
     import numpy as np
     import pandas as pd
 
     from cvx.risk.factor import FactorModel
     from cvx.risk.portfolio import minrisk_problem
+    from cvx.risk.variable import Variable
 
 
 @app.cell
@@ -107,8 +105,8 @@ def _(ret):
 
 @app.cell
 def _(beta, factors, ret, triangle):
-    w = cp.Variable(1000)
-    y = cp.Variable(100)
+    w = Variable(1000)
+    y = Variable(100)
     _problem = minrisk_problem(triangle, w, y=y)
     triangle.update(
         exposure=beta.values,
@@ -137,7 +135,7 @@ def _(beta, factors, ret, triangle, w, y):
             lower_factors=-0.1 * np.ones(100),
             upper_factors=0.1 * np.ones(100),
         )
-        _problem.solve(ignore_dpp=True, solver="CLARABEL")
+        _problem.solve()
     return
 
 

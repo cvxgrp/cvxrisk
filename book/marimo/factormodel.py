@@ -1,11 +1,9 @@
 # /// script
 # dependencies = [
 #     "marimo==0.18.4",
-#     "cvxpy-base",
 #     "numpy",
 #     "pandas",
 #     "polars",
-#     "clarabel==0.11.1",
 #     "cvxrisk",
 #     "pyarrow"
 # ]
@@ -22,7 +20,6 @@ __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 with app.setup:
-    import cvxpy as cp
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -31,6 +28,7 @@ with app.setup:
     from cvx.risk.factor import FactorModel
     from cvx.risk.linalg import pca
     from cvx.risk.portfolio import minrisk_problem
+    from cvx.risk.variable import Variable
 
 
 @app.cell
@@ -68,21 +66,21 @@ def _(factors, returns):
 
     # test the risk model with uniform weights
     weights = 0.05 * np.ones(20)
-    risk = model.estimate(weights).value
+    risk = model.estimate(weights)
     print(risk)
     return (model,)
 
 
 @app.cell
 def _(model, prices):
-    w = cp.Variable(20)
-    y = cp.Variable(10)
+    w = Variable(20)
+    y = Variable(10)
 
     problem = minrisk_problem(model, w, y=y)
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     print(pd.Series(data=w.value, index=prices.columns))
-    print(model.estimate(w, y=y).value)
+    print(model.estimate(w.value))
 
     # check the solution
     print(f"Check sum of weights: {np.isclose(w.value.sum(), 1.0)}")

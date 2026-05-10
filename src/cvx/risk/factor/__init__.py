@@ -5,7 +5,6 @@ Factor models decompose portfolio risk into systematic (factor) risk and
 idiosyncratic (residual) risk.
 
 Example:
-    >>> import cvxpy as cp
     >>> import numpy as np
     >>> from cvx.risk.factor import FactorModel
     >>> # Create factor model with 5 assets and 2 factors
@@ -20,9 +19,9 @@ Example:
     ...     lower_factors=-np.ones(2),
     ...     upper_factors=np.ones(2)
     ... )
-    >>> weights = cp.Variable(5)
-    >>> risk = model.estimate(weights)
-    >>> isinstance(risk, cp.Expression)
+    >>> w = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+    >>> risk = model.estimate(w)
+    >>> isinstance(risk, float)
     True
 
 """

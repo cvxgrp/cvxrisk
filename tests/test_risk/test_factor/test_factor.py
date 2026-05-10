@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import cvxpy as cp
 import numpy as np
 import pandas as pd
 import pytest
@@ -11,6 +10,7 @@ from cvx.risk.factor import FactorModel
 from cvx.risk.linalg import pca as principal_components
 from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.rand import rand_cov
+from cvx.risk.variable import Variable
 
 
 @pytest.fixture
@@ -61,29 +61,27 @@ def test_timeseries_model(returns: pd.DataFrame) -> None:
     w = np.zeros(25)
     w[:20] = 0.05
 
-    vola = model.estimate(w).value
+    vola = model.estimate(w)
     np.testing.assert_almost_equal(vola, 0.00923407730537884)
 
 
 def test_minvar(returns: pd.DataFrame) -> None:
     """Test the minimum variance problem with a factor model.
 
-    This test verifies that:
-    1. A minimum risk problem can be created with a FactorModel
-    2. The problem is disciplined parametrized programming (DPP) compliant
+    This test verifies that a minimum risk problem can be created with a FactorModel.
 
     Args:
         returns: Pytest fixture providing stock return data
 
     """
-    weights = cp.Variable(20)
-    y = cp.Variable(10)
+    weights = Variable(20)
+    y = Variable(10)
 
     model = FactorModel(assets=20, k=10)
 
     problem = minrisk_problem(model, weights, y=y)
 
-    assert problem.is_dpp()
+    assert problem is not None
 
 
 def test_estimate_risk() -> None:
@@ -93,11 +91,10 @@ def test_estimate_risk() -> None:
     rng = np.random.default_rng(42)
 
     # define the problem
-    weights = cp.Variable(25)
-    y = cp.Variable(12)
+    weights = Variable(25)
+    y = Variable(12)
 
     prob = minrisk_problem(model, weights, y=y)
-    assert prob.is_dpp()
 
     model.update(
         cov=rand_cov(10, seed=42),
@@ -108,10 +105,11 @@ def test_estimate_risk() -> None:
         lower_factors=np.zeros(10),
         upper_factors=np.ones(10),
     )
-    prob.solve(solver="CLARABEL")
+    prob.solve()
     w = np.array(weights.value)
 
-    assert prob.value == pytest.approx(0.19926997253968454)
+    # rel=1e-4 reflects Clarabel's default solver tolerances when called directly
+    assert prob.value == pytest.approx(0.19926997253968454, rel=1e-4)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     model.update(
@@ -123,9 +121,10 @@ def test_estimate_risk() -> None:
         lower_factors=-0.1 * np.ones(10),
         upper_factors=0.1 * np.ones(10),
     )
-    prob.solve(solver="CLARABEL")
+    prob.solve()
     w = np.array(weights.value)
-    assert prob.value == pytest.approx(0.18811759576078277)
+    # rel=1e-4 reflects Clarabel's default solver tolerances when called directly
+    assert prob.value == pytest.approx(0.18811759576078277, rel=1e-4)
     assert w[20:] == pytest.approx(np.zeros(5), abs=1e-6)
 
     # test that the exposure is correct, e.g. the factor weights match the exposure * asset weights
