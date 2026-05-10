@@ -28,6 +28,11 @@ dev = [
     "polars>=1.34.0",      # Fast DataFrame library (alternative to pandas)
     "plotly>=6.5",
 ]
+# Benchmark dependencies – install with: uv sync --group benchmark
+benchmark = [
+    "cvxpy-base>=1.8.2",    # Old cvxpy-based approach for comparison
+    "pytest-benchmark>=5.1", # pytest plugin for timing benchmarks
+]
 
 # Build system configuration
 [build-system]
