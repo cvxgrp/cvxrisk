@@ -40,7 +40,7 @@ cvxrisk makes it easy to formulate and solve portfolio optimization problems:
 import numpy as np
 from cvx.risk.sample import SampleCovariance
 from cvx.risk.portfolio import minrisk_problem
-from cvx.risk.variable import Variable
+from cvx.core import Variable
 
 # Create a risk model
 riskmodel = SampleCovariance(num=2)
