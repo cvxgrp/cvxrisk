@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import cvxpy as cp
 import numpy as np
 
 from cvx.risk.portfolio.min_risk import minrisk_problem
 from cvx.risk.sample import SampleCovariance
+from cvx.risk.variable import Variable
 
 
 def test_minrisk_problem_basic():
@@ -14,12 +14,12 @@ def test_minrisk_problem_basic():
 
     This function verifies that a simple risk optimization problem can be created, solved
     successfully, and yields expected solutions under given conditions. It checks for
-    validity, optimality, and adherence to portfolio constraints using basic assertions.
+    validity, solution optimality, and adherence to portfolio constraints using basic assertions.
 
     Raises:
-        AssertionError: If any of the validation checks fail, such as problem validity,
-        DCP compliance, solution optimality, portfolio constraints (e.g., weights summing
-        to 1), or specific expected behavior derived from the covariance matrix.
+        AssertionError: If any of the validation checks fail, such as solution optimality,
+        portfolio constraints (e.g., weights summing to 1), or specific expected behavior
+        derived from the covariance matrix.
 
     """
     # Create a simple risk model
@@ -27,22 +27,18 @@ def test_minrisk_problem_basic():
     riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
 
     # Define portfolio weights variable
-    weights = cp.Variable(2)
+    weights = Variable(2)
 
     # Create the optimization problem
     problem = minrisk_problem(riskmodel, weights)
 
-    # Check that the problem is valid
-    assert isinstance(problem, cp.Problem)
-    assert problem.is_dcp()
-
     # Solve the problem
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     w = np.array(weights.value)
 
     # Check that the problem was solved successfully
-    assert problem.status == cp.OPTIMAL
+    assert "Solved" in problem.status
 
     # Check that the weights sum to 1
     assert np.isclose(np.sum(w), 1.0)
@@ -62,7 +58,7 @@ def test_minrisk_problem_with_base():
     riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
 
     # Define portfolio weights variable
-    weights = cp.Variable(2)
+    weights = Variable(2)
 
     # Define a base portfolio (e.g., for tracking error minimization)
     base = np.array([0.5, 0.5])
@@ -70,15 +66,11 @@ def test_minrisk_problem_with_base():
     # Create the optimization problem
     problem = minrisk_problem(riskmodel, weights, base=base)
 
-    # Check that the problem is valid
-    assert isinstance(problem, cp.Problem)
-    assert problem.is_dcp()
-
     # Solve the problem
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     # Check that the problem was solved successfully
-    assert problem.status == cp.OPTIMAL
+    assert "Solved" in problem.status
 
     # Check that the weights sum to 1
     assert np.isclose(np.sum(weights.value), 1.0)
@@ -94,25 +86,21 @@ def test_minrisk_problem_with_additional_constraints():
     riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
 
     # Define portfolio weights variable
-    weights = cp.Variable(2)
+    weights = Variable(2)
 
-    # Define additional constraints
-    additional_constraints = [weights[0] >= 0.3]  # At least 30% in the first asset
+    # Define additional constraints: w[0] >= 0.3
+    additional_constraints = [(np.array([1.0, 0.0]), 0.3, None)]
 
     # Create the optimization problem
     problem = minrisk_problem(riskmodel, weights, constraints=additional_constraints)
 
-    # Check that the problem is valid
-    assert isinstance(problem, cp.Problem)
-    assert problem.is_dcp()
-
     # Solve the problem
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     w = np.array(weights.value)
 
     # Check that the problem was solved successfully
-    assert problem.status == cp.OPTIMAL
+    assert "Solved" in problem.status
 
     # Check that the weights sum to 1
     assert np.isclose(np.sum(w), 1.0)

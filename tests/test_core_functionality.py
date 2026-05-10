@@ -14,7 +14,6 @@ These tests serve both as verification of the package's functionality
 and as examples of how to use the package in practice.
 """
 
-import cvxpy as cp
 import numpy as np
 import pandas as pd
 
@@ -24,6 +23,7 @@ from cvx.risk.linalg import pca
 from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.rand import rand_cov
 from cvx.risk.sample import SampleCovariance
+from cvx.risk.variable import Variable
 
 
 def test_sample_covariance_optimization():
@@ -46,20 +46,20 @@ def test_sample_covariance_optimization():
     riskmodel.update(cov=cov_matrix, lower_assets=np.zeros(n_assets), upper_assets=np.ones(n_assets))
 
     # Define portfolio weights variable
-    weights = cp.Variable(n_assets)
+    weights = Variable(n_assets)
 
     # Create and solve the optimization problem
     problem = minrisk_problem(riskmodel, weights)
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     # Verify the solution
-    assert problem.status == "optimal"
+    assert "Solved" in problem.status
     assert np.isclose(np.sum(weights.value), 1.0)
     assert np.all(weights.value >= -1e-6)  # Allow for small numerical errors
 
     # Print the optimal weights and risk
     print(f"Optimal weights: {weights.value}")
-    print(f"Portfolio risk: {riskmodel.estimate(weights).value}")
+    print(f"Portfolio risk: {riskmodel.estimate(weights.value)}")
 
 
 def test_factor_model_optimization():
@@ -99,22 +99,22 @@ def test_factor_model_optimization():
     )
 
     # Define portfolio weights and factor exposures variables
-    w = cp.Variable(n_assets)
-    y = cp.Variable(n_factors)
+    w = Variable(n_assets)
+    y = Variable(n_factors)
 
     # Create and solve the optimization problem
     problem = minrisk_problem(model, w, y=y)
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     # Verify the solution
-    assert problem.status == "optimal"
+    assert "Solved" in problem.status
     assert np.isclose(np.sum(w.value), 1.0)
     assert np.all(w.value >= -1e-6)  # Allow for small numerical errors
 
     # Print the optimal weights, factor exposures, and risk
     print(f"Optimal weights: {w.value}")
     print(f"Factor exposures: {y.value}")
-    print(f"Portfolio risk: {model.estimate(w, y=y).value}")
+    print(f"Portfolio risk: {model.estimate(w.value)}")
 
 
 def test_cvar_optimization():
@@ -143,20 +143,20 @@ def test_cvar_optimization():
     model.update(returns=historical_returns, lower_assets=np.zeros(n_assets), upper_assets=np.ones(n_assets))
 
     # Define portfolio weights variable
-    weights = cp.Variable(n_assets)
+    weights = Variable(n_assets)
 
     # Create and solve the optimization problem
     problem = minrisk_problem(model, weights)
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     # Verify the solution
-    assert problem.status == "optimal"
+    assert "Solved" in problem.status
     assert np.isclose(np.sum(weights.value), 1.0)
     assert np.all(weights.value >= -1e-6)  # Allow for small numerical errors
 
     # Print the optimal weights and CVaR
     print(f"Optimal weights: {weights.value}")
-    print(f"Portfolio CVaR: {model.estimate(weights).value}")
+    print(f"Portfolio CVaR: {model.estimate(weights.value)}")
 
 
 def test_combined_optimization():
@@ -189,40 +189,40 @@ def test_combined_optimization():
     cvar_model.update(returns=returns, lower_assets=np.zeros(n_assets), upper_assets=np.ones(n_assets))
 
     # Define portfolio weights variable
-    weights_sample = cp.Variable(n_assets)
-    weights_cvar = cp.Variable(n_assets)
+    weights_sample = Variable(n_assets)
+    weights_cvar = Variable(n_assets)
 
     # Create and solve the optimization problems
     problem_sample = minrisk_problem(sample_model, weights_sample)
-    problem_sample.solve(solver="CLARABEL")
+    problem_sample.solve()
 
     problem_cvar = minrisk_problem(cvar_model, weights_cvar)
-    problem_cvar.solve(solver="CLARABEL")
+    problem_cvar.solve()
 
     # Verify the solutions
-    assert problem_sample.status == "optimal"
-    assert problem_cvar.status == "optimal"
+    assert "Solved" in problem_sample.status
+    assert "Solved" in problem_cvar.status
 
     # Compare the results
     print("Sample Covariance optimal weights:")
     print(weights_sample.value)
-    print(f"Sample Covariance risk: {sample_model.estimate(weights_sample).value}")
+    print(f"Sample Covariance risk: {sample_model.estimate(weights_sample.value)}")
 
     print("\nCVaR optimal weights:")
     print(weights_cvar.value)
-    print(f"CVaR risk: {cvar_model.estimate(weights_cvar).value}")
+    print(f"CVaR risk: {cvar_model.estimate(weights_cvar.value)}")
 
     # Calculate the risk of each portfolio using the other risk model
-    print(f"\nSample portfolio evaluated with CVaR: {cvar_model.estimate(weights_sample).value}")
-    print(f"CVaR portfolio evaluated with Sample Covariance: {sample_model.estimate(weights_cvar).value}")
+    print(f"\nSample portfolio evaluated with CVaR: {cvar_model.estimate(weights_sample.value)}")
+    print(f"CVaR portfolio evaluated with Sample Covariance: {sample_model.estimate(weights_cvar.value)}")
 
 
 def test_custom_constraints():
-    """Test portfolio optimization with custom constraints.
+    """Test portfolio optimization with custom linear constraints.
 
     This test demonstrates:
     1. Creating a risk model
-    2. Adding custom constraints to the optimization problem
+    2. Adding linear constraints to the optimization problem
     3. Solving the constrained optimization problem
     4. Verifying the solution satisfies all constraints
     """
@@ -237,36 +237,30 @@ def test_custom_constraints():
     riskmodel.update(cov=cov_matrix, lower_assets=np.zeros(n_assets), upper_assets=np.ones(n_assets))
 
     # Define portfolio weights variable
-    weights = cp.Variable(n_assets)
+    weights = Variable(n_assets)
 
-    # Create custom constraints
+    # Create custom constraints as (a, lb, ub) tuples
 
     # 1. Sector constraints: assume first 3 assets are in sector 1, next 3 in sector 2, rest in sector 3
-    sector1_weights = weights[:3]
-    sector2_weights = weights[3:6]
-    sector3_weights = weights[6:]
+    sector1 = np.zeros(n_assets)
+    sector1[:3] = 1.0
+    sector2 = np.zeros(n_assets)
+    sector2[3:6] = 1.0
+    sector3 = np.zeros(n_assets)
+    sector3[6:] = 1.0
 
-    sector_constraints = [
-        cp.sum(sector1_weights) <= 0.4,  # Sector 1 <= 40%
-        cp.sum(sector2_weights) >= 0.2,  # Sector 2 >= 20%
-        cp.sum(sector3_weights) <= 0.5,  # Sector 3 <= 50%
+    custom_constraints = [
+        (sector1, None, 0.4),  # Sector 1 <= 40%
+        (sector2, 0.2, None),  # Sector 2 >= 20%
+        (sector3, None, 0.5),  # Sector 3 <= 50%
     ]
-
-    # 2. Tracking error constraint: assume we have a benchmark
-    benchmark = np.ones(n_assets) / n_assets  # Equal weight benchmark
-    tracking_constraints = [
-        cp.sum(cp.abs(weights - benchmark)) <= 0.5  # Limit total deviation from benchmark
-    ]
-
-    # Combine all custom constraints
-    custom_constraints = sector_constraints + tracking_constraints
 
     # Create and solve the optimization problem with custom constraints
     problem = minrisk_problem(riskmodel, weights, constraints=custom_constraints)
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     # Verify the solution
-    assert problem.status == "optimal"
+    assert "Solved" in problem.status
     assert np.isclose(np.sum(weights.value), 1.0)
     assert np.all(weights.value >= -1e-6)  # Allow for small numerical errors
 
@@ -275,13 +269,9 @@ def test_custom_constraints():
     assert np.sum(weights.value[3:6]) >= 0.2 - 1e-6
     assert np.sum(weights.value[6:]) <= 0.5 + 1e-6
 
-    # Verify tracking error constraint
-    assert np.sum(np.abs(weights.value - benchmark)) <= 0.5 + 1e-6
-
     # Print the optimal weights and risk
     print(f"Optimal weights: {weights.value}")
-    print(f"Portfolio risk: {riskmodel.estimate(weights).value}")
+    print(f"Portfolio risk: {riskmodel.estimate(weights.value)}")
     print(f"Sector 1 weight: {np.sum(weights.value[:3])}")
     print(f"Sector 2 weight: {np.sum(weights.value[3:6])}")
     print(f"Sector 3 weight: {np.sum(weights.value[6:])}")
-    print(f"Tracking error: {np.sum(np.abs(weights.value - benchmark))}")

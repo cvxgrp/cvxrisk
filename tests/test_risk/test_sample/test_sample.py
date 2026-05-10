@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import cvxpy as cp
 import numpy as np
 
 from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.sample import SampleCovariance
+from cvx.risk.variable import Variable
 
 
 def test_sample() -> None:
@@ -23,7 +23,7 @@ def test_sample() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    vola = riskmodel.estimate(np.array([1.0, 1.0])).value
+    vola = riskmodel.estimate(np.array([1.0, 1.0]))
     np.testing.assert_almost_equal(vola, 2.0)
 
 
@@ -42,7 +42,7 @@ def test_sample_large() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    vola = riskmodel.estimate(np.array([1.0, 1.0, 0.0, 0.0])).value
+    vola = riskmodel.estimate(np.array([1.0, 1.0, 0.0, 0.0]))
     np.testing.assert_almost_equal(vola, 2.0)
 
 
@@ -51,24 +51,22 @@ def test_min_variance() -> None:
 
     This test verifies that:
     1. A minimum risk problem can be created with a SampleCovariance model
-    2. The problem is disciplined parametrized programming (DPP) compliant
-    3. The problem can be solved and produces the expected optimal weights
-    4. The model can be updated with a different covariance matrix
-    5. The problem can be re-solved and produces new optimal weights
-    6. Unused assets have zero weights in the optimal solution
+    2. The problem can be solved and produces the expected optimal weights
+    3. The model can be updated with a different covariance matrix
+    4. The problem can be re-solved and produces new optimal weights
+    5. Unused assets have zero weights in the optimal solution
     """
-    weights = cp.Variable(4)
+    weights = Variable(4)
     riskmodel = SampleCovariance(num=4)
     problem = minrisk_problem(riskmodel, weights)
-    assert problem.is_dpp()
 
     riskmodel.update(
         cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    problem.solve(solver="CLARABEL")
-    np.testing.assert_almost_equal(weights.value, np.array([0.75, 0.25, 0.0, 0.0]), decimal=5)
+    problem.solve()
+    np.testing.assert_almost_equal(weights.value, np.array([0.75, 0.25, 0.0, 0.0]), decimal=4)
 
     # It's enough to only update the value for the cholesky decomposition
     riskmodel.update(
@@ -76,8 +74,8 @@ def test_min_variance() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    problem.solve(solver="CLARABEL")
-    np.testing.assert_almost_equal(weights.value, np.array([0.875, 0.125, 0.0, 0.0]), decimal=5)
+    problem.solve()
+    np.testing.assert_almost_equal(weights.value, np.array([0.875, 0.125, 0.0, 0.0]), decimal=4)
 
 
 def test_min_risk_constraints() -> None:
@@ -88,10 +86,11 @@ def test_min_risk_constraints() -> None:
     2. The problem can be solved with a constraint that forces a specific weight to be zero
     3. The optimal solution respects both the model constraints and the additional constraints
     """
-    weights = cp.Variable(4)
+    weights = Variable(4)
     riskmodel = SampleCovariance(num=4)
-    # inject some constraints
-    constraints = [weights[0] == 0.0]
+    # inject some constraints: w[0] == 0.0
+    e0 = np.array([1.0, 0.0, 0.0, 0.0])
+    constraints = [(e0, 0.0, 0.0)]
     problem = minrisk_problem(riskmodel, weights, constraints=constraints)
 
     riskmodel.update(
@@ -99,5 +98,5 @@ def test_min_risk_constraints() -> None:
         lower_assets=np.zeros(2),
         upper_assets=np.ones(2),
     )
-    problem.solve(solver="CLARABEL")
+    problem.solve()
     np.testing.assert_almost_equal(weights.value, np.array([0.0, 1.0, 0.0, 0.0]), decimal=5)

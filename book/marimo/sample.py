@@ -1,9 +1,7 @@
 # /// script
 # dependencies = [
 #     "marimo==0.18.4",
-#     "cvxpy-base",
 #     "numpy",
-#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #
@@ -19,13 +17,13 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 with app.setup:
-    import cvxpy as cp
     import marimo as mo
     import numpy as np
 
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.rand import rand_cov
     from cvx.risk.sample import SampleCovariance
+    from cvx.risk.variable import Variable
 
 
 @app.cell
@@ -37,7 +35,7 @@ def _():
 @app.cell
 def _():
     def problem(n):
-        weights = cp.Variable(n)
+        weights = Variable(n)
         _riskmodel = SampleCovariance(num=n)
         _problem = minrisk_problem(_riskmodel, weights)
 
@@ -53,7 +51,7 @@ def _(problem):
     _problem, _riskmodel = problem(_n)
     for _i in range(100):
         _riskmodel.update(cov=_a, lower_assets=np.zeros(48), upper_assets=np.ones(48))
-        _problem.solve(solver="CLARABEL")
+        _problem.solve()
     return
 
 
@@ -64,7 +62,7 @@ def _(problem):
     for _i in range(100):
         _problem, _riskmodel = problem(_a.shape[0])
         _riskmodel.update(cov=_a, lower_assets=np.zeros(48), upper_assets=np.ones(48))
-        _problem.solve(solver="CLARABEL")
+        _problem.solve()
     return
 
 

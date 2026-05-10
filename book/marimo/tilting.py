@@ -1,10 +1,8 @@
 # /// script
 # dependencies = [
 #     "marimo==0.18.4",
-#     "cvxpy-base",
 #     "numpy",
 #     "pandas",
-#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #
@@ -20,7 +18,6 @@ __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 with app.setup:
-    import cvxpy as cp
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -28,6 +25,7 @@ with app.setup:
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.rand import rand_cov
     from cvx.risk.sample import SampleCovariance
+    from cvx.risk.variable import Variable
 
 
 @app.cell
@@ -88,7 +86,7 @@ def _():
     mo.md(
         r"""
     For this problem we have enhanced the builtin minrisk function.
-    One can now inject convex constraints.
+    One can now inject linear constraints as (a, lb, ub) tuples.
     """
     )
     return
@@ -103,8 +101,8 @@ def _():
     # those are the market weights for our 5 markets
     w_sp = pd.Series(index=assets, data=[0.1, 0.2, 0.3, 0.1, 0.3])
 
-    # we need the cvxpy variable for the weights
-    weights = cp.Variable(name="weights", shape=len(assets))
+    # the Variable for the weights
+    weights = Variable(len(assets))
 
     # Let's define a sample covariance riskmodel
     riskmodel = SampleCovariance(num=len(assets))
@@ -120,8 +118,7 @@ def _(assets, riskmodel, w_sp, weights):
     # without the tilting constraint. We reproduce (as predicted) w_sp.
     problem = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=[])
 
-    print(problem)
-    problem.solve(solver="CLARABEL")
+    problem.solve()
 
     solution = pd.Series(index=assets, data=weights.value)
     print(solution)
@@ -130,13 +127,12 @@ def _(assets, riskmodel, w_sp, weights):
 
 @app.cell
 def _(assets, riskmodel, v, w_sp, weights):
-    # Now we specify the tilting constraint
-    constraints = [v.to_numpy() @ weights == 0.5]
+    # Now we specify the tilting constraint: v @ w == 0.5 as (a, lb, ub) with lb == ub
+    constraints = [(v.to_numpy(), 0.5, 0.5)]
     # We inject the constraints
     problem_tilt = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=constraints)
 
-    print(problem_tilt)
-    problem_tilt.solve(solver="CLARABEL")
+    problem_tilt.solve()
 
     # The solution is different from the previous problem
     solution_tilt = pd.Series(index=assets, data=weights.value)

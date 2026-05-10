@@ -1,11 +1,9 @@
 # /// script
 # dependencies = [
 #     "marimo==0.18.4",
-#     "cvxpy-base",
 #     "pandas",
 #     "polars",
 #     "cvxsimulator",
-#     "clarabel==0.11.1",
 #     "cvxrisk"
 # ]
 #
@@ -21,7 +19,6 @@ __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 with app.setup:
-    import cvxpy as cp
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -30,6 +27,7 @@ with app.setup:
 
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.sample import SampleCovariance
+    from cvx.risk.variable import Variable
 
     pd.options.plotting.backend = "plotly"
 
@@ -64,7 +62,7 @@ def _(prices, returns):
     # Perform the backtest
     _builder = Builder(prices=prices.truncate(before=start), initial_aum=1e6)
 
-    _w = cp.Variable(len(_builder.prices.columns))
+    _w = Variable(len(_builder.prices.columns))
     _problem = minrisk_problem(_risk_model, _w)
 
     for _t, _state in _builder:
@@ -75,7 +73,7 @@ def _(prices, returns):
         )
 
         # don't reconstruct the problem in every iteration!
-        _problem.solve(solver="CLARABEL")
+        _problem.solve()
 
         _builder.weights = _w.value
         _builder.aum = _state.aum
@@ -95,7 +93,7 @@ def _(prices, returns, start):
     # Perform the backtest
     _builder = Builder(prices=prices.truncate(before=start), initial_aum=1e6)
 
-    _w = cp.Variable(len(_builder.prices.columns))
+    _w = Variable(len(_builder.prices.columns))
     _problem = minrisk_problem(_risk_model, _w)
 
     for _t, _state in _builder:
@@ -106,7 +104,7 @@ def _(prices, returns, start):
         )
 
         # don't reconstruct the problem in every iteration!
-        _problem.solve(solver="CLARABEL")
+        _problem.solve()
 
         _builder.weights = _w.value
         _builder.aum = _state.aum

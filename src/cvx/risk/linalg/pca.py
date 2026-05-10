@@ -136,7 +136,6 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
         Using PCA results for a factor model:
 
         >>> from cvx.risk.factor import FactorModel
-        >>> import cvxpy as cp
         >>> model = FactorModel(assets=10, k=3)
         >>> model.update(
         ...     exposure=result.exposure.values,

@@ -9,7 +9,6 @@ making it a popular choice for risk-averse portfolio optimization.
 Example:
     Create a CVaR model and compute the tail risk:
 
-    >>> import cvxpy as cp
     >>> import numpy as np
     >>> from cvx.risk.cvar import CVar
     >>> # Create CVaR model with 95% confidence level
@@ -23,10 +22,10 @@ Example:
     ...     lower_assets=np.zeros(5),
     ...     upper_assets=np.ones(5)
     ... )
-    >>> # The model is ready for optimization
-    >>> weights = cp.Variable(5)
-    >>> risk = model.estimate(weights)
-    >>> isinstance(risk, cp.Expression)
+    >>> # The model is ready for use
+    >>> w = np.ones(5) / 5
+    >>> risk = model.estimate(w)
+    >>> isinstance(risk, float)
     True
 
 """
@@ -47,13 +46,13 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any
 
-import cvxpy as cvx
 import numpy as np
 
 from cvx.risk.bounds import Bounds
 from cvx.risk.model import Model
+from cvx.risk.parameter import Parameter
 
 
 @dataclass
@@ -75,12 +74,12 @@ class CVar(Model):
         m: Maximum number of assets in the portfolio.
 
     Example:
-        Basic CVaR model setup and optimization:
+        Basic CVaR model setup:
 
-        >>> import cvxpy as cp
         >>> import numpy as np
         >>> from cvx.risk.cvar import CVar
         >>> from cvx.risk.portfolio import minrisk_problem
+        >>> from cvx.risk.variable import Variable
         >>> # Create model for 95% CVaR with 50 scenarios and 3 assets
         >>> model = CVar(alpha=0.95, n=50, m=3)
         >>> # Number of tail samples: k = 50 * (1 - 0.95) = 2.5 -> 2
@@ -95,9 +94,9 @@ class CVar(Model):
         ...     upper_assets=np.ones(3)
         ... )
         >>> # Create and solve optimization
-        >>> weights = cp.Variable(3)
+        >>> weights = Variable(3)
         >>> problem = minrisk_problem(model, weights)
-        >>> _ = problem.solve(solver="CLARABEL")
+        >>> problem.solve()
 
         Mathematical verification of CVaR calculation:
 
@@ -116,7 +115,7 @@ class CVar(Model):
         1
         >>> # For 100% in asset 2, worst return is -0.20
         >>> w = np.array([0.0, 1.0])
-        >>> cvar = model.estimate(w).value
+        >>> cvar = model.estimate(w)
         >>> expected_cvar = 0.20  # negative of worst return
         >>> bool(np.isclose(cvar, expected_cvar, rtol=1e-6))
         True
@@ -160,10 +159,10 @@ class CVar(Model):
 
         """
         self.k = int(self.n * (1 - self.alpha))
-        self.parameter["R"] = cvx.Parameter(shape=(self.n, self.m), name="returns", value=np.zeros((self.n, self.m)))
+        self.parameter["R"] = Parameter(shape=(self.n, self.m), name="returns")
         self.bounds = Bounds(m=self.m, name="assets")
 
-    def estimate(self, weights: cvx.Variable, **kwargs: Any) -> cvx.Expression:
+    def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:
         """Estimate the Conditional Value at Risk (CVaR) for the given weights.
 
         Computes the negative average of the k smallest returns in the portfolio,
@@ -171,14 +170,13 @@ class CVar(Model):
         loss in the worst (1-alpha) fraction of scenarios.
 
         Args:
-            weights: CVXPY variable representing portfolio weights.
+            weights: Numpy array representing portfolio weights.
             **kwargs: Additional keyword arguments (not used).
 
         Returns:
-            CVXPY expression representing the CVaR (expected tail loss).
+            Float representing the CVaR (expected tail loss).
 
         Example:
-            >>> import cvxpy as cp
             >>> import numpy as np
             >>> from cvx.risk.cvar import CVar
             >>> model = CVar(alpha=0.95, n=100, m=3)
@@ -189,19 +187,16 @@ class CVar(Model):
             ...     lower_assets=np.zeros(3),
             ...     upper_assets=np.ones(3)
             ... )
-            >>> weights = cp.Variable(3)
-            >>> cvar = model.estimate(weights)
-            >>> isinstance(cvar, cp.Expression)
+            >>> w = np.array([1/3, 1/3, 1/3])
+            >>> cvar = model.estimate(w)
+            >>> isinstance(cvar, float)
             True
 
         """
-        # R is a matrix of returns, n is the number of rows in R
-        # k is the number of returns in the left tail
-        # average value of the k elements in the left tail
-        return cast(
-            cvx.Expression,
-            -cvx.sum_smallest(self.parameter["R"] @ weights, k=self.k) / self.k,
-        )
+        portfolio_returns = self.parameter["R"].value @ np.asarray(weights)
+        sorted_returns = np.sort(portfolio_returns)
+        # Take the k smallest (worst) returns and average them
+        return float(-np.mean(sorted_returns[: self.k]))
 
     def update(self, **kwargs: Any) -> None:
         """Update the returns data and bounds parameters.
@@ -239,35 +234,3 @@ class CVar(Model):
         returns_arr[:, :num_assets] = ret
         self.parameter["R"].value = returns_arr
         self.bounds.update(**kwargs)
-
-    def constraints(self, weights: cvx.Variable, **kwargs: Any) -> list[cvx.Constraint]:
-        """Return constraints for the CVaR model.
-
-        Returns the asset bounds constraints from the internal bounds object.
-
-        Args:
-            weights: CVXPY variable representing portfolio weights.
-            **kwargs: Additional keyword arguments passed to bounds.constraints().
-
-        Returns:
-            List of CVXPY constraints from the bounds object.
-
-        Example:
-            >>> import cvxpy as cp
-            >>> import numpy as np
-            >>> from cvx.risk.cvar import CVar
-            >>> model = CVar(alpha=0.95, n=50, m=3)
-            >>> np.random.seed(42)
-            >>> returns = np.random.randn(50, 3)
-            >>> model.update(
-            ...     returns=returns,
-            ...     lower_assets=np.zeros(3),
-            ...     upper_assets=np.ones(3)
-            ... )
-            >>> weights = cp.Variable(3)
-            >>> constraints = model.constraints(weights)
-            >>> len(constraints)
-            2
-
-        """
-        return self.bounds.constraints(weights)

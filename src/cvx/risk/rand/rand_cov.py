@@ -67,7 +67,8 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         Use in portfolio optimization:
 
         >>> from cvx.risk.sample import SampleCovariance
-        >>> import cvxpy as cp
+        >>> from cvx.risk.portfolio import minrisk_problem
+        >>> from cvx.risk.variable import Variable
         >>> model = SampleCovariance(num=4)
         >>> cov = rand_cov(4, seed=42)
         >>> model.update(
@@ -75,9 +76,9 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         ...     lower_assets=np.zeros(4),
         ...     upper_assets=np.ones(4)
         ... )
-        >>> weights = cp.Variable(4)
-        >>> risk = model.estimate(weights)
-        >>> isinstance(risk, cp.Expression)
+        >>> weights = Variable(4)
+        >>> risk = model.estimate(np.ones(4) / 4)
+        >>> isinstance(risk, float)
         True
 
         Verify positive definiteness via Cholesky decomposition:
@@ -114,6 +115,7 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         Monte Carlo simulation example:
 
         >>> from cvx.risk.portfolio import minrisk_problem
+        >>> from cvx.risk.variable import Variable
         >>> results = []
         >>> for i in range(5):
         ...     cov = rand_cov(3, seed=i)
@@ -123,9 +125,9 @@ def rand_cov(n: int, seed: int | None = None) -> np.ndarray:
         ...         lower_assets=np.zeros(3),
         ...         upper_assets=np.ones(3)
         ...     )
-        ...     weights = cp.Variable(3)
+        ...     weights = Variable(3)
         ...     prob = minrisk_problem(model, weights)
-        ...     _ = prob.solve(solver="CLARABEL")
+        ...     prob.solve()
         ...     results.append(prob.value)
         >>> len(results)
         5

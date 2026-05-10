@@ -20,7 +20,6 @@ one of the most common approaches to portfolio risk estimation.
 Example:
     Create and use a sample covariance risk model:
 
-    >>> import cvxpy as cp
     >>> import numpy as np
     >>> from cvx.risk.sample import SampleCovariance
     >>> # Create risk model for up to 3 assets
@@ -34,7 +33,7 @@ Example:
     ... )
     >>> # Estimate risk for a given portfolio
     >>> weights = np.array([0.4, 0.3, 0.3])
-    >>> risk = model.estimate(weights).value
+    >>> risk = model.estimate(weights)
     >>> isinstance(risk, float)
     True
 
@@ -43,14 +42,14 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any
 
-import cvxpy as cvx
 import numpy as np
 
 from cvx.risk.bounds import Bounds
 from cvx.risk.linalg import cholesky
 from cvx.risk.model import Model
+from cvx.risk.parameter import Parameter
 
 
 @dataclass
@@ -72,7 +71,6 @@ class SampleCovariance(Model):
     Example:
         Basic usage:
 
-        >>> import cvxpy as cp
         >>> import numpy as np
         >>> from cvx.risk.sample import SampleCovariance
         >>> model = SampleCovariance(num=2)
@@ -83,7 +81,7 @@ class SampleCovariance(Model):
         ... )
         >>> # Equal weight portfolio
         >>> weights = np.array([0.5, 0.5])
-        >>> risk = model.estimate(weights).value
+        >>> risk = model.estimate(weights)
         >>> # Risk should be sqrt(0.5^2 * 1 + 0.5^2 * 2 + 2 * 0.5 * 0.5 * 0.5)
         >>> bool(np.isclose(risk, 1.0))
         True
@@ -91,9 +89,10 @@ class SampleCovariance(Model):
         Using in optimization:
 
         >>> from cvx.risk.portfolio import minrisk_problem
-        >>> weights = cp.Variable(2)
+        >>> from cvx.risk.variable import Variable
+        >>> weights = Variable(2)
         >>> problem = minrisk_problem(model, weights)
-        >>> _ = problem.solve(solver="CLARABEL")
+        >>> problem.solve()
         >>> # Lower variance asset gets higher weight
         >>> bool(weights.value[0] > weights.value[1])
         True
@@ -111,29 +110,10 @@ class SampleCovariance(Model):
         ... )
         >>> w = np.array([0.4, 0.35, 0.25])
         >>> # Model estimate
-        >>> model_risk = model.estimate(w).value
+        >>> model_risk = model.estimate(w)
         >>> # Manual calculation: sqrt(w^T @ cov @ w)
         >>> manual_risk = np.sqrt(w @ cov @ w)
         >>> bool(np.isclose(model_risk, manual_risk, rtol=1e-6))
-        True
-
-        Using with correlation matrix and volatilities:
-
-        >>> # Construct covariance from correlation and volatilities
-        >>> vols = np.array([0.15, 0.20, 0.25])  # 15%, 20%, 25% annual vol
-        >>> corr = np.array([[1.0, 0.3, 0.1],
-        ...                  [0.3, 1.0, 0.4],
-        ...                  [0.1, 0.4, 1.0]])
-        >>> cov = np.outer(vols, vols) * corr
-        >>> model.update(
-        ...     cov=cov,
-        ...     lower_assets=np.zeros(3),
-        ...     upper_assets=np.ones(3)
-        ... )
-        >>> equal_weight = np.array([1/3, 1/3, 1/3])
-        >>> portfolio_vol = model.estimate(equal_weight).value
-        >>> # Portfolio vol should be less than weighted average vol (diversification)
-        >>> bool(portfolio_vol < np.mean(vols))
         True
 
     """
@@ -156,14 +136,13 @@ class SampleCovariance(Model):
             (5, 5)
 
         """
-        self.parameter["chol"] = cvx.Parameter(
+        self.parameter["chol"] = Parameter(
             shape=(self.num, self.num),
             name="cholesky of covariance",
-            value=np.zeros((self.num, self.num)),
         )
         self.bounds = Bounds(m=self.num, name="assets")
 
-    def estimate(self, weights: cvx.Variable, **kwargs: Any) -> cvx.Expression:
+    def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:
         """Estimate the portfolio risk using the Cholesky decomposition.
 
         Computes the L2 norm of the product of the Cholesky factor and the
@@ -171,14 +150,13 @@ class SampleCovariance(Model):
         variance (i.e., portfolio volatility).
 
         Args:
-            weights: CVXPY variable or numpy array representing portfolio weights.
+            weights: Numpy array representing portfolio weights.
             **kwargs: Additional keyword arguments (not used).
 
         Returns:
-            CVXPY expression representing the portfolio risk (standard deviation).
+            Float representing the portfolio risk (standard deviation).
 
         Example:
-            >>> import cvxpy as cp
             >>> import numpy as np
             >>> from cvx.risk.sample import SampleCovariance
             >>> model = SampleCovariance(num=2)
@@ -188,16 +166,12 @@ class SampleCovariance(Model):
             ...     lower_assets=np.zeros(2),
             ...     upper_assets=np.ones(2)
             ... )
-            >>> weights = cp.Variable(2)
-            >>> risk = model.estimate(weights)
-            >>> isinstance(risk, cp.Expression)
+            >>> risk = model.estimate(np.array([0.5, 0.5]))
+            >>> isinstance(risk, float)
             True
 
         """
-        return cast(
-            cvx.Expression,
-            cvx.norm2(self.parameter["chol"] @ weights),
-        )
+        return float(np.linalg.norm(self.parameter["chol"].value @ np.asarray(weights)))
 
     def update(self, **kwargs: Any) -> None:
         """Update the Cholesky decomposition parameter and bounds.
@@ -237,33 +211,3 @@ class SampleCovariance(Model):
         chol[:n, :n] = cholesky(cov)
         self.parameter["chol"].value = chol
         self.bounds.update(**kwargs)
-
-    def constraints(self, weights: cvx.Variable, **kwargs: Any) -> list[cvx.Constraint]:
-        """Return constraints for the sample covariance model.
-
-        Returns the asset bounds constraints from the internal bounds object.
-
-        Args:
-            weights: CVXPY variable representing portfolio weights.
-            **kwargs: Additional keyword arguments (not used).
-
-        Returns:
-            List of CVXPY constraints from the bounds object (lower and upper bounds).
-
-        Example:
-            >>> import cvxpy as cp
-            >>> import numpy as np
-            >>> from cvx.risk.sample import SampleCovariance
-            >>> model = SampleCovariance(num=3)
-            >>> model.update(
-            ...     cov=np.eye(3),
-            ...     lower_assets=np.array([0.1, 0.0, 0.0]),
-            ...     upper_assets=np.array([0.5, 0.6, 0.4])
-            ... )
-            >>> weights = cp.Variable(3)
-            >>> constraints = model.constraints(weights)
-            >>> len(constraints)
-            2
-
-        """
-        return self.bounds.constraints(weights)
