@@ -20,7 +20,7 @@ with app.setup:
     import marimo as mo
     import numpy as np
 
-    from cvx.risk.core.variable import Variable
+    from cvx.core.variable import Variable
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.rand import rand_cov
     from cvx.risk.sample import SampleCovariance

@@ -7,7 +7,7 @@ Example:
     >>> import numpy as np
     >>> from cvx.risk.sample import SampleCovariance
     >>> from cvx.risk.portfolio import minrisk_problem
-    >>> from cvx.risk.core.variable import Variable
+    >>> from cvx.core.variable import Variable
     >>> model = SampleCovariance(num=3)
     >>> model.update(
     ...     cov=np.eye(3),

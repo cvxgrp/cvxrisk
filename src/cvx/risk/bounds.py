@@ -43,7 +43,8 @@ from typing import Any
 
 import numpy as np
 
-from .core.parameter import Parameter
+from cvx.core.parameter import Parameter
+
 from .model import Model
 
 

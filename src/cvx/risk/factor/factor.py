@@ -54,8 +54,8 @@ from typing import Any
 
 import numpy as np
 
+from cvx.core.parameter import Parameter
 from cvx.risk.bounds import Bounds
-from cvx.risk.core.parameter import Parameter
 from cvx.risk.linalg import cholesky
 from cvx.risk.model import Model
 

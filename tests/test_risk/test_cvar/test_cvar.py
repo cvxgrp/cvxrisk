@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from cvx.risk.core.variable import Variable
+from cvx.core.variable import Variable
 from cvx.risk.cvar import CVar
 from cvx.risk.portfolio import minrisk_problem
 
