@@ -6,7 +6,7 @@ validation.
 
 Example:
     >>> import numpy as np
-    >>> from cvx.risk.linalg import cholesky, pca, valid
+    >>> from cvx.risk.linalg import cholesky, pca, rand_cov, valid
     >>> # Cholesky decomposition
     >>> cov = np.array([[4.0, 2.0], [2.0, 5.0]])
     >>> R = cholesky(cov)
@@ -16,6 +16,7 @@ Example:
 Functions:
     cholesky: Compute upper triangular Cholesky decomposition
     pca: Compute principal components of return data
+    rand_cov: Generate a random positive semi-definite covariance matrix
     valid: Extract valid submatrix from a matrix with NaN values
 
 """
@@ -35,4 +36,5 @@ Functions:
 #    limitations under the License.
 from .cholesky import cholesky as cholesky
 from .pca import pca as pca
+from .rand_cov import rand_cov as rand_cov
 from .valid import valid as valid

@@ -20,9 +20,8 @@ import pandas as pd
 from cvx.core.variable import Variable
 from cvx.risk.cvar import CVar
 from cvx.risk.factor import FactorModel
-from cvx.risk.linalg import pca
+from cvx.risk.linalg import pca, rand_cov
 from cvx.risk.portfolio import minrisk_problem
-from cvx.risk.rand import rand_cov
 from cvx.risk.sample import SampleCovariance
 
 

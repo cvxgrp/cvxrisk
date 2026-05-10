@@ -29,9 +29,8 @@ Example:
 Modules:
     cvar: Conditional Value at Risk risk model
     factor: Factor-based risk model
-    linalg: Linear algebra utilities (Cholesky, PCA, validation)
+    linalg: Linear algebra utilities (Cholesky, PCA, rand_cov, validation)
     portfolio: Portfolio optimization functions
-    rand: Random data generation utilities
     sample: Sample covariance risk model
 
 """
