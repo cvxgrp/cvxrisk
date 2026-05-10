@@ -7,7 +7,7 @@ Example:
     Compute the Cholesky decomposition of a covariance matrix:
 
     >>> import numpy as np
-    >>> from cvx.risk.linalg import cholesky
+    >>> from cvx.linalg import cholesky
     >>> # Create a positive definite matrix
     >>> cov = np.array([[4.0, 2.0], [2.0, 5.0]])
     >>> # Compute upper triangular Cholesky factor
@@ -57,7 +57,7 @@ def cholesky(cov: np.ndarray) -> np.ndarray:
         Basic usage with a simple covariance matrix:
 
         >>> import numpy as np
-        >>> from cvx.risk.linalg import cholesky
+        >>> from cvx.linalg import cholesky
         >>> # Identity matrix
         >>> cov = np.eye(3)
         >>> R = cholesky(cov)

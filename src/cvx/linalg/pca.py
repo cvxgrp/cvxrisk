@@ -22,7 +22,7 @@ Example:
 
     >>> import numpy as np
     >>> import pandas as pd
-    >>> from cvx.risk.linalg import pca
+    >>> from cvx.linalg import pca
     >>> # Create sample returns data
     >>> np.random.seed(42)
     >>> returns = pd.DataFrame(
@@ -76,7 +76,7 @@ Attributes:
 Example:
     >>> import numpy as np
     >>> import pandas as pd
-    >>> from cvx.risk.linalg import pca
+    >>> from cvx.linalg import pca
     >>> np.random.seed(42)
     >>> returns = pd.DataFrame(np.random.randn(50, 4))
     >>> result = pca(returns, n_components=2)
@@ -120,7 +120,7 @@ def pca(returns: pd.DataFrame, n_components: int = 10) -> PCA:
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from cvx.risk.linalg import pca
+        >>> from cvx.linalg import pca
         >>> np.random.seed(42)
         >>> # Create returns with 100 periods and 10 assets
         >>> returns = pd.DataFrame(np.random.randn(100, 10))

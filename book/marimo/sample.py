@@ -21,7 +21,7 @@ with app.setup:
     import numpy as np
 
     from cvx.core.variable import Variable
-    from cvx.risk.linalg import rand_cov
+    from cvx.linalg import rand_cov
     from cvx.risk.portfolio import minrisk_problem
     from cvx.risk.sample import SampleCovariance
 

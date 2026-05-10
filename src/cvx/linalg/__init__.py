@@ -6,7 +6,7 @@ validation.
 
 Example:
     >>> import numpy as np
-    >>> from cvx.risk.linalg import cholesky, pca, rand_cov, valid
+    >>> from cvx.linalg import cholesky, pca, rand_cov, valid
     >>> # Cholesky decomposition
     >>> cov = np.array([[4.0, 2.0], [2.0, 5.0]])
     >>> R = cholesky(cov)

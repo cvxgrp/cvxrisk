@@ -8,7 +8,7 @@ Example:
     Extract the valid submatrix from a covariance matrix with missing data:
 
     >>> import numpy as np
-    >>> from cvx.risk.linalg import valid
+    >>> from cvx.linalg import valid
     >>> # Create a covariance matrix with some NaN values on diagonal
     >>> cov = np.array([[np.nan, 0.5, 0.2],
     ...                 [0.5, 2.0, 0.3],
@@ -68,7 +68,7 @@ def valid(matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         Basic usage with a covariance matrix:
 
         >>> import numpy as np
-        >>> from cvx.risk.linalg import valid
+        >>> from cvx.linalg import valid
         >>> # Create a 3x3 matrix with one invalid entry
         >>> cov = np.array([[1.0, 0.5, 0.2],
         ...                 [0.5, np.nan, 0.3],

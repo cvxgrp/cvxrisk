@@ -57,7 +57,7 @@ import numpy as np
 from cvx.core.bounds import Bounds
 from cvx.core.model import Model
 from cvx.core.parameter import Parameter
-from cvx.risk.linalg import cholesky
+from cvx.linalg import cholesky
 
 
 @dataclass

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from cvx.risk.linalg import rand_cov
+from cvx.linalg import rand_cov
 
 
 def test_rand_cov() -> None:
