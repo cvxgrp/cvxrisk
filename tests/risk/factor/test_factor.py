@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import polars as pl
 import pytest
 
 from cvx.core.variable import Variable
@@ -14,7 +15,7 @@ from cvx.risk.portfolio import minrisk_problem
 
 
 @pytest.fixture
-def returns(resource_dir) -> pd.DataFrame:
+def returns(resource_dir) -> pl.DataFrame:
     """Pytest fixture that provides stock return data for testing.
 
     This fixture loads stock price data from a CSV file, calculates returns
@@ -28,10 +29,10 @@ def returns(resource_dir) -> pd.DataFrame:
 
     """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
-    return prices.pct_change().fillna(0.0)
+    return pl.from_pandas(prices.pct_change().fillna(0.0).reset_index(drop=True))
 
 
-def test_timeseries_model(returns: pd.DataFrame) -> None:
+def test_timeseries_model(returns: pl.DataFrame) -> None:
     """Test the FactorModel with time series data.
 
     This test verifies that:
@@ -49,9 +50,9 @@ def test_timeseries_model(returns: pd.DataFrame) -> None:
     model = FactorModel(assets=25, k=10)
 
     model.update(
-        cov=factors.cov.values,
-        exposure=factors.exposure.values,
-        idiosyncratic_risk=factors.idiosyncratic.std().values,
+        cov=factors.cov.to_numpy(),
+        exposure=factors.exposure.to_numpy(),
+        idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
         lower_assets=np.zeros(20),
         upper_assets=np.ones(20),
         lower_factors=np.zeros(10),
@@ -65,7 +66,7 @@ def test_timeseries_model(returns: pd.DataFrame) -> None:
     np.testing.assert_almost_equal(vola, 0.00923407730537884)
 
 
-def test_minvar(returns: pd.DataFrame) -> None:
+def test_minvar(returns: pl.DataFrame) -> None:
     """Test the minimum variance problem with a factor model.
 
     This test verifies that a minimum risk problem can be created with a FactorModel.

@@ -39,7 +39,7 @@ def _():
     prices = prices.to_pandas().set_index("date")
 
     # Estimate a series of historic covariance matrices
-    returns = prices.pct_change().dropna(axis=0, how="all")
+    returns = pl.from_pandas(prices.pct_change().dropna(axis=0, how="all").reset_index(drop=True))
     return prices, returns
 
 
@@ -55,9 +55,9 @@ def _(factors, returns):
 
     # update the model parameters
     model.update(
-        cov=factors.cov,
-        exposure=factors.exposure.values,
-        idiosyncratic_risk=factors.idiosyncratic.std().values,
+        cov=factors.cov.to_numpy(),
+        exposure=factors.exposure.to_numpy(),
+        idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
         lower_assets=np.zeros(20),
         upper_assets=np.ones(20),
         lower_factors=-0.1 * np.ones(10),
