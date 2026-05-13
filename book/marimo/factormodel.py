@@ -45,7 +45,7 @@ def _():
 
 @app.cell
 def _(returns):
-    factors = pca(returns=returns, n_components=10)
+    factors = pca(returns=returns.to_numpy(), n_components=10)
     return (factors,)
 
 
@@ -55,9 +55,9 @@ def _(factors, returns):
 
     # update the model parameters
     model.update(
-        cov=factors.cov.to_numpy(),
-        exposure=factors.exposure.to_numpy(),
-        idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
+        cov=factors.cov,
+        exposure=factors.exposure,
+        idiosyncratic_risk=factors.idiosyncratic.std(axis=0, ddof=1),
         lower_assets=np.zeros(model.assets),
         upper_assets=np.ones(model.assets),
         lower_factors=-0.1 * np.ones(model.k),

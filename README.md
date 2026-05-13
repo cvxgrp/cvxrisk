@@ -102,14 +102,13 @@ smaller set of factors:
 
 ```python
 import numpy as np
-import polars as pl
 from cvx.risk.factor import FactorModel
 from cvx.linalg import pca
 
 # Create some sample returns data
 a = 100
 m = 25
-returns = pl.DataFrame(np.random.randn(a, m))
+returns = np.random.randn(a, m)
 
 # Compute principal components (deterministic using a fixed seed for reproducibility)
 np.random.seed(0)
@@ -118,9 +117,9 @@ factors = pca(returns, n_components=10)
 # Create and update the factor model
 model = FactorModel(assets=m, k=10)
 model.update(
-    cov=factors.cov.to_numpy(),
-    exposure=factors.exposure.to_numpy(),
-    idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
+    cov=factors.cov,
+    exposure=factors.exposure,
+    idiosyncratic_risk=factors.idiosyncratic.std(axis=0, ddof=1),
     lower_assets=np.zeros(m),
     upper_assets=np.ones(m),
     lower_factors=-0.1*np.ones(10),

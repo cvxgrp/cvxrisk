@@ -45,14 +45,14 @@ def test_timeseries_model(returns: pl.DataFrame) -> None:
 
     """
     # Here we compute the factors and regress the returns on them
-    factors = principal_components(returns=returns, n_components=10)
+    factors = principal_components(returns=returns.to_numpy(), n_components=10)
 
     model = FactorModel(assets=25, k=10)
 
     model.update(
-        cov=factors.cov.to_numpy(),
-        exposure=factors.exposure.to_numpy(),
-        idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
+        cov=factors.cov,
+        exposure=factors.exposure,
+        idiosyncratic_risk=factors.idiosyncratic.std(axis=0, ddof=1),
         lower_assets=np.zeros(20),
         upper_assets=np.ones(20),
         lower_factors=np.zeros(10),
