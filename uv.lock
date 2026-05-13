@@ -189,7 +189,6 @@ dependencies = [
     { name = "clarabel" },
     { name = "cvx-linalg" },
     { name = "numpy" },
-    { name = "pandas" },
     { name = "scipy" },
 ]
 
@@ -210,7 +209,6 @@ requires-dist = [
     { name = "clarabel", specifier = ">=0.11.1" },
     { name = "cvx-linalg", specifier = ">=0.2.0" },
     { name = "numpy", specifier = ">=2.3.0" },
-    { name = "pandas", specifier = ">=3.0.3" },
     { name = "scipy", specifier = ">=1.17.1" },
 ]
 
