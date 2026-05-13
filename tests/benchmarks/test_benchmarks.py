@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+from cvx.linalg import cholesky
 
 from cvx.core.variable import Variable
-from cvx.linalg import cholesky
 from cvx.risk.factor import FactorModel
 from cvx.risk.portfolio import minrisk_problem
 from cvx.risk.sample import SampleCovariance
