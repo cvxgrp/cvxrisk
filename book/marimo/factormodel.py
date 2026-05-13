@@ -24,9 +24,9 @@ with app.setup:
     import numpy as np
     import pandas as pd
     import polars as pl
+    from cvx.linalg import pca
 
     from cvx.core.variable import Variable
-    from cvx.linalg import pca
     from cvx.risk.factor import FactorModel
     from cvx.risk.portfolio import minrisk_problem
 

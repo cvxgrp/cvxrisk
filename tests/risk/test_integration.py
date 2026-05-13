@@ -16,9 +16,9 @@ and as examples of how to use the package in practice.
 
 import numpy as np
 import polars as pl
+from cvx.linalg import pca, rand_cov
 
 from cvx.core.variable import Variable
-from cvx.linalg import pca, rand_cov
 from cvx.risk.cvar import CVar
 from cvx.risk.factor import FactorModel
 from cvx.risk.portfolio import minrisk_problem
