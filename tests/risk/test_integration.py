@@ -89,7 +89,7 @@ def test_factor_model_optimization():
     model.update(
         cov=factors.cov,
         exposure=factors.exposure,
-        idiosyncratic_risk=factors.idiosyncratic.std(axis=0),
+        idiosyncratic_risk=factors.idiosyncratic.std(axis=0, ddof=1),
         lower_assets=np.zeros(n_assets),
         upper_assets=np.ones(n_assets),
         lower_factors=-0.1 * np.ones(n_factors),
