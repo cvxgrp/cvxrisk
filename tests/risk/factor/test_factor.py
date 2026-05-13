@@ -25,7 +25,7 @@ def returns(resource_dir) -> pl.DataFrame:
         resource_dir: Pytest fixture providing the path to the test resources directory
 
     Returns:
-        pandas.DataFrame: DataFrame containing stock returns
+        polars.DataFrame: DataFrame containing stock returns
 
     """
     prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
