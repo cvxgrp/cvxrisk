@@ -9,7 +9,7 @@ requires-python = ">=3.11"
 # List of core dependencies required for the package to function
 dependencies = [
     "clarabel>=0.11.1",    # Conic interior-point solver (replaces cvxpy-base)
-    "cvx-linalg>=0.2.0",   # Linear algebra utilities (provides cvx.linalg)
+    "cvx-linalg>=0.3.0",   # Linear algebra utilities (provides cvx.linalg)
     "numpy>=2.3.0",        # Numerical computing library for array operations
     #"pandas>=3.0.3",       # Data manipulation and analysis library
     "scipy>=1.17.1",       # Scientific computing (sparse matrix support)
