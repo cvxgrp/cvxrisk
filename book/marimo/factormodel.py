@@ -58,14 +58,14 @@ def _(factors, returns):
         cov=factors.cov.to_numpy(),
         exposure=factors.exposure.to_numpy(),
         idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
-        lower_assets=np.zeros(20),
-        upper_assets=np.ones(20),
-        lower_factors=-0.1 * np.ones(10),
-        upper_factors=0.1 * np.ones(10),
+        lower_assets=np.zeros(model.assets),
+        upper_assets=np.ones(model.assets),
+        lower_factors=-0.1 * np.ones(model.k),
+        upper_factors=0.1 * np.ones(model.k),
     )
 
     # test the risk model with uniform weights
-    weights = 0.05 * np.ones(20)
+    weights = 0.05 * np.ones(model.assets)
     risk = model.estimate(weights)
     print(risk)
     return (model,)
@@ -73,8 +73,8 @@ def _(factors, returns):
 
 @app.cell
 def _(model, prices):
-    w = Variable(20)
-    y = Variable(10)
+    w = Variable(model.assets)
+    y = Variable(model.k)
 
     problem = minrisk_problem(model, w, y=y)
     problem.solve()
