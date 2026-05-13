@@ -80,6 +80,22 @@ def test_min_variance() -> None:
     np.testing.assert_almost_equal(weights.value, np.array([0.875, 0.125, 0.0, 0.0]), decimal=4)
 
 
+def test_infeasible() -> None:
+    """Infeasible bounds cause solve_minrisk to return None without raising."""
+    weights = Variable(2)
+    riskmodel = SampleCovariance(num=2)
+    problem = minrisk_problem(riskmodel, weights)
+    # lower bounds sum > 1 contradicts the sum=1 equality → infeasible
+    riskmodel.update(
+        cov=np.eye(2),
+        lower_assets=np.array([0.7, 0.7]),
+        upper_assets=np.ones(2),
+    )
+    problem.solve()
+    assert problem.value is None
+    assert "Solved" not in problem.status
+
+
 def test_min_risk_constraints() -> None:
     """Test the minimum risk problem with additional constraints.
 

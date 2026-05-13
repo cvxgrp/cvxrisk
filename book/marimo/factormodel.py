@@ -24,9 +24,9 @@ with app.setup:
     import numpy as np
     import pandas as pd
     import polars as pl
+    from cvx.linalg import pca
 
     from cvx.core.variable import Variable
-    from cvx.linalg import pca
     from cvx.risk.factor import FactorModel
     from cvx.risk.portfolio import minrisk_problem
 
@@ -39,7 +39,7 @@ def _():
     prices = prices.to_pandas().set_index("date")
 
     # Estimate a series of historic covariance matrices
-    returns = prices.pct_change().dropna(axis=0, how="all")
+    returns = pl.from_pandas(prices.pct_change().dropna(axis=0, how="all").reset_index(drop=True))
     return prices, returns
 
 
@@ -55,17 +55,17 @@ def _(factors, returns):
 
     # update the model parameters
     model.update(
-        cov=factors.cov,
-        exposure=factors.exposure.values,
-        idiosyncratic_risk=factors.idiosyncratic.std().values,
-        lower_assets=np.zeros(20),
-        upper_assets=np.ones(20),
-        lower_factors=-0.1 * np.ones(10),
-        upper_factors=0.1 * np.ones(10),
+        cov=factors.cov.to_numpy(),
+        exposure=factors.exposure.to_numpy(),
+        idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
+        lower_assets=np.zeros(model.assets),
+        upper_assets=np.ones(model.assets),
+        lower_factors=-0.1 * np.ones(model.k),
+        upper_factors=0.1 * np.ones(model.k),
     )
 
     # test the risk model with uniform weights
-    weights = 0.05 * np.ones(20)
+    weights = 0.05 * np.ones(model.assets)
     risk = model.estimate(weights)
     print(risk)
     return (model,)
@@ -73,8 +73,8 @@ def _(factors, returns):
 
 @app.cell
 def _(model, prices):
-    w = Variable(20)
-    y = Variable(10)
+    w = Variable(model.assets)
+    y = Variable(model.k)
 
     problem = minrisk_problem(model, w, y=y)
     problem.solve()

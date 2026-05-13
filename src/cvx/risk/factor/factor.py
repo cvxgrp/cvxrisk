@@ -54,10 +54,10 @@ from typing import Any
 
 import clarabel
 import numpy as np
+from cvx.linalg import cholesky
 from scipy import sparse
 
 from cvx.core import Bounds, Model, Parameter, Variable
-from cvx.linalg import cholesky
 
 
 @dataclass

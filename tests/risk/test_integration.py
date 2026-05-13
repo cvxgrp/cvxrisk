@@ -15,10 +15,10 @@ and as examples of how to use the package in practice.
 """
 
 import numpy as np
-import pandas as pd
+import polars as pl
+from cvx.linalg import pca, rand_cov
 
 from cvx.core.variable import Variable
-from cvx.linalg import pca, rand_cov
 from cvx.risk.cvar import CVar
 from cvx.risk.factor import FactorModel
 from cvx.risk.portfolio import minrisk_problem
@@ -81,16 +81,16 @@ def test_factor_model_optimization():
 
     # Generate random returns data
     n_periods = 100
-    returns = pd.DataFrame(rng.standard_normal((n_periods, n_assets)))
+    returns = pl.DataFrame(rng.standard_normal((n_periods, n_assets)))
 
     # Compute principal components
     factors = pca(returns, n_components=n_factors)
 
     # Update the factor model
     model.update(
-        cov=factors.cov.values,
-        exposure=factors.exposure.values,
-        idiosyncratic_risk=factors.idiosyncratic.std().values,
+        cov=factors.cov.to_numpy(),
+        exposure=factors.exposure.to_numpy(),
+        idiosyncratic_risk=factors.idiosyncratic.std().to_numpy().ravel(),
         lower_assets=np.zeros(n_assets),
         upper_assets=np.ones(n_assets),
         lower_factors=-0.1 * np.ones(n_factors),

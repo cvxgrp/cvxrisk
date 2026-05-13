@@ -10,6 +10,48 @@ from cvx.risk.cvar import CVar
 from cvx.risk.portfolio import minrisk_problem
 
 
+def test_extra_constraints() -> None:
+    """Extra constraints (equality, lb-only, ub-only) are passed through solve_minrisk."""
+    model = CVar(alpha=0.95, n=20, m=3)
+    rng = np.random.default_rng(0)
+    weights = Variable(3)
+
+    constraints = [
+        (np.array([1.0, 0.0, 0.0]), 0.4, 0.4),  # equality: w[0] == 0.4
+        (np.array([0.0, 1.0, 0.0]), 0.1, None),  # lb-only: w[1] >= 0.1
+        (np.array([0.0, 0.0, 1.0]), None, 0.7),  # ub-only: w[2] <= 0.7
+    ]
+
+    problem = minrisk_problem(model, weights, constraints=constraints)
+    model.update(
+        returns=rng.standard_normal((20, 3)),
+        lower_assets=np.zeros(3),
+        upper_assets=np.ones(3),
+    )
+    problem.solve()
+    assert "Solved" in problem.status
+    assert np.isclose(weights.value[0], 0.4, atol=1e-4)
+    assert weights.value[1] >= 0.1 - 1e-4
+    assert weights.value[2] <= 0.7 + 1e-4
+
+
+def test_infeasible() -> None:
+    """Infeasible bounds cause solve_minrisk to return None without raising."""
+    model = CVar(alpha=0.95, n=20, m=2)
+    rng = np.random.default_rng(0)
+    weights = Variable(2)
+    problem = minrisk_problem(model, weights)
+    # lower bounds sum > 1 contradicts the sum=1 equality → infeasible
+    model.update(
+        returns=rng.standard_normal((20, 2)),
+        lower_assets=np.array([0.7, 0.7]),
+        upper_assets=np.ones(2),
+    )
+    problem.solve()
+    assert problem.value is None
+    assert "Solved" not in problem.status
+
+
 def test_estimate_risk() -> None:
     """Test the estimate() method of the CVar class.
 

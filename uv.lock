@@ -133,6 +133,19 @@ wheels = [
 ]
 
 [[package]]
+name = "cvx-linalg"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "polars" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7b/14/63b5797a9263f27397efd3bd9a9f53c43ddf925481690e712558b89440e7/cvx_linalg-0.2.0.tar.gz", hash = "sha256:406b07fba57ebe08a22458a0f3f59986e603de0fec414154a0b6506c917cae3e", size = 13029, upload-time = "2026-05-13T03:36:42.176Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2d/f9/e0fb0875344c5c663ee919ad848be6b0bd981bccf1566da5423e08097e6a/cvx_linalg-0.2.0-py3-none-any.whl", hash = "sha256:160f9d791c9d77878420390f843f2c10af1f1a350d9294741268a0765faad0bf", size = 10926, upload-time = "2026-05-13T03:36:41Z" },
+]
+
+[[package]]
 name = "cvxpy-base"
 version = "1.8.2"
 source = { registry = "https://pypi.org/simple" }
@@ -174,8 +187,8 @@ version = "1.4.14"
 source = { editable = "." }
 dependencies = [
     { name = "clarabel" },
+    { name = "cvx-linalg" },
     { name = "numpy" },
-    { name = "pandas" },
     { name = "scipy" },
 ]
 
@@ -187,6 +200,7 @@ benchmark = [
 dev = [
     { name = "cvxsimulator" },
     { name = "marimo" },
+    { name = "pandas" },
     { name = "plotly" },
     { name = "polars" },
 ]
@@ -194,8 +208,8 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "clarabel", specifier = ">=0.11.1" },
+    { name = "cvx-linalg", specifier = ">=0.2.0" },
     { name = "numpy", specifier = ">=2.3.0" },
-    { name = "pandas", specifier = ">=3.0.3" },
     { name = "scipy", specifier = ">=1.17.1" },
 ]
 
@@ -207,6 +221,7 @@ benchmark = [
 dev = [
     { name = "cvxsimulator", specifier = ">=1.4.5" },
     { name = "marimo", specifier = ">=0.23.6" },
+    { name = "pandas", specifier = ">3.0" },
     { name = "plotly", specifier = ">=6.5" },
     { name = "polars", specifier = ">=1.34.0" },
 ]
