@@ -2,8 +2,6 @@
 
 import importlib.metadata
 
-import cvx.simulator
-
 import cvx.risk
 
 
@@ -22,17 +20,3 @@ def test_versions() -> None:
 
     # Print the versions for debugging purposes
     print(f"Package version: {expected_version}")
-
-
-def test_version_simulator():
-    """Test the versioning of the simulator module.
-
-    This function verifies that the simulator module in the cvx package has a
-    defined version and prints it.
-
-    Raises:
-        AssertionError: If the simulator module's version is None.
-
-    """
-    assert cvx.simulator.__version__ is not None
-    print(f"Risk version: {cvx.simulator.__version__}")
