@@ -3,6 +3,7 @@
 #     "marimo==0.18.4",
 #     "pandas",
 #     "polars",
+#     "pyarrow",
 #     "jquantstats",
 #     "cvxrisk"
 # ]
