@@ -4,8 +4,7 @@
 #     "numpy",
 #     "polars",
 #     "cvxrisk",
-#     "cvx-linalg",
-#     "pyarrow"
+#     "cvx-linalg"
 # ]
 #
 # [tool.uv.sources]

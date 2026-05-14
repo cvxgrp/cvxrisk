@@ -47,10 +47,8 @@ packages = ["src/cvx"]  # Only include the cvx package in the wheel
 # Map package names to their actual module names to suppress warnings
 [tool.deptry.package_module_name_map]
 numpy = "numpy"
-pandas = "pandas"
 clarabel = "clarabel"
 scipy = "scipy"
-cvxsimulator = "cvxsimulator"
 marimo = "marimo"
 plotly = "plotly"
 polars = "polars"
