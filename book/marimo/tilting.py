@@ -2,7 +2,7 @@
 # dependencies = [
 #     "marimo==0.18.4",
 #     "numpy",
-#     "pandas",
+#     "polars",
 #     "cvx-linalg",
 #     "cvxrisk"
 # ]
@@ -21,7 +21,7 @@ app = marimo.App(width="medium")
 with app.setup:
     import marimo as mo
     import numpy as np
-    import pandas as pd
+    import polars as pl
     from cvx.linalg import rand_cov
 
     from cvx.core.variable import Variable
@@ -97,10 +97,10 @@ def _():
 def _():
     # Let's start without the tilting constraint
     assets = ["A", "B", "C", "D", "E"]
-    s = pd.DataFrame(index=assets, columns=assets, data=rand_cov(len(assets)))
+    s = pl.DataFrame(dict(zip(assets, rand_cov(len(assets)).T, strict=False)))
 
     # those are the market weights for our 5 markets
-    w_sp = pd.Series(index=assets, data=[0.1, 0.2, 0.3, 0.1, 0.3])
+    w_sp = pl.Series(values=[0.1, 0.2, 0.3, 0.1, 0.3])
 
     # the Variable for the weights
     weights = Variable(len(assets))
@@ -110,18 +110,18 @@ def _():
     riskmodel.update(cov=s.to_numpy(), lower_assets=np.zeros(len(assets)), upper_assets=np.ones(len(assets)))
 
     # the tilting vector
-    v = pd.Series(index=assets, data=[0.1, 0.1, 0.5, 0.0, 0.5])
+    v = pl.Series(values=[0.1, 0.1, 0.5, 0.0, 0.5])
     return assets, riskmodel, v, w_sp, weights
 
 
 @app.cell
 def _(assets, riskmodel, w_sp, weights):
     # without the tilting constraint. We reproduce (as predicted) w_sp.
-    problem = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=[])
+    problem = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.to_numpy(), constraints=[])
 
     problem.solve()
 
-    solution = pd.Series(index=assets, data=weights.value)
+    solution = pl.DataFrame({"asset": assets, "weight": weights.value})
     print(solution)
     return
 
@@ -131,16 +131,16 @@ def _(assets, riskmodel, v, w_sp, weights):
     # Now we specify the tilting constraint: v @ w == 0.5 as (a, lb, ub) with lb == ub
     constraints = [(v.to_numpy(), 0.5, 0.5)]
     # We inject the constraints
-    problem_tilt = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.values, constraints=constraints)
+    problem_tilt = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.to_numpy(), constraints=constraints)
 
     problem_tilt.solve()
 
     # The solution is different from the previous problem
-    solution_tilt = pd.Series(index=assets, data=weights.value)
+    solution_tilt = pl.DataFrame({"asset": assets, "weight": weights.value})
     print(solution_tilt)
     # We check whether the tilting constraint is respected
     print("Tilting value. Should be close to 0.5:")
-    print(solution_tilt.to_numpy() @ v.to_numpy())
+    print(weights.value @ v.to_numpy())
     return
 
 

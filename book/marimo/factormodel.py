@@ -2,7 +2,6 @@
 # dependencies = [
 #     "marimo==0.18.4",
 #     "numpy",
-#     "pandas",
 #     "polars",
 #     "cvxrisk",
 #     "cvx-linalg",
@@ -23,7 +22,6 @@ app = marimo.App(width="medium")
 with app.setup:
     import marimo as mo
     import numpy as np
-    import pandas as pd
     import polars as pl
     from cvx.linalg import pca
 
@@ -37,11 +35,11 @@ def _():
     # Load some historic stock prices
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
 
-    prices = prices.to_pandas().set_index("date")
+    asset_cols = [c for c in prices.columns if c != "date"]
 
-    # Estimate a series of historic covariance matrices
-    returns = pl.from_pandas(prices.pct_change().dropna(axis=0, how="all").reset_index(drop=True))
-    return prices, returns
+    # Compute percentage returns in polars
+    returns = prices.select(pl.col(asset_cols).pct_change()).drop_nulls()
+    return prices, returns, asset_cols
 
 
 @app.cell
@@ -73,14 +71,14 @@ def _(factors, returns):
 
 
 @app.cell
-def _(model, prices):
+def _(asset_cols, model):
     w = Variable(model.assets)
     y = Variable(model.k)
 
     problem = minrisk_problem(model, w, y=y)
     problem.solve()
 
-    print(pd.Series(data=w.value, index=prices.columns))
+    print(pl.DataFrame({"asset": asset_cols, "weight": w.value}))
     print(model.estimate(w.value))
 
     # check the solution

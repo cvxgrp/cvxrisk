@@ -2,7 +2,6 @@
 # dependencies = [
 #     "marimo==0.18.4",
 #     "numpy",
-#     "pandas",
 #     "cvxrisk"
 # ]
 #
@@ -22,7 +21,6 @@ with app.setup:
 
     import marimo as mo
     import numpy as np
-    import pandas as pd
 
     from cvx.core.variable import Variable
     from cvx.risk.factor import FactorModel
@@ -42,34 +40,23 @@ def _random():
 
     def random_weights(assets):
         """Construct a vector of non-negative random weights. Their sum shall be 1."""
-        # Get some random weights
-        weights = pd.Series(index=assets, data=rng.random(len(assets)))
-        return weights / weights.sum()
+        w = rng.random(len(assets))
+        return w / w.sum()
 
     def random_factors(t, n=2, const_factor=True):
         """Construct N random factor time series for T timestamps."""
-        factors = pd.DataFrame(
-            index=range(1, t + 1),
-            columns=[f"F{i}" for i in range(n)],
-            data=rng.standard_normal((t, n)),
-        )
-        # add the constant factor
+        data = rng.standard_normal((t, n))
         if const_factor:
-            factors["const"] = 1
-        return factors
+            data = np.column_stack([data, np.ones(t)])
+        return data
 
     def random_beta(assets, factors):
         """Construct a random exposure matrix."""
-        data = rng.standard_normal((factors.shape[1], len(assets)))
-        return pd.DataFrame(columns=assets, index=factors.columns, data=data)
+        return rng.standard_normal((factors.shape[1], len(assets)))
 
     def random_noise(frame):
         """Construct a frame of random noise with exactly the same dimensions as the input frame."""
-        return pd.DataFrame(
-            columns=frame.columns,
-            index=frame.index,
-            data=rng.standard_normal((frame.shape[0], frame.shape[1])),
-        )
+        return rng.standard_normal(frame.shape)
 
     def random_assets(num):
         """Construct a vector of random assets."""
@@ -99,7 +86,7 @@ def _(beta, factors, random_noise):
 
 @app.cell
 def _(ret):
-    triangle = FactorModel(assets=len(ret.columns), k=100)
+    triangle = FactorModel(assets=ret.shape[1], k=100)
     return (triangle,)
 
 
@@ -109,9 +96,9 @@ def _(beta, factors, ret, triangle):
     y = Variable(100)
     _problem = minrisk_problem(triangle, w, y=y)
     triangle.update(
-        exposure=beta.values,
-        cov=factors.cov().values,
-        idiosyncratic_risk=pd.DataFrame(data=ret - factors @ beta, index=ret.index, columns=ret.columns).std().values,
+        exposure=beta,
+        cov=np.cov(factors.T),
+        idiosyncratic_risk=(ret - factors @ beta).std(axis=0),
         lower_assets=np.zeros(1000),
         upper_assets=np.ones(1000),
         lower_factors=-0.1 * np.ones(100),
@@ -125,11 +112,9 @@ def _(beta, factors, ret, triangle, w, y):
     for _i in range(1):
         _problem = minrisk_problem(triangle, w, y=y)
         triangle.update(
-            exposure=beta.values,
-            cov=factors.cov().values,
-            idiosyncratic_risk=pd.DataFrame(data=ret - factors @ beta, index=ret.index, columns=ret.columns)
-            .std()
-            .values,
+            exposure=beta,
+            cov=np.cov(factors.T),
+            idiosyncratic_risk=(ret - factors @ beta).std(axis=0),
             lower_assets=np.zeros(1000),
             upper_assets=np.ones(1000),
             lower_factors=-0.1 * np.ones(100),
