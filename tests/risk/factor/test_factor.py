@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numpy as np
-import pandas as pd
 import polars as pl
 import pytest
 from cvx.linalg import pca as principal_components
@@ -28,8 +27,9 @@ def returns(resource_dir) -> pl.DataFrame:
         polars.DataFrame: DataFrame containing stock returns
 
     """
-    prices = pd.read_csv(resource_dir / "stock_prices.csv", index_col=0, header=0, parse_dates=True)
-    return pl.from_pandas(prices.pct_change().fillna(0.0).reset_index(drop=True))
+    prices = pl.read_csv(resource_dir / "stock_prices.csv", try_parse_dates=True)
+    asset_cols = [c for c in prices.columns if c != prices.columns[0]]
+    return prices.select(pl.col(asset_cols).pct_change().fill_null(0.0))
 
 
 def test_timeseries_model(returns: pl.DataFrame) -> None:
