@@ -46,7 +46,8 @@ from typing import Any
 
 import clarabel
 import numpy as np
-from cvx.linalg import cholesky
+
+# from cvx.linalg import cholesky
 from scipy import sparse
 
 from cvx.core import Bounds, Model, Parameter, Variable
@@ -208,7 +209,7 @@ class SampleCovariance(Model):
         n = cov.shape[0]
 
         chol = np.zeros((self.num, self.num))
-        chol[:n, :n] = cholesky(cov)
+        chol[:n, :n] = np.linalg.cholesky(cov).transpose()
         self.parameter["chol"].value = chol
         self.bounds.update(**kwargs)
 

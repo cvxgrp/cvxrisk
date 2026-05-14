@@ -2,6 +2,7 @@
 # dependencies = [
 #     "marimo==0.18.4",
 #     "numpy",
+#     "cvx-linalg",
 #     "cvxrisk"
 # ]
 #

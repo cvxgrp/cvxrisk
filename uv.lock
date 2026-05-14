@@ -186,7 +186,6 @@ version = "1.4.14"
 source = { editable = "." }
 dependencies = [
     { name = "clarabel" },
-    { name = "cvx-linalg" },
     { name = "numpy" },
     { name = "scipy" },
 ]
@@ -197,6 +196,7 @@ benchmark = [
     { name = "pytest-benchmark" },
 ]
 dev = [
+    { name = "cvx-linalg" },
     { name = "cvxsimulator" },
     { name = "marimo" },
     { name = "pandas" },
@@ -207,7 +207,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "clarabel", specifier = ">=0.11.1" },
-    { name = "cvx-linalg", specifier = ">=0.3.0" },
     { name = "numpy", specifier = ">=2.3.0" },
     { name = "scipy", specifier = ">=1.17.1" },
 ]
@@ -218,6 +217,7 @@ benchmark = [
     { name = "pytest-benchmark", specifier = ">=5.1" },
 ]
 dev = [
+    { name = "cvx-linalg", specifier = ">=0.3.0" },
     { name = "cvxsimulator", specifier = ">=1.4.5" },
     { name = "marimo", specifier = ">=0.23.6" },
     { name = "pandas", specifier = ">3.0" },
