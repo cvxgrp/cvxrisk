@@ -1,9 +1,7 @@
 # /// script
 # dependencies = [
 #     "marimo==0.18.4",
-#     "pandas",
 #     "polars",
-#     "pyarrow",
 #     "jquantstats",
 #     "cvxrisk"
 # ]
@@ -36,23 +34,25 @@ with app.setup:
 
 @app.cell
 def _():
-    # Load some historic stock prices
+    # Load prices and compute returns entirely in polars
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
 
-    prices = prices.to_pandas().set_index("date")
+    asset_cols = [c for c in prices.columns if c != "date"]
+    returns = prices.select([pl.col("date"), pl.col(asset_cols).pct_change()]).drop_nulls()
 
-    # Compute returns and EWM covariance (requires pandas)
-    returns = prices.pct_change().dropna(axis=0, how="all")
-    cov = returns.ewm(com=60, min_periods=100).cov().dropna(axis=0, how="all")
-    start = cov.index[0][0]
-    return prices, returns, cov, start
+    # EWM covariance via jquantstats (com=60 → span=121, warmup=100)
+    data = jqs.Data.from_returns(returns, date_col="date")
+    cov = data.utils.exponential_cov(window=121, warmup=100)
+    start = next(iter(cov))
+    return asset_cols, returns, cov, start
 
 
 @app.cell
-def _(cov, returns, start):
+def _(asset_cols, cov, returns, start):
     # Minimum-risk backtest using SampleCovariance
-    cov_dates = set(cov.index.get_level_values(0))
-    returns_bt = returns.loc[start:]
+    _returns_bt = returns.filter(pl.col("date") >= start)
+    _dates = _returns_bt["date"].to_list()
+    _ret_values = _returns_bt.select(asset_cols).to_numpy()
 
     _risk_model = SampleCovariance(num=20)
     _w = Variable(20)
@@ -60,10 +60,10 @@ def _(cov, returns, start):
     _current_w = None
 
     _port_rets = []
-    for _date in returns_bt.index:
-        if _date in cov_dates:
+    for _i, _date in enumerate(_dates):
+        if _date in cov:
             _risk_model.update(
-                cov=cov.loc[_date].values,
+                cov=cov[_date],
                 lower_assets=np.zeros(20),
                 upper_assets=np.ones(20),
             )
@@ -71,15 +71,10 @@ def _(cov, returns, start):
             _current_w = _w.value.copy()
 
         if _current_w is not None:
-            _port_rets.append(float(returns_bt.loc[_date].values @ _current_w))
+            _port_rets.append(float(_ret_values[_i] @ _current_w))
 
-    _returns_pl = pl.DataFrame(
-        {
-            "Date": returns_bt.index[-len(_port_rets) :].to_list(),
-            "SampleCovariance": _port_rets,
-        }
-    )
-    data_sc = jqs.Data.from_returns(_returns_pl, date_col="Date")
+    _returns_pl = pl.DataFrame({"date": _dates[-len(_port_rets) :], "SampleCovariance": _port_rets})
+    data_sc = jqs.Data.from_returns(_returns_pl, date_col="date")
     print(data_sc.stats.sharpe())
     return (data_sc,)
 
@@ -93,7 +88,9 @@ def _(data_sc):
 def _(returns, start):
     from cvx.risk.cvar import CVar
 
-    _returns_bt = returns.loc[start:]
+    _returns_bt = returns.filter(pl.col("date") >= start)
+    _dates = _returns_bt["date"].to_list()
+    _ret_values = _returns_bt.select([c for c in _returns_bt.columns if c != "date"]).to_numpy()
 
     _risk_model = CVar(alpha=0.80, n=40, m=20)
     _w = Variable(20)
@@ -101,11 +98,11 @@ def _(returns, start):
     _current_w = None
 
     _port_rets = []
-    for _i, _date in enumerate(_returns_bt.index):
-        _hist = _returns_bt.iloc[: _i + 1].tail(40)
+    for _i in range(len(_dates)):
+        _hist = _ret_values[max(0, _i - 39) : _i + 1]
         if len(_hist) == 40:
             _risk_model.update(
-                returns=_hist.values,
+                returns=_hist,
                 lower_assets=np.zeros(20),
                 upper_assets=np.ones(20),
             )
@@ -113,15 +110,10 @@ def _(returns, start):
             _current_w = _w.value.copy()
 
         if _current_w is not None:
-            _port_rets.append(float(_returns_bt.iloc[_i].values @ _current_w))
+            _port_rets.append(float(_ret_values[_i] @ _current_w))
 
-    _returns_pl = pl.DataFrame(
-        {
-            "Date": _returns_bt.index[-len(_port_rets) :].to_list(),
-            "CVar": _port_rets,
-        }
-    )
-    data_cvar = jqs.Data.from_returns(_returns_pl, date_col="Date")
+    _returns_pl = pl.DataFrame({"date": _dates[-len(_port_rets) :], "CVar": _port_rets})
+    data_cvar = jqs.Data.from_returns(_returns_pl, date_col="date")
     print(data_cvar.stats.sharpe())
     return (data_cvar,)
 
