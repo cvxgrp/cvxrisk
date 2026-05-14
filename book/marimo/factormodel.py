@@ -5,6 +5,7 @@
 #     "pandas",
 #     "polars",
 #     "cvxrisk",
+#     "cvx-linalg",
 #     "pyarrow"
 # ]
 #
