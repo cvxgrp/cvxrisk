@@ -57,13 +57,17 @@ LinearConstraint = tuple[np.ndarray, float | None, float | None]
 
 
 class _SolvableModel(Protocol):
+    """Protocol for risk models that support direct Clarabel solving."""
+
     def solve_minrisk(
         self,
         weights: Variable,
         base: np.ndarray,
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
         y_var: Variable | None = None,
-    ) -> tuple[float | None, float | None, str]: ...
+    ) -> tuple[float | None, float | None, str]:
+        """Solve the minimum-risk problem and return (objective, risk, status)."""
+        ...
 
 
 @dataclass
