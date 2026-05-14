@@ -45,15 +45,25 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 
-from cvx.core import Model, Variable
+from cvx.core import Variable
 
 # Type alias for user-supplied linear constraints: (a, lb, ub)
 # meaning lb <= a @ w <= ub.  Use None for one-sided bounds.
 LinearConstraint = tuple[np.ndarray, float | None, float | None]
+
+
+class _SolvableModel(Protocol):
+    def solve_minrisk(
+        self,
+        weights: Variable,
+        base: np.ndarray,
+        extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
+        y_var: Variable | None = None,
+    ) -> tuple[float | None, float | None, str]: ...
 
 
 @dataclass
@@ -94,7 +104,7 @@ class MinRiskProblem:
 
     """
 
-    riskmodel: Model
+    riskmodel: _SolvableModel
     weights: Variable
     base: Any = 0.0
     _extra_constraints: list[LinearConstraint] = field(default_factory=list)
@@ -155,7 +165,7 @@ class MinRiskProblem:
 
 
 def minrisk_problem(
-    riskmodel: Model,
+    riskmodel: _SolvableModel,
     weights: Variable,
     base: Any = 0.0,
     constraints: list[LinearConstraint] | None = None,
