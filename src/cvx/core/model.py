@@ -43,7 +43,6 @@ from typing import Any
 import numpy as np
 
 from cvx.core.parameter import Parameter
-from cvx.core.variable import Variable
 
 
 @dataclass
@@ -131,17 +130,3 @@ class Model(ABC):
             ... )
 
         """
-
-    def solve_minrisk(
-        self,
-        weights: Variable,
-        base: np.ndarray,
-        extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
-        y_var: Variable | None = None,
-    ) -> tuple[float | None, float | None, str]:
-        """Solve the minimum-risk problem for this model.
-
-        Subclasses that support direct Clarabel solving override this method.
-        """
-        msg = f"{type(self).__name__} does not implement solve_minrisk"
-        raise NotImplementedError(msg)
