@@ -54,9 +54,7 @@ from typing import Any
 
 import clarabel
 import numpy as np
-from numpy.linalg import cholesky
-
-# from cvx.linalg import cholesky
+from cvx.linalg import cholesky, norm
 from scipy import sparse
 
 from cvx.core import Bounds, Model, Parameter, Variable
@@ -238,8 +236,8 @@ class FactorModel(Model):
         w = np.asarray(weights)
         y = np.asarray(kwargs.get("y", self.parameter["exposure"].value @ w))
 
-        var_systematic = np.linalg.norm(self.parameter["chol"].value @ y)
-        var_residual = np.linalg.norm(self.parameter["idiosyncratic_risk"].value * w)
+        var_systematic = norm(self.parameter["chol"].value @ y)
+        var_residual = norm(self.parameter["idiosyncratic_risk"].value * w)
 
         return float(np.sqrt(var_systematic**2 + var_residual**2))
 
@@ -297,7 +295,7 @@ class FactorModel(Model):
 
         self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
         self.parameter["idiosyncratic_risk"].value[:assets] = kwargs["idiosyncratic_risk"]
-        self.parameter["chol"].value[:k, :k] = cholesky(kwargs["cov"]).transpose()
+        self.parameter["chol"].value[:k, :k] = cholesky(kwargs["cov"])
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)
 

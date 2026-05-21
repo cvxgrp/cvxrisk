@@ -46,8 +46,7 @@ from typing import Any
 
 import clarabel
 import numpy as np
-
-# from cvx.linalg import cholesky
+from cvx.linalg import cholesky, norm
 from scipy import sparse
 
 from cvx.core import Bounds, Model, Parameter, Variable
@@ -172,7 +171,7 @@ class SampleCovariance(Model):
             True
 
         """
-        return float(np.linalg.norm(self.parameter["chol"].value @ np.asarray(weights)))
+        return norm(self.parameter["chol"].value @ np.asarray(weights))
 
     def update(self, **kwargs: Any) -> None:
         """Update the Cholesky decomposition parameter and bounds.
@@ -209,7 +208,7 @@ class SampleCovariance(Model):
         n = cov.shape[0]
 
         chol = np.zeros((self.num, self.num))
-        chol[:n, :n] = np.linalg.cholesky(cov).transpose()
+        chol[:n, :n] = cholesky(cov)
         self.parameter["chol"].value = chol
         self.bounds.update(**kwargs)
 
