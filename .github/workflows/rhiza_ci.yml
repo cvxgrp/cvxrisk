@@ -22,3 +22,4 @@ on:
 jobs:
   ci:
     uses: jebel-quant/rhiza/.github/workflows/rhiza_ci.yml@v0.11.0
+    secrets: inherit
