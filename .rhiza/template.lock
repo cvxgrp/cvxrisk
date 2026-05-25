@@ -5,10 +5,7 @@ ref: v0.11.0
 include: []
 exclude: []
 templates:
-- github
 - legal
-- tests
-- marimo
 files:
 - .bandit
 - .editorconfig
@@ -100,5 +97,5 @@ files:
 - ruff.toml
 profiles:
 - github-project
-synced_at: '2026-05-24T13:59:34Z'
+synced_at: '2026-05-25T00:53:14Z'
 strategy: merge
