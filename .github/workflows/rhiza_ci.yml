@@ -9,7 +9,7 @@
 #
 # Trigger: On push and pull_request.
 
-name: (RHIZA) CI
+name: "(RHIZA) CI"
 
 permissions:
   contents: read
