@@ -30,5 +30,5 @@ on:
 
 jobs:
   codeql:
-    uses: jebel-quant/rhiza/.github/workflows/rhiza_codeql.yml@v0.14.0
+    uses: jebel-quant/rhiza/.github/workflows/rhiza_codeql.yml@v0.15.2
     secrets: inherit
