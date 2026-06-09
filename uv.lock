@@ -247,15 +247,15 @@ toml = [
 
 [[package]]
 name = "cvx-linalg"
-version = "0.6.1"
+version = "0.6.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
     { name = "polars" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/40/b4/8704cc758c5b3a43ed82050c5cc77a01922c34517adde4688f02caf09cab/cvx_linalg-0.6.1.tar.gz", hash = "sha256:cbc87ba185a2482df7e638b39ba9f5f656fdda46d4a227b244ca3d61a7b29c6c", size = 20695, upload-time = "2026-05-20T11:45:03.513Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/65/da/f0501d7477bc4bf18c251b7a4077ed018536a3d86e2b17f58bb328b36bbb/cvx_linalg-0.6.2.tar.gz", hash = "sha256:3ca0cbf54032f99a9e231090f8f44111cae4c530c2744a898f408128156b503a", size = 21625, upload-time = "2026-06-08T06:48:00.012Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/2d/5393709cd1df83bb8486d25fd8a5c91fc5c3f39ea8e81c1cb2c5193e472c/cvx_linalg-0.6.1-py3-none-any.whl", hash = "sha256:5fb2f6a322117f8426536164ac397de4ab5ee3c9249b66ebfc001f3e4156f685", size = 23501, upload-time = "2026-05-20T11:45:02.316Z" },
+    { url = "https://files.pythonhosted.org/packages/a1/e8/f30eb4ec91f65e41062edaa0877afeaf9bdc148c71125c893ae9a8102636/cvx_linalg-0.6.2-py3-none-any.whl", hash = "sha256:cfe1e8b8c45c77007a5ef2804d683c9fa21d6b274b662c5a113e68ba2076d830", size = 23538, upload-time = "2026-06-08T06:47:58.863Z" },
 ]
 
 [[package]]
@@ -451,7 +451,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.9.2"
+version = "0.9.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -461,9 +461,9 @@ dependencies = [
     { name = "polars" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1c/7b/03fe36a491784f8ae32ef1d18a13827200894ba9e2462ccf390d4fe0bde8/jquantstats-0.9.2.tar.gz", hash = "sha256:b6116c2dcb9f3819ff3dda1b81ec011d0406df5ef075cae1b9b3acaaf70e2232", size = 97241, upload-time = "2026-05-24T08:39:14.959Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/b9/126cb5b0bda1c6844ba40a91a8abc80e93ef608950f37c833f2dbfee90be/jquantstats-0.9.3.tar.gz", hash = "sha256:ccadef550ecc30ded5bc186b1ba5966d6c8c21831a4f85f849da6f9b47e18d4a", size = 99261, upload-time = "2026-06-05T02:54:22.705Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/71/7ff0e04c0d2a5309c11b6c9d077cd90819818dc1ae248c3234f1dd712965/jquantstats-0.9.2-py3-none-any.whl", hash = "sha256:2c6d9ec68fbe755527c33434ffa7471c6ed72767182d5acf1186e0a6f4be278c", size = 112663, upload-time = "2026-05-24T08:39:13.44Z" },
+    { url = "https://files.pythonhosted.org/packages/10/58/7720a6682c45ef1f649e693801128d142f0c433b00b80ecc366039107a3a/jquantstats-0.9.3-py3-none-any.whl", hash = "sha256:8d4f22f47798eb02ec02e5011163ae05af15f0d786b43937718f4414276a3844", size = 112693, upload-time = "2026-06-05T02:54:21.252Z" },
 ]
 
 [[package]]
@@ -558,7 +558,7 @@ wheels = [
 
 [[package]]
 name = "marimo"
-version = "0.23.8"
+version = "0.23.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -581,9 +581,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f2/fe/a1dec6111a660ee3bd26521c24788e7aef519a31c60cf37f767f29313454/marimo-0.23.8.tar.gz", hash = "sha256:8049df4ad263e7126e959d7d910b014e6181dffe49f540a89c3174e61a446a99", size = 38505767, upload-time = "2026-05-22T16:24:19.881Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/15/be/4a4c7bc1bc160d825c6ae1b4154add505a466532977a5516434ac57ce050/marimo-0.23.9.tar.gz", hash = "sha256:9fb7123aa0dacb202d53bc0989cecd1892435671efc4107b8d8491986b4a6bb9", size = 38538904, upload-time = "2026-06-04T23:06:06.505Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/76/51b57a2e521b9110f25ec935f2774412e2f3d678b3fdea7841987244fb2c/marimo-0.23.8-py3-none-any.whl", hash = "sha256:99a4035d035fb320c8f2dcefc2213e0d64e9de13e989bc3f2a973b19dc40542a", size = 38938839, upload-time = "2026-05-22T16:24:16.102Z" },
+    { url = "https://files.pythonhosted.org/packages/68/f4/ab8be4e65b37deb4d1d780df4a3555e983849ac280b0ec7967801fb438c8/marimo-0.23.9-py3-none-any.whl", hash = "sha256:2cbd50ce9a995c2a256b9a05cc1844f035060e070b8a85fdb32645719817dbdf", size = 38970788, upload-time = "2026-06-04T23:06:01.628Z" },
 ]
 
 [[package]]
