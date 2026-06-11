@@ -29,19 +29,10 @@ Example:
 
 """
 
-#    Copyright 2023 Stanford University Convex Optimization Group
+#    Copyright (c) 2025 Jebel Quant Research
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
-#
-#        http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
+#    Licensed under the MIT License. See the LICENSE file in the project root
+#    for the full license text.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -143,6 +134,12 @@ class MinRiskProblem:
 
         After calling ``solve()``, you can update the model parameters and call
         ``solve()`` again without reconstructing the problem structure.
+
+        Failure contract: ``solve()`` does not raise when the problem cannot be
+        solved (e.g. it is infeasible or unbounded). Instead, ``status`` is set
+        to the solver status, ``value`` stays ``None``, and ``weights.value``
+        is left untouched. Always check ``status`` (or ``value is not None``)
+        before using the weights.
 
         Example:
             >>> import numpy as np

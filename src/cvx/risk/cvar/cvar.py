@@ -30,19 +30,10 @@ Example:
 
 """
 
-#    Copyright 2023 Stanford University Convex Optimization Group
+#    Copyright (c) 2025 Jebel Quant Research
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
-#
-#        http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
+#    Licensed under the MIT License. See the LICENSE file in the project root
+#    for the full license text.
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -52,7 +43,7 @@ import clarabel
 import numpy as np
 from scipy import sparse
 
-from cvx.core import Bounds, Model, Parameter, Variable
+from cvx.core import Bounds, ConeProgramBuilder, Model, Parameter, Variable
 
 
 @dataclass
@@ -211,6 +202,10 @@ class CVar(Model):
                 - lower_assets: Array of lower bounds for asset weights.
                 - upper_assets: Array of upper bounds for asset weights.
 
+        Raises:
+            ValueError: If ``returns`` is missing, has the wrong number of
+                scenarios, or more columns than the model capacity ``m``.
+
         Example:
             >>> import numpy as np
             >>> from cvx.risk.cvar import CVar
@@ -227,7 +222,19 @@ class CVar(Model):
             (50, 3)
 
         """
-        ret = kwargs["returns"]
+        if "returns" not in kwargs:
+            msg = "update() requires a 'returns' argument"
+            raise ValueError(msg)
+        ret = np.asarray(kwargs["returns"])
+        if ret.ndim != 2:
+            msg = f"returns must be a 2d matrix of shape (n, num_assets), got shape {ret.shape}"
+            raise ValueError(msg)
+        if ret.shape[0] != self.n:
+            msg = f"returns has {ret.shape[0]} scenarios but the model expects n={self.n}"
+            raise ValueError(msg)
+        if ret.shape[1] > self.m:
+            msg = f"Too many assets: returns has {ret.shape[1]} columns but the model capacity is m={self.m}"
+            raise ValueError(msg)
         num_assets = ret.shape[1]
 
         returns_arr = np.zeros((self.n, self.m))
@@ -242,88 +249,57 @@ class CVar(Model):
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
         y_var: Variable | None = None,
     ) -> tuple[float | None, float | None, str]:
-        """Build and solve the Clarabel LP for this model."""
+        """Build and solve the Clarabel LP for this model.
+
+        Raises:
+            ValueError: If the weights dimension exceeds the model capacity ``m``.
+
+        """
         n = weights.n
+        if n > self.m:
+            msg = f"weights has dimension {n} but the model capacity is m={self.m}"
+            raise ValueError(msg)
         T = self.n  # noqa: N806
         k = self.k
         R = self.parameter["R"].value  # noqa: N806
         lb_w, ub_w = self.bounds.get_bounds()
 
         R_n = R[:, :n]  # noqa: N806
-        n_vars = n + 1 + T
-        P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
-        q = np.zeros(n_vars)
-        q[n] = 1.0
-        q[n + 1 :] = 1.0 / k
 
-        A_rows: list[np.ndarray] = []  # noqa: N806
-        b_rows: list[np.ndarray] = []
-        cones: list[Any] = []
+        # Variables: x = [w, gamma, u] (Rockafellar-Uryasev formulation)
+        # with gamma the VaR level and u the scenario excess losses.
+        w_cols = slice(0, n)
+        gamma_col = n
+        u_cols = slice(n + 1, n + 1 + T)
+        builder = ConeProgramBuilder(n_vars=n + 1 + T)
 
-        A_cvar = np.zeros((T, n_vars))  # noqa: N806
-        A_cvar[:, :n] = -R_n
-        A_cvar[:, n] = -1.0
-        A_cvar[:, n + 1 :] = -np.eye(T)
-        A_rows.append(A_cvar)
-        b_rows.append(R_n @ base)
-        cones.append(clarabel.NonnegativeConeT(T))
+        # u >= -R @ (w - base) - gamma  (scenario losses beyond VaR)
+        # Built directly in sparse form: dense (T x n_vars) blocks would be
+        # O(T^2) memory for what is mostly an identity over the u variables.
+        a_cvar = sparse.hstack(
+            [sparse.csr_matrix(-R_n), sparse.csr_matrix(-np.ones((T, 1))), -sparse.identity(T, format="csr")],
+            format="csr",
+        )
+        builder.add(a_cvar, R_n @ base, clarabel.NonnegativeConeT(T))
 
-        A_u = np.zeros((T, n_vars))  # noqa: N806
-        A_u[:, n + 1 :] = -np.eye(T)
-        A_rows.append(A_u)
-        b_rows.append(np.zeros(T))
-        cones.append(clarabel.NonnegativeConeT(T))
+        # u >= 0
+        a_u = sparse.hstack(
+            [sparse.csr_matrix((T, n + 1)), -sparse.identity(T, format="csr")],
+            format="csr",
+        )
+        builder.add(a_u, np.zeros(T), clarabel.NonnegativeConeT(T))
 
-        A_eq = np.zeros((1, n_vars))  # noqa: N806
-        A_eq[0, :n] = 1.0
-        A_rows.append(A_eq)
-        b_rows.append(np.array([1.0]))
-        cones.append(clarabel.ZeroConeT(1))
+        builder.add_sum_constraint(w_cols)
+        builder.add_variable_bounds(w_cols, lb_w[:n], ub_w[:n])
+        builder.add_linear_constraints(extra_constraints, w_cols)
 
-        A_lb = np.zeros((n, n_vars))  # noqa: N806
-        A_lb[:, :n] = -np.eye(n)
-        A_rows.append(A_lb)
-        b_rows.append(-lb_w[:n])
-        cones.append(clarabel.NonnegativeConeT(n))
-
-        A_ub = np.zeros((n, n_vars))  # noqa: N806
-        A_ub[:, :n] = np.eye(n)
-        A_rows.append(A_ub)
-        b_rows.append(ub_w[:n])
-        cones.append(clarabel.NonnegativeConeT(n))
-
-        for a, lb_val, ub_val in extra_constraints:
-            a = np.asarray(a)
-            if lb_val is not None and ub_val is not None and lb_val == ub_val:
-                A_extra = np.zeros((1, n_vars))  # noqa: N806
-                A_extra[0, :n] = a
-                A_rows.append(A_extra)
-                b_rows.append(np.array([lb_val]))
-                cones.append(clarabel.ZeroConeT(1))
-            else:
-                if lb_val is not None:
-                    A_extra = np.zeros((1, n_vars))  # noqa: N806
-                    A_extra[0, :n] = -a
-                    A_rows.append(A_extra)
-                    b_rows.append(np.array([-lb_val]))
-                    cones.append(clarabel.NonnegativeConeT(1))
-                if ub_val is not None:
-                    A_extra = np.zeros((1, n_vars))  # noqa: N806
-                    A_extra[0, :n] = a
-                    A_rows.append(A_extra)
-                    b_rows.append(np.array([ub_val]))
-                    cones.append(clarabel.NonnegativeConeT(1))
-
-        A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
-        b = np.concatenate(b_rows)
-
-        settings = clarabel.DefaultSettings()
-        settings.verbose = False
-        sol = clarabel.DefaultSolver(P, q, A, b, cones, settings).solve()
-        status = str(sol.status)
+        q = np.zeros(builder.n_vars)
+        q[gamma_col] = 1.0
+        q[u_cols] = 1.0 / k
+        sol, status = builder.solve(q)
 
         if "Solved" in status:
-            weights.value = np.array(sol.x[:n])
+            weights.value = np.array(sol.x[w_cols])
             cvar_val = float(q @ sol.x)
             return cvar_val, cvar_val, status
         return None, None, status

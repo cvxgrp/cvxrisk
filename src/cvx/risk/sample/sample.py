@@ -1,16 +1,7 @@
-#    Copyright 2023 Stanford University Convex Optimization Group
+#    Copyright (c) 2025 Jebel Quant Research
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
-#
-#        http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
+#    Licensed under the MIT License. See the LICENSE file in the project root
+#    for the full license text.
 """Risk models based on the sample covariance matrix.
 
 This module provides the SampleCovariance class, which implements a risk model
@@ -47,9 +38,8 @@ from typing import Any
 import clarabel
 import numpy as np
 from cvx.linalg import cholesky, norm
-from scipy import sparse
 
-from cvx.core import Bounds, Model, Parameter, Variable
+from cvx.core import Bounds, ConeProgramBuilder, Model, Parameter, Variable
 
 
 @dataclass
@@ -186,6 +176,10 @@ class SampleCovariance(Model):
                 - lower_assets: Array of lower bounds for asset weights.
                 - upper_assets: Array of upper bounds for asset weights.
 
+        Raises:
+            ValueError: If ``cov`` is missing, not square, or larger than the
+                model capacity ``num``.
+
         Example:
             >>> import numpy as np
             >>> from cvx.risk.sample import SampleCovariance
@@ -204,7 +198,16 @@ class SampleCovariance(Model):
             (3, 3)
 
         """
-        cov = kwargs["cov"]
+        if "cov" not in kwargs:
+            msg = "update() requires a 'cov' argument"
+            raise ValueError(msg)
+        cov = np.asarray(kwargs["cov"])
+        if cov.ndim != 2 or cov.shape[0] != cov.shape[1]:
+            msg = f"cov must be a square matrix, got shape {cov.shape}"
+            raise ValueError(msg)
+        if cov.shape[0] > self.num:
+            msg = f"Too many assets: cov is {cov.shape[0]}x{cov.shape[0]} but the model capacity is num={self.num}"
+            raise ValueError(msg)
         n = cov.shape[0]
 
         chol = np.zeros((self.num, self.num))
@@ -219,78 +222,41 @@ class SampleCovariance(Model):
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
         y_var: Variable | None = None,
     ) -> tuple[float | None, float | None, str]:
-        """Build and solve the Clarabel SOC problem for this model."""
+        """Build and solve the Clarabel SOC problem for this model.
+
+        Raises:
+            ValueError: If the weights dimension does not match the model
+                capacity ``num``.
+
+        """
         n = weights.n
+        if n != self.num:
+            msg = f"weights has dimension {n} but the model capacity is num={self.num}"
+            raise ValueError(msg)
         chol = self.parameter["chol"].value
         lb, ub = self.bounds.get_bounds()
 
-        n_vars = 1 + n
-        P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
-        q = np.zeros(n_vars)
-        q[0] = 1.0
+        # Variables: x = [t, w] with t bounding the portfolio volatility.
+        w_cols = slice(1, 1 + n)
+        builder = ConeProgramBuilder(n_vars=1 + n)
 
-        A_rows: list[np.ndarray] = []  # noqa: N806
-        b_rows: list[np.ndarray] = []
-        cones: list[Any] = []
-
-        A_soc = np.zeros((n + 1, n_vars))  # noqa: N806
-        A_soc[0, 0] = -1.0
-        A_soc[1:, 1:] = -chol
+        # SOC: || chol @ (w - base) ||_2 <= t
+        a_soc = builder.block(n + 1)
+        a_soc[0, 0] = -1.0
+        a_soc[1:, w_cols] = -chol
         b_soc = np.zeros(n + 1)
         b_soc[1:] = -chol @ base
-        A_rows.append(A_soc)
-        b_rows.append(b_soc)
-        cones.append(clarabel.SecondOrderConeT(n + 1))
+        builder.add(a_soc, b_soc, clarabel.SecondOrderConeT(n + 1))
 
-        A_eq = np.zeros((1, n_vars))  # noqa: N806
-        A_eq[0, 1:] = 1.0
-        A_rows.append(A_eq)
-        b_rows.append(np.array([1.0]))
-        cones.append(clarabel.ZeroConeT(1))
+        builder.add_sum_constraint(w_cols)
+        builder.add_variable_bounds(w_cols, lb, ub)
+        builder.add_linear_constraints(extra_constraints, w_cols)
 
-        A_lb = np.zeros((n, n_vars))  # noqa: N806
-        A_lb[:, 1:] = -np.eye(n)
-        A_rows.append(A_lb)
-        b_rows.append(-lb)
-        cones.append(clarabel.NonnegativeConeT(n))
-
-        A_ub = np.zeros((n, n_vars))  # noqa: N806
-        A_ub[:, 1:] = np.eye(n)
-        A_rows.append(A_ub)
-        b_rows.append(ub)
-        cones.append(clarabel.NonnegativeConeT(n))
-
-        for a, lb_val, ub_val in extra_constraints:
-            a = np.asarray(a)
-            if lb_val is not None and ub_val is not None and lb_val == ub_val:
-                A_extra = np.zeros((1, n_vars))  # noqa: N806
-                A_extra[0, 1:] = a
-                A_rows.append(A_extra)
-                b_rows.append(np.array([lb_val]))
-                cones.append(clarabel.ZeroConeT(1))
-            else:
-                if lb_val is not None:
-                    A_extra = np.zeros((1, n_vars))  # noqa: N806
-                    A_extra[0, 1:] = -a
-                    A_rows.append(A_extra)
-                    b_rows.append(np.array([-lb_val]))
-                    cones.append(clarabel.NonnegativeConeT(1))
-                if ub_val is not None:
-                    A_extra = np.zeros((1, n_vars))  # noqa: N806
-                    A_extra[0, 1:] = a
-                    A_rows.append(A_extra)
-                    b_rows.append(np.array([ub_val]))
-                    cones.append(clarabel.NonnegativeConeT(1))
-
-        A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
-        b = np.concatenate(b_rows)
-
-        settings = clarabel.DefaultSettings()
-        settings.verbose = False
-        sol = clarabel.DefaultSolver(P, q, A, b, cones, settings).solve()
-        status = str(sol.status)
+        q = np.zeros(builder.n_vars)
+        q[0] = 1.0
+        sol, status = builder.solve(q)
 
         if "Solved" in status:
-            weights.value = np.array(sol.x[1 : 1 + n])
+            weights.value = np.array(sol.x[w_cols])
             return float(sol.obj_val), float(sol.x[0]), status
         return None, None, status

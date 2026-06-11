@@ -1,7 +1,7 @@
 # [cvxrisk](https://www.cvxgrp.org/cvxrisk/): Convex Optimization for Portfolio Risk Management
 
 [![PyPI version](https://badge.fury.io/py/cvxrisk.svg)](https://badge.fury.io/py/cvxrisk)
-[![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/cvxrisk/blob/master/LICENSE)
+[![MIT License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/cvxgrp/cvxrisk/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/cvxrisk?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month)](https://pepy.tech/project/cvxrisk)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
 [![Coverage](https://www.cvxgrp.org/cvxrisk/coverage-badge.svg)](https://www.cvxgrp.org/cvxrisk/reports/html-coverage/)
@@ -19,11 +19,10 @@ them in your optimization problems.
 
 ## 🚀 Installation
 
-```bash
-# Install from PyPI
-pip install cvxrisk
+Install from source (PyPI releases are currently paused; the package on
+PyPI predates the direct-Clarabel rewrite and has a different API):
 
-# For development installation
+```bash
 git clone https://github.com/cvxgrp/cvxrisk.git
 cd cvxrisk
 make install
@@ -209,7 +208,7 @@ make marimo
 
 ## 📄 License
 
-cvxrisk is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+cvxrisk is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## 👥 Contributing
 

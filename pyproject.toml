@@ -32,9 +32,12 @@ dev = [
 ]
 # Test dependencies
 test = [
+    "hypothesis>=6.100",    # Property-based testing
+    "mutmut>=2.5,<3",       # Mutation testing (2.x matches the CLI flags used by `make mutation`)
     "pytest>=9.0",
     "pytest-cov>=7.0",
     "pytest-mock>=3.0",
+    "pytest-timeout>=2.3",  # Enforces the per-test timeout configured in pytest.ini
 ]
 # Lint dependencies
 lint = [
