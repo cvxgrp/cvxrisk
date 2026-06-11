@@ -1,16 +1,7 @@
-#    Copyright 2023 Stanford University Convex Optimization Group
+#    Copyright (c) 2025 Jebel Quant Research
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
-#
-#        http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
+#    Licensed under the MIT License. See the LICENSE file in the project root
+#    for the full license text.
 """Box constraints for optimization variables.
 
 This module provides the :class:`Bounds` class, which tracks lower and upper
@@ -160,6 +151,10 @@ class Bounds(Model):
             **kwargs: Must contain ``lower_{name}`` and ``upper_{name}`` keys
                 with numpy arrays of length ≤ ``m``.
 
+        Raises:
+            ValueError: If a required key is missing or an array is longer
+                than ``m``.
+
         Example:
             >>> import numpy as np
             >>> from cvx.core.bounds import Bounds
@@ -172,15 +167,17 @@ class Bounds(Model):
             array([0. , 0.1, 0.2])
 
         """
-        lower = kwargs[self._f("lower")]
-        lower_arr = np.zeros(self.m)
-        lower_arr[: len(lower)] = lower
-        self.parameter[self._f("lower")].value = lower_arr
-
-        upper = kwargs[self._f("upper")]
-        upper_arr = np.zeros(self.m)
-        upper_arr[: len(upper)] = upper
-        self.parameter[self._f("upper")].value = upper_arr
+        for key in (self._f("lower"), self._f("upper")):
+            if key not in kwargs:
+                msg = f"update() requires a '{key}' argument"
+                raise ValueError(msg)
+            values = kwargs[key]
+            if len(values) > self.m:
+                msg = f"'{key}' has length {len(values)} but the maximum is {self.m}"
+                raise ValueError(msg)
+            arr = np.zeros(self.m)
+            arr[: len(values)] = values
+            self.parameter[key].value = arr
 
     def get_bounds(self) -> tuple[np.ndarray, np.ndarray]:
         """Return ``(lower, upper)`` bound arrays of length ``m``.

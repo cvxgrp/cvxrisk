@@ -14,6 +14,7 @@ theme:
 
 nav:
   - Home: index.md
+  - Mathematics: models.md
   - Notebooks:
     - Demo: notebooks/demo.html
     - Factor Model: notebooks/factormodel.html

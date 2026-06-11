@@ -1,16 +1,7 @@
-#    Copyright 2023 Stanford University Convex Optimization Group
+#    Copyright (c) 2025 Jebel Quant Research
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
-#
-#        http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
+#    Licensed under the MIT License. See the LICENSE file in the project root
+#    for the full license text.
 """Factor risk model.
 
 This module provides the FactorModel class, which implements a factor-based
@@ -57,7 +48,7 @@ import numpy as np
 from cvx.linalg import cholesky, norm
 from scipy import sparse
 
-from cvx.core import Bounds, Model, Parameter, Variable
+from cvx.core import Bounds, ConeProgramBuilder, Model, Parameter, Variable
 
 
 @dataclass
@@ -259,7 +250,10 @@ class FactorModel(Model):
                 - upper_factors: Array of upper bounds for factor exposures.
 
         Raises:
-            ValueError: If number of factors or assets exceeds maximum.
+            ValueError: If a required argument is missing, the number of
+                factors or assets exceeds the maximum, or the shapes of
+                ``cov`` and ``idiosyncratic_risk`` are inconsistent with
+                ``exposure``.
 
         Example:
             >>> import numpy as np
@@ -277,12 +271,14 @@ class FactorModel(Model):
             ... )
 
         """
-        self.parameter["exposure"].value = np.zeros((self.k, self.assets))
-        self.parameter["chol"].value = np.zeros((self.k, self.k))
-        self.parameter["idiosyncratic_risk"].value = np.zeros(self.assets)
+        missing = [key for key in ("exposure", "cov", "idiosyncratic_risk") if key not in kwargs]
+        if missing:
+            msg = f"update() missing required arguments: {', '.join(missing)}"
+            raise ValueError(msg)
 
-        # get the exposure
-        exposure = kwargs["exposure"]
+        exposure = np.asarray(kwargs["exposure"])
+        cov = np.asarray(kwargs["cov"])
+        idiosyncratic_risk = np.asarray(kwargs["idiosyncratic_risk"])
 
         # extract dimensions
         k, assets = exposure.shape
@@ -292,10 +288,20 @@ class FactorModel(Model):
         if assets > self.assets:
             msg = "Too many assets"
             raise ValueError(msg)
+        if cov.shape != (k, k):
+            msg = f"cov must have shape ({k}, {k}) to match exposure, got {cov.shape}"
+            raise ValueError(msg)
+        if idiosyncratic_risk.shape != (assets,):
+            msg = f"idiosyncratic_risk must have shape ({assets},) to match exposure, got {idiosyncratic_risk.shape}"
+            raise ValueError(msg)
 
-        self.parameter["exposure"].value[:k, :assets] = kwargs["exposure"]
-        self.parameter["idiosyncratic_risk"].value[:assets] = kwargs["idiosyncratic_risk"]
-        self.parameter["chol"].value[:k, :k] = cholesky(kwargs["cov"])
+        self.parameter["exposure"].value = np.zeros((self.k, self.assets))
+        self.parameter["chol"].value = np.zeros((self.k, self.k))
+        self.parameter["idiosyncratic_risk"].value = np.zeros(self.assets)
+
+        self.parameter["exposure"].value[:k, :assets] = exposure
+        self.parameter["idiosyncratic_risk"].value[:assets] = idiosyncratic_risk
+        self.parameter["chol"].value[:k, :k] = cholesky(cov)
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)
 
@@ -306,8 +312,17 @@ class FactorModel(Model):
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
         y_var: Variable | None = None,
     ) -> tuple[float | None, float | None, str]:
-        """Build and solve the Clarabel SOC problem for this model."""
+        """Build and solve the Clarabel SOC problem for this model.
+
+        Raises:
+            ValueError: If the weights dimension does not match the model
+                capacity ``assets``.
+
+        """
         n = weights.n
+        if n != self.assets:
+            msg = f"weights has dimension {n} but the model capacity is assets={self.assets}"
+            raise ValueError(msg)
         k = self.k
 
         chol = self.parameter["chol"].value
@@ -317,96 +332,48 @@ class FactorModel(Model):
         lb_w, ub_w = self.bounds_assets.get_bounds()
         lb_y, ub_y = self.bounds_factors.get_bounds()
 
-        n_vars = 1 + n + k
-        P = sparse.csc_matrix((n_vars, n_vars))  # noqa: N806
-        q = np.zeros(n_vars)
-        q[0] = 1.0
+        # Variables: x = [t, w, y] with t bounding the total volatility
+        # and y the factor exposures.
+        w_cols = slice(1, 1 + n)
+        y_cols = slice(1 + n, 1 + n + k)
+        builder = ConeProgramBuilder(n_vars=1 + n + k)
 
-        A_rows: list[np.ndarray] = []  # noqa: N806
-        b_rows: list[np.ndarray] = []
-        cones: list[Any] = []
-
+        # SOC: || [chol @ exposure @ (w - base); idio * (w - base)] ||_2 <= t
+        # encoded via y = exposure @ w, so the systematic term is chol @ (y - exposure @ base).
+        # Built directly in sparse form: the block has only O(n + k^2) nonzeros.
         soc_size = 1 + k + n
-        A_soc = np.zeros((soc_size, n_vars))  # noqa: N806
-        A_soc[0, 0] = -1.0
-        A_soc[1 : 1 + k, 1 + n :] = -chol
-        A_soc[1 + k :, 1 : 1 + n] = -np.diag(idio)
+        a_soc = sparse.bmat(
+            [
+                [sparse.csr_matrix(np.array([[-1.0]])), None, None],
+                [None, None, sparse.csr_matrix(-chol)],
+                [None, sparse.diags(-idio), None],
+            ],
+            format="csr",
+        )
         b_soc = np.zeros(soc_size)
+        b_soc[1 : 1 + k] = -chol @ (exposure @ base)
         b_soc[1 + k :] = -idio * base
-        A_rows.append(A_soc)
-        b_rows.append(b_soc)
-        cones.append(clarabel.SecondOrderConeT(soc_size))
+        builder.add(a_soc, b_soc, clarabel.SecondOrderConeT(soc_size))
 
-        A_eq_sum = np.zeros((1, n_vars))  # noqa: N806
-        A_eq_sum[0, 1 : 1 + n] = 1.0
-        A_rows.append(A_eq_sum)
-        b_rows.append(np.array([1.0]))
-        cones.append(clarabel.ZeroConeT(1))
+        builder.add_sum_constraint(w_cols)
 
-        A_eq_exp = np.zeros((k, n_vars))  # noqa: N806
-        A_eq_exp[:, 1 : 1 + n] = -exposure
-        A_eq_exp[:, 1 + n :] = np.eye(k)
-        A_rows.append(A_eq_exp)
-        b_rows.append(np.zeros(k))
-        cones.append(clarabel.ZeroConeT(k))
+        # Equality: y = exposure @ w
+        a_exp = builder.block(k)
+        a_exp[:, w_cols] = -exposure
+        a_exp[:, y_cols] = np.eye(k)
+        builder.add(a_exp, np.zeros(k), clarabel.ZeroConeT(k))
 
-        A_wlb = np.zeros((n, n_vars))  # noqa: N806
-        A_wlb[:, 1 : 1 + n] = -np.eye(n)
-        A_rows.append(A_wlb)
-        b_rows.append(-lb_w)
-        cones.append(clarabel.NonnegativeConeT(n))
+        builder.add_variable_bounds(w_cols, lb_w, ub_w)
+        builder.add_variable_bounds(y_cols, lb_y, ub_y)
+        builder.add_linear_constraints(extra_constraints, w_cols)
 
-        A_wub = np.zeros((n, n_vars))  # noqa: N806
-        A_wub[:, 1 : 1 + n] = np.eye(n)
-        A_rows.append(A_wub)
-        b_rows.append(ub_w)
-        cones.append(clarabel.NonnegativeConeT(n))
-
-        A_ylb = np.zeros((k, n_vars))  # noqa: N806
-        A_ylb[:, 1 + n :] = -np.eye(k)
-        A_rows.append(A_ylb)
-        b_rows.append(-lb_y)
-        cones.append(clarabel.NonnegativeConeT(k))
-
-        A_yub = np.zeros((k, n_vars))  # noqa: N806
-        A_yub[:, 1 + n :] = np.eye(k)
-        A_rows.append(A_yub)
-        b_rows.append(ub_y)
-        cones.append(clarabel.NonnegativeConeT(k))
-
-        for a, lb_val, ub_val in extra_constraints:
-            a = np.asarray(a)
-            if lb_val is not None and ub_val is not None and lb_val == ub_val:
-                A_extra = np.zeros((1, n_vars))  # noqa: N806
-                A_extra[0, 1 : 1 + n] = a
-                A_rows.append(A_extra)
-                b_rows.append(np.array([lb_val]))
-                cones.append(clarabel.ZeroConeT(1))
-            else:
-                if lb_val is not None:
-                    A_extra = np.zeros((1, n_vars))  # noqa: N806
-                    A_extra[0, 1 : 1 + n] = -a
-                    A_rows.append(A_extra)
-                    b_rows.append(np.array([-lb_val]))
-                    cones.append(clarabel.NonnegativeConeT(1))
-                if ub_val is not None:
-                    A_extra = np.zeros((1, n_vars))  # noqa: N806
-                    A_extra[0, 1 : 1 + n] = a
-                    A_rows.append(A_extra)
-                    b_rows.append(np.array([ub_val]))
-                    cones.append(clarabel.NonnegativeConeT(1))
-
-        A = sparse.csc_matrix(np.vstack(A_rows))  # noqa: N806
-        b = np.concatenate(b_rows)
-
-        settings = clarabel.DefaultSettings()
-        settings.verbose = False
-        sol = clarabel.DefaultSolver(P, q, A, b, cones, settings).solve()
-        status = str(sol.status)
+        q = np.zeros(builder.n_vars)
+        q[0] = 1.0
+        sol, status = builder.solve(q)
 
         if "Solved" in status:
-            weights.value = np.array(sol.x[1 : 1 + n])
+            weights.value = np.array(sol.x[w_cols])
             if y_var is not None:
-                y_var.value = np.array(sol.x[1 + n : 1 + n + k])
+                y_var.value = np.array(sol.x[y_cols])
             return float(sol.obj_val), float(sol.x[0]), status
         return None, None, status
