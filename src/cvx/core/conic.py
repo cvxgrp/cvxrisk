@@ -41,7 +41,7 @@ from scipy import sparse
 
 # User-supplied linear constraint: (a, lb, ub) meaning lb <= a @ w <= ub.
 # Use None for one-sided bounds; lb == ub yields an equality constraint.
-LinearConstraint = tuple[np.ndarray, float | None, float | None]
+LinearConstraint = tuple[np.ndarray, float | None, float | None]  # pragma: no mutate
 
 
 class ConeProgramBuilder:

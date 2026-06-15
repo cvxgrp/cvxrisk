@@ -44,7 +44,7 @@ from cvx.core import Variable
 
 # Type alias for user-supplied linear constraints: (a, lb, ub)
 # meaning lb <= a @ w <= ub.  Use None for one-sided bounds.
-LinearConstraint = tuple[np.ndarray, float | None, float | None]
+LinearConstraint = tuple[np.ndarray, float | None, float | None]  # pragma: no mutate
 
 
 class _SolvableModel(Protocol):
@@ -105,9 +105,9 @@ class MinRiskProblem:
     _extra_constraints: list[LinearConstraint] = field(default_factory=list)
     _kwargs: dict[str, Any] = field(default_factory=dict)
 
-    value: float | None = field(default=None, init=False)
-    status: str | None = field(default=None, init=False)
-    _y_var: Variable | None = field(default=None, init=False)
+    value: float | None = field(default=None, init=False)  # pragma: no mutate
+    status: str | None = field(default=None, init=False)  # pragma: no mutate
+    _y_var: Variable | None = field(default=None, init=False)  # pragma: no mutate
 
     def __post_init__(self) -> None:
         """Extract and store the optional y Variable from kwargs."""

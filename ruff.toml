@@ -138,6 +138,13 @@ line-ending = "auto"
     "RUF002",  # docstrings quote prose with typographic unicode (e.g. en dash)
     "RUF012",  # pytest class attributes are conventionally bare mutables, not ClassVar
 ]
+# Mutation-pinning contract tests assert the *exact* exception message via
+# `str(exc.value) == ...`, which is stricter than `match=` (a substring search)
+# and is what kills message-wrapping mutants — so the PT011 "set match=" rule
+# does not apply here.
+"tests/**/test_*_contracts.py" = [
+    "PT011",  # exact str(exc.value) equality is asserted instead of a match= search
+]
 # Marimo notebooks - allow flexible coding patterns for interactive exploration
 "**/notebooks/*.py" = [
     "ANN",     # notebooks prioritize interactive readability over strict annotation coverage

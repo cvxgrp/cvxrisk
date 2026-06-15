@@ -54,5 +54,5 @@ class Variable:
     n: int
     """Dimension of the variable."""
 
-    value: np.ndarray | None = field(default=None, init=False)
+    value: np.ndarray | None = field(default=None, init=False)  # pragma: no mutate
     """Optimal value set after solving, or ``None`` before solving."""

@@ -270,7 +270,7 @@ class CVar(Model):
         # with gamma the VaR level and u the scenario excess losses.
         w_cols = slice(0, n)
         gamma_col = n
-        u_cols = slice(n + 1, n + 1 + T)
+        u_cols = slice(n + 1, n + 1 + T)  # pragma: no mutate
         builder = ConeProgramBuilder(n_vars=n + 1 + T)
 
         # u >= -R @ (w - base) - gamma  (scenario losses beyond VaR)

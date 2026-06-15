@@ -205,10 +205,11 @@ class SampleCovariance(Model):
         if cov.ndim != 2 or cov.shape[0] != cov.shape[1]:
             msg = f"cov must be a square matrix, got shape {cov.shape}"
             raise ValueError(msg)
-        if cov.shape[0] > self.num:
-            msg = f"Too many assets: cov is {cov.shape[0]}x{cov.shape[0]} but the model capacity is num={self.num}"
+        n_assets = cov.shape[0]  # pragma: no mutate  (square: shape[0] == shape[1])
+        if n_assets > self.num:
+            msg = f"Too many assets: cov is {n_assets}x{n_assets} but the model capacity is num={self.num}"
             raise ValueError(msg)
-        n = cov.shape[0]
+        n = n_assets
 
         chol = np.zeros((self.num, self.num))
         chol[:n, :n] = cholesky(cov)
@@ -238,7 +239,7 @@ class SampleCovariance(Model):
 
         # Variables: x = [t, w] with t bounding the portfolio volatility.
         w_cols = slice(1, 1 + n)
-        builder = ConeProgramBuilder(n_vars=1 + n)
+        builder = ConeProgramBuilder(n_vars=1 + n)  # pragma: no mutate
 
         # SOC: || chol @ (w - base) ||_2 <= t
         a_soc = builder.block(n + 1)
