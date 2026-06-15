@@ -132,7 +132,7 @@ class SampleCovariance(Model):
         )
         self.bounds = Bounds(m=self.num, name="assets")
 
-    def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:
+    def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:  # noqa: ARG002
         """Estimate the portfolio risk using the Cholesky decomposition.
 
         Computes the L2 norm of the product of the Cholesky factor and the
@@ -161,7 +161,7 @@ class SampleCovariance(Model):
             True
 
         """
-        return norm(self.parameter["chol"].value @ np.asarray(weights))
+        return float(norm(self.parameter["chol"].value @ np.asarray(weights)))
 
     def update(self, **kwargs: Any) -> None:
         """Update the Cholesky decomposition parameter and bounds.
@@ -220,7 +220,7 @@ class SampleCovariance(Model):
         weights: Variable,
         base: np.ndarray,
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
-        y_var: Variable | None = None,
+        y_var: Variable | None = None,  # noqa: ARG002
     ) -> tuple[float | None, float | None, str]:
         """Build and solve the Clarabel SOC problem for this model.
 

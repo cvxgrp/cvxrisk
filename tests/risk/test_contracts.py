@@ -38,12 +38,17 @@ def test_model_is_abstract():
         Model()
 
     class OnlyEstimate(Model):
+        """Subclass that implements only estimate, leaving update abstract."""
+
         def estimate(self, weights, **kwargs):
+            """Return a constant risk estimate, ignoring the inputs."""
             return 0.0
 
     class OnlyUpdate(Model):
+        """Subclass that implements only update, leaving estimate abstract."""
+
         def update(self, **kwargs):
-            pass
+            """Do nothing; provided solely to satisfy the abstract update method."""
 
     with pytest.raises(TypeError):
         OnlyEstimate()

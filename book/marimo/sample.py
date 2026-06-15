@@ -18,24 +18,27 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 with app.setup:
+    from collections.abc import Callable
+
     import marimo as mo
     import numpy as np
     from cvx.linalg import rand_cov
 
     from cvx.core.variable import Variable
     from cvx.risk.portfolio import minrisk_problem
+    from cvx.risk.portfolio.min_risk import MinRiskProblem
     from cvx.risk.sample import SampleCovariance
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(r"""# Sample covariance""")
     return
 
 
 @app.cell
-def _():
-    def problem(n):
+def _() -> tuple[Callable[[int], tuple[MinRiskProblem, SampleCovariance]]]:
+    def problem(n: int) -> tuple[MinRiskProblem, SampleCovariance]:
         weights = Variable(n)
         _riskmodel = SampleCovariance(num=n)
         _problem = minrisk_problem(_riskmodel, weights)
@@ -46,7 +49,7 @@ def _():
 
 
 @app.cell
-def _(problem):
+def _(problem: Callable[[int], tuple[MinRiskProblem, SampleCovariance]]) -> None:
     _n = 50
     _a = rand_cov(_n - 2)
     _problem, _riskmodel = problem(_n)
@@ -57,7 +60,7 @@ def _(problem):
 
 
 @app.cell
-def _(problem):
+def _(problem: Callable[[int], tuple[MinRiskProblem, SampleCovariance]]) -> None:
     _n = 50
     _a = rand_cov(_n - 2)
     for _i in range(100):

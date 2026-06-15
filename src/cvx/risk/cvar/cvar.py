@@ -153,7 +153,7 @@ class CVar(Model):
         self.parameter["R"] = Parameter(shape=(self.n, self.m), name="returns")
         self.bounds = Bounds(m=self.m, name="assets")
 
-    def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:
+    def estimate(self, weights: np.ndarray, **kwargs: Any) -> float:  # noqa: ARG002
         """Estimate the Conditional Value at Risk (CVaR) for the given weights.
 
         Computes the negative average of the k smallest returns in the portfolio,
@@ -247,7 +247,7 @@ class CVar(Model):
         weights: Variable,
         base: np.ndarray,
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
-        y_var: Variable | None = None,
+        y_var: Variable | None = None,  # noqa: ARG002
     ) -> tuple[float | None, float | None, str]:
         """Build and solve the Clarabel LP for this model.
 

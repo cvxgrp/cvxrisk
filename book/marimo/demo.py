@@ -18,6 +18,8 @@ __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 with app.setup:
+    from typing import Any
+
     import jquantstats as jqs
     import marimo as mo
     import numpy as np
@@ -33,7 +35,7 @@ with app.setup:
 
 
 @app.cell
-def _():
+def _() -> tuple[list[str], pl.DataFrame, Any, Any]:
     # Load prices and compute returns entirely in polars
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
 
@@ -48,7 +50,7 @@ def _():
 
 
 @app.cell
-def _(asset_cols, cov, returns, start):
+def _(asset_cols: list[str], cov: Any, returns: pl.DataFrame, start: Any) -> tuple[Any]:
     # Minimum-risk backtest using SampleCovariance
     _returns_bt = returns.filter(pl.col("date") >= start)
     _dates = _returns_bt["date"].to_list()
@@ -80,12 +82,12 @@ def _(asset_cols, cov, returns, start):
 
 
 @app.cell
-def _(data_sc):
+def _(data_sc: Any) -> None:
     data_sc.plots.snapshot()
 
 
 @app.cell
-def _(returns, start):
+def _(returns: pl.DataFrame, start: Any) -> tuple[Any]:
     from cvx.risk.cvar import CVar
 
     _returns_bt = returns.filter(pl.col("date") >= start)
@@ -119,7 +121,7 @@ def _(returns, start):
 
 
 @app.cell
-def _(data_cvar):
+def _(data_cvar: Any) -> None:
     data_cvar.plots.snapshot()
 
 

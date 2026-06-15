@@ -194,6 +194,7 @@ def test_factor_tracking_error_matches_slsqp(seed):
     assert "Solved" in problem.status
 
     def objective(w):
+        """Total squared tracking error (systematic plus idiosyncratic) of the active position w - base."""
         y = exposure @ (w - base)
         return y @ cov_f @ y + np.sum((idio * (w - base)) ** 2)
 

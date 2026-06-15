@@ -19,6 +19,8 @@ __generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 with app.setup:
+    from typing import Any
+
     import marimo as mo
     import numpy as np
     import polars as pl
@@ -30,7 +32,7 @@ with app.setup:
 
 
 @app.cell
-def _():
+def _() -> tuple[pl.DataFrame, pl.DataFrame, list[str]]:
     # Load some historic stock prices
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock_prices.csv"), try_parse_dates=True)
 
@@ -42,13 +44,13 @@ def _():
 
 
 @app.cell
-def _(returns):
+def _(returns: pl.DataFrame) -> tuple[Any]:
     factors = pca(returns=returns.to_numpy(), n_components=10)
     return (factors,)
 
 
 @app.cell
-def _(factors, returns):
+def _(factors: Any, returns: pl.DataFrame) -> tuple[FactorModel]:
     model = FactorModel(assets=len(returns.columns), k=10)
 
     # update the model parameters
@@ -70,7 +72,7 @@ def _(factors, returns):
 
 
 @app.cell
-def _(asset_cols, model):
+def _(asset_cols: list[str], model: FactorModel) -> None:
     w = Variable(model.assets)
     y = Variable(model.k)
 
