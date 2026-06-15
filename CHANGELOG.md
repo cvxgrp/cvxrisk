@@ -1,3 +1,13 @@
+## [1.6.0] - 2026-06-11
+
+### 💼 Other
+
+- Bump version 1.5.1 → 1.6.0
+
+### ⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG.md for v1.5.1 [skip ci]
+- Bump rhiza to v0.18.8 (#468)
 ## [1.5.1] - 2026-06-04
 
 ### 🚀 Features
