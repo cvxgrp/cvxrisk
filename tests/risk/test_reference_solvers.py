@@ -194,6 +194,7 @@ def test_factor_tracking_error_matches_slsqp(seed):
     assert "Solved" in problem.status
 
     def objective(w):
+        """Factor-model tracking-error variance of (w - base): factor risk plus idiosyncratic risk."""
         y = exposure @ (w - base)
         return y @ cov_f @ y + np.sum((idio * (w - base)) ** 2)
 

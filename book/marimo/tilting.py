@@ -30,7 +30,7 @@ with app.setup:
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(
         r"""
     This notebook is based on an idea by Nicholas Gunther
@@ -42,7 +42,7 @@ def _():
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(
         r"""
     Can you give some guidance on how to include constraints in cvxrisk?
@@ -72,7 +72,7 @@ def _():
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(
         r"""
     We shall first observe that if we drop the constraint w.dot(V)
@@ -83,7 +83,7 @@ def _():
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(
         r"""
     For this problem we have enhanced the builtin minrisk function.
@@ -115,7 +115,7 @@ def _():
 
 
 @app.cell
-def _(assets, riskmodel, w_sp, weights):
+def _(assets, riskmodel, w_sp, weights) -> None:
     # without the tilting constraint. We reproduce (as predicted) w_sp.
     problem = minrisk_problem(riskmodel=riskmodel, weights=weights, base=w_sp.to_numpy(), constraints=[])
 
@@ -127,7 +127,7 @@ def _(assets, riskmodel, w_sp, weights):
 
 
 @app.cell
-def _(assets, riskmodel, v, w_sp, weights):
+def _(assets, riskmodel, v, w_sp, weights) -> None:
     # Now we specify the tilting constraint: v @ w == 0.5 as (a, lb, ub) with lb == ub
     constraints = [(v.to_numpy(), 0.5, 0.5)]
     # We inject the constraints

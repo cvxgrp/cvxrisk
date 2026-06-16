@@ -77,3 +77,18 @@ DEP002 = ["scikit-learn"]
 # ty type checker configuration
 [tool.ty.environment]
 extra-paths = ["stubs"]
+
+# mypy configuration (the typecheck gate runs `mypy --strict` as a cross-check)
+[tool.mypy]
+# Resolve local stub packages (e.g. stubs/clarabel) the same way ty does via extra-paths.
+# `src` is included so the PEP 420 namespace package `cvx` roots at one canonical
+# module path (avoids "source file found twice" for cvx.core.* under --strict).
+mypy_path = ["src", "stubs"]
+namespace_packages = true
+explicit_package_bases = true
+
+# scipy ships no type information and has no stub package installed here; only its
+# sparse-matrix API is used. Don't fail strict mode on the missing stubs.
+[[tool.mypy.overrides]]
+module = ["scipy.*"]
+ignore_missing_imports = true

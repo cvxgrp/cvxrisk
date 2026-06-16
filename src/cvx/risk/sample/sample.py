@@ -220,7 +220,7 @@ class SampleCovariance(Model):
         weights: Variable,
         base: np.ndarray,
         extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
-        y_var: Variable | None = None,
+        y_var: Variable | None = None,  # noqa: ARG002 -- shared solve_minrisk interface; only factor models use y_var
     ) -> tuple[float | None, float | None, str]:
         """Build and solve the Clarabel SOC problem for this model.
 

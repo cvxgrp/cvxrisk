@@ -38,12 +38,17 @@ def test_model_is_abstract():
         Model()
 
     class OnlyEstimate(Model):
+        """Concrete only for estimate(); update() stays abstract, so it cannot instantiate."""
+
         def estimate(self, weights, **kwargs):
+            """Return a constant; the value is irrelevant to the abstractness check."""
             return 0.0
 
     class OnlyUpdate(Model):
+        """Concrete only for update(); estimate() stays abstract, so it cannot instantiate."""
+
         def update(self, **kwargs):
-            pass
+            """No-op; the value is irrelevant to the abstractness check."""
 
     with pytest.raises(TypeError):
         OnlyEstimate()
