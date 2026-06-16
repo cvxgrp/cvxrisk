@@ -28,7 +28,7 @@ with app.setup:
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(r"""# Large problem with 1000 assets and 100 factors""")
     return
 
@@ -108,7 +108,7 @@ def _(beta, factors, ret, triangle):
 
 
 @app.cell
-def _(beta, factors, ret, triangle, w, y):
+def _(beta, factors, ret, triangle, w, y) -> None:
     for _i in range(1):
         _problem = minrisk_problem(triangle, w, y=y)
         triangle.update(

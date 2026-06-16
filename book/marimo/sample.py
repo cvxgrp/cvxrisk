@@ -28,7 +28,7 @@ with app.setup:
 
 
 @app.cell
-def _():
+def _() -> None:
     mo.md(r"""# Sample covariance""")
     return
 
@@ -46,7 +46,7 @@ def _():
 
 
 @app.cell
-def _(problem):
+def _(problem) -> None:
     _n = 50
     _a = rand_cov(_n - 2)
     _problem, _riskmodel = problem(_n)
@@ -57,7 +57,7 @@ def _(problem):
 
 
 @app.cell
-def _(problem):
+def _(problem) -> None:
     _n = 50
     _a = rand_cov(_n - 2)
     for _i in range(100):

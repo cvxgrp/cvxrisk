@@ -70,7 +70,7 @@ def _(factors, returns):
 
 
 @app.cell
-def _(asset_cols, model):
+def _(asset_cols, model) -> None:
     w = Variable(model.assets)
     y = Variable(model.k)
 

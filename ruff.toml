@@ -112,6 +112,12 @@ ignore = [
 [lint.pydocstyle]
 convention = "google"
 
+[lint.flake8-unused-arguments]
+# `*args`/`**kwargs` are interface plumbing: the Estimator protocol (estimate/update)
+# carries `**kwargs` so every model shares one signature; individual models legitimately
+# ignore it. Don't flag unused variadics as ARG.
+ignore-variadic-names = true
+
 # Formatting configuration
 [format]
 # Use double quotes for strings
@@ -137,6 +143,17 @@ line-ending = "auto"
 "tests/**/*.py" = [
     "RUF002",  # docstrings quote prose with typographic unicode (e.g. en dash)
     "RUF012",  # pytest class attributes are conventionally bare mutables, not ClassVar
+]
+# Marimo notebooks under book/ - same interactive-exploration allowances as notebooks/
+"book/marimo/*.py" = [
+    "ANN",     # notebooks prioritize interactive readability over strict annotation coverage
+    "D100",    # marimo requires `import marimo` as the first statement
+    "N803",    # Allow non-lowercase variable names in notebooks
+    "S101",    # Allow assert statements in notebooks
+    "PLC0415", # Allow imports not at top-level in notebooks
+    "B018",    # Allow useless expressions in notebooks
+    "RUF001",  # Allow ambiguous unicode in notebooks
+    "RUF002",  # Allow ambiguous unicode in notebooks
 ]
 # Marimo notebooks - allow flexible coding patterns for interactive exploration
 "**/notebooks/*.py" = [

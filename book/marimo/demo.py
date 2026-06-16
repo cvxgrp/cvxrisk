@@ -80,7 +80,7 @@ def _(asset_cols, cov, returns, start):
 
 
 @app.cell
-def _(data_sc):
+def _(data_sc) -> None:
     data_sc.plots.snapshot()
 
 
@@ -119,7 +119,7 @@ def _(returns, start):
 
 
 @app.cell
-def _(data_cvar):
+def _(data_cvar) -> None:
     data_cvar.plots.snapshot()
 
 
