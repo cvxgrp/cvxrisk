@@ -73,6 +73,7 @@ class TestClarabelDirect:
         weights = Variable(n)
 
         def solve():
+            """Build and solve the SampleCovariance min-risk problem (the timed unit)."""
             problem = minrisk_problem(model, weights)
             problem.solve()
             return weights.value
@@ -100,6 +101,7 @@ class TestClarabelDirect:
         weights = Variable(assets)
 
         def solve():
+            """Build and solve the FactorModel min-risk problem (the timed unit)."""
             problem = minrisk_problem(model, weights)
             problem.solve()
             return weights.value
@@ -124,6 +126,7 @@ class TestCvxpy:
         L = cholesky(cov)  # upper-triangular Cholesky factor  # noqa: N806
 
         def solve():
+            """Construct and solve the cvxpy sample-covariance problem (the timed unit)."""
             w = cp.Variable(n)
             risk = cp.norm(L @ w, 2)
             constraints = [
@@ -148,6 +151,7 @@ class TestCvxpy:
         L = cholesky(factor_cov)  # (k, k) upper-triangular Cholesky factor  # noqa: N806
 
         def solve():
+            """Construct and solve the cvxpy factor-model problem (the timed unit)."""
             w = cp.Variable(assets)
             y = cp.Variable(k)
             systematic_risk = cp.norm(L @ y, 2)
