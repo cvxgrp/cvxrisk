@@ -94,7 +94,10 @@ def test_cvar_estimate_is_tail_mean(data):
     model = CVar(alpha=alpha, n=n_scenarios, m=m_max)
     model.update(returns=returns, lower_assets=np.zeros(m_used), upper_assets=np.ones(m_used))
 
-    k = int(n_scenarios * (1 - alpha))
+    # Use the model's own tail size: it is floor(n*(1-alpha)) computed with a
+    # rounding tolerance, so exact fractions (e.g. n=20, alpha=0.8 -> 4) are not
+    # truncated by floating-point error the way a naive int(n*(1-alpha)) would be.
+    k = model.k
     padded_w = np.zeros(m_max)
     padded_w[:m_used] = w
     expected = -np.mean(np.sort(returns @ w)[:k])

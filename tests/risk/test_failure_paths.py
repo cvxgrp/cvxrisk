@@ -202,6 +202,17 @@ def test_solve_minrisk_dimension_mismatch():
         problem.solve()
 
 
+def test_cvar_empty_tail_rejected():
+    """An alpha/n combination with an empty tail (k == 0) must be rejected at construction.
+
+    With ``k = int(n * (1 - alpha)) == 0`` the tail average is undefined:
+    ``estimate`` would return ``nan`` and ``solve_minrisk`` would divide by zero.
+    Rejecting it up front turns a cryptic downstream failure into a clear error.
+    """
+    with pytest.raises(ValueError, match=r"alpha=0.99 with n=50 yields an empty CVaR tail \(k=0\)"):
+        CVar(alpha=0.99, n=50, m=3)
+
+
 def test_resolve_after_infeasible_recovers():
     """After an infeasible solve, fixing the bounds and re-solving must succeed."""
     n = 3
