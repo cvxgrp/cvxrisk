@@ -138,6 +138,20 @@ class CVar(Model):
         Calculates the number of samples in the tail (k) based on alpha,
         creates the returns parameter matrix, and initializes the bounds.
 
+        The tail size is ``k = floor(n * (1 - alpha))``, computed with a small
+        rounding tolerance so that exact fractions such as ``n=10, alpha=0.9``
+        yield ``k=1`` rather than ``0`` (``1 - 0.9`` is slightly below ``0.1``
+        in floating point, which would otherwise truncate down to ``0``).
+
+        Raises:
+            ValueError: If a configured model (``n > 0``) yields an empty tail
+                (``k == 0``) — e.g. ``alpha=0.99`` with ``n=50``. An empty tail
+                makes the risk undefined (``estimate`` returns ``nan`` and the
+                solver objective divides by zero), so the degenerate model is
+                rejected up front. Increase ``n`` or lower ``alpha``. The
+                all-defaults placeholder ``CVar()`` (``n == 0``) is left
+                constructible, mirroring the other risk models.
+
         Example:
             >>> from cvx.risk.cvar import CVar
             >>> model = CVar(alpha=0.95, n=100, m=5)
@@ -148,8 +162,23 @@ class CVar(Model):
             >>> model.parameter["R"].shape
             (100, 5)
 
+            An exact fraction is not truncated by floating-point error:
+
+            >>> CVar(alpha=0.9, n=10, m=3).k
+            1
+
+            A configured alpha/n combination with an empty tail is rejected:
+
+            >>> CVar(alpha=0.99, n=50, m=3)
+            Traceback (most recent call last):
+                ...
+            ValueError: alpha=0.99 with n=50 yields an empty CVaR tail (k=0); increase n or lower alpha
+
         """
-        self.k = int(self.n * (1 - self.alpha))
+        self.k = int(np.floor(round(self.n * (1 - self.alpha), 9)))
+        if self.n > 0 and self.k < 1:
+            msg = f"alpha={self.alpha} with n={self.n} yields an empty CVaR tail (k=0); increase n or lower alpha"
+            raise ValueError(msg)
         self.parameter["R"] = Parameter(shape=(self.n, self.m), name="returns")
         self.bounds = Bounds(m=self.m, name="assets")
 
