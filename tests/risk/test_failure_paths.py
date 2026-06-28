@@ -113,6 +113,11 @@ def test_update_validation_messages():
         sample.update(cov=np.ones((2, 3)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
     with pytest.raises(ValueError, match="Too many assets"):
         sample.update(cov=np.eye(4), lower_assets=np.zeros(4), upper_assets=np.ones(4))
+    with pytest.raises(
+        ValueError,
+        match=r"'lower_assets' has length 4 but the maximum is 3",
+    ):
+        sample.update(cov=np.eye(3), lower_assets=np.zeros(4), upper_assets=np.ones(4))
     with pytest.raises(ValueError, match="requires a 'lower_assets'"):
         sample.update(cov=np.eye(3), lower_asset=np.zeros(3), upper_assets=np.ones(3))  # typo
 
@@ -154,6 +159,11 @@ def test_update_validation_messages():
         cvar.update(returns=np.zeros((10,)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
     with pytest.raises(ValueError, match=r"expects n=10"):
         cvar.update(returns=np.zeros((5, 3)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
+    with pytest.raises(
+        ValueError,
+        match=r"returns must be a 2d matrix of shape \(n, num_assets\), got shape \(10,\)",
+    ):
+        cvar.update(returns=np.zeros((10,)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
     with pytest.raises(ValueError, match="Too many assets"):
         cvar.update(returns=np.zeros((10, 4)), lower_assets=np.zeros(4), upper_assets=np.ones(4))
 
