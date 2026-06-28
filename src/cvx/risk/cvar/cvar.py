@@ -150,6 +150,11 @@ class CVar(Model):
 
         """
         self.k = int(self.n * (1 - self.alpha))
+        if self.n > 0 and self.k == 0:
+            raise ValueError(
+                f"alpha={self.alpha} with n={self.n} yields an empty CVaR tail (k=0); "
+                "increase n or lower alpha"
+            )
         self.parameter["R"] = Parameter(shape=(self.n, self.m), name="returns")
         self.bounds = Bounds(m=self.m, name="assets")
 

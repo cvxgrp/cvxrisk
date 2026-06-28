@@ -152,7 +152,7 @@ def test_update_validation_messages():
             upper_factors=np.ones(2),
         )
 
-    cvar = CVar(alpha=0.9, n=10, m=3)
+    cvar = CVar(alpha=0.5, n=10, m=3)
     with pytest.raises(ValueError, match="requires a 'returns'"):
         cvar.update(lower_assets=np.zeros(3), upper_assets=np.ones(3))
     with pytest.raises(ValueError, match="2d matrix"):
@@ -195,11 +195,17 @@ def test_solve_minrisk_dimension_mismatch():
     with pytest.raises(ValueError, match="capacity is assets=3"):
         problem.solve()
 
-    cvar = CVar(alpha=0.9, n=10, m=3)
+    cvar = CVar(alpha=0.5, n=10, m=3)
     cvar.update(returns=np.zeros((10, 3)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
     problem = minrisk_problem(cvar, Variable(4))
     with pytest.raises(ValueError, match="capacity is m=3"):
         problem.solve()
+
+
+def test_cvar_empty_tail_raises():
+    """CVar(alpha=0.99, n=50) yields k=0 and must raise ValueError at construction."""
+    with pytest.raises(ValueError, match=r"alpha=0\.99.*n=50.*k=0"):
+        CVar(alpha=0.99, n=50, m=3)
 
 
 def test_resolve_after_infeasible_recovers():
