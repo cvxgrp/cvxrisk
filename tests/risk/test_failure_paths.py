@@ -204,7 +204,7 @@ def test_solve_minrisk_dimension_mismatch():
 
 def test_cvar_empty_tail_raises():
     """CVar(alpha=0.99, n=50) yields k=0 and must raise ValueError at construction."""
-    with pytest.raises(ValueError, match=r"alpha=0\.99.*n=50.*k=0"):
+    with pytest.raises(ValueError, match=r"alpha=0\.99.*n=50.*empty CVaR tail \(k=0\)"):
         CVar(alpha=0.99, n=50, m=3)
 
 
