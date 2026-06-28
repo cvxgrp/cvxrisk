@@ -150,10 +150,17 @@ def test_update_validation_messages():
     cvar = CVar(alpha=0.9, n=10, m=3)
     with pytest.raises(ValueError, match="requires a 'returns'"):
         cvar.update(lower_assets=np.zeros(3), upper_assets=np.ones(3))
+    with pytest.raises(ValueError, match="2d matrix"):
+        cvar.update(returns=np.zeros((10,)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
     with pytest.raises(ValueError, match=r"expects n=10"):
         cvar.update(returns=np.zeros((5, 3)), lower_assets=np.zeros(3), upper_assets=np.ones(3))
     with pytest.raises(ValueError, match="Too many assets"):
         cvar.update(returns=np.zeros((10, 4)), lower_assets=np.zeros(4), upper_assets=np.ones(4))
+
+    # Bounds.update() length guard: an over-length bound array (length 4 > m=3)
+    # reaches Bounds.update() via CVar.update() and must be rejected.
+    with pytest.raises(ValueError, match="maximum is"):
+        cvar.update(returns=np.zeros((10, 3)), lower_assets=np.zeros(4), upper_assets=np.ones(3))
 
 
 def test_solve_minrisk_dimension_mismatch():
