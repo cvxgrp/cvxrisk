@@ -254,21 +254,21 @@ class CVar(Model):
         if "returns" not in kwargs:
             msg = "update() requires a 'returns' argument"
             raise ValueError(msg)
-        ret = np.asarray(kwargs["returns"])
-        if ret.ndim != 2:
-            msg = f"returns must be a 2d matrix of shape (n, num_assets), got shape {ret.shape}"
+        returns = np.asarray(kwargs["returns"])
+        if returns.ndim != 2:
+            msg = f"returns must be a 2d matrix of shape (n, num_assets), got shape {returns.shape}"
             raise ValueError(msg)
-        if ret.shape[0] != self.n:
-            msg = f"returns has {ret.shape[0]} scenarios but the model expects n={self.n}"
+        if returns.shape[0] != self.n:
+            msg = f"returns has {returns.shape[0]} scenarios but the model expects n={self.n}"
             raise ValueError(msg)
-        if ret.shape[1] > self.m:
-            msg = f"Too many assets: returns has {ret.shape[1]} columns but the model capacity is m={self.m}"
+        if returns.shape[1] > self.m:
+            msg = f"Too many assets: returns has {returns.shape[1]} columns but the model capacity is m={self.m}"
             raise ValueError(msg)
-        num_assets = ret.shape[1]
+        num_assets = returns.shape[1]
 
-        returns_arr = np.zeros((self.n, self.m))
-        returns_arr[:, :num_assets] = ret
-        self.parameter["R"].value = returns_arr
+        padded_returns = np.zeros((self.n, self.m))
+        padded_returns[:, :num_assets] = returns
+        self.parameter["R"].value = padded_returns
         self.bounds.update(**kwargs)
 
     def solve_minrisk(
