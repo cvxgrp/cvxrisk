@@ -54,7 +54,7 @@ class _SolvableModel(Protocol):
         self,
         weights: Variable,
         base: np.ndarray,
-        extra_constraints: list[tuple[np.ndarray, float | None, float | None]],
+        extra_constraints: list[LinearConstraint],
         y_var: Variable | None = None,
     ) -> tuple[float | None, float | None, str]:
         """Solve the minimum-risk problem and return (objective, risk, status)."""
@@ -122,8 +122,8 @@ class MinRiskProblem:
             return np.zeros(n)
         base = np.asarray(self.base)
         result = np.zeros(n)
-        m = min(len(base), n)
-        result[:m] = base[:m]
+        prefix_length = min(len(base), n)
+        result[:prefix_length] = base[:prefix_length]
         return result
 
     def solve(self) -> None:
@@ -160,7 +160,7 @@ class MinRiskProblem:
 
         """
         base = self._get_base_array()
-        obj, _risk, status = self.riskmodel.solve_minrisk(self.weights, base, self._extra_constraints, self._y_var)
+        obj, _, status = self.riskmodel.solve_minrisk(self.weights, base, self._extra_constraints, self._y_var)
         self.value = obj
         self.status = status
 
@@ -184,7 +184,7 @@ def minrisk_problem(
             interface. Supported types: :class:`~cvx.risk.sample.SampleCovariance`,
             :class:`~cvx.risk.factor.FactorModel`,
             :class:`~cvx.risk.cvar.CVar`.
-        weights: :class:`~cvx.risk.variable.Variable` that will hold the optimal
+        weights: :class:`~cvx.core.variable.Variable` that will hold the optimal
             weights after calling :meth:`MinRiskProblem.solve`.
         base: Base portfolio for tracking-error minimization. Can be a numpy array
             of length ``weights.n`` or a scalar (default 0.0 means no base).

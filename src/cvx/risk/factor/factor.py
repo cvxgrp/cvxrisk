@@ -280,28 +280,30 @@ class FactorModel(Model):
         cov = np.asarray(kwargs["cov"])
         idiosyncratic_risk = np.asarray(kwargs["idiosyncratic_risk"])
 
-        # extract dimensions
-        k, assets = exposure.shape
-        if k > self.k:
+        # Extract the active factor/asset dimensions from the input exposure matrix.
+        num_factors, num_assets = exposure.shape
+        if num_factors > self.k:
             msg = "Too many factors"
             raise ValueError(msg)
-        if assets > self.assets:
+        if num_assets > self.assets:
             msg = "Too many assets"
             raise ValueError(msg)
-        if cov.shape != (k, k):
-            msg = f"cov must have shape ({k}, {k}) to match exposure, got {cov.shape}"
+        if cov.shape != (num_factors, num_factors):
+            msg = f"cov must have shape ({num_factors}, {num_factors}) to match exposure, got {cov.shape}"
             raise ValueError(msg)
-        if idiosyncratic_risk.shape != (assets,):
-            msg = f"idiosyncratic_risk must have shape ({assets},) to match exposure, got {idiosyncratic_risk.shape}"
+        if idiosyncratic_risk.shape != (num_assets,):
+            msg = (
+                f"idiosyncratic_risk must have shape ({num_assets},) to match exposure, got {idiosyncratic_risk.shape}"
+            )
             raise ValueError(msg)
 
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
         self.parameter["chol"].value = np.zeros((self.k, self.k))
         self.parameter["idiosyncratic_risk"].value = np.zeros(self.assets)
 
-        self.parameter["exposure"].value[:k, :assets] = exposure
-        self.parameter["idiosyncratic_risk"].value[:assets] = idiosyncratic_risk
-        self.parameter["chol"].value[:k, :k] = cholesky(cov)
+        self.parameter["exposure"].value[:num_factors, :num_assets] = exposure
+        self.parameter["idiosyncratic_risk"].value[:num_assets] = idiosyncratic_risk
+        self.parameter["chol"].value[:num_factors, :num_factors] = cholesky(cov)
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)
 
