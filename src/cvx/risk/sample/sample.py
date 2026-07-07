@@ -208,11 +208,11 @@ class SampleCovariance(Model):
         if cov.shape[0] > self.num:
             msg = f"Too many assets: cov is {cov.shape[0]}x{cov.shape[0]} but the model capacity is num={self.num}"
             raise ValueError(msg)
-        n = cov.shape[0]
+        num_assets = cov.shape[0]
 
-        chol = np.zeros((self.num, self.num))
-        chol[:n, :n] = cholesky(cov)
-        self.parameter["chol"].value = chol
+        padded_chol = np.zeros((self.num, self.num))
+        padded_chol[:num_assets, :num_assets] = cholesky(cov)
+        self.parameter["chol"].value = padded_chol
         self.bounds.update(**kwargs)
 
     def solve_minrisk(

@@ -323,9 +323,9 @@ class FactorModel(Model):
         self.parameter["chol"].value = np.zeros((self.k, self.k))
         self.parameter["idiosyncratic_risk"].value = np.zeros(self.assets)
 
-        self.parameter["exposure"].value[:k, :assets] = exposure
-        self.parameter["idiosyncratic_risk"].value[:assets] = idiosyncratic_risk
-        self.parameter["chol"].value[:k, :k] = cholesky(cov)
+        self.parameter["exposure"].value[:num_factors, :num_assets] = exposure
+        self.parameter["idiosyncratic_risk"].value[:num_assets] = idiosyncratic_risk
+        self.parameter["chol"].value[:num_factors, :num_factors] = cholesky(cov)
         self.bounds_assets.update(**kwargs)
         self.bounds_factors.update(**kwargs)
 
