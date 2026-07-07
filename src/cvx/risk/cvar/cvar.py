@@ -327,6 +327,7 @@ class CVar(Model):
         q[u_cols] = 1.0 / k
 
         def result(sol: Any) -> tuple[float, float]:
+            """Return the CVaR objective value as both the risk and the reported minimum."""
             cvar_val = float(q @ sol.x)
             return cvar_val, cvar_val
 
