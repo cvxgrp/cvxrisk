@@ -232,6 +232,58 @@ class FactorModel(Model):
 
         return float(np.sqrt(var_systematic**2 + var_residual**2))
 
+    @staticmethod
+    def _require_inputs(kwargs: dict[str, Any]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Return the ``exposure``, ``cov`` and ``idiosyncratic_risk`` arrays from ``kwargs``.
+
+        Raises:
+            ValueError: If any of the three required arguments is missing.
+
+        """
+        missing = [key for key in ("exposure", "cov", "idiosyncratic_risk") if key not in kwargs]
+        if missing:
+            msg = f"update() missing required arguments: {', '.join(missing)}"
+            raise ValueError(msg)
+        return (
+            np.asarray(kwargs["exposure"]),
+            np.asarray(kwargs["cov"]),
+            np.asarray(kwargs["idiosyncratic_risk"]),
+        )
+
+    def _validate_shapes(
+        self,
+        exposure: np.ndarray,
+        cov: np.ndarray,
+        idiosyncratic_risk: np.ndarray,
+    ) -> tuple[int, int]:
+        """Check the input shapes against the model capacity and each other.
+
+        Returns:
+            The active ``(num_factors, num_assets)`` read from ``exposure``.
+
+        Raises:
+            ValueError: If the number of factors or assets exceeds the model
+                capacity, or ``cov``/``idiosyncratic_risk`` are inconsistent
+                with ``exposure``.
+
+        """
+        num_factors, num_assets = exposure.shape
+        if num_factors > self.k:
+            msg = "Too many factors"
+            raise ValueError(msg)
+        if num_assets > self.assets:
+            msg = "Too many assets"
+            raise ValueError(msg)
+        if cov.shape != (num_factors, num_factors):
+            msg = f"cov must have shape ({num_factors}, {num_factors}) to match exposure, got {cov.shape}"
+            raise ValueError(msg)
+        if idiosyncratic_risk.shape != (num_assets,):
+            msg = (
+                f"idiosyncratic_risk must have shape ({num_assets},) to match exposure, got {idiosyncratic_risk.shape}"
+            )
+            raise ValueError(msg)
+        return num_factors, num_assets
+
     def update(self, **kwargs: Any) -> None:
         """Update the factor model parameters.
 
@@ -271,31 +323,8 @@ class FactorModel(Model):
             ... )
 
         """
-        missing = [key for key in ("exposure", "cov", "idiosyncratic_risk") if key not in kwargs]
-        if missing:
-            msg = f"update() missing required arguments: {', '.join(missing)}"
-            raise ValueError(msg)
-
-        exposure = np.asarray(kwargs["exposure"])
-        cov = np.asarray(kwargs["cov"])
-        idiosyncratic_risk = np.asarray(kwargs["idiosyncratic_risk"])
-
-        # Extract the active factor/asset dimensions from the input exposure matrix.
-        num_factors, num_assets = exposure.shape
-        if num_factors > self.k:
-            msg = "Too many factors"
-            raise ValueError(msg)
-        if num_assets > self.assets:
-            msg = "Too many assets"
-            raise ValueError(msg)
-        if cov.shape != (num_factors, num_factors):
-            msg = f"cov must have shape ({num_factors}, {num_factors}) to match exposure, got {cov.shape}"
-            raise ValueError(msg)
-        if idiosyncratic_risk.shape != (num_assets,):
-            msg = (
-                f"idiosyncratic_risk must have shape ({num_assets},) to match exposure, got {idiosyncratic_risk.shape}"
-            )
-            raise ValueError(msg)
+        exposure, cov, idiosyncratic_risk = self._require_inputs(kwargs)
+        num_factors, num_assets = self._validate_shapes(exposure, cov, idiosyncratic_risk)
 
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
         self.parameter["chol"].value = np.zeros((self.k, self.k))
@@ -371,11 +400,12 @@ class FactorModel(Model):
 
         q = np.zeros(builder.n_vars)
         q[0] = 1.0
-        sol, status = builder.solve(q)
-
-        if "Solved" in status:
-            weights.value = np.array(sol.x[w_cols])
-            if y_var is not None:
-                y_var.value = np.array(sol.x[y_cols])
-            return float(sol.obj_val), float(sol.x[0]), status
-        return None, None, status
+        return self._solve_and_unpack(
+            builder,
+            q,
+            weights,
+            w_cols,
+            lambda sol: (float(sol.obj_val), float(sol.x[0])),
+            y_var=y_var,
+            y_cols=y_cols,
+        )
