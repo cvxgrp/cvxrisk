@@ -28,12 +28,17 @@ Example:
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 from cvx.core.parameter import Parameter
+
+if TYPE_CHECKING:
+    from cvx.core.conic import ConeProgramBuilder
+    from cvx.core.variable import Variable
 
 
 @dataclass
@@ -121,3 +126,48 @@ class Model(ABC):
             ... )
 
         """
+
+    def _solve_and_unpack(
+        self,
+        builder: ConeProgramBuilder,
+        q: np.ndarray,
+        weights: Variable,
+        w_cols: slice,
+        result: Callable[[Any], tuple[float, float]],
+        *,
+        y_var: Variable | None = None,
+        y_cols: slice | None = None,
+    ) -> tuple[float | None, float | None, str]:
+        """Solve an assembled cone program and unpack the primal solution.
+
+        This is the shared tail of every concrete :meth:`solve_minrisk`: it runs
+        the Clarabel solver on the linear objective ``q`` and, on a solved
+        status, copies the optimal asset weights (and, when both ``y_var`` and
+        ``y_cols`` are supplied, the factor exposures) back into the caller's
+        variables. The reported ``(objective, risk)`` pair is derived from the
+        solution by the model-specific ``result`` callback. If the solver does
+        not converge, returns ``(None, None, status)`` and leaves the variables
+        untouched.
+
+        Args:
+            builder: The cone program with all constraints already added.
+            q: Linear objective coefficients.
+            weights: Variable that receives the optimal asset weights.
+            w_cols: Columns of the solution vector holding the asset weights.
+            result: Maps the solved solution to the ``(objective, risk)`` pair.
+            y_var: Optional variable that receives the optimal factor exposures.
+            y_cols: Columns of the solution vector holding the factor exposures.
+
+        Returns:
+            ``(objective, risk, status)`` on a solved status, otherwise
+            ``(None, None, status)``.
+
+        """
+        sol, status = builder.solve(q)
+        if "Solved" not in status:
+            return None, None, status
+        weights.value = np.array(sol.x[w_cols])
+        if y_var is not None and y_cols is not None:
+            y_var.value = np.array(sol.x[y_cols])
+        objective, risk = result(sol)
+        return objective, risk, status

@@ -325,10 +325,9 @@ class CVar(Model):
         q = np.zeros(builder.n_vars)
         q[gamma_col] = 1.0
         q[u_cols] = 1.0 / k
-        sol, status = builder.solve(q)
 
-        if "Solved" in status:
-            weights.value = np.array(sol.x[w_cols])
+        def result(sol: Any) -> tuple[float, float]:
             cvar_val = float(q @ sol.x)
-            return cvar_val, cvar_val, status
-        return None, None, status
+            return cvar_val, cvar_val
+
+        return self._solve_and_unpack(builder, q, weights, w_cols, result)
