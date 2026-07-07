@@ -232,6 +232,52 @@ class FactorModel(Model):
 
         return float(np.sqrt(var_systematic**2 + var_residual**2))
 
+    def _validated_inputs(self, kwargs: dict[str, Any]) -> tuple[np.ndarray, np.ndarray, np.ndarray, int, int]:
+        """Validate the ``update`` keyword arguments and return the parsed arrays.
+
+        Checks that the required keys are present and that the shapes of
+        ``exposure``, ``cov`` and ``idiosyncratic_risk`` are mutually consistent
+        and within the model capacity, then returns the parsed arrays together
+        with the inferred ``(k, assets)`` dimensions.
+
+        Args:
+            kwargs: The keyword arguments passed to :meth:`update`.
+
+        Returns:
+            Tuple ``(exposure, cov, idiosyncratic_risk, k, assets)``.
+
+        Raises:
+            ValueError: If a required argument is missing, the number of factors
+                or assets exceeds the maximum, or the shapes of ``cov`` and
+                ``idiosyncratic_risk`` are inconsistent with ``exposure``.
+
+        """
+        missing = [key for key in ("exposure", "cov", "idiosyncratic_risk") if key not in kwargs]
+        if missing:
+            msg = f"update() missing required arguments: {', '.join(missing)}"
+            raise ValueError(msg)
+
+        exposure = np.asarray(kwargs["exposure"])
+        cov = np.asarray(kwargs["cov"])
+        idiosyncratic_risk = np.asarray(kwargs["idiosyncratic_risk"])
+
+        # extract dimensions
+        k, assets = exposure.shape
+        if k > self.k:
+            msg = "Too many factors"
+            raise ValueError(msg)
+        if assets > self.assets:
+            msg = "Too many assets"
+            raise ValueError(msg)
+        if cov.shape != (k, k):
+            msg = f"cov must have shape ({k}, {k}) to match exposure, got {cov.shape}"
+            raise ValueError(msg)
+        if idiosyncratic_risk.shape != (assets,):
+            msg = f"idiosyncratic_risk must have shape ({assets},) to match exposure, got {idiosyncratic_risk.shape}"
+            raise ValueError(msg)
+
+        return exposure, cov, idiosyncratic_risk, k, assets
+
     def update(self, **kwargs: Any) -> None:
         """Update the factor model parameters.
 
@@ -271,29 +317,7 @@ class FactorModel(Model):
             ... )
 
         """
-        missing = [key for key in ("exposure", "cov", "idiosyncratic_risk") if key not in kwargs]
-        if missing:
-            msg = f"update() missing required arguments: {', '.join(missing)}"
-            raise ValueError(msg)
-
-        exposure = np.asarray(kwargs["exposure"])
-        cov = np.asarray(kwargs["cov"])
-        idiosyncratic_risk = np.asarray(kwargs["idiosyncratic_risk"])
-
-        # extract dimensions
-        k, assets = exposure.shape
-        if k > self.k:
-            msg = "Too many factors"
-            raise ValueError(msg)
-        if assets > self.assets:
-            msg = "Too many assets"
-            raise ValueError(msg)
-        if cov.shape != (k, k):
-            msg = f"cov must have shape ({k}, {k}) to match exposure, got {cov.shape}"
-            raise ValueError(msg)
-        if idiosyncratic_risk.shape != (assets,):
-            msg = f"idiosyncratic_risk must have shape ({assets},) to match exposure, got {idiosyncratic_risk.shape}"
-            raise ValueError(msg)
+        exposure, cov, idiosyncratic_risk, k, assets = self._validated_inputs(kwargs)
 
         self.parameter["exposure"].value = np.zeros((self.k, self.assets))
         self.parameter["chol"].value = np.zeros((self.k, self.k))
@@ -369,11 +393,11 @@ class FactorModel(Model):
 
         q = np.zeros(builder.n_vars)
         q[0] = 1.0
-        sol, status = builder.solve(q)
 
-        if "Solved" in status:
-            weights.value = np.array(sol.x[w_cols])
+        def result(sol: Any) -> tuple[float, float]:
+            """Populate the factor exposures and return the (objective, risk) pair."""
             if y_var is not None:
                 y_var.value = np.array(sol.x[y_cols])
-            return float(sol.obj_val), float(sol.x[0]), status
-        return None, None, status
+            return float(sol.obj_val), float(sol.x[0])
+
+        return self._finalize_solve(builder, q, weights, w_cols, result)

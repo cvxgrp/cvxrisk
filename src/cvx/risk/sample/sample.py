@@ -254,9 +254,4 @@ class SampleCovariance(Model):
 
         q = np.zeros(builder.n_vars)
         q[0] = 1.0
-        sol, status = builder.solve(q)
-
-        if "Solved" in status:
-            weights.value = np.array(sol.x[w_cols])
-            return float(sol.obj_val), float(sol.x[0]), status
-        return None, None, status
+        return self._finalize_solve(builder, q, weights, w_cols, lambda sol: (float(sol.obj_val), float(sol.x[0])))
