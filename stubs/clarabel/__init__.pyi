@@ -63,9 +63,9 @@ class DefaultSolution:
 class DefaultSolver:
     def __init__(
         self,
-        P: sp.csc_matrix,
+        P: sp.csc_matrix,  # noqa: N803
         q: np.ndarray,
-        A: sp.csc_matrix,
+        A: sp.csc_matrix,  # noqa: N803
         b: np.ndarray,
         cones: list[Any],
         settings: DefaultSettings,
