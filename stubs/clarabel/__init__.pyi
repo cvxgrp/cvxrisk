@@ -63,9 +63,9 @@ class DefaultSolution:
 class DefaultSolver:
     def __init__(
         self,
-        P: sp.csc_matrix,
+        P: sp.csc_matrix,  # noqa: N803  # mirrors clarabel's QP API (P = quadratic term matrix)
         q: np.ndarray,
-        A: sp.csc_matrix,
+        A: sp.csc_matrix,  # noqa: N803  # mirrors clarabel's QP API (A = constraint matrix)
         b: np.ndarray,
         cones: list[Any],
         settings: DefaultSettings,
