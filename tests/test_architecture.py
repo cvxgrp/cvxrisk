@@ -84,6 +84,7 @@ def _imported_first_party(path: Path, known: set[str]) -> set[str]:
 
 
 def _import_graph() -> dict[str, set[str]]:
+    """Build the first-party import graph: module -> set of ``cvx`` modules it imports."""
     modules = _first_party_modules()
     known = set(modules)
     return {name: _imported_first_party(path, known) for name, path in modules.items()}
@@ -107,6 +108,7 @@ def test_import_graph_is_acyclic() -> None:
     stack: list[str] = []
 
     def walk(node: str) -> list[str] | None:
+        """DFS from ``node``; return the first back-edge cycle as a path, else ``None``."""
         visiting.add(node)
         stack.append(node)
         for nxt in graph.get(node, set()):
