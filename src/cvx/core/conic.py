@@ -126,6 +126,38 @@ class ConeProgramBuilder:
         self.add(sparse.hstack([left, -eye, right]), -lower, clarabel.NonnegativeConeT(m))
         self.add(sparse.hstack([left, eye, right]), upper, clarabel.NonnegativeConeT(m))
 
+    def _add_scalar_row(self, a: np.ndarray, cols: slice, rhs: float, cone: Any) -> None:
+        """Add a single-row constraint ``a @ x[cols] + s = rhs`` with ``s`` in ``cone``.
+
+        Args:
+            a: Coefficient vector for the selected columns.
+            cols: Column slice the coefficients refer to.
+            rhs: Scalar right-hand side.
+            cone: Clarabel cone for the row's slack.
+
+        """
+        row = self.block(1)
+        row[0, cols] = a
+        self.add(row, np.array([rhs]), cone)
+
+    def _add_inequalities(self, a: np.ndarray, cols: slice, lower: float | None, upper: float | None) -> None:
+        """Add the one-sided rows for ``lower <= a @ x[cols] <= ub``.
+
+        Each present bound becomes a ``NonnegativeConeT`` row; ``None`` sides
+        are skipped.
+
+        Args:
+            a: Coefficient vector for the selected columns.
+            cols: Column slice the coefficients refer to.
+            lower: Lower bound, or ``None`` to leave the expression unbounded below.
+            upper: Upper bound, or ``None`` to leave the expression unbounded above.
+
+        """
+        if lower is not None:
+            self._add_scalar_row(-a, cols, -lower, clarabel.NonnegativeConeT(1))
+        if upper is not None:
+            self._add_scalar_row(a, cols, upper, clarabel.NonnegativeConeT(1))
+
     def add_linear_constraints(self, constraints: list[LinearConstraint], cols: slice) -> None:
         """Add user-supplied linear constraints ``lb <= a @ x[cols] <= ub``.
 
@@ -139,18 +171,9 @@ class ConeProgramBuilder:
         for coeffs, lower, upper in constraints:
             a = np.asarray(coeffs)
             if lower is not None and upper is not None and lower == upper:
-                row = self.block(1)
-                row[0, cols] = a
-                self.add(row, np.array([lower]), clarabel.ZeroConeT(1))
-                continue
-            if lower is not None:
-                row = self.block(1)
-                row[0, cols] = -a
-                self.add(row, np.array([-lower]), clarabel.NonnegativeConeT(1))
-            if upper is not None:
-                row = self.block(1)
-                row[0, cols] = a
-                self.add(row, np.array([upper]), clarabel.NonnegativeConeT(1))
+                self._add_scalar_row(a, cols, lower, clarabel.ZeroConeT(1))
+            else:
+                self._add_inequalities(a, cols, lower, upper)
 
     def solve(self, q: np.ndarray) -> tuple[Any, str]:
         """Assemble the accumulated blocks, solve with Clarabel, and return the result.
