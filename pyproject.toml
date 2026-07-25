@@ -13,13 +13,12 @@ dependencies = [
     "numpy>=2.3.0",        # Numerical computing library for array operations
     "scipy>=1.17.1",       # Scientific computing (sparse matrix support)
 ]
-license = {text = "MIT"}
+license = "MIT"
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 # The CI Python matrix (rhiza_ci.yml) is generated from these
 # `Programming Language :: Python :: 3.x` entries — dropping them empties the
 # test/typecheck matrices and fails the CI gate.
 classifiers = [
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
