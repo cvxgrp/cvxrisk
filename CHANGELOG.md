@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and entries are generated from [Conventional Commits](https://www.conventionalcommits.org).
 
-## [1.6.1] - 2026-06-17
+## [Unreleased]
 
 ### Maintenance
 - Chore(deps)(deps): bump the python-dependencies group with 4 updates (#475)
