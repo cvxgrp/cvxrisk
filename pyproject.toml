@@ -48,10 +48,6 @@ test = [
     "pytest-mock>=3.0",
     "pytest-timeout>=2.3",  # Enforces the per-test timeout configured in pytest.ini
 ]
-# Lint dependencies
-lint = [
-    "pre-commit>=4.0",
-]
 # Benchmark dependencies – install with: uv sync --group benchmark
 benchmark = [
     "cvxpy-base>=1.8.2",    # Old cvxpy-based approach for comparison
