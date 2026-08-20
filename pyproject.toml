@@ -61,6 +61,69 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvx"]  # Only include the cvx package in the wheel
 
+# Rhiza task runner configuration.
+#
+# These settings used to live in the make layer that rhiza v1.4.0 stopped shipping
+# (.rhiza/rhiza.mk, .rhiza/make.d/*.mk, .rhiza/.env). The sync deletes those files, and
+# rhiza-task's defaults are not the values they carried -- so a setting omitted here is not
+# "inherited", it is silently changed. Only settings that differ from rhiza-task@0.3.1's
+# defaults belong below; the ones that match are recorded as comments, with the reason, so
+# the next person does not re-add them.
+[tool.rhiza-task]
+
+# was: TYPECHECKER ?= both        (.rhiza/make.d/python.mk:71)
+# rhiza-task default: "ty"
+# Missing, the typecheck gate runs ty alone and `mypy --strict` stops running at all --
+# which would quietly retire the [tool.mypy] block below and the strict cross-check it
+# exists for. The CLI is also stricter than the recipe it replaces: the old shell `case`
+# let mypy's exit status win, so a ty failure could pass.
+typechecker = "both"
+
+# was: RHIZA_CHECKS_VERSION ?= 0.2.1, consumed as `uv run --with 'pytest-rhiza==0.2.1'`
+#      (.rhiza/make.d/quality.mk:115 and :160)
+# rhiza-task default: "pytest-rhiza @ git+https://github.com/Jebel-Quant/pytest-rhiza@v0.2.0"
+# Missing, this is a downgrade rather than a no-op: the gates ran 0.2.1's assertions and the
+# default points at v0.2.0. Kept as the PyPI pin the make layer actually used -- 0.2.0 is not
+# on PyPI, which is why the default reaches for git. Moving to 0.2.2 is an upgrade decision,
+# deliberately not taken as part of this migration.
+pytest_rhiza = "pytest-rhiza==0.2.1"
+
+# Not set, on purpose -- the make layer's value already equals the rhiza-task@0.3.1 default,
+# so naming it here would only add a second place to drift:
+#   source_folder = "src"                       (.rhiza/.env, rhiza.mk:103)
+#   tests_folder = "tests"                      (python.mk:60)
+#   coverage_fail_under = 90                    (python.mk:64; no [tool.coverage.report] to outrank)
+#   license_fail_on = "GPL;LGPL;AGPL"           (python.mk:39)
+#   uv_sync_args = "--all-extras --all-groups"  (python.mk:28)
+#   book_output = "_book", zensical_version = ">=0.0.36"  (book.mk:13, :16)
+#
+# Not set for a stronger reason than "it matches the default":
+#   python_version          -- .python-version (3.12) wins over any value configured here, so
+#                              setting it would be inert at best and contradictory at worst.
+#   ci_os_matrix            -- .rhiza/.env deliberately left this unset so that
+#                              .github/workflows/rhiza_ci.yml can select the matrix per caller
+#                              by exporting it. Pinning it here defeats that mechanism, which
+#                              is the exact bug .env's comment warned against.
+#   rhiza_checks, layers    -- derived, not defaulted. detect_layers() reads the manifests
+#                              (-> "python") and rhiza_checks_for() expands that to the same
+#                              five modules the make layer accumulated by `+=` across core,
+#                              python.mk and test.mk: test_readme, test_release_tags,
+#                              test_readme_validation, test_pyproject, test_docstrings.
+#                              Naming either freezes it against future layer changes.
+#   license_ignore_packages -- the make layer's only entry was `+= docutils` (marimo.mk:20),
+#                              and rhiza-task appends docutils itself whenever marimo is in
+#                              the task registry.
+#   mkdocs_extra_packages   -- the old Makefile set `--with 'mkdocstrings[python]'`, now the
+#                              default. Naming the setting *replaces* the default list, so a
+#                              redundant line is the one someone later edits to add a package
+#                              and silently drops mkdocstrings from the book build with.
+#   marimo_folder           -- the make layer said "docs/notebooks", which is also the default,
+#                              so this migration preserves it. Note it is stale either way:
+#                              the notebooks live in book/marimo and docs/notebooks does not
+#                              exist, so marimo.mk's deptry/DEP004 contribution never fired.
+#                              Pointing it at book/marimo is a behaviour change (deptry would
+#                              start scanning the notebooks) and belongs in its own PR.
+
 # Deptry configuration for dependency checking
 # Map package names to their actual module names to suppress warnings
 [tool.deptry.package_module_name_map]
