@@ -24,7 +24,7 @@ nav:
   - Reports:
     - Test Report: reports/html-report/report.html
     - Coverage Report: reports/html-coverage/index.html
-    - Benchmark Report: reports/benchmarks/report.html
+    - Benchmark Histogram: reports/benchmarks/histogram.svg
   - Development:
     - Marimo: development/MARIMO.md
     - Tests: development/TESTS.md

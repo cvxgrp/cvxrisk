@@ -1,5 +1,5 @@
 repository: "jebel-quant/rhiza"
-ref: "v1.5.0"
+ref: "v1.6.0"
 
 profiles:
   - github-project
@@ -7,3 +7,24 @@ profiles:
 templates:
   - legal
 
+# Template-owned paths this repo declines to sync. Matched against *destination*
+# paths — where the file lands here — so entries are written as `.github/...`,
+# never clone-relative (`bundles/github/...`), which matches nothing silently.
+# A directory entry covers everything under it.
+exclude:
+  # Discussion forms. Declined here, as in the sibling repos.
+  - .github/DISCUSSION_TEMPLATE
+
+  # The issue forms, `bug_report.yml` and `feature_request.yml`. Issues stay
+  # enabled and actively used, but they are opened by the people who wrote the
+  # code, so a required "steps to reproduce" textarea puts the friction entirely
+  # on the one audience a form's structure was never meant to discipline.
+  # Free-form instead.
+  - .github/ISSUE_TEMPLATE
+
+  # SECURITY.md. The template's copy enumerates security measures generically;
+  # the accurate list differs per repo, so this one is maintained here. Excluding
+  # it does not delete the file — an excluded path is never treated as an orphan,
+  # so the existing SECURITY.md stays exactly as it is and simply stops being
+  # overwritten on each sync.
+  - SECURITY.md
