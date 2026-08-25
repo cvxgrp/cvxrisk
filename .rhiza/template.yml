@@ -21,3 +21,10 @@ exclude:
   # on the one audience a form's structure was never meant to discipline.
   # Free-form instead.
   - .github/ISSUE_TEMPLATE
+
+  # SECURITY.md. The template's copy enumerates security measures generically;
+  # the accurate list differs per repo, so this one is maintained here. Excluding
+  # it does not delete the file — an excluded path is never treated as an orphan,
+  # so the existing SECURITY.md stays exactly as it is and simply stops being
+  # overwritten on each sync.
+  - SECURITY.md
