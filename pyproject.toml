@@ -87,6 +87,20 @@ typechecker = "both"
 # deliberately not taken as part of this migration.
 pytest_rhiza = "pytest-rhiza==0.2.1"
 
+# was: MARIMO_FOLDER unset, so the make layer inherited "docs/notebooks"
+#      (marimo.mk); rhiza-task default: "docs/notebooks"
+# The migration preserved that default and flagged it as stale, because the notebooks
+# actually live in book/marimo and docs/notebooks does not exist. v1.6.0 turned the
+# staleness into a failure: rhiza_book.yml gained a `book-nav` gate, and `_export_notebooks`
+# reads this setting, so with it pointing at a missing folder the export was skipped and
+# all five `notebooks/*.html` nav entries published as 404s.
+#
+# The migration note deferred this because pointing it at book/marimo makes deptry start
+# scanning the notebooks (DEP004). Verified: it does -- `deps` now runs
+# `deptry src book/marimo` -- but rhiza-task passes `--ignore DEP004` itself, so the gate
+# still reports "No dependency issues found" and needs no per-rule ignore here.
+marimo_folder = "book/marimo"
+
 # Not set, on purpose -- the make layer's value already equals the rhiza-task@0.3.1 default,
 # so naming it here would only add a second place to drift:
 #   source_folder = "src"                       (.rhiza/.env, rhiza.mk:103)
@@ -116,12 +130,6 @@ pytest_rhiza = "pytest-rhiza==0.2.1"
 #                              default. Naming the setting *replaces* the default list, so a
 #                              redundant line is the one someone later edits to add a package
 #                              and silently drops mkdocstrings from the book build with.
-#   marimo_folder           -- the make layer said "docs/notebooks", which is also the default,
-#                              so this migration preserves it. Note it is stale either way:
-#                              the notebooks live in book/marimo and docs/notebooks does not
-#                              exist, so marimo.mk's deptry/DEP004 contribution never fired.
-#                              Pointing it at book/marimo is a behaviour change (deptry would
-#                              start scanning the notebooks) and belongs in its own PR.
 
 # Deptry configuration for dependency checking
 # Map package names to their actual module names to suppress warnings
