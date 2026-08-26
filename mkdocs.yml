@@ -9,8 +9,10 @@ docs_dir: docs
 
 theme:
   name: material
-  logo: assets/rhiza-logo.svg
-  favicon: assets/rhiza-logo.svg
+  # Referenced from rhiza's published site rather than vendored: the template
+  # stopped delivering docs/assets/rhiza-logo.svg in v1.7.0.
+  logo: https://jebel-quant.github.io/rhiza/assets/rhiza-logo.svg
+  favicon: https://jebel-quant.github.io/rhiza/assets/rhiza-logo.svg
 
 nav:
   - Home: index.md
@@ -26,5 +28,4 @@ nav:
     - Coverage Report: reports/html-coverage/index.html
     - Benchmark Histogram: reports/benchmarks/histogram.svg
   - Development:
-    - Marimo: development/MARIMO.md
-    - Tests: development/TESTS.md
+    - Rhiza: development/rhiza.md
