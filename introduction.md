@@ -264,7 +264,7 @@ where $\Sigma_f$ is the covariance matrix of the factors and $Var(\epsilon_i)$ i
 
 ## Further Reading
 
-For more detailed documentation and examples, visit the [cvxrisk documentation site](http://www.cvxgrp.org/cvxrisk/book).
+For more detailed documentation and examples, visit the [cvxrisk documentation site](https://www.cvxgrp.org/cvxrisk/).
 
 To learn more about convex optimization and its applications in finance, check out:
 
