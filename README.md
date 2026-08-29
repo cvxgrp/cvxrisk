@@ -186,7 +186,7 @@ print(model.parameter["R"].value.shape)
 ```
 ## 📚 Documentation
 
-For more detailed documentation and examples, visit our [documentation site](https://www.cvxgrp.org/cvxrisk/book/).
+For more detailed documentation and examples, visit our [documentation site](https://www.cvxgrp.org/cvxrisk/).
 
 ## 🛠️ Development
 
