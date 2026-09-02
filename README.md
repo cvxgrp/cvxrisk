@@ -45,11 +45,7 @@ from cvx.core import Variable
 riskmodel = SampleCovariance(num=2)
 
 # Update the model with data
-riskmodel.update(
-    cov = np.array([[1.0, 0.5], [0.5, 2.0]]),
-    lower_assets = np.zeros(2),
-    upper_assets = np.ones(2)
-)
+riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
 
 # Define portfolio weights variable
 weights = Variable(2)
@@ -121,8 +117,8 @@ model.update(
     idiosyncratic_risk=factors.idiosyncratic.std(axis=0, ddof=1),
     lower_assets=np.zeros(m),
     upper_assets=np.ones(m),
-    lower_factors=-0.1*np.ones(10),
-    upper_factors=0.1*np.ones(10),
+    lower_factors=-0.1 * np.ones(10),
+    upper_factors=0.1 * np.ones(10),
 )
 
 # Verify the model has the correct dimensions
