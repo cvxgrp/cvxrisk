@@ -65,11 +65,7 @@ from cvx.risk.variable import Variable
 riskmodel = SampleCovariance(num=2)
 
 # Update the model with data
-riskmodel.update(
-    cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
-    lower_assets=np.zeros(2),
-    upper_assets=np.ones(2)
-)
+riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
 
 # Define portfolio weights variable
 weights = Variable(2)
@@ -109,7 +105,7 @@ model.update(
     lower_assets=np.zeros(20),
     upper_assets=np.ones(20),
     lower_factors=np.zeros(10),
-    upper_factors=np.ones(10)
+    upper_factors=np.ones(10),
 )
 
 # Define portfolio weights variable
@@ -141,11 +137,7 @@ model = CVar(alpha=0.95, n=50, m=10)
 returns = np.random.randn(50, 10)
 
 # Update the model with data
-model.update(
-    returns=returns,
-    lower_assets=np.zeros(10),
-    upper_assets=np.ones(10)
-)
+model.update(returns=returns, lower_assets=np.zeros(10), upper_assets=np.ones(10))
 
 # Define portfolio weights variable
 weights = Variable(10)
@@ -172,11 +164,7 @@ from cvx.risk.variable import Variable
 
 # Create a risk model
 riskmodel = SampleCovariance(num=4)
-riskmodel.update(
-    cov=np.array([[1.0, 0.5], [0.5, 2.0]]),
-    lower_assets=np.zeros(2),
-    upper_assets=np.ones(2)
-)
+riskmodel.update(cov=np.array([[1.0, 0.5], [0.5, 2.0]]), lower_assets=np.zeros(2), upper_assets=np.ones(2))
 
 # Define portfolio weights variable
 weights = Variable(4)
@@ -206,9 +194,7 @@ from cvx.risk.variable import Variable
 # Create a risk model
 riskmodel = SampleCovariance(num=3)
 riskmodel.update(
-    cov=np.array([[1.0, 0.5, 0.3], [0.5, 2.0, 0.4], [0.3, 0.4, 1.5]]),
-    lower_assets=np.zeros(3),
-    upper_assets=np.ones(3)
+    cov=np.array([[1.0, 0.5, 0.3], [0.5, 2.0, 0.4], [0.3, 0.4, 1.5]]), lower_assets=np.zeros(3), upper_assets=np.ones(3)
 )
 
 # Define portfolio weights variable
