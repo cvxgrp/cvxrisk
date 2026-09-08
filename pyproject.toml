@@ -1,7 +1,10 @@
 # Main project metadata and configuration
 [project]
 name = "cvxrisk"
-version = "1.6.0"
+# [project].version is derived from the newest git tag by hatch-vcs, so the number
+# lives in exactly one place. A build from a checkout that cannot see the tag falls
+# back to a dev version, hence fetch-depth: 0 in any job that builds a distribution.
+dynamic = ["version"]
 description = "Simple riskengine for portfolio optimization"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -53,10 +56,13 @@ benchmark = [
 
 # Build system configuration
 [build-system]
-requires = ["hatchling"]  # Hatchling is used as the build backend
+requires = ["hatchling", "hatch-vcs"]  # Hatchling is used as the build backend
 build-backend = "hatchling.build"
 
 # Hatch configuration for building the package
+[tool.hatch.version]
+source = "vcs"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvx"]  # Only include the cvx package in the wheel
 
@@ -85,7 +91,9 @@ typechecker = "both"
 # default points at v0.2.0. Kept as the PyPI pin the make layer actually used -- 0.2.0 is not
 # on PyPI, which is why the default reaches for git. Moving to 0.2.2 is an upgrade decision,
 # deliberately not taken as part of this migration.
-pytest_rhiza = "pytest-rhiza==0.2.1"
+# 0.6.0 is the first release whose test_pyproject tolerates a VCS-derived
+# [project].version; 0.2.1 asserted a written one and fails on it.
+pytest_rhiza = "pytest-rhiza==0.6.0"
 
 # was: MARIMO_FOLDER unset, so the make layer inherited "docs/notebooks"
 #      (marimo.mk); rhiza-task default: "docs/notebooks"
@@ -167,10 +175,12 @@ module = ["scipy.*"]
 ignore_missing_imports = true
 
 # bump-my-version only auto-discovers .bumpversion.toml, .bumpversion.cfg,
-# setup.cfg and pyproject.toml. Without a table here it falls back to
-# `git describe`, so a release can be cut at an already-published version.
-# It reads and rewrites [project].version natively — hence no current_version
-# and no [[tool.bumpversion.files]] entry for it.
+# setup.cfg and pyproject.toml, and this table is what it finds. There is no
+# current_version and no [[tool.bumpversion.files]] entry because [project].version
+# is dynamic: there is no written number to read or rewrite, so it reads the newest
+# tag via `git describe` — which is the same source hatch-vcs builds from, so the
+# bump it offers and the version it produces cannot disagree. What is left here are
+# the two settings the release flow needs.
 [tool.bumpversion]
 allow_dirty = false
 # The release flow commits and tags itself so the changelog lands in the bump commit.
