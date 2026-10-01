@@ -251,3 +251,21 @@ def test_overlength_base_rejected():
     with pytest.raises(ValueError, match="base has length 5 but weights has dimension 3"):
         problem.solve()
     assert weights.value is None
+
+
+def test_wrong_length_constraint_rejected():
+    """A constraint whose coefficients do not match the weights must name itself."""
+    n = 3
+    model = SampleCovariance(num=n)
+    constraints = [(np.ones(n), 0.0, 1.0), (np.array([1.0, 0.0]), 0.3, None)]
+    with pytest.raises(ValueError, match="constraint 1 has 2 coefficients but weights has dimension 3"):
+        minrisk_problem(model, Variable(n), constraints=constraints)
+
+
+def test_unexpected_kwargs_rejected():
+    """Unknown kwargs and a non-Variable ``y`` must raise instead of being ignored."""
+    model = SampleCovariance(num=3)
+    with pytest.raises(TypeError, match="unexpected keyword argument\\(s\\): 'Y'"):
+        minrisk_problem(model, Variable(3), Y=Variable(2))
+    with pytest.raises(TypeError, match="y must be a Variable, got ndarray"):
+        minrisk_problem(model, Variable(3), y=np.zeros(2))
