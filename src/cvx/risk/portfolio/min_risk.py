@@ -73,8 +73,9 @@ class MinRiskProblem:
     Attributes:
         riskmodel: The risk model defining portfolio risk.
         weights: Variable that will hold the optimal weights after solving.
-        base: Base portfolio (numpy array or 0.0). The problem minimizes the
-            risk of ``weights - base``.
+        base: Base portfolio (numpy array or scalar). The problem minimizes the
+            risk of ``weights - base``. A scalar is broadcast to every asset;
+            a shorter array is zero-padded, a longer one is rejected.
         value: Optimal objective value after solving (None before solving).
         status: Solver status string after solving (None before solving).
 
@@ -116,14 +117,25 @@ class MinRiskProblem:
             self._y_var = y
 
     def _get_base_array(self) -> np.ndarray:
-        """Return the base portfolio as a numpy array of length weights.n."""
+        """Return the base portfolio as a numpy array of length weights.n.
+
+        A scalar base is broadcast to every asset. An array base shorter than
+        ``weights.n`` is zero-padded on purpose: the risk models accept fewer
+        active assets than their capacity, and the padded slots stay zero.
+
+        Raises:
+            ValueError: If an array base is longer than ``weights.n``.
+
+        """
         n = self.weights.n
-        if isinstance(self.base, (int, float)) and self.base == 0:
-            return np.zeros(n)
-        base = np.asarray(self.base)
+        base = np.asarray(self.base, dtype=float)
+        if base.ndim == 0:
+            return np.full(n, float(base))
+        if len(base) > n:
+            msg = f"base has length {len(base)} but weights has dimension {n}"
+            raise ValueError(msg)
         result = np.zeros(n)
-        prefix_length = min(len(base), n)
-        result[:prefix_length] = base[:prefix_length]
+        result[: len(base)] = base
         return result
 
     def solve(self) -> None:
@@ -188,6 +200,9 @@ def minrisk_problem(
             weights after calling :meth:`MinRiskProblem.solve`.
         base: Base portfolio for tracking-error minimization. Can be a numpy array
             of length ``weights.n`` or a scalar (default 0.0 means no base).
+            A scalar is broadcast to every asset; an array shorter than
+            ``weights.n`` is zero-padded, and a longer one raises ``ValueError``
+            when the problem is solved.
         constraints: Optional list of linear constraints on portfolio weights.
             Each constraint is a tuple ``(a, lb, ub)`` specifying
             ``lb <= a @ w <= ub``. Use ``None`` for one-sided bounds.

@@ -227,3 +227,27 @@ def test_resolve_after_infeasible_recovers():
     problem.solve()
     assert "Solved" in problem.status
     assert np.isclose(np.sum(np.array(weights.value)), 1.0, atol=1e-6)
+
+
+def test_scalar_base_is_broadcast():
+    """A non-zero scalar base is broadcast to every asset and solves."""
+    n = 3
+    model = SampleCovariance(num=n)
+    model.update(cov=np.eye(n), lower_assets=np.zeros(n), upper_assets=np.ones(n))
+    weights = Variable(n)
+    problem = minrisk_problem(model, weights, base=0.1)
+    problem.solve()
+    assert "Solved" in problem.status
+    assert np.isclose(np.sum(np.array(weights.value)), 1.0, atol=1e-6)
+
+
+def test_overlength_base_rejected():
+    """A base longer than the weights must raise rather than be silently truncated."""
+    n = 3
+    model = SampleCovariance(num=n)
+    model.update(cov=np.eye(n), lower_assets=np.zeros(n), upper_assets=np.ones(n))
+    weights = Variable(n)
+    problem = minrisk_problem(model, weights, base=np.full(5, 0.2))
+    with pytest.raises(ValueError, match="base has length 5 but weights has dimension 3"):
+        problem.solve()
+    assert weights.value is None
