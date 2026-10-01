@@ -111,10 +111,32 @@ class MinRiskProblem:
     _y_var: Variable | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
-        """Extract and store the optional y Variable from kwargs."""
-        y = self._kwargs.get("y")
-        if isinstance(y, Variable):
+        """Validate the constraints and kwargs, and store the optional y Variable.
+
+        Raises:
+            TypeError: If kwargs holds any key other than ``y``, or ``y`` is not
+                a :class:`~cvx.core.variable.Variable`.
+            ValueError: If a constraint's coefficient vector does not have
+                length ``weights.n``.
+
+        """
+        unexpected = sorted(set(self._kwargs) - {"y"})
+        if unexpected:
+            msg = f"minrisk_problem() got unexpected keyword argument(s): {', '.join(map(repr, unexpected))}"
+            raise TypeError(msg)
+        if "y" in self._kwargs:
+            y = self._kwargs["y"]
+            if not isinstance(y, Variable):
+                msg = f"y must be a Variable, got {type(y).__name__}"
+                raise TypeError(msg)
             self._y_var = y
+
+        n = self.weights.n
+        for index, (coeffs, _, _) in enumerate(self._extra_constraints):
+            length = np.asarray(coeffs).size
+            if length != n:
+                msg = f"constraint {index} has {length} coefficients but weights has dimension {n}"
+                raise ValueError(msg)
 
     def _get_base_array(self) -> np.ndarray:
         """Return the base portfolio as a numpy array of length weights.n.
@@ -209,10 +231,17 @@ def minrisk_problem(
             For an equality constraint use ``lb == ub``.
         **kwargs: Additional keyword arguments. For :class:`~cvx.risk.factor.FactorModel`,
             pass ``y=Variable(k)`` to expose the factor-exposure solution.
+            Any other keyword is rejected.
 
     Returns:
         A :class:`MinRiskProblem` object. Call :meth:`MinRiskProblem.solve` to
         solve it and populate ``weights.value``.
+
+    Raises:
+        TypeError: If an unexpected keyword is passed, or ``y`` is not a
+            :class:`~cvx.core.variable.Variable`.
+        ValueError: If a constraint's coefficient vector does not have length
+            ``weights.n``.
 
     Example:
         Basic minimum risk portfolio:
