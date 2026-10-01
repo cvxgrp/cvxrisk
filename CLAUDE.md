@@ -82,7 +82,8 @@ every task the pinned CLI knows, plus anything `local.mk` adds.
 - `make deps` — deptry unused/missing dependency analysis
 - `make security` — the bandit scan
 - `make license` — fail on GPL/LGPL/AGPL
-- `make rhiza-test` — the rhiza repository checks, from `pytest-rhiza==0.2.1`
+- `make rhiza-test` — the rhiza repository checks, from the `pytest-rhiza` version
+  pinned by `pytest_rhiza` in `[tool.rhiza-task]`
 - `make all` — everything above, in CI's order
 
 `make benchmark` runs `tests/benchmarks/` and needs the `benchmark` group:
