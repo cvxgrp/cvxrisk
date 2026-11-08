@@ -1,7 +1,7 @@
-sha: 7e34d8e308506d07d383b8600dc71776f92de04e
+sha: 5ce21d8526f71ffdc8ae287c78653950a78c6c0b
 repo: jebel-quant/rhiza
 host: github
-ref: v1.11.1
+ref: v1.12.0
 include: []
 exclude:
 - .github/DISCUSSION_TEMPLATE
@@ -28,6 +28,7 @@ files:
 - .github/workflows/rhiza_marimo.yml
 - .github/workflows/rhiza_release.yml
 - .github/workflows/rhiza_scorecard.yml
+- .github/workflows/rhiza_sync.yml
 - .github/workflows/rhiza_weekly.yml
 - .gitignore
 - .pre-commit-config.yaml
@@ -45,5 +46,5 @@ files:
 - pytest.ini
 - ruff.toml
 - tests/test_rhiza_packaging.py
-synced_at: '2026-11-03T17:32:37Z'
+synced_at: '2026-11-08T18:06:09Z'
 strategy: merge

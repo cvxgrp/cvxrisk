@@ -49,6 +49,26 @@ gh secret set PAT_TOKEN
 A PAT expires; when sync pushes start failing with a `refusing to allow ... workflow` error,
 regenerate the token and update the secret.
 
+## Daily template sync (`rhiza_sync.yml`)
+
+Every day at 06:00 UTC the sync workflow compares `ref` in `.rhiza/template.yml` with
+the template repository's latest release. When the ref is behind, the workflow bumps it,
+syncs the template files with the rhiza-claude scripts that `/rhiza:update` also uses,
+and opens a pull request from `rhiza/sync-<tag>`. The PR stages only paths listed in
+`.rhiza/template.lock`. Merge conflicts resolve to the upstream side. A major bump (for
+example `v1.x` → `v2.0.0`) is never applied automatically; the run warns and you run
+`/rhiza:update` yourself. When the branch for that release already exists, later runs
+skip it, so you get one PR per release.
+
+The workflow reads the `GH_PAT` secret. Give the token the permissions listed above
+(Contents, Workflows and Pull requests: read and write, or classic `repo` + `workflow`).
+Without `GH_PAT` the workflow falls back to `github.token`, which has two limits:
+
+- it cannot push a sync that changes `.github/workflows/*`, and
+- GitHub does not start CI on a pull request opened with it.
+
+To run a check right away: `gh workflow run rhiza_sync.yml`.
+
 ## Release workflow secrets (optional)
 
 The release workflow (`.github/workflows/rhiza_release.yml`) supports additional secrets, all
@@ -154,3 +174,14 @@ until the next major release. `book-setup: true` enables setup for the book job 
 emits a warning. The generic action takes precedence; if absent, the old
 `rhiza-book-setup` action runs with its `token` input. `RHIZA_SETUP_CREDENTIALS`
 takes precedence over `BOOK_SETUP_TOKEN`. Only one action runs.
+
+## CI profiles (prototype)
+
+Select `lean`, `standard` or `comprehensive` with `[tool.rhiza.ci].profile` in the
+consumer's `pyproject.toml`. The default is `comprehensive`. Lean consolidates
+quality checks and runs the primary Python version on ordinary changes; scheduled
+and full manual runs restore the complete compatibility matrix. Standard moves
+lowest-direct dependency testing to those broader runs.
+
+See the [CI profiles guide](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/CI_PROFILES.md)
+for scope, migration, branch protection and unreleased-prototype limitations.
